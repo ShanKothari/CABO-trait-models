@@ -73,8 +73,8 @@ meta(spec.traits)$PC3.traits.scale.norm<-meta(spec.traits)$PC3.traits.scale/sd(m
 meta(spec.traits)$PC4.traits.scale.norm<-meta(spec.traits)$PC4.traits.scale/sd(meta(spec.traits)$PC4.traits.scale)
 meta(spec.traits)$PC5.traits.scale.norm<-meta(spec.traits)$PC5.traits.scale/sd(meta(spec.traits)$PC5.traits.scale)
 
-## find projects with more than 50 samples (all but CABO-General)
-common.proj<-names(table(meta(spec.traits)$project))[table(meta(spec.traits)$project)>50]
+## find projects with more than 30 samples (all but CABO-General)
+common.proj<-names(table(meta(spec.traits)$project))[table(meta(spec.traits)$project)>30]
 
 ########################################
 ## spectral overlap analyses
@@ -384,9 +384,9 @@ lignin_mass_dist<-list()
 chlA_fresh_dist<-list()
 EWT_dist<-list()
 
-functional.groups<-na.omit(unique(meta(spec.traits)$functional.group))
+common.fg<-names(table(meta(spec.traits)$functional.group))[table(meta(spec.traits)$functional.group)>30]
 
-for(i in functional.groups){
+for(i in common.fg){
   print(i)
   spec.traits.fg<-spec.traits[meta(spec.traits)$functional.group==i]
   spec.traits.other<-spec.traits[meta(spec.traits)$functional.group!=i]

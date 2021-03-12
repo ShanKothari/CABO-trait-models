@@ -105,6 +105,7 @@ meta(all.spec)$growth.form[meta(all.spec)$species=="Prunus virginiana Linnaeus"]
 meta(all.spec)$growth.form[meta(all.spec)$species=="Staphylea trifolia Linnaeus"]<-"shrub"
 meta(all.spec)$growth.form[meta(all.spec)$species=="Oemleria cerasiformis (Torrey & A. Gray ex Hooker & Arnott) J.W. Landon"]<-"shrub"
 meta(all.spec)$growth.form[meta(all.spec)$species=="Crataegus monogyna Jacquin"]<-"shrub"
+meta(all.spec)$growth.form[meta(all.spec)$species=="Agonis flexuosa (Willd.) Sweet"]<-"tree"
 
 meta(all.spec)$functional.group<-as.character(meta(all.spec)$growth.form)
 meta(all.spec)$functional.group[meta(all.spec)$family %in% c("Poaceae","Cyperaceae","Juncaceae")]<-"graminoid"
