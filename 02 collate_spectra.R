@@ -90,13 +90,22 @@ Fulcrum.summary<-read.csv("SummaryData/leaf_spectra.csv")
 Fulcrum.sub<-data.frame(sample.id=Fulcrum.summary$sample_id,
                         species=Fulcrum.summary$scientific_name,
                         project=Fulcrum.summary$project)
+PhragmitesTemporal.summary<-read.csv("SummaryData/leaf_spectra_phragmites_temporal.csv")
+PhragmitesTemporal.sub<-data.frame(sample.id=PhragmitesTemporal.summary$sample_id,
+                        species=PhragmitesTemporal.summary$scientific_name,
+                        project=PhragmitesTemporal.summary$project)
 Dessain.summary<-read.csv("SummaryData/DessainHerbarium.csv")
 Dessain.sub<-data.frame(sample.id=Dessain.summary$parentEventID,
                         species=Dessain.summary$scientificName,
                         project="2017-Dessain-MSc")
-allmeta.sub<-rbind(Fulcrum.sub,Dessain.sub)
+Warren.summary<-read.csv("SummaryData/WarrenSummary.csv")
+Warren.sub<-data.frame(sample.id=Warren.summary$Bulk.sample.ID,
+                       species=Warren.summary$Species,
+                       project="SWA-Warren")
+allmeta.sub<-do.call(rbind,args=list(Fulcrum.sub,Dessain.sub,
+                                  PhragmitesTemporal.sub,Warren.sub))
 
-## missing full summary data for: Warren, Pardo, Phragmites Temporal
+## missing full summary data for: Pardo
 
 meta(all.spec)$species<-allmeta.sub$species[match(meta(all.spec)$sample_id,allmeta.sub$sample.id)]
 meta(all.spec)$project<-allmeta.sub$project[match(meta(all.spec)$sample_id,allmeta.sub$sample.id)]
@@ -104,8 +113,6 @@ meta(all.spec)$project<-allmeta.sub$project[match(meta(all.spec)$sample_id,allme
 ## this is temporary
 meta(all.spec)$project<-as.character(meta(all.spec)$project)
 meta(all.spec)$project[meta(all.spec)$sample_id %in% meta(Pardo.spec)$sample_id]<-"2019-Pardo-MSc-UdeM"
-meta(all.spec)$project[meta(all.spec)$sample_id %in% meta(Warren.spec)$sample_id]<-"SWA-Warren"
-meta(all.spec)$project[meta(all.spec)$sample_id %in% meta(PhragmitesTemporal.spec)$sample_id]<-"2019-Phragmites-temporal"
 
 ## remove data from Beauchamp Rioux dataset
 ## of red or yellow leaves (or otherwise non-standard)

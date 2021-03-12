@@ -83,6 +83,34 @@ all.spec<-readRDS("ProcessedSpectra/all_spectra.rds")
 #   labs(x="Wavelength",y="Reflectance")+lims(y=c(0,1))+
 #   ggtitle("Girard spectra")
 
+#############################################
+## growth form
+
+vascan<-read.csv("SummaryData/vascan.csv")
+meta(all.spec)$growth.form<-vascan$growth_form[match(meta(all.spec)$species,vascan$scientific_name)]
+meta(all.spec)$family<-vascan$family[match(meta(all.spec)$species,vascan$scientific_name)]
+
+meta(all.spec)$growth.form[meta(all.spec)$species=="Acer pensylvanicum Linnaeus"]<-"tree"
+meta(all.spec)$growth.form[meta(all.spec)$species=="Betula populifolia Marshall"]<-"tree"
+meta(all.spec)$growth.form[meta(all.spec)$species=="Sorbus decora (Sargent) C.K. Schneider"]<-"tree"
+meta(all.spec)$growth.form[meta(all.spec)$species=="Sorbus americana Marshall"]<-"tree"
+meta(all.spec)$growth.form[meta(all.spec)$species=="Prunus pensylvanica Linnaeus f."]<-"tree"
+meta(all.spec)$growth.form[meta(all.spec)$species=="Frangula alnus Miller"]<-"shrub"
+meta(all.spec)$growth.form[meta(all.spec)$species=="Rhamnus cathartica Linnaeus"]<-"shrub"
+meta(all.spec)$growth.form[meta(all.spec)$species=="Prunus nigra Aiton"]<-"tree"
+meta(all.spec)$growth.form[meta(all.spec)$species=="Salix Linnaeus"]<-"shrub"
+## the next four, I'm not too sure about the tree/shrub assignment
+## making a best guess based on max height and project
+meta(all.spec)$growth.form[meta(all.spec)$species=="Prunus virginiana Linnaeus"]<-"shrub"
+meta(all.spec)$growth.form[meta(all.spec)$species=="Staphylea trifolia Linnaeus"]<-"shrub"
+meta(all.spec)$growth.form[meta(all.spec)$species=="Oemleria cerasiformis (Torrey & A. Gray ex Hooker & Arnott) J.W. Landon"]<-"shrub"
+meta(all.spec)$growth.form[meta(all.spec)$species=="Crataegus monogyna Jacquin"]<-"shrub"
+
+meta(all.spec)$functional.group<-as.character(meta(all.spec)$growth.form)
+meta(all.spec)$functional.group[meta(all.spec)$family %in% c("Poaceae","Cyperaceae","Juncaceae")]<-"graminoid"
+meta(all.spec)$functional.group[meta(all.spec)$family=="Fabaceae"]<-"legume"
+meta(all.spec)$functional.group[meta(all.spec)$family %in% c("Pinaceae","Cupressaceae")]<-"conifer"
+
 ##############################################
 ## read leaf area/water traits
 

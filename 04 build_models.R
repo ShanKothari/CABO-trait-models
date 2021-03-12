@@ -17,11 +17,29 @@ spec.traits<-readRDS("ProcessedSpectra/all_spectra_and_traits.rds")
 ## remove Dessain data and instead use as a validation data set
 
 #########################################
-## define RMSD function
+## define functions
 
+## RMSD between predicted and observed values
 RMSD<-function(measured,predicted){
   not.na<-which(!is.na(measured) & !is.na(predicted))
   return(sqrt(sum((measured-predicted)^2,na.rm=T)/(length(not.na)-1)))
+}
+
+## applying coefficients to validation spectra
+apply.coefs<-function(coef.list,val.spec,intercept=T){
+  if(sum(lapply(coef.list,length)==ncol(val.spec)+intercept) < length(coef.list)){
+    stop("some coefficients have the wrong length")
+  }
+  
+  coef.matrix<-matrix(unlist(coef.list),
+                      nrow=length(coef.list),
+                      byrow=T)
+  
+  if(intercept==T){
+    pred.matrix<-t(t(as.matrix(val.spec) %*% t(coef.matrix[,-1]))+coef.matrix[,1])
+  } else {
+    pred.matrix<-as.matrix(val.spec) %*% t(coef.matrix)
+  }
 }
 
 ##########################################
@@ -525,11 +543,7 @@ for(i in 1:nreps){
   
 }
 
-EWT.jack.pred<-t(apply(as.matrix(spec.test),1,function(spec) {
-  preds<-lapply(EWT.jack.coefs,function(coef) coef[1]+sum(coef[-1]*spec))
-  return(unlist(preds))
-}))
-
+EWT.jack.pred<-EWT.jack.pred<-apply.coefs(EWT.jack.coefs,as.matrix(spec.test))
 EWT.jack.stat<-t(apply(EWT.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 EWT.jack.df<-data.frame(pred.mean=EWT.jack.stat[,1],
                         pred.low=EWT.jack.stat[,1]-1.96*EWT.jack.stat[,2],
@@ -551,11 +565,7 @@ EWT.val.plot<-ggplot(EWT.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   labs(y="Measured EWT (cm)",x="Predicted EWT (cm)")+
   guides(color=F)
 
-solubles_mass.jack.pred<-t(apply(as.matrix(spec.test),1,function(spec) {
-  preds<-lapply(solubles_mass.jack.coefs,function(coef) coef[1]+sum(coef[-1]*spec))
-  return(unlist(preds))
-}))
-
+solubles_mass.jack.pred<-apply.coefs(solubles_mass.jack.coefs,as.matrix(spec.test))
 solubles_mass.jack.stat<-t(apply(solubles_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 solubles_mass.jack.df<-data.frame(pred.mean=solubles_mass.jack.stat[,1],
                             pred.low=solubles_mass.jack.stat[,1]-1.96*solubles_mass.jack.stat[,2],
@@ -577,11 +587,7 @@ solubles_mass.val.plot<-ggplot(solubles_mass.jack.df,aes(y=Measured,x=pred.mean,
   labs(y="Measured solubles (%)",x="Predicted solubles (%)")+
   guides(color=F)
 
-hemicellulose_mass.jack.pred<-t(apply(as.matrix(spec.test),1,function(spec) {
-  preds<-lapply(hemicellulose_mass.jack.coefs,function(coef) coef[1]+sum(coef[-1]*spec))
-  return(unlist(preds))
-}))
-
+hemicellulose_mass.jack.pred<-apply.coefs(hemicellulose_mass.jack.coefs,as.matrix(spec.test))
 hemicellulose_mass.jack.stat<-t(apply(hemicellulose_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 hemicellulose_mass.jack.df<-data.frame(pred.mean=hemicellulose_mass.jack.stat[,1],
                             pred.low=hemicellulose_mass.jack.stat[,1]-1.96*hemicellulose_mass.jack.stat[,2],
@@ -603,11 +609,7 @@ hemicellulose_mass.val.plot<-ggplot(hemicellulose_mass.jack.df,aes(y=Measured,x=
   labs(y="Measured hemicellulose (%)",x="Predicted hemicellulose (%)")+
   guides(color=F)
 
-cellulose_mass.jack.pred<-t(apply(as.matrix(spec.test),1,function(spec) {
-  preds<-lapply(cellulose_mass.jack.coefs,function(coef) coef[1]+sum(coef[-1]*spec))
-  return(unlist(preds))
-}))
-
+cellulose_mass.jack.pred<-apply.coefs(cellulose_mass.jack.coefs,as.matrix(spec.test))
 cellulose_mass.jack.stat<-t(apply(cellulose_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 cellulose_mass.jack.df<-data.frame(pred.mean=cellulose_mass.jack.stat[,1],
                             pred.low=cellulose_mass.jack.stat[,1]-1.96*cellulose_mass.jack.stat[,2],
@@ -629,11 +631,7 @@ cellulose_mass.val.plot<-ggplot(cellulose_mass.jack.df,aes(y=Measured,x=pred.mea
   labs(y="Measured cellulose (%)",x="Predicted cellulose (%)")+
   guides(color=F)
 
-lignin_mass.jack.pred<-t(apply(as.matrix(spec.test),1,function(spec) {
-  preds<-lapply(lignin_mass.jack.coefs,function(coef) coef[1]+sum(coef[-1]*spec))
-  return(unlist(preds))
-}))
-
+lignin_mass.jack.pred<-apply.coefs(lignin_mass.jack.coefs,as.matrix(spec.test))
 lignin_mass.jack.stat<-t(apply(lignin_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 lignin_mass.jack.df<-data.frame(pred.mean=lignin_mass.jack.stat[,1],
                             pred.low=lignin_mass.jack.stat[,1]-1.96*lignin_mass.jack.stat[,2],
@@ -655,6 +653,7 @@ lignin_mass.val.plot<-ggplot(lignin_mass.jack.df,aes(y=Measured,x=pred.mean,colo
   labs(y="Measured lignin (%)",x="Predicted lignin (%)")+
   guides(color=F)
 
+chlA_fresh.jack.pred<-apply.coefs(chlA_fresh.jack.coefs,as.matrix(spec.test))
 chlA_fresh.jack.stat<-t(apply(chlA_fresh.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 chlA_fresh.jack.df<-data.frame(pred.mean=chlA_fresh.jack.stat[,1],
                                 pred.low=chlA_fresh.jack.stat[,1]-1.96*chlA_fresh.jack.stat[,2],
@@ -676,6 +675,7 @@ chlA_fresh.val.plot<-ggplot(chlA_fresh.jack.df,aes(y=Measured,x=pred.mean,color=
   labs(y=expression("Measured Chl a (mg g"^-1*")"),x=expression("Predicted Chl b (mg g"^-1*")"))+
   guides(color=F)
 
+chlB_fresh.jack.pred<-apply.coefs(chlB_fresh.jack.coefs,as.matrix(spec.test))
 chlB_fresh.jack.stat<-t(apply(chlB_fresh.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 chlB_fresh.jack.df<-data.frame(pred.mean=chlB_fresh.jack.stat[,1],
                                 pred.low=chlB_fresh.jack.stat[,1]-1.96*chlB_fresh.jack.stat[,2],
@@ -697,6 +697,7 @@ chlB_fresh.val.plot<-ggplot(chlB_fresh.jack.df,aes(y=Measured,x=pred.mean,color=
   labs(y=expression("Measured Chl b (mg g"^-1*")"),x=expression("Predicted Chl b (mg g"^-1*")"))+
   guides(color=F)
 
+car_fresh.jack.pred<-apply.coefs(car_fresh.jack.coefs,as.matrix(spec.test))
 car_fresh.jack.stat<-t(apply(car_fresh.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 car_fresh.jack.df<-data.frame(pred.mean=car_fresh.jack.stat[,1],
                                 pred.low=car_fresh.jack.stat[,1]-1.96*car_fresh.jack.stat[,2],
@@ -718,11 +719,7 @@ car_fresh.val.plot<-ggplot(car_fresh.jack.df,aes(y=Measured,x=pred.mean,color=Pr
   labs(y=expression("Measured carotenoids (mg g"^-1*")"),x=expression("Predicted carotenoids (mg g"^-1*")"))+
   guides(color=F)
 
-Cmass.jack.pred<-t(apply(as.matrix(spec.test),1,function(spec) {
-  preds<-lapply(Cmass.jack.coefs,function(coef) coef[1]+sum(coef[-1]*spec))
-  return(unlist(preds))
-}))
-
+Cmass.jack.pred<-apply.coefs(Cmass.jack.coefs,as.matrix(spec.test))
 Cmass.jack.stat<-t(apply(Cmass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 Cmass.jack.df<-data.frame(pred.mean=Cmass.jack.stat[,1],
                          pred.low=Cmass.jack.stat[,1]-1.96*Cmass.jack.stat[,2],
@@ -743,11 +740,7 @@ Cmass.val.plot<-ggplot(Cmass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   labs(y=expression("Measured C"[mass]*" (%)"),x=expression("Predicted C"[mass]*" (%)"))+
   guides(color=F)
 
-Nmass.jack.pred<-t(apply(as.matrix(spec.test),1,function(spec) {
-  preds<-lapply(Nmass.jack.coefs,function(coef) coef[1]+sum(coef[-1]*spec))
-  return(unlist(preds))
-}))
-
+Nmass.jack.pred<-apply.coefs(Nmass.jack.coefs,as.matrix(spec.test))
 Nmass.jack.stat<-t(apply(Nmass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 Nmass.jack.df<-data.frame(pred.mean=Nmass.jack.stat[,1],
                          pred.low=Nmass.jack.stat[,1]-1.96*Nmass.jack.stat[,2],
@@ -767,11 +760,7 @@ Nmass.val.plot<-ggplot(Nmass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured N"[mass]*" (%)"),x=expression("Predicted N"[mass]*" (%)"))+  guides(color=F)
 
-LMA.jack.pred<-t(apply(as.matrix(spec.test),1,function(spec) {
-  preds<-lapply(LMA.jack.coefs,function(coef) coef[1]+sum(coef[-1]*spec))
-  return(unlist(preds))
-}))
-
+LMA.jack.pred<-apply.coefs(LMA.jack.coefs,as.matrix(spec.test))
 LMA.jack.stat<-t(apply(LMA.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 LMA.jack.df<-data.frame(pred.mean=LMA.jack.stat[,1],
                         pred.low=LMA.jack.stat[,1]-1.96*LMA.jack.stat[,2],
@@ -792,11 +781,7 @@ LMA.val.plot<-ggplot(LMA.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   labs(y=expression("Measured LMA (kg m"^-2*")"),x=expression("Predicted LMA (kg m"^-2*")"))+
   guides(color=F)
 
-LDMC.jack.pred<-t(apply(as.matrix(spec.test),1,function(spec) {
-  preds<-lapply(LDMC.jack.coefs,function(coef) coef[1]+sum(coef[-1]*spec))
-  return(unlist(preds))
-}))
-
+LDMC.jack.pred<-apply.coefs(LDMC.jack.coefs,as.matrix(spec.test))
 LDMC.jack.stat<-t(apply(LDMC.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 LDMC.jack.df<-data.frame(pred.mean=LDMC.jack.stat[,1],
                          pred.low=LDMC.jack.stat[,1]-1.96*LDMC.jack.stat[,2],
@@ -817,11 +802,36 @@ LDMC.val.plot<-ggplot(LDMC.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   labs(y=expression("Measured LDMC (mg g"^-1*")"),x=expression("Predicted LDMC (mg g"^-1*")"))+
   guides(color=F)
 
+all.jack.coef.list<-list(EWT=EWT.jack.coefs,
+                         solubles_mass=solubles_mass.jack.coefs,
+                         hemicellulose_mass=hemicellulose_mass.jack.coefs,
+                         cellulose_mass=cellulose_mass.jack.coefs,
+                         lignin_mass=lignin_mass.jack.coefs,
+                         chlA_fresh=chlA_fresh.jack.coefs,
+                         chlB_fresh=chlB_fresh.jack.coefs,
+                         car_fresh=car_fresh.jack.coefs,
+                         Nmass=Nmass.jack.coefs,
+                         Cmass=Cmass.jack.coefs,
+                         LDMC=LDMC.jack.coefs,
+                         LMA=LMA.jack.coefs)
+saveRDS(all.jack.coef.list,"SavedResults/all_jack_coefs_list.rds")
+
+all.jack.df.list<-list(EWT=EWT.jack.df,
+                       solubles_mass=solubles_mass.jack.df,
+                       hemicellulose_mass=hemicellulose_mass.jack.df,
+                       cellulose_mass=cellulose_mass.jack.df,
+                       lignin_mass=lignin_mass.jack.df,
+                       chlA_fresh=chlA_fresh.jack.df,
+                       chlB_fresh=chlB_fresh.jack.df,
+                       car_fresh=car_fresh.jack.df,
+                       Nmass=Nmass.jack.df,
+                       Cmass=Cmass.jack.df,
+                       LDMC=LDMC.jack.df,
+                       LMA=LMA.jack.df)
+saveRDS(all.jack.df.list,"SavedResults/all_jack_df_list.rds")
+
 pdf("Images/val_plots.pdf",width = 10,height = 9)
 EWT.val.plot
-NDFmass.val.plot
-ADFmass.val.plot
-ADLmass.val.plot
 solubles_mass.val.plot
 hemicellulose_mass.val.plot
 cellulose_mass.val.plot
