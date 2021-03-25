@@ -12,7 +12,6 @@ spec.traits<-readRDS("ProcessedSpectra/all_spectra_and_traits.rds")
 ##########################################
 ## to dos
 
-## fix RMSD calculations
 ## try Type II regression?
 ## remove Dessain data and instead use as a validation data set
 
@@ -435,7 +434,7 @@ for(i in 1:nreps){
   EWT.jack.val.pred<-as.vector(predict(EWT.jack,newdata=as.matrix(val.jack),ncomp=ncomp_EWT_CVmodel)[,,1])
   EWT.jack.val.fit<-lm(EWT.jack.val.pred~meta(val.jack)$EWT)
   EWT.jack.stats[[i]]<-c(R2=summary(EWT.jack.val.fit)$r.squared,
-                         RMSE=sqrt(c(crossprod(EWT.jack.val.fit$residuals))/length(EWT.jack.val.fit$residuals)),
+                         RMSE=RMSD(meta(val.jack)$EWT,EWT.jack.val.pred),
                          max.val=max(meta(val.jack)$EWT,na.rm=T),
                          min.val=min(meta(val.jack)$EWT,na.rm=T),
                          bias=mean(EWT.jack.val.pred,na.rm=T)-mean(meta(val.jack)$EWT,na.rm=T))
@@ -443,7 +442,7 @@ for(i in 1:nreps){
   solubles_mass.jack.val.pred<-as.vector(predict(solubles_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_solubles_mass_CVmodel)[,,1])
   solubles_mass.jack.val.fit<-lm(solubles_mass.jack.val.pred~meta(val.jack)$solubles_mass)
   solubles_mass.jack.stats[[i]]<-c(R2=summary(solubles_mass.jack.val.fit)$r.squared,
-                             RMSE=sqrt(c(crossprod(solubles_mass.jack.val.fit$residuals))/length(solubles_mass.jack.val.fit$residuals)),
+                             RMSE=RMSD(meta(val.jack)$solubles_mass,solubles_mass.jack.val.pred),
                              max.val=max(meta(val.jack)$solubles_mass,na.rm=T),
                              min.val=min(meta(val.jack)$solubles_mass,na.rm=T),
                              bias=mean(solubles_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$solubles_mass,na.rm=T))
@@ -451,7 +450,7 @@ for(i in 1:nreps){
   hemicellulose_mass.jack.val.pred<-as.vector(predict(hemicellulose_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_hemicellulose_mass_CVmodel)[,,1])
   hemicellulose_mass.jack.val.fit<-lm(hemicellulose_mass.jack.val.pred~meta(val.jack)$hemicellulose_mass)
   hemicellulose_mass.jack.stats[[i]]<-c(R2=summary(hemicellulose_mass.jack.val.fit)$r.squared,
-                             RMSE=sqrt(c(crossprod(hemicellulose_mass.jack.val.fit$residuals))/length(hemicellulose_mass.jack.val.fit$residuals)),
+                             RMSE=RMSD(meta(val.jack)$hemicellulose_mass,hemicellulose.jack.val.pred),
                              max.val=max(meta(val.jack)$hemicellulose_mass,na.rm=T),
                              min.val=min(meta(val.jack)$hemicellulose_mass,na.rm=T),
                              bias=mean(hemicellulose_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$hemicellulose_mass,na.rm=T))
@@ -459,7 +458,7 @@ for(i in 1:nreps){
   cellulose_mass.jack.val.pred<-as.vector(predict(cellulose_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_cellulose_mass_CVmodel)[,,1])
   cellulose_mass.jack.val.fit<-lm(cellulose_mass.jack.val.pred~meta(val.jack)$cellulose_mass)
   cellulose_mass.jack.stats[[i]]<-c(R2=summary(cellulose_mass.jack.val.fit)$r.squared,
-                             RMSE=sqrt(c(crossprod(cellulose_mass.jack.val.fit$residuals))/length(cellulose_mass.jack.val.fit$residuals)),
+                             RMSE=RMSD(meta(val.jack)$cellulose_mass,cellulose_mass.jack.val.pred),
                              max.val=max(meta(val.jack)$cellulose_mass,na.rm=T),
                              min.val=min(meta(val.jack)$cellulose_mass,na.rm=T),
                              bias=mean(cellulose_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$cellulose_mass,na.rm=T))
@@ -467,7 +466,7 @@ for(i in 1:nreps){
   lignin_mass.jack.val.pred<-as.vector(predict(lignin_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_lignin_mass_CVmodel)[,,1])
   lignin_mass.jack.val.fit<-lm(lignin_mass.jack.val.pred~meta(val.jack)$lignin_mass)
   lignin_mass.jack.stats[[i]]<-c(R2=summary(lignin_mass.jack.val.fit)$r.squared,
-                             RMSE=sqrt(c(crossprod(lignin_mass.jack.val.fit$residuals))/length(lignin_mass.jack.val.fit$residuals)),
+                             RMSE=RMSD(meta(val.jack)$lignin_mass,lignin_mass.jack.val.pred),
                              max.val=max(meta(val.jack)$lignin_mass,na.rm=T),
                              min.val=min(meta(val.jack)$lignin_mass,na.rm=T),
                              bias=mean(lignin_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$lignin_mass,na.rm=T))
@@ -475,7 +474,7 @@ for(i in 1:nreps){
   chlA_mass.jack.val.pred<-as.vector(predict(chlA_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_chlA_mass_CVmodel)[,,1])
   chlA_mass.jack.val.fit<-lm(chlA_mass.jack.val.pred~meta(val.jack)$chlA_mass)
   chlA_mass.jack.stats[[i]]<-c(R2=summary(chlA_mass.jack.val.fit)$r.squared,
-                                   RMSE=sqrt(c(crossprod(chlA_mass.jack.val.fit$residuals))/length(chlA_mass.jack.val.fit$residuals)),
+                                   RMSE=RMSD(meta(val.jack)$chlA_mass,chlA_mass.jack.val.pred),
                                    max.val=max(meta(val.jack)$chlA_mass,na.rm=T),
                                    min.val=min(meta(val.jack)$chlA_mass,na.rm=T),
                                    bias=mean(chlA_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$chlA_mass,na.rm=T))
@@ -483,7 +482,7 @@ for(i in 1:nreps){
   chlB_mass.jack.val.pred<-as.vector(predict(chlB_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_chlB_mass_CVmodel)[,,1])
   chlB_mass.jack.val.fit<-lm(chlB_mass.jack.val.pred~meta(val.jack)$chlB_mass)
   chlB_mass.jack.stats[[i]]<-c(R2=summary(chlB_mass.jack.val.fit)$r.squared,
-                                   RMSE=sqrt(c(crossprod(chlB_mass.jack.val.fit$residuals))/length(chlB_mass.jack.val.fit$residuals)),
+                                   RMSE=RMSD(meta(val.jack)$chlB_mass,chlB_mass.jack.val.pred),
                                    max.val=max(meta(val.jack)$chlB_mass,na.rm=T),
                                    min.val=min(meta(val.jack)$chlB_mass,na.rm=T),
                                    bias=mean(chlB_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$chlB_mass,na.rm=T))
@@ -491,7 +490,7 @@ for(i in 1:nreps){
   car_mass.jack.val.pred<-as.vector(predict(car_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_car_mass_CVmodel)[,,1])
   car_mass.jack.val.fit<-lm(car_mass.jack.val.pred~meta(val.jack)$car_mass)
   car_mass.jack.stats[[i]]<-c(R2=summary(car_mass.jack.val.fit)$r.squared,
-                                   RMSE=sqrt(c(crossprod(car_mass.jack.val.fit$residuals))/length(car_mass.jack.val.fit$residuals)),
+                                   RMSE=RMSD(meta(val.jack)$car_mass,car_mass.jack.val.pred),
                                    max.val=max(meta(val.jack)$car_mass,na.rm=T),
                                    min.val=min(meta(val.jack)$car_mass,na.rm=T),
                                    bias=mean(car_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$car_mass,na.rm=T))
@@ -499,7 +498,7 @@ for(i in 1:nreps){
   Cmass.jack.val.pred<-as.vector(predict(Cmass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Cmass_CVmodel)[,,1])
   Cmass.jack.val.fit<-lm(Cmass.jack.val.pred~meta(val.jack)$Cmass)
   Cmass.jack.stats[[i]]<-c(R2=summary(Cmass.jack.val.fit)$r.squared,
-                                  RMSE=sqrt(c(crossprod(Cmass.jack.val.fit$residuals))/length(Cmass.jack.val.fit$residuals)),
+                                  RMSE=RMSD(meta(val.jack)$Cmass,Cmass.jack.val.pred),
                                   max.val=max(meta(val.jack)$Cmass,na.rm=T),
                                   min.val=min(meta(val.jack)$Cmass,na.rm=T),
                                   bias=mean(Cmass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Cmass,na.rm=T))
@@ -507,7 +506,7 @@ for(i in 1:nreps){
   Nmass.jack.val.pred<-as.vector(predict(Nmass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Nmass_CVmodel)[,,1])
   Nmass.jack.val.fit<-lm(Nmass.jack.val.pred~meta(val.jack)$Nmass)
   Nmass.jack.stats[[i]]<-c(R2=summary(Nmass.jack.val.fit)$r.squared,
-                                  RMSE=sqrt(c(crossprod(Nmass.jack.val.fit$residuals))/length(Nmass.jack.val.fit$residuals)),
+                                  RMSE=RMSD(meta(val.jack)$Nmass,Nmass.jack.val.pred),
                                   max.val=max(meta(val.jack)$Nmass,na.rm=T),
                                   min.val=min(meta(val.jack)$Nmass,na.rm=T),
                                   bias=mean(Nmass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Nmass,na.rm=T))
@@ -515,7 +514,7 @@ for(i in 1:nreps){
   LMA.jack.val.pred<-as.vector(predict(LMA.jack,newdata=as.matrix(val.jack),ncomp=ncomp_LMA_CVmodel)[,,1])
   LMA.jack.val.fit<-lm(LMA.jack.val.pred~meta(val.jack)$LMA)
   LMA.jack.stats[[i]]<-c(R2=summary(LMA.jack.val.fit)$r.squared,
-                                 RMSE=sqrt(c(crossprod(LMA.jack.val.fit$residuals))/length(LMA.jack.val.fit$residuals)),
+                                 RMSE=RMSD(meta(val.jack)$LMA,LMA.jack.val.pred),
                                  max.val=max(meta(val.jack)$LMA,na.rm=T),
                                  min.val=min(meta(val.jack)$LMA,na.rm=T),
                                  bias=mean(LMA.jack.val.pred,na.rm=T)-mean(meta(val.jack)$LMA,na.rm=T))
@@ -523,7 +522,7 @@ for(i in 1:nreps){
   LDMC.jack.val.pred<-as.vector(predict(LDMC.jack,newdata=as.matrix(val.jack),ncomp=ncomp_LDMC_CVmodel)[,,1])
   LDMC.jack.val.fit<-lm(LDMC.jack.val.pred~meta(val.jack)$LDMC)
   LDMC.jack.stats[[i]]<-c(R2=summary(LDMC.jack.val.fit)$r.squared,
-                                  RMSE=sqrt(c(crossprod(LDMC.jack.val.fit$residuals))/length(LDMC.jack.val.fit$residuals)),
+                                  RMSE=RMSD(meta(val.jack)$LDMC,LDMC.jack.val.pred),
                                   max.val=max(meta(val.jack)$LDMC,na.rm=T),
                                   min.val=min(meta(val.jack)$LDMC,na.rm=T),
                                   bias=mean(LDMC.jack.val.pred,na.rm=T)-mean(meta(val.jack)$LDMC,na.rm=T))

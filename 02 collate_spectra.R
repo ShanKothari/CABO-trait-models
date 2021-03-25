@@ -2,80 +2,80 @@ setwd("C:/Users/kotha020/Dropbox/PostdocProjects/FreshLeafModels/")
 
 library(spectrolab)
 
-BeauchampRioux.df<-read.csv("ProcessedSpectra/BeauchampRioux_spec_processed.csv")
+BeauchampRioux.df<-read.csv("ProcessedSpectra/BeauchampRioux_ref_processed.csv")
 colnames(BeauchampRioux.df)<-gsub("X","",colnames(BeauchampRioux.df))
 BeauchampRioux.spec<-as_spectra(BeauchampRioux.df,name_idx=1)
 meta(BeauchampRioux.spec)$sample_id<-gsub("spec_","",names(BeauchampRioux.spec))
 BeauchampRioux.spec<-BeauchampRioux.spec[,400:2400]
 
-Blanchard.df<-read.csv("ProcessedSpectra/Blanchard_spec_processed.csv")
+Blanchard.df<-read.csv("ProcessedSpectra/Blanchard_ref_processed.csv")
 colnames(Blanchard.df)<-gsub("X","",colnames(Blanchard.df))
 Blanchard.spec<-as_spectra(Blanchard.df,name_idx=1)
 meta(Blanchard.spec)$sample_id<-gsub("spec_","",names(Blanchard.spec))
 Blanchard.spec<-Blanchard.spec[,400:2400]
 
-Boucherville2018.df<-read.csv("ProcessedSpectra/Boucherville2018_spec_processed.csv")
+Boucherville2018.df<-read.csv("ProcessedSpectra/Boucherville2018_ref_processed.csv")
 colnames(Boucherville2018.df)<-gsub("X","",colnames(Boucherville2018.df))
 Boucherville2018.spec<-as_spectra(Boucherville2018.df,name_idx=1)
 meta(Boucherville2018.spec)$sample_id<-gsub("spec_","",names(Boucherville2018.spec))
 Boucherville2018.spec<-Boucherville2018.spec[,400:2400]
 
-Boucherville2019.df<-read.csv("ProcessedSpectra/Boucherville2019_spec_processed.csv")
+Boucherville2019.df<-read.csv("ProcessedSpectra/Boucherville2019_ref_processed.csv")
 colnames(Boucherville2019.df)<-gsub("X","",colnames(Boucherville2019.df))
 Boucherville2019.spec<-as_spectra(Boucherville2019.df,name_idx=1)
 meta(Boucherville2019.spec)$sample_id<-gsub("spec_","",names(Boucherville2019.spec))
 Boucherville2019.spec<-Boucherville2019.spec[,400:2400]
 
-CABOGeneral2019.df<-read.csv("ProcessedSpectra/CABOGeneral2019_spec_processed.csv")
+CABOGeneral2019.df<-read.csv("ProcessedSpectra/CABOGeneral2019_ref_processed.csv")
 colnames(CABOGeneral2019.df)<-gsub("X","",colnames(CABOGeneral2019.df))
 CABOGeneral2019.spec<-as_spectra(CABOGeneral2019.df,name_idx=1)
 meta(CABOGeneral2019.spec)$sample_id<-gsub("spec_","",names(CABOGeneral2019.spec))
 CABOGeneral2019.spec<-CABOGeneral2019.spec[,400:2400]
 CABOGeneral2019.spec<-CABOGeneral2019.spec[-which(names(CABOGeneral2019.spec) %in% names(Blanchard.spec))]
 
-CABOGeneralOther.df<-read.csv("ProcessedSpectra/CABOGeneralOther_spec_processed.csv")
+CABOGeneralOther.df<-read.csv("ProcessedSpectra/CABOGeneralOther_ref_processed.csv")
 colnames(CABOGeneralOther.df)<-gsub("X","",colnames(CABOGeneralOther.df))
 CABOGeneralOther.spec<-as_spectra(CABOGeneralOther.df,name_idx=1)
 meta(CABOGeneralOther.spec)$sample_id<-gsub("spec_","",names(CABOGeneralOther.spec))
 CABOGeneralOther.spec<-CABOGeneralOther.spec[,400:2400]
 
-Crofts.df<-read.csv("ProcessedSpectra/Crofts_spec_processed.csv")
+Crofts.df<-read.csv("ProcessedSpectra/Crofts_ref_processed.csv")
 colnames(Crofts.df)<-gsub("X","",colnames(Crofts.df))
 Crofts.spec<-as_spectra(Crofts.df,name_idx=1)
 meta(Crofts.spec)$sample_id<-gsub("spec_","",names(Crofts.spec))
 Crofts.spec<-Crofts.spec[,400:2400]
 
-Dessain.df<-read.csv("ProcessedSpectra/Dessain_spec_processed.csv")
+Dessain.df<-read.csv("ProcessedSpectra/Dessain_ref_processed.csv")
 colnames(Dessain.df)<-gsub("X","",colnames(Dessain.df))
 Dessain.spec<-as_spectra(Dessain.df,name_idx=1)
 meta(Dessain.spec)$sample_id<-gsub("spec_","",names(Dessain.spec))
 Dessain.spec<-Dessain.spec[,400:2400]
 
-Girard.df<-read.csv("ProcessedSpectra/Girard_spec_processed.csv")
+Girard.df<-read.csv("ProcessedSpectra/Girard_ref_processed.csv")
 colnames(Girard.df)<-gsub("X","",colnames(Girard.df))
 Girard.spec<-as_spectra(Girard.df,name_idx=1)
 meta(Girard.spec)$sample_id<-gsub("spec_","",names(Girard.spec))
 Girard.spec<-Girard.spec[,400:2400]
 
-Hacker2019.df<-read.csv("ProcessedSpectra/Hacker2019_spec_processed.csv")
+Hacker2019.df<-read.csv("ProcessedSpectra/Hacker2019_ref_processed.csv")
 colnames(Hacker2019.df)<-gsub("X","",colnames(Hacker2019.df))
 Hacker2019.spec<-as_spectra(Hacker2019.df,name_idx=1)
 meta(Hacker2019.spec)$sample_id<-gsub("spec_","",names(Hacker2019.spec))
 Hacker2019.spec<-Hacker2019.spec[,400:2400]
 
-Pardo.df<-read.csv("ProcessedSpectra/Pardo_spec_processed.csv")
+Pardo.df<-read.csv("ProcessedSpectra/Pardo_ref_processed.csv")
 colnames(Pardo.df)<-gsub("X","",colnames(Pardo.df))
 Pardo.spec<-as_spectra(Pardo.df,name_idx=1)
 meta(Pardo.spec)$sample_id<-gsub("spec_","",names(Pardo.spec))
 Pardo.spec<-Pardo.spec[,400:2400]
 
-PhragmitesTemporal.df<-read.csv("ProcessedSpectra/PhragmitesTemporal_spec_processed.csv")
+PhragmitesTemporal.df<-read.csv("ProcessedSpectra/PhragmitesTemporal_ref_processed.csv")
 colnames(PhragmitesTemporal.df)<-gsub("X","",colnames(PhragmitesTemporal.df))
 PhragmitesTemporal.spec<-as_spectra(PhragmitesTemporal.df,name_idx=1)
 meta(PhragmitesTemporal.spec)$sample_id<-gsub("spec_","",names(PhragmitesTemporal.spec))
 PhragmitesTemporal.spec<-PhragmitesTemporal.spec[,400:2400]
 
-Warren.df<-read.csv("ProcessedSpectra/Warren_spec_processed.csv")
+Warren.df<-read.csv("ProcessedSpectra/Warren_ref_processed.csv")
 colnames(Warren.df)<-gsub("X","",colnames(Warren.df))
 Warren.spec<-as_spectra(Warren.df,name_idx=1)
 meta(Warren.spec)$sample_id<-gsub("spec_","",names(Warren.spec))
