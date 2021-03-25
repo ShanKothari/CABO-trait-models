@@ -329,9 +329,9 @@ all.pigments$carotenoides._mg_g[all.pigments$sample_id==13404937]<-NA
 ## remove records who notes contain "refaire" or "refait" since these were all redone
 all.pigments<-all.pigments[-which(str_detect(string = all.pigments$Notes,pattern = "efai")),]
 
-meta(all.spec)$chlA_fresh<-as.numeric(as.character(all.pigments$chlA_mg_g[match(meta(all.spec)$sample_id,all.pigments$sample_id)]))
-meta(all.spec)$chlB_fresh<-as.numeric(as.character(all.pigments$chlB_mg_g[match(meta(all.spec)$sample_id,all.pigments$sample_id)]))
-meta(all.spec)$car_fresh<-as.numeric(as.character(all.pigments$carotenoides._mg_g[match(meta(all.spec)$sample_id,all.pigments$sample_id)]))
+meta(all.spec)$chlA_mass<-as.numeric(as.character(all.pigments$chlA_mg_g[match(meta(all.spec)$sample_id,all.pigments$sample_id)]))
+meta(all.spec)$chlB_mass<-as.numeric(as.character(all.pigments$chlB_mg_g[match(meta(all.spec)$sample_id,all.pigments$sample_id)]))
+meta(all.spec)$car_mass<-as.numeric(as.character(all.pigments$carotenoides._mg_g[match(meta(all.spec)$sample_id,all.pigments$sample_id)]))
 
 #############################################
 ## area-normalized chemical traits and
@@ -370,24 +370,18 @@ meta(all.spec)$lignin_area<-meta(all.spec)$lignin_mass*meta(all.spec)$LMA/1000
 lignin_area_norm<-lm(log(lignin_area)~log(0.1*LMA),data=meta(all.spec),na.action=na.exclude)
 meta(all.spec)$lignin_norm<-resid(lignin_area_norm)
 
-## first to dry mass basis
-meta(all.spec)$chlA_dry<-meta(all.spec)$chlA_fresh*1000/meta(all.spec)$LDMC
 ## then to area basis
-meta(all.spec)$chlA_area<-meta(all.spec)$chlA_dry*meta(all.spec)$LMA/1000
+meta(all.spec)$chlA_area<-meta(all.spec)$chlA_mass*meta(all.spec)$LMA/1000
 chlA_area_norm<-lm(log(chlA_area)~log(0.1*LMA),data=meta(all.spec),na.action=na.exclude)
 meta(all.spec)$chlA_norm<-resid(chlA_area_norm)
 
-## first to dry mass basis
-meta(all.spec)$chlB_dry<-meta(all.spec)$chlB_fresh*1000/meta(all.spec)$LDMC
 ## then to area basis
-meta(all.spec)$chlB_area<-meta(all.spec)$chlB_dry*meta(all.spec)$LMA/1000
+meta(all.spec)$chlB_area<-meta(all.spec)$chlB_mass*meta(all.spec)$LMA/1000
 chlB_area_norm<-lm(log(chlB_area)~log(0.1*LMA),data=meta(all.spec),na.action=na.exclude)
 meta(all.spec)$chlB_norm<-resid(chlB_area_norm)
 
-## first to dry mass basis
-meta(all.spec)$car_dry<-meta(all.spec)$car_fresh*1000/meta(all.spec)$LDMC
 ## then to area basis
-meta(all.spec)$car_area<-meta(all.spec)$car_dry*meta(all.spec)$LMA/1000
+meta(all.spec)$car_area<-meta(all.spec)$car_mass*meta(all.spec)$LMA/1000
 car_area_norm<-lm(log(car_area)~log(0.1*LMA),data=meta(all.spec),na.action=na.exclude)
 meta(all.spec)$car_norm<-resid(car_area_norm)
 

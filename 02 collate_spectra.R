@@ -57,11 +57,11 @@ Girard.spec<-as_spectra(Girard.df,name_idx=1)
 meta(Girard.spec)$sample_id<-gsub("spec_","",names(Girard.spec))
 Girard.spec<-Girard.spec[,400:2400]
 
-Hacker.df<-read.csv("ProcessedSpectra/Hacker_spec_processed.csv")
-colnames(Hacker.df)<-gsub("X","",colnames(Hacker.df))
-Hacker.spec<-as_spectra(Hacker.df,name_idx=1)
-meta(Hacker.spec)$sample_id<-gsub("spec_","",names(Hacker.spec))
-Hacker.spec<-Hacker.spec[,400:2400]
+Hacker2019.df<-read.csv("ProcessedSpectra/Hacker2019_spec_processed.csv")
+colnames(Hacker2019.df)<-gsub("X","",colnames(Hacker2019.df))
+Hacker2019.spec<-as_spectra(Hacker2019.df,name_idx=1)
+meta(Hacker2019.spec)$sample_id<-gsub("spec_","",names(Hacker2019.spec))
+Hacker2019.spec<-Hacker2019.spec[,400:2400]
 
 Pardo.df<-read.csv("ProcessedSpectra/Pardo_spec_processed.csv")
 colnames(Pardo.df)<-gsub("X","",colnames(Pardo.df))
@@ -83,7 +83,7 @@ Warren.spec<-Warren.spec[,400:2400]
 
 all.spec<-Reduce(combine, list(BeauchampRioux.spec, Blanchard.spec, Boucherville2018.spec,
                                Boucherville2019.spec, CABOGeneral2019.spec, CABOGeneralOther.spec,
-                               Crofts.spec, Dessain.spec, Girard.spec, Hacker.spec,
+                               Crofts.spec, Dessain.spec, Girard.spec, Hacker2019.spec,
                                Pardo.spec, PhragmitesTemporal.spec, Warren.spec))
 
 Fulcrum.summary<-read.csv("SummaryData/leaf_spectra.csv")
@@ -117,11 +117,11 @@ meta(all.spec)$project[meta(all.spec)$sample_id %in% meta(Pardo.spec)$sample_id]
 ## remove data from Beauchamp Rioux dataset
 ## of red or yellow leaves (or otherwise non-standard)
 all.spec<-all.spec[-which(meta(all.spec)$sample_id %in% c("11851575","13221003","22405244",
-                                                                   "21854888","21854774","21854585",
-                                                                   "10449089","10450505","10452131",
-                                                                   "10453164","10454172","10461643",
-                                                                   "10465061","10466192","10466735",
-                                                                   "10468015"))]
+                                                          "21854888","21854774","21854585",
+                                                          "10449089","10450505","10452131",
+                                                          "10453164","10454172","10461643",
+                                                          "10465061","10466192","10466735",
+                                                          "10468015"))]
 
 ## remove a few missing spectra from Blanchard project?
 ## not sure why they're missing though!

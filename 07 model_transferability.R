@@ -8,6 +8,7 @@ library(reshape2)
 library(hypervolume)
 library(GSAR)
 library(statip)
+library(lme4)
 
 spec.traits<-readRDS("ProcessedSpectra/all_spectra_and_traits.rds")
 ## the Pardo dataset has no trait data (yet)
@@ -58,7 +59,7 @@ meta(spec.traits)$PC5.spec.scale.norm<-meta(spec.traits)$PC5.spec.scale/sd(meta(
 traits.ref=meta(spec.traits)[,c("LDMC","EWT","Cmass","Nmass","LMA",
                                 "solubles_mass","hemicellulose_mass",
                                 "cellulose_mass","lignin_mass",
-                                "chlA_fresh","chlB_fresh","car_fresh")]
+                                "chlA_mass","chlB_mass","car_mass")]
 
 traits.pca.scale<-prcomp(~.,traits.ref,scale.=T,na.action=na.exclude)
 meta(spec.traits)$PC1.traits.scale<-traits.pca.scale$x[,1]
@@ -213,15 +214,22 @@ LMA_pred_list<-list()
 LDMC_pred_list<-list()
 Nmass_pred_list<-list()
 lignin_mass_pred_list<-list()
-chlA_fresh_pred_list<-list()
+chlA_mass_pred_list<-list()
 EWT_pred_list<-list()
 
 LMA_dist<-list()
 LDMC_dist<-list()
 Nmass_dist<-list()
 lignin_mass_dist<-list()
-chlA_fresh_dist<-list()
+chlA_mass_dist<-list()
 EWT_dist<-list()
+
+LMA_KL<-list()
+LDMC_KL<-list()
+Nmass_KL<-list()
+lignin_mass_KL<-list()
+chlA_mass_KL<-list()
+EWT_KL<-list()
 
 for(i in common.proj){
   print(i)
@@ -238,6 +246,8 @@ for(i in common.proj){
                            na.omit(meta(spec.traits.other)$LMA),
                            lower=-0.2,
                            upper=0.6)
+  LMA_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$LMA),
+                             na.omit(meta(spec.traits.proj)$LMA))
   
   LDMC_cal<-plsr(meta(spec.traits.other)$LDMC~as.matrix(spec.traits.other),
                 ncomp=30,method = "oscorespls",validation="CV",segments=10)
@@ -249,6 +259,8 @@ for(i in common.proj){
                            na.omit(meta(spec.traits.other)$LDMC),
                            lower=-200,
                            upper=800)
+  LDMC_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$LDMC),
+                             na.omit(meta(spec.traits.proj)$LDMC))
   
   Nmass_cal<-plsr(meta(spec.traits.other)$Nmass~as.matrix(spec.traits.other),
                 ncomp=30,method = "oscorespls",validation="CV",segments=10)
@@ -260,6 +272,8 @@ for(i in common.proj){
                            na.omit(meta(spec.traits.other)$Nmass),
                            lower=-1,
                            upper=8)
+  Nmass_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$Nmass),
+                             na.omit(meta(spec.traits.proj)$Nmass))
   
   lignin_mass_cal<-plsr(meta(spec.traits.other)$lignin_mass~as.matrix(spec.traits.other),
                   ncomp=30,method = "oscorespls",validation="CV",segments=10)
@@ -271,17 +285,21 @@ for(i in common.proj){
                              na.omit(meta(spec.traits.other)$lignin_mass),
                              lower=-5,
                              upper=30)
+  lignin_mass_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$lignin_mass),
+                                     na.omit(meta(spec.traits.proj)$lignin_mass))
   
-  chlA_fresh_cal<-plsr(meta(spec.traits.other)$chlA_fresh~as.matrix(spec.traits.other),
+  chlA_mass_cal<-plsr(meta(spec.traits.other)$chlA_mass~as.matrix(spec.traits.other),
                         ncomp=30,method = "oscorespls",validation="CV",segments=10)
-  ncomp_chlA_fresh<-selectNcomp(chlA_fresh_cal, method = "onesigma", plot = F)
-  chlA_fresh_val<-predict(chlA_fresh_cal,newdata=as.matrix(spec.traits.proj),ncomp=ncomp_chlA_fresh)
-  chlA_fresh_pred_list[[i]]<-data.frame(measured=meta(spec.traits.proj)$chlA_fresh,
-                                         val_pred=as.vector(chlA_fresh_val))
-  chlA_fresh_dist[[i]]<-hellinger(na.omit(meta(spec.traits.proj)$chlA_fresh),
-                                   na.omit(meta(spec.traits.other)$chlA_fresh),
+  ncomp_chlA_mass<-selectNcomp(chlA_mass_cal, method = "onesigma", plot = F)
+  chlA_mass_val<-predict(chlA_mass_cal,newdata=as.matrix(spec.traits.proj),ncomp=ncomp_chlA_mass)
+  chlA_mass_pred_list[[i]]<-data.frame(measured=meta(spec.traits.proj)$chlA_mass,
+                                         val_pred=as.vector(chlA_mass_val))
+  chlA_mass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.proj)$chlA_mass),
+                                   na.omit(meta(spec.traits.other)$chlA_mass),
                                    lower=-5,
                                    upper=30)
+  chlA_mass_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$chlA_mass),
+                             na.omit(meta(spec.traits.proj)$chlA_mass))
   
   EWT_cal<-plsr(meta(spec.traits.other)$EWT~as.matrix(spec.traits.other),
                         ncomp=30,method = "oscorespls",validation="CV",segments=10)
@@ -293,6 +311,8 @@ for(i in common.proj){
                                    na.omit(meta(spec.traits.other)$EWT),
                                    lower=-0.02,
                                    upper=0.09)
+  EWT_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$EWT),
+                             na.omit(meta(spec.traits.proj)$EWT))
   
 }
 
@@ -300,40 +320,46 @@ LMA_sum_df<-data.frame(dataset=names(LMA_pred_list),
                        RMSD=unlist(lapply(LMA_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                        R2=unlist(lapply(LMA_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
                        hellinger=unlist(LMA_dist),
+                       KL=unlist(lapply(LMA_KL,function(x) x[[5]])),
                        trait="LMA")
 
 LDMC_sum_df<-data.frame(dataset=names(LDMC_pred_list),
                        RMSD=unlist(lapply(LDMC_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                        R2=unlist(lapply(LDMC_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
                        hellinger=unlist(LDMC_dist),
+                       KL=unlist(lapply(LDMC_KL,function(x) x[[5]])),
                        trait="LDMC")
 
 Nmass_sum_df<-data.frame(dataset=names(Nmass_pred_list),
                         RMSD=unlist(lapply(Nmass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                         R2=unlist(lapply(Nmass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
                         hellinger=unlist(Nmass_dist),
+                        KL=unlist(lapply(Nmass_KL,function(x) x[[5]])),
                         trait="Nmass")
 
 lignin_mass_sum_df<-data.frame(dataset=names(lignin_mass_pred_list),
                          RMSD=unlist(lapply(lignin_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                          R2=unlist(lapply(lignin_mass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
                          hellinger=unlist(lignin_mass_dist),
+                         KL=unlist(lapply(lignin_mass_KL,function(x) x[[5]])),
                          trait="lignin_mass")
 
-chlA_fresh_sum_df<-data.frame(dataset=names(chlA_fresh_pred_list),
-                               RMSD=unlist(lapply(chlA_fresh_pred_list,function(x) RMSD(x$measured,x$val_pred))),
-                               R2=unlist(lapply(chlA_fresh_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
-                               hellinger=unlist(chlA_fresh_dist),
-                               trait="chlA_fresh")
+chlA_mass_sum_df<-data.frame(dataset=names(chlA_mass_pred_list),
+                               RMSD=unlist(lapply(chlA_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                               R2=unlist(lapply(chlA_mass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                               hellinger=unlist(chlA_mass_dist),
+                             KL=unlist(lapply(chlA_mass_KL,function(x) x[[5]])),
+                               trait="chlA_mass")
 
 EWT_sum_df<-data.frame(dataset=names(EWT_pred_list),
                                RMSD=unlist(lapply(EWT_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                                R2=unlist(lapply(EWT_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
                                hellinger=unlist(EWT_dist),
+                       KL=unlist(lapply(EWT_KL,function(x) x[[5]])),
                                trait="EWT")
 
 summary_df<-do.call(rbind,list(LMA_sum_df,LDMC_sum_df,Nmass_sum_df,
-                               lignin_mass_sum_df,chlA_fresh_sum_df,
+                               lignin_mass_sum_df,chlA_mass_sum_df,
                                EWT_sum_df))
 
 summary_df$KS_stat<-spec_distance_df$KS_stat[match(summary_df$dataset,spec_distance_df$dataset)]
@@ -346,10 +372,10 @@ summary_df$jaccard_scale_norm<-spec_overlap_df$jaccard_scale_norm[match(summary_
 summary_df$unique_frac_scale_norm<-spec_overlap_df$unique_frac_scale_norm[match(summary_df$dataset,spec_overlap_df$dataset)]
 
 
-ggplot(data=summary_df,aes(x=unique_frac_scale_norm,y=R2,color=trait))+
+ggplot(data=summary_df,aes(x=KL,y=R2,color=trait))+
   geom_point()+geom_smooth(method="lm",se=F)
 
-summary(lmer(R2~hellinger+(1|trait)+(1|dataset),data=summary_df))
+summary(lmer(R2~KL+(1|trait)+(1|dataset),data=summary_df))
 
 
 ## bringing in randomized validation data
@@ -360,7 +386,7 @@ summary_df$R2_val[summary_df$trait=="LMA"]<-summary(lm(Measured~pred.mean,val_mo
 summary_df$R2_val[summary_df$trait=="LDMC"]<-summary(lm(Measured~pred.mean,val_models[["LDMC"]]))$r.squared
 summary_df$R2_val[summary_df$trait=="Nmass"]<-summary(lm(Measured~pred.mean,val_models[["Nmass"]]))$r.squared
 summary_df$R2_val[summary_df$trait=="lignin_mass"]<-summary(lm(Measured~pred.mean,val_models[["lignin_mass"]]))$r.squared
-summary_df$R2_val[summary_df$trait=="chlA_fresh"]<-summary(lm(Measured~pred.mean,val_models[["chlA_fresh"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="chlA_mass"]<-summary(lm(Measured~pred.mean,val_models[["chlA_mass"]]))$r.squared
 
 ggplot(data=summary_df,aes(x=trait,y=R2))+
   geom_violin()+
@@ -374,14 +400,14 @@ LMA_pred_list<-list()
 LDMC_pred_list<-list()
 Nmass_pred_list<-list()
 lignin_mass_pred_list<-list()
-chlA_fresh_pred_list<-list()
+chlA_mass_pred_list<-list()
 EWT_pred_list<-list()
 
 LMA_dist<-list()
 LDMC_dist<-list()
 Nmass_dist<-list()
 lignin_mass_dist<-list()
-chlA_fresh_dist<-list()
+chlA_mass_dist<-list()
 EWT_dist<-list()
 
 common.fg<-names(table(meta(spec.traits)$functional.group))[table(meta(spec.traits)$functional.group)>30]
@@ -435,14 +461,14 @@ for(i in common.fg){
                                    lower=-5,
                                    upper=30)
   
-  chlA_fresh_cal<-plsr(meta(spec.traits.other)$chlA_fresh~as.matrix(spec.traits.other),
+  chlA_mass_cal<-plsr(meta(spec.traits.other)$chlA_mass~as.matrix(spec.traits.other),
                        ncomp=30,method = "oscorespls",validation="CV",segments=10)
-  ncomp_chlA_fresh<-selectNcomp(chlA_fresh_cal, method = "onesigma", plot = F)
-  chlA_fresh_val<-predict(chlA_fresh_cal,newdata=as.matrix(spec.traits.fg),ncomp=ncomp_chlA_fresh)
-  chlA_fresh_pred_list[[i]]<-data.frame(measured=meta(spec.traits.fg)$chlA_fresh,
-                                        val_pred=as.vector(chlA_fresh_val))
-  chlA_fresh_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$chlA_fresh),
-                                  na.omit(meta(spec.traits.other)$chlA_fresh),
+  ncomp_chlA_mass<-selectNcomp(chlA_mass_cal, method = "onesigma", plot = F)
+  chlA_mass_val<-predict(chlA_mass_cal,newdata=as.matrix(spec.traits.fg),ncomp=ncomp_chlA_mass)
+  chlA_mass_pred_list[[i]]<-data.frame(measured=meta(spec.traits.fg)$chlA_mass,
+                                        val_pred=as.vector(chlA_mass_val))
+  chlA_mass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$chlA_mass),
+                                  na.omit(meta(spec.traits.other)$chlA_mass),
                                   lower=-5,
                                   upper=30)
   
@@ -459,38 +485,76 @@ for(i in common.fg){
   
 }
 
-LMA_sum_df<-data.frame(dataset=names(LMA_pred_list),
+LMA_sum_df<-data.frame(functional.group=names(LMA_pred_list),
                        RMSD=unlist(lapply(LMA_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                        R2=unlist(lapply(LMA_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
                        hellinger=unlist(LMA_dist),
                        trait="LMA")
 
-LDMC_sum_df<-data.frame(dataset=names(LDMC_pred_list),
+LDMC_sum_df<-data.frame(functional.group=names(LDMC_pred_list),
                         RMSD=unlist(lapply(LDMC_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                         R2=unlist(lapply(LDMC_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
                         hellinger=unlist(LDMC_dist),
                         trait="LDMC")
 
-Nmass_sum_df<-data.frame(dataset=names(Nmass_pred_list),
+Nmass_sum_df<-data.frame(functional.group=names(Nmass_pred_list),
                          RMSD=unlist(lapply(Nmass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                          R2=unlist(lapply(Nmass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
                          hellinger=unlist(Nmass_dist),
                          trait="Nmass")
 
-lignin_mass_sum_df<-data.frame(dataset=names(lignin_mass_pred_list),
+lignin_mass_sum_df<-data.frame(functional.group=names(lignin_mass_pred_list),
                                RMSD=unlist(lapply(lignin_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                                R2=unlist(lapply(lignin_mass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
                                hellinger=unlist(lignin_mass_dist),
                                trait="lignin_mass")
 
-chlA_fresh_sum_df<-data.frame(dataset=names(chlA_fresh_pred_list),
-                              RMSD=unlist(lapply(chlA_fresh_pred_list,function(x) RMSD(x$measured,x$val_pred))),
-                              R2=unlist(lapply(chlA_fresh_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
-                              hellinger=unlist(chlA_fresh_dist),
-                              trait="chlA_fresh")
+chlA_mass_sum_df<-data.frame(functional.group=names(chlA_mass_pred_list),
+                              RMSD=unlist(lapply(chlA_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                              R2=unlist(lapply(chlA_mass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                              hellinger=unlist(chlA_mass_dist),
+                              trait="chlA_mass")
 
-EWT_sum_df<-data.frame(dataset=names(EWT_pred_list),
+EWT_sum_df<-data.frame(functional.group=names(EWT_pred_list),
                        RMSD=unlist(lapply(EWT_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                        R2=unlist(lapply(EWT_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
                        hellinger=unlist(EWT_dist),
                        trait="EWT")
+
+summary_df<-do.call(rbind,list(LMA_sum_df,LDMC_sum_df,Nmass_sum_df,
+                               lignin_mass_sum_df,chlA_mass_sum_df,
+                               EWT_sum_df))
+
+## bringing in randomized validation data
+val_models<-readRDS("SavedResults/all_jack_df_list.rds")
+summary_df$R2_val<-NA
+summary_df$R2_val[summary_df$trait=="EWT"]<-summary(lm(Measured~pred.mean,data=val_models[["EWT"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="LMA"]<-summary(lm(Measured~pred.mean,val_models[["LMA"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="LDMC"]<-summary(lm(Measured~pred.mean,val_models[["LDMC"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="Nmass"]<-summary(lm(Measured~pred.mean,val_models[["Nmass"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="lignin_mass"]<-summary(lm(Measured~pred.mean,val_models[["lignin_mass"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="chlA_mass"]<-summary(lm(Measured~pred.mean,val_models[["chlA_mass"]]))$r.squared
+
+ggplot(data=summary_df,aes(x=trait,y=R2))+
+  geom_violin()+
+  geom_point(data=summary_df,aes(x=trait,y=R2_val),color="red")+
+  theme_bw()
+
+RMSD_df<-data.frame(functional.group=LMA_sum_df$functional.group,
+                    LMA=LMA_sum_df$RMSD,
+                    LDMC=LDMC_sum_df$RMSD,
+                    Nmass=Nmass_sum_df$RMSD,
+                    lignin_mass=lignin_mass_sum_df$RMSD,
+                    chlA_mass=chlA_mass_sum_df$RMSD,
+                    EWT=EWT_sum_df$RMSD)
+
+R2_df<-data.frame(functional.group=LMA_sum_df$functional.group,
+                    LMA=LMA_sum_df$R2,
+                    LDMC=LDMC_sum_df$R2,
+                    Nmass=Nmass_sum_df$R2,
+                    lignin_mass=lignin_mass_sum_df$R2,
+                    chlA_mass=chlA_mass_sum_df$R2,
+                    EWT=EWT_sum_df$R2)
+
+ggplot(data=summary_df,aes(x=hellinger,y=R2,color=trait))+
+  geom_point()+geom_smooth(method="lm",se=F)
