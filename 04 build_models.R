@@ -542,7 +542,7 @@ for(i in 1:nreps){
   
 }
 
-EWT.jack.pred<-EWT.jack.pred<-apply.coefs(EWT.jack.coefs,as.matrix(spec.test))
+EWT.jack.pred<-apply.coefs(EWT.jack.coefs,as.matrix(spec.test))
 EWT.jack.stat<-t(apply(EWT.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 EWT.jack.df<-data.frame(pred.mean=EWT.jack.stat[,1],
                         pred.low=EWT.jack.stat[,1]-1.96*EWT.jack.stat[,2],
