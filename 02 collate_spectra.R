@@ -214,7 +214,7 @@ all.ref.spec<-all.ref.spec[-which(meta(all.ref.spec)$sample_id %in% c("11851575"
                                                           "10465061","10466192","10466735",
                                                           "10468015"))]
 
-all.trans.spec<-all.ref.spec[-which(meta(all.trans.spec)$sample_id %in% c("11851575","13221003","22405244",
+all.trans.spec<-all.trans.spec[-which(meta(all.trans.spec)$sample_id %in% c("11851575","13221003","22405244",
                                                                       "21854888","21854774","21854585",
                                                                       "10449089","10450505","10452131",
                                                                       "10453164","10454172","10461643",
