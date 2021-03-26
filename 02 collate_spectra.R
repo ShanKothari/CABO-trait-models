@@ -224,6 +224,7 @@ all.trans.spec<-all.ref.spec[-which(meta(all.trans.spec)$sample_id %in% c("11851
 ## remove a few missing spectra from Blanchard project?
 ## not sure why they're missing though!
 all.ref.spec<-all.ref.spec[-which(is.na(rowSums(as.matrix(all.ref.spec))))]
-all.ref.spec<-all.ref.spec[-which(is.na(rowSums(as.matrix(all.trans.spec))))]
+all.trans.spec<-all.trans.spec[-which(is.na(rowSums(as.matrix(all.trans.spec))))]
 
-saveRDS(all.ref.spec,file = "ProcessedSpectra/all_reflectance.rds")
+saveRDS(all.ref.spec,file = "ProcessedSpectra/all_ref.rds")
+saveRDS(all.trans.spec,file = "ProcessedSpectra/all_trans.rds")

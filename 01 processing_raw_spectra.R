@@ -258,6 +258,8 @@ write.csv(Dessain_sg_wide,"ProcessedSpectra/Dessain_ref_processed.csv",row.names
 ## and integrating sphere
 
 BeauchampRioux<-read.csv("UnprocessedSpectra/project_leaves_combined_BeauchampRioux.csv")
+## this is important because otherwise the SG filter step acts up
+BeauchampRioux<-BeauchampRioux[BeauchampRioux$wavelength>=350,]
 
 ## separate reflectance and transmittance
 BeauchampRioux_ref<-BeauchampRioux[BeauchampRioux$reflectance.transmittance=="reflectance",]
@@ -370,6 +372,7 @@ write.csv(BeauchampRioux_trans_sg_wide,"ProcessedSpectra/BeauchampRioux_trans_pr
 ## all annotations can be found in the Beauchamp-Rioux section
 
 Boucherville2018<-read.csv("UnprocessedSpectra/project_leaves_combined_Boucherville2018.csv")
+Boucherville2018<-Boucherville2018[Boucherville2018$wavelength>=350,]
 
 Boucherville2018_ref<-Boucherville2018[Boucherville2018$reflectance.transmittance=="reflectance",]
 
@@ -473,6 +476,7 @@ write.csv(Boucherville2018_trans_sg_wide,"ProcessedSpectra/Boucherville2018_tran
 ## Girard spectra
 
 Girard<-read.csv("UnprocessedSpectra/project_leaves_combined_Girard.csv")
+Girard<-Girard[Girard$wavelength>=350,]
 
 Girard_ref<-Girard[Girard$reflectance.transmittance=="reflectance",]
 
@@ -576,6 +580,7 @@ write.csv(Girard_trans_sg_wide,"ProcessedSpectra/Girard_trans_processed.csv",row
 ## Hacker spectra
 
 Hacker2019<-read.csv("UnprocessedSpectra/project_leaves_combined_Hacker2019.csv")
+Hacker2019<-Hacker2019[Hacker2019$wavelength>=350,]
 
 Hacker2019_ref<-Hacker2019[Hacker2019$reflectance.transmittance=="reflectance",]
 
@@ -679,6 +684,7 @@ write.csv(Hacker2019_trans_sg_wide,"ProcessedSpectra/Hacker2019_trans_processed.
 ## Blanchard spectra
 
 Blanchard<-read.csv("UnprocessedSpectra/project_leaves_combined_Blanchard.csv")
+Blanchard<-Blanchard[Blanchard$wavelength>=350,]
 
 Blanchard_ref<-Blanchard[Blanchard$reflectance.transmittance=="reflectance",]
 
@@ -784,6 +790,7 @@ write.csv(Blanchard_trans_sg_wide,"ProcessedSpectra/Blanchard_trans_processed.cs
 Boucherville2019<-read.csv("UnprocessedSpectra/project_leaves_combined_Boucherville2019.csv")
 ## temporary fix -- there are two spectra per leaf with this ID, and one of each is bad
 Boucherville2019<-Boucherville2019[-which(Boucherville2019$sample_id=="44245455"),]
+Boucherville2019<-Boucherville2019[Boucherville2019$wavelength>=350,]
 
 Boucherville2019_ref<-Boucherville2019[Boucherville2019$reflectance.transmittance=="reflectance",]
 
@@ -887,6 +894,7 @@ write.csv(Boucherville2019_trans_sg_wide,"ProcessedSpectra/Boucherville2019_tran
 ## CABO General 2019 spectra
 
 CABOGeneral2019<-read.csv("UnprocessedSpectra/project_leaves_combined_CABOGeneral2019.csv")
+CABOGeneral2019<-CABOGeneral2019[CABOGeneral2019$wavelength>=350,]
 
 CABOGeneral2019_ref<-CABOGeneral2019[CABOGeneral2019$reflectance.transmittance=="reflectance",]
 
@@ -990,6 +998,7 @@ write.csv(CABOGeneral2019_trans_sg_wide,"ProcessedSpectra/CABOGeneral2019_trans_
 ## Crofts spectra
 
 Crofts<-read.csv("UnprocessedSpectra/project_leaves_combined_Crofts.csv")
+Crofts<-Crofts[Crofts$wavelength>=350,]
 
 Crofts_ref<-Crofts[Crofts$reflectance.transmittance=="reflectance",]
 
@@ -1093,6 +1102,7 @@ write.csv(Crofts_trans_sg_wide,"ProcessedSpectra/Crofts_trans_processed.csv",row
 ## Pardo spectra
 
 Pardo<-read.csv("UnprocessedSpectra/project_leaves_combined_Pardo.csv")
+Pardo<-Pardo[Pardo$wavelength>=350,]
 
 Pardo_ref<-Pardo[Pardo$reflectance.transmittance=="reflectance",]
 
@@ -1196,6 +1206,7 @@ write.csv(Pardo_trans_sg_wide,"ProcessedSpectra/Pardo_trans_processed.csv",row.n
 ## Phragmites temporal spectra
 
 PhragmitesTemporal<-read.csv("UnprocessedSpectra/project_leaves_combined_PhragmitesTemporal.csv")
+PhragmitesTemporal<-PhragmitesTemporal[PhragmitesTemporal$wavelength>=350,]
 
 PhragmitesTemporal_ref<-PhragmitesTemporal[PhragmitesTemporal$reflectance.transmittance=="reflectance",]
 
@@ -1299,6 +1310,7 @@ write.csv(PhragmitesTemporal_trans_sg_wide,"ProcessedSpectra/PhragmitesTemporal_
 ## CABO General Other spectra
 
 CABOGeneralOther<-read.csv("UnprocessedSpectra/project_leaves_combined_CABOGeneralOther.csv")
+CABOGeneralOther<-CABOGeneralOther[CABOGeneralOther$wavelength>=350,]
 
 CABOGeneralOther_ref<-CABOGeneralOther[CABOGeneralOther$reflectance.transmittance=="reflectance",]
 
@@ -1402,6 +1414,7 @@ write.csv(CABOGeneralOther_trans_sg_wide,"ProcessedSpectra/CABOGeneralOther_tran
 ## Warren spectra
 
 Warren<-read.csv("UnprocessedSpectra/project_leaves_combined_Warren.csv")
+Warren<-Warren[Warren$wavelength>=350,]
 
 Warren_ref<-Warren[Warren$reflectance.transmittance=="reflectance",]
 
