@@ -166,7 +166,7 @@ colnames(Dessain_sg_wide)<-gsub(pattern = "value_sg.",
                                 replacement = "",
                                 x = colnames(Dessain_sg_wide))
 
-write.csv(Dessain_sg_wide,"ProcessedSpectra/Dessain_spec_processed.csv",row.names=F)
+write.csv(Dessain_sg_wide,"ProcessedSpectra/Dessain_ref_processed.csv",row.names=F)
 
 ##########################################################
 ## Hacker 2018 GOP
