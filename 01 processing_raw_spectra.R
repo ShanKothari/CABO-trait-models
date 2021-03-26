@@ -124,15 +124,15 @@ refl_corr.df <- comb3 %>%
   do(refl_corr(.))
 
 ## aggregate reps within a leaf
-Dessain_spec <- refl_corr.df %>%
+Dessain <- refl_corr.df %>%
   group_by(parentEventID,leafNumber, wvl) %>%
   summarise(mean.refl.corr = mean(refl_corr)) %>%
   droplevels()
 
 ## for consistency with other data sets at this stage
-colnames(Dessain_spec)<-c("sample_id","leaf_number","wvl","DN")
+colnames(Dessain)<-c("sample_id","leaf_number","wvl","DN")
 
-Dessain_agg<- Dessain_spec %>% 
+Dessain_agg<- Dessain %>% 
   dplyr::group_by(sample_id, wvl) %>% 
   dplyr::summarise(value = mean(DN, na.rm = T))
 
@@ -204,18 +204,18 @@ write.csv(Dessain_sg_wide,"ProcessedSpectra/Dessain_ref_processed.csv",row.names
 #   dplyr::select(-wvl.char) 
 # 
 # ## aggregate reps within a leaf
-# Hacker2018_spec <- ref.long %>%
+# Hacker2018 <- ref.long %>%
 #   group_by(substr(ref.long$fileName,1,nchar(ref.long$fileName)-6), wvl) %>%
 #   summarise(mean.refl.corr = mean(target.rad)) %>%
 #   droplevels()
 # 
 # ## for consistency with other data sets at this stage
-# colnames(Hacker2018_spec)<-c("sample_id","wvl","DN")
+# colnames(Hacker2018)<-c("sample_id","wvl","DN")
 # 
-# Hacker2018_spec$leaf_number<-unlist(lapply(strsplit(Hacker2018_spec$sample_id,split="_"),function(x) x[[2]]))
-# Hacker2018_spec$sample_id<-unlist(lapply(strsplit(Hacker2018_spec$sample_id,split="_"),function(x) x[[1]]))
+# Hacker2018$leaf_number<-unlist(lapply(strsplit(Hacker2018$sample_id,split="_"),function(x) x[[2]]))
+# Hacker2018$sample_id<-unlist(lapply(strsplit(Hacker2018$sample_id,split="_"),function(x) x[[1]]))
 # 
-# Hacker2018_agg<- Hacker2018_spec %>% 
+# Hacker2018_agg<- Hacker2018 %>% 
 #   dplyr::group_by(sample_id, wvl) %>% 
 #   dplyr::summarise(value = mean(DN, na.rm = T))
 # 
@@ -249,7 +249,7 @@ write.csv(Dessain_sg_wide,"ProcessedSpectra/Dessain_ref_processed.csv",row.names
 #                                 replacement = "",
 #                                 x = colnames(Hacker2018_sg_wide))
 # 
-# write.csv(Hacker2018_sg_wide,"ProcessedSpectra/Hacker2018_spec_processed.csv",row.names=F)
+# write.csv(Hacker2018_sg_wide,"ProcessedSpectra/Hacker2018_ref_processed.csv",row.names=F)
 
 ###########################################################
 ## Beauchamp-Rioux spectra
@@ -257,22 +257,22 @@ write.csv(Dessain_sg_wide,"ProcessedSpectra/Dessain_ref_processed.csv",row.names
 ## like the rest, these were measured with an SVC
 ## and integrating sphere
 
-BeauchampRioux_spec<-read.csv("UnprocessedSpectra/project_leaves_combined_BeauchampRioux.csv")
+BeauchampRioux<-read.csv("UnprocessedSpectra/project_leaves_combined_BeauchampRioux.csv")
 
 ## separate reflectance and transmittance
-BeauchampRioux_spec_ref<-BeauchampRioux_spec[BeauchampRioux_spec$reflectance.transmittance=="reflectance",]
+BeauchampRioux_ref<-BeauchampRioux[BeauchampRioux$reflectance.transmittance=="reflectance",]
 
 ## create unique ids for an individual leaf
-BeauchampRioux_spec_ref$leaf_id<-apply(BeauchampRioux_spec_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
-BeauchampRioux_spec_ref$wvl_id<-apply(BeauchampRioux_spec_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
+BeauchampRioux_ref$leaf_id<-apply(BeauchampRioux_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
+BeauchampRioux_ref$wvl_id<-apply(BeauchampRioux_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
 ## remove the spectral overlap region and interpolate over it
-dup_ids_ref<-BeauchampRioux_spec_ref$wvl_id[duplicated(BeauchampRioux_spec_ref$wvl_id)]
-BeauchampRioux_spec_ref_no_dups<-BeauchampRioux_spec_ref[-which(BeauchampRioux_spec_ref$wvl_id %in% dup_ids_ref),]
-inter_wvls <- ceiling(min(BeauchampRioux_spec_ref_no_dups$wavelength)):floor(max(BeauchampRioux_spec_ref_no_dups$wavelength))
+dup_ids_ref<-BeauchampRioux_ref$wvl_id[duplicated(BeauchampRioux_ref$wvl_id)]
+BeauchampRioux_ref_no_dups<-BeauchampRioux_ref[-which(BeauchampRioux_ref$wvl_id %in% dup_ids_ref),]
+inter_wvls <- ceiling(min(BeauchampRioux_ref_no_dups$wavelength)):floor(max(BeauchampRioux_ref_no_dups$wavelength))
 
 ## apply linear interpolation step over spectral overlap
-BeauchampRioux_ref_cleaned <-BeauchampRioux_spec_ref_no_dups%>%
+BeauchampRioux_ref_cleaned <-BeauchampRioux_ref_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -315,15 +315,15 @@ colnames(BeauchampRioux_ref_sg_wide)<-gsub(pattern = "value_sg.",
 write.csv(BeauchampRioux_ref_sg_wide,"ProcessedSpectra/BeauchampRioux_ref_processed.csv",row.names=F)
 
 ## now the same for transmittance
-BeauchampRioux_spec_trans<-BeauchampRioux_spec[BeauchampRioux_spec$reflectance.transmittance=="transmittance",]
-BeauchampRioux_spec_trans$leaf_id<-apply(BeauchampRioux_spec_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
-BeauchampRioux_spec_trans$wvl_id<-apply(BeauchampRioux_spec_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
+BeauchampRioux_trans<-BeauchampRioux[BeauchampRioux$reflectance.transmittance=="transmittance",]
+BeauchampRioux_trans$leaf_id<-apply(BeauchampRioux_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
+BeauchampRioux_trans$wvl_id<-apply(BeauchampRioux_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_trans<-BeauchampRioux_spec_trans$wvl_id[duplicated(BeauchampRioux_spec_trans$wvl_id)]
-BeauchampRioux_spec_trans_no_dups<-BeauchampRioux_spec_trans[-which(BeauchampRioux_spec_trans$wvl_id %in% dup_ids_trans),]
-inter_wvls <- ceiling(min(BeauchampRioux_spec_trans_no_dups$wavelength)):floor(max(BeauchampRioux_spec_trans_no_dups$wavelength))
+dup_ids_trans<-BeauchampRioux_trans$wvl_id[duplicated(BeauchampRioux_trans$wvl_id)]
+BeauchampRioux_trans_no_dups<-BeauchampRioux_trans[-which(BeauchampRioux_trans$wvl_id %in% dup_ids_trans),]
+inter_wvls <- ceiling(min(BeauchampRioux_trans_no_dups$wavelength)):floor(max(BeauchampRioux_trans_no_dups$wavelength))
 
-BeauchampRioux_trans_cleaned <-BeauchampRioux_spec_trans_no_dups%>%
+BeauchampRioux_trans_cleaned <-BeauchampRioux_trans_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -369,18 +369,18 @@ write.csv(BeauchampRioux_trans_sg_wide,"ProcessedSpectra/BeauchampRioux_trans_pr
 ## now I remove comments -- 
 ## all annotations can be found in the Beauchamp-Rioux section
 
-Boucherville2018_spec<-read.csv("UnprocessedSpectra/project_leaves_combined_Boucherville2018.csv")
+Boucherville2018<-read.csv("UnprocessedSpectra/project_leaves_combined_Boucherville2018.csv")
 
-Boucherville2018_spec_ref<-Boucherville2018_spec[Boucherville2018_spec$reflectance.transmittance=="reflectance",]
+Boucherville2018_ref<-Boucherville2018[Boucherville2018$reflectance.transmittance=="reflectance",]
 
-Boucherville2018_spec_ref$leaf_id<-apply(Boucherville2018_spec_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
-Boucherville2018_spec_ref$wvl_id<-apply(Boucherville2018_spec_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
+Boucherville2018_ref$leaf_id<-apply(Boucherville2018_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
+Boucherville2018_ref$wvl_id<-apply(Boucherville2018_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_ref<-Boucherville2018_spec_ref$wvl_id[duplicated(Boucherville2018_spec_ref$wvl_id)]
-Boucherville2018_spec_ref_no_dups<-Boucherville2018_spec_ref[-which(Boucherville2018_spec_ref$wvl_id %in% dup_ids_ref),]
-inter_wvls <- ceiling(min(Boucherville2018_spec_ref_no_dups$wavelength)):floor(max(Boucherville2018_spec_ref_no_dups$wavelength))
+dup_ids_ref<-Boucherville2018_ref$wvl_id[duplicated(Boucherville2018_ref$wvl_id)]
+Boucherville2018_ref_no_dups<-Boucherville2018_ref[-which(Boucherville2018_ref$wvl_id %in% dup_ids_ref),]
+inter_wvls <- ceiling(min(Boucherville2018_ref_no_dups$wavelength)):floor(max(Boucherville2018_ref_no_dups$wavelength))
 
-Boucherville2018_ref_cleaned <-Boucherville2018_spec_ref_no_dups%>%
+Boucherville2018_ref_cleaned <-Boucherville2018_ref_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -421,15 +421,15 @@ colnames(Boucherville2018_ref_sg_wide)<-gsub(pattern = "value_sg.",
 write.csv(Boucherville2018_ref_sg_wide,"ProcessedSpectra/Boucherville2018_ref_processed.csv",row.names=F)
 
 ## now the same for transmittance
-Boucherville2018_spec_trans<-Boucherville2018_spec[Boucherville2018_spec$reflectance.transmittance=="transmittance",]
-Boucherville2018_spec_trans$leaf_id<-apply(Boucherville2018_spec_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
-Boucherville2018_spec_trans$wvl_id<-apply(Boucherville2018_spec_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
+Boucherville2018_trans<-Boucherville2018[Boucherville2018$reflectance.transmittance=="transmittance",]
+Boucherville2018_trans$leaf_id<-apply(Boucherville2018_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
+Boucherville2018_trans$wvl_id<-apply(Boucherville2018_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_trans<-Boucherville2018_spec_trans$wvl_id[duplicated(Boucherville2018_spec_trans$wvl_id)]
-Boucherville2018_spec_trans_no_dups<-Boucherville2018_spec_trans[-which(Boucherville2018_spec_trans$wvl_id %in% dup_ids_trans),]
-inter_wvls <- ceiling(min(Boucherville2018_spec_trans_no_dups$wavelength)):floor(max(Boucherville2018_spec_trans_no_dups$wavelength))
+dup_ids_trans<-Boucherville2018_trans$wvl_id[duplicated(Boucherville2018_trans$wvl_id)]
+Boucherville2018_trans_no_dups<-Boucherville2018_trans[-which(Boucherville2018_trans$wvl_id %in% dup_ids_trans),]
+inter_wvls <- ceiling(min(Boucherville2018_trans_no_dups$wavelength)):floor(max(Boucherville2018_trans_no_dups$wavelength))
 
-Boucherville2018_trans_cleaned <-Boucherville2018_spec_trans_no_dups%>%
+Boucherville2018_trans_cleaned <-Boucherville2018_trans_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -472,18 +472,18 @@ write.csv(Boucherville2018_trans_sg_wide,"ProcessedSpectra/Boucherville2018_tran
 ###########################################################
 ## Girard spectra
 
-Girard_spec<-read.csv("UnprocessedSpectra/project_leaves_combined_Girard.csv")
+Girard<-read.csv("UnprocessedSpectra/project_leaves_combined_Girard.csv")
 
-Girard_spec_ref<-Girard_spec[Girard_spec$reflectance.transmittance=="reflectance",]
+Girard_ref<-Girard[Girard$reflectance.transmittance=="reflectance",]
 
-Girard_spec_ref$leaf_id<-apply(Girard_spec_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
-Girard_spec_ref$wvl_id<-apply(Girard_spec_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
+Girard_ref$leaf_id<-apply(Girard_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
+Girard_ref$wvl_id<-apply(Girard_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_ref<-Girard_spec_ref$wvl_id[duplicated(Girard_spec_ref$wvl_id)]
-Girard_spec_ref_no_dups<-Girard_spec_ref[-which(Girard_spec_ref$wvl_id %in% dup_ids_ref),]
-inter_wvls <- ceiling(min(Girard_spec_ref_no_dups$wavelength)):floor(max(Girard_spec_ref_no_dups$wavelength))
+dup_ids_ref<-Girard_ref$wvl_id[duplicated(Girard_ref$wvl_id)]
+Girard_ref_no_dups<-Girard_ref[-which(Girard_ref$wvl_id %in% dup_ids_ref),]
+inter_wvls <- ceiling(min(Girard_ref_no_dups$wavelength)):floor(max(Girard_ref_no_dups$wavelength))
 
-Girard_ref_cleaned <-Girard_spec_ref_no_dups%>%
+Girard_ref_cleaned <-Girard_ref_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -524,15 +524,15 @@ colnames(Girard_ref_sg_wide)<-gsub(pattern = "value_sg.",
 write.csv(Girard_ref_sg_wide,"ProcessedSpectra/Girard_ref_processed.csv",row.names=F)
 
 ## now the same for transmittance
-Girard_spec_trans<-Girard_spec[Girard_spec$reflectance.transmittance=="transmittance",]
-Girard_spec_trans$leaf_id<-apply(Girard_spec_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
-Girard_spec_trans$wvl_id<-apply(Girard_spec_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
+Girard_trans<-Girard[Girard$reflectance.transmittance=="transmittance",]
+Girard_trans$leaf_id<-apply(Girard_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
+Girard_trans$wvl_id<-apply(Girard_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_trans<-Girard_spec_trans$wvl_id[duplicated(Girard_spec_trans$wvl_id)]
-Girard_spec_trans_no_dups<-Girard_spec_trans[-which(Girard_spec_trans$wvl_id %in% dup_ids_trans),]
-inter_wvls <- ceiling(min(Girard_spec_trans_no_dups$wavelength)):floor(max(Girard_spec_trans_no_dups$wavelength))
+dup_ids_trans<-Girard_trans$wvl_id[duplicated(Girard_trans$wvl_id)]
+Girard_trans_no_dups<-Girard_trans[-which(Girard_trans$wvl_id %in% dup_ids_trans),]
+inter_wvls <- ceiling(min(Girard_trans_no_dups$wavelength)):floor(max(Girard_trans_no_dups$wavelength))
 
-Girard_trans_cleaned <-Girard_spec_trans_no_dups%>%
+Girard_trans_cleaned <-Girard_trans_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -575,18 +575,18 @@ write.csv(Girard_trans_sg_wide,"ProcessedSpectra/Girard_trans_processed.csv",row
 ###########################################################
 ## Hacker spectra
 
-Hacker2019_spec<-read.csv("UnprocessedSpectra/project_leaves_combined_Hacker2019.csv")
+Hacker2019<-read.csv("UnprocessedSpectra/project_leaves_combined_Hacker2019.csv")
 
-Hacker2019_spec_ref<-Hacker2019_spec[Hacker2019_spec$reflectance.transmittance=="reflectance",]
+Hacker2019_ref<-Hacker2019[Hacker2019$reflectance.transmittance=="reflectance",]
 
-Hacker2019_spec_ref$leaf_id<-apply(Hacker2019_spec_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
-Hacker2019_spec_ref$wvl_id<-apply(Hacker2019_spec_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
+Hacker2019_ref$leaf_id<-apply(Hacker2019_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
+Hacker2019_ref$wvl_id<-apply(Hacker2019_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_ref<-Hacker2019_spec_ref$wvl_id[duplicated(Hacker2019_spec_ref$wvl_id)]
-Hacker2019_spec_ref_no_dups<-Hacker2019_spec_ref[-which(Hacker2019_spec_ref$wvl_id %in% dup_ids_ref),]
-inter_wvls <- ceiling(min(Hacker2019_spec_ref_no_dups$wavelength)):floor(max(Hacker2019_spec_ref_no_dups$wavelength))
+dup_ids_ref<-Hacker2019_ref$wvl_id[duplicated(Hacker2019_ref$wvl_id)]
+Hacker2019_ref_no_dups<-Hacker2019_ref[-which(Hacker2019_ref$wvl_id %in% dup_ids_ref),]
+inter_wvls <- ceiling(min(Hacker2019_ref_no_dups$wavelength)):floor(max(Hacker2019_ref_no_dups$wavelength))
 
-Hacker2019_ref_cleaned <-Hacker2019_spec_ref_no_dups%>%
+Hacker2019_ref_cleaned <-Hacker2019_ref_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -627,15 +627,15 @@ colnames(Hacker2019_ref_sg_wide)<-gsub(pattern = "value_sg.",
 write.csv(Hacker2019_ref_sg_wide,"ProcessedSpectra/Hacker2019_ref_processed.csv",row.names=F)
 
 ## now the same for transmittance
-Hacker2019_spec_trans<-Hacker2019_spec[Hacker2019_spec$reflectance.transmittance=="transmittance",]
-Hacker2019_spec_trans$leaf_id<-apply(Hacker2019_spec_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
-Hacker2019_spec_trans$wvl_id<-apply(Hacker2019_spec_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
+Hacker2019_trans<-Hacker2019[Hacker2019$reflectance.transmittance=="transmittance",]
+Hacker2019_trans$leaf_id<-apply(Hacker2019_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
+Hacker2019_trans$wvl_id<-apply(Hacker2019_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_trans<-Hacker2019_spec_trans$wvl_id[duplicated(Hacker2019_spec_trans$wvl_id)]
-Hacker2019_spec_trans_no_dups<-Hacker2019_spec_trans[-which(Hacker2019_spec_trans$wvl_id %in% dup_ids_trans),]
-inter_wvls <- ceiling(min(Hacker2019_spec_trans_no_dups$wavelength)):floor(max(Hacker2019_spec_trans_no_dups$wavelength))
+dup_ids_trans<-Hacker2019_trans$wvl_id[duplicated(Hacker2019_trans$wvl_id)]
+Hacker2019_trans_no_dups<-Hacker2019_trans[-which(Hacker2019_trans$wvl_id %in% dup_ids_trans),]
+inter_wvls <- ceiling(min(Hacker2019_trans_no_dups$wavelength)):floor(max(Hacker2019_trans_no_dups$wavelength))
 
-Hacker2019_trans_cleaned <-Hacker2019_spec_trans_no_dups%>%
+Hacker2019_trans_cleaned <-Hacker2019_trans_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -678,18 +678,18 @@ write.csv(Hacker2019_trans_sg_wide,"ProcessedSpectra/Hacker2019_trans_processed.
 ###########################################################
 ## Blanchard spectra
 
-Blanchard_spec<-read.csv("UnprocessedSpectra/project_leaves_combined_Blanchard.csv")
+Blanchard<-read.csv("UnprocessedSpectra/project_leaves_combined_Blanchard.csv")
 
-Blanchard_spec_ref<-Blanchard_spec[Blanchard_spec$reflectance.transmittance=="reflectance",]
+Blanchard_ref<-Blanchard[Blanchard$reflectance.transmittance=="reflectance",]
 
-Blanchard_spec_ref$leaf_id<-apply(Blanchard_spec_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
-Blanchard_spec_ref$wvl_id<-apply(Blanchard_spec_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
+Blanchard_ref$leaf_id<-apply(Blanchard_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
+Blanchard_ref$wvl_id<-apply(Blanchard_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_ref<-Blanchard_spec_ref$wvl_id[duplicated(Blanchard_spec_ref$wvl_id)]
-Blanchard_spec_ref_no_dups<-Blanchard_spec_ref[-which(Blanchard_spec_ref$wvl_id %in% dup_ids_ref),]
-inter_wvls <- ceiling(min(Blanchard_spec_ref_no_dups$wavelength)):floor(max(Blanchard_spec_ref_no_dups$wavelength))
+dup_ids_ref<-Blanchard_ref$wvl_id[duplicated(Blanchard_ref$wvl_id)]
+Blanchard_ref_no_dups<-Blanchard_ref[-which(Blanchard_ref$wvl_id %in% dup_ids_ref),]
+inter_wvls <- ceiling(min(Blanchard_ref_no_dups$wavelength)):floor(max(Blanchard_ref_no_dups$wavelength))
 
-Blanchard_ref_cleaned <-Blanchard_spec_ref_no_dups%>%
+Blanchard_ref_cleaned <-Blanchard_ref_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -730,15 +730,15 @@ colnames(Blanchard_ref_sg_wide)<-gsub(pattern = "value_sg.",
 write.csv(Blanchard_ref_sg_wide,"ProcessedSpectra/Blanchard_ref_processed.csv",row.names=F)
 
 ## now the same for transmittance
-Blanchard_spec_trans<-Blanchard_spec[Blanchard_spec$reflectance.transmittance=="transmittance",]
-Blanchard_spec_trans$leaf_id<-apply(Blanchard_spec_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
-Blanchard_spec_trans$wvl_id<-apply(Blanchard_spec_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
+Blanchard_trans<-Blanchard[Blanchard$reflectance.transmittance=="transmittance",]
+Blanchard_trans$leaf_id<-apply(Blanchard_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
+Blanchard_trans$wvl_id<-apply(Blanchard_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_trans<-Blanchard_spec_trans$wvl_id[duplicated(Blanchard_spec_trans$wvl_id)]
-Blanchard_spec_trans_no_dups<-Blanchard_spec_trans[-which(Blanchard_spec_trans$wvl_id %in% dup_ids_trans),]
-inter_wvls <- ceiling(min(Blanchard_spec_trans_no_dups$wavelength)):floor(max(Blanchard_spec_trans_no_dups$wavelength))
+dup_ids_trans<-Blanchard_trans$wvl_id[duplicated(Blanchard_trans$wvl_id)]
+Blanchard_trans_no_dups<-Blanchard_trans[-which(Blanchard_trans$wvl_id %in% dup_ids_trans),]
+inter_wvls <- ceiling(min(Blanchard_trans_no_dups$wavelength)):floor(max(Blanchard_trans_no_dups$wavelength))
 
-Blanchard_trans_cleaned <-Blanchard_spec_trans_no_dups%>%
+Blanchard_trans_cleaned <-Blanchard_trans_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -781,20 +781,20 @@ write.csv(Blanchard_trans_sg_wide,"ProcessedSpectra/Blanchard_trans_processed.cs
 ###########################################################
 ## Boucherville 2019 spectra
 
-Boucherville2019_spec<-read.csv("UnprocessedSpectra/project_leaves_combined_Boucherville2019.csv")
+Boucherville2019<-read.csv("UnprocessedSpectra/project_leaves_combined_Boucherville2019.csv")
 ## temporary fix -- there are two spectra per leaf with this ID, and one of each is bad
-Boucherville2019_spec<-Boucherville2019_spec[-which(Boucherville2019_spec$sample_id=="44245455"),]
+Boucherville2019<-Boucherville2019[-which(Boucherville2019$sample_id=="44245455"),]
 
-Boucherville2019_spec_ref<-Boucherville2019_spec[Boucherville2019_spec$reflectance.transmittance=="reflectance",]
+Boucherville2019_ref<-Boucherville2019[Boucherville2019$reflectance.transmittance=="reflectance",]
 
-Boucherville2019_spec_ref$leaf_id<-apply(Boucherville2019_spec_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
-Boucherville2019_spec_ref$wvl_id<-apply(Boucherville2019_spec_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
+Boucherville2019_ref$leaf_id<-apply(Boucherville2019_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
+Boucherville2019_ref$wvl_id<-apply(Boucherville2019_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_ref<-Boucherville2019_spec_ref$wvl_id[duplicated(Boucherville2019_spec_ref$wvl_id)]
-Boucherville2019_spec_ref_no_dups<-Boucherville2019_spec_ref[-which(Boucherville2019_spec_ref$wvl_id %in% dup_ids_ref),]
-inter_wvls <- ceiling(min(Boucherville2019_spec_ref_no_dups$wavelength)):floor(max(Boucherville2019_spec_ref_no_dups$wavelength))
+dup_ids_ref<-Boucherville2019_ref$wvl_id[duplicated(Boucherville2019_ref$wvl_id)]
+Boucherville2019_ref_no_dups<-Boucherville2019_ref[-which(Boucherville2019_ref$wvl_id %in% dup_ids_ref),]
+inter_wvls <- ceiling(min(Boucherville2019_ref_no_dups$wavelength)):floor(max(Boucherville2019_ref_no_dups$wavelength))
 
-Boucherville2019_ref_cleaned <-Boucherville2019_spec_ref_no_dups%>%
+Boucherville2019_ref_cleaned <-Boucherville2019_ref_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -835,15 +835,15 @@ colnames(Boucherville2019_ref_sg_wide)<-gsub(pattern = "value_sg.",
 write.csv(Boucherville2019_ref_sg_wide,"ProcessedSpectra/Boucherville2019_ref_processed.csv",row.names=F)
 
 ## now the same for transmittance
-Boucherville2019_spec_trans<-Boucherville2019_spec[Boucherville2019_spec$reflectance.transmittance=="transmittance",]
-Boucherville2019_spec_trans$leaf_id<-apply(Boucherville2019_spec_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
-Boucherville2019_spec_trans$wvl_id<-apply(Boucherville2019_spec_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
+Boucherville2019_trans<-Boucherville2019[Boucherville2019$reflectance.transmittance=="transmittance",]
+Boucherville2019_trans$leaf_id<-apply(Boucherville2019_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
+Boucherville2019_trans$wvl_id<-apply(Boucherville2019_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_trans<-Boucherville2019_spec_trans$wvl_id[duplicated(Boucherville2019_spec_trans$wvl_id)]
-Boucherville2019_spec_trans_no_dups<-Boucherville2019_spec_trans[-which(Boucherville2019_spec_trans$wvl_id %in% dup_ids_trans),]
-inter_wvls <- ceiling(min(Boucherville2019_spec_trans_no_dups$wavelength)):floor(max(Boucherville2019_spec_trans_no_dups$wavelength))
+dup_ids_trans<-Boucherville2019_trans$wvl_id[duplicated(Boucherville2019_trans$wvl_id)]
+Boucherville2019_trans_no_dups<-Boucherville2019_trans[-which(Boucherville2019_trans$wvl_id %in% dup_ids_trans),]
+inter_wvls <- ceiling(min(Boucherville2019_trans_no_dups$wavelength)):floor(max(Boucherville2019_trans_no_dups$wavelength))
 
-Boucherville2019_trans_cleaned <-Boucherville2019_spec_trans_no_dups%>%
+Boucherville2019_trans_cleaned <-Boucherville2019_trans_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -886,18 +886,18 @@ write.csv(Boucherville2019_trans_sg_wide,"ProcessedSpectra/Boucherville2019_tran
 ###########################################################
 ## CABO General 2019 spectra
 
-CABOGeneral2019_spec<-read.csv("UnprocessedSpectra/project_leaves_combined_CABOGeneral2019.csv")
+CABOGeneral2019<-read.csv("UnprocessedSpectra/project_leaves_combined_CABOGeneral2019.csv")
 
-CABOGeneral2019_spec_ref<-CABOGeneral2019_spec[CABOGeneral2019_spec$reflectance.transmittance=="reflectance",]
+CABOGeneral2019_ref<-CABOGeneral2019[CABOGeneral2019$reflectance.transmittance=="reflectance",]
 
-CABOGeneral2019_spec_ref$leaf_id<-apply(CABOGeneral2019_spec_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
-CABOGeneral2019_spec_ref$wvl_id<-apply(CABOGeneral2019_spec_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
+CABOGeneral2019_ref$leaf_id<-apply(CABOGeneral2019_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
+CABOGeneral2019_ref$wvl_id<-apply(CABOGeneral2019_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_ref<-CABOGeneral2019_spec_ref$wvl_id[duplicated(CABOGeneral2019_spec_ref$wvl_id)]
-CABOGeneral2019_spec_ref_no_dups<-CABOGeneral2019_spec_ref[-which(CABOGeneral2019_spec_ref$wvl_id %in% dup_ids_ref),]
-inter_wvls <- ceiling(min(CABOGeneral2019_spec_ref_no_dups$wavelength)):floor(max(CABOGeneral2019_spec_ref_no_dups$wavelength))
+dup_ids_ref<-CABOGeneral2019_ref$wvl_id[duplicated(CABOGeneral2019_ref$wvl_id)]
+CABOGeneral2019_ref_no_dups<-CABOGeneral2019_ref[-which(CABOGeneral2019_ref$wvl_id %in% dup_ids_ref),]
+inter_wvls <- ceiling(min(CABOGeneral2019_ref_no_dups$wavelength)):floor(max(CABOGeneral2019_ref_no_dups$wavelength))
 
-CABOGeneral2019_ref_cleaned <-CABOGeneral2019_spec_ref_no_dups%>%
+CABOGeneral2019_ref_cleaned <-CABOGeneral2019_ref_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -938,15 +938,15 @@ colnames(CABOGeneral2019_ref_sg_wide)<-gsub(pattern = "value_sg.",
 write.csv(CABOGeneral2019_ref_sg_wide,"ProcessedSpectra/CABOGeneral2019_ref_processed.csv",row.names=F)
 
 ## now the same for transmittance
-CABOGeneral2019_spec_trans<-CABOGeneral2019_spec[CABOGeneral2019_spec$reflectance.transmittance=="transmittance",]
-CABOGeneral2019_spec_trans$leaf_id<-apply(CABOGeneral2019_spec_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
-CABOGeneral2019_spec_trans$wvl_id<-apply(CABOGeneral2019_spec_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
+CABOGeneral2019_trans<-CABOGeneral2019[CABOGeneral2019$reflectance.transmittance=="transmittance",]
+CABOGeneral2019_trans$leaf_id<-apply(CABOGeneral2019_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
+CABOGeneral2019_trans$wvl_id<-apply(CABOGeneral2019_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_trans<-CABOGeneral2019_spec_trans$wvl_id[duplicated(CABOGeneral2019_spec_trans$wvl_id)]
-CABOGeneral2019_spec_trans_no_dups<-CABOGeneral2019_spec_trans[-which(CABOGeneral2019_spec_trans$wvl_id %in% dup_ids_trans),]
-inter_wvls <- ceiling(min(CABOGeneral2019_spec_trans_no_dups$wavelength)):floor(max(CABOGeneral2019_spec_trans_no_dups$wavelength))
+dup_ids_trans<-CABOGeneral2019_trans$wvl_id[duplicated(CABOGeneral2019_trans$wvl_id)]
+CABOGeneral2019_trans_no_dups<-CABOGeneral2019_trans[-which(CABOGeneral2019_trans$wvl_id %in% dup_ids_trans),]
+inter_wvls <- ceiling(min(CABOGeneral2019_trans_no_dups$wavelength)):floor(max(CABOGeneral2019_trans_no_dups$wavelength))
 
-CABOGeneral2019_trans_cleaned <-CABOGeneral2019_spec_trans_no_dups%>%
+CABOGeneral2019_trans_cleaned <-CABOGeneral2019_trans_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -989,18 +989,18 @@ write.csv(CABOGeneral2019_trans_sg_wide,"ProcessedSpectra/CABOGeneral2019_trans_
 ###########################################################
 ## Crofts spectra
 
-Crofts_spec<-read.csv("UnprocessedSpectra/project_leaves_combined_Crofts.csv")
+Crofts<-read.csv("UnprocessedSpectra/project_leaves_combined_Crofts.csv")
 
-Crofts_spec_ref<-Crofts_spec[Crofts_spec$reflectance.transmittance=="reflectance",]
+Crofts_ref<-Crofts[Crofts$reflectance.transmittance=="reflectance",]
 
-Crofts_spec_ref$leaf_id<-apply(Crofts_spec_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
-Crofts_spec_ref$wvl_id<-apply(Crofts_spec_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
+Crofts_ref$leaf_id<-apply(Crofts_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
+Crofts_ref$wvl_id<-apply(Crofts_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_ref<-Crofts_spec_ref$wvl_id[duplicated(Crofts_spec_ref$wvl_id)]
-Crofts_spec_ref_no_dups<-Crofts_spec_ref[-which(Crofts_spec_ref$wvl_id %in% dup_ids_ref),]
-inter_wvls <- ceiling(min(Crofts_spec_ref_no_dups$wavelength)):floor(max(Crofts_spec_ref_no_dups$wavelength))
+dup_ids_ref<-Crofts_ref$wvl_id[duplicated(Crofts_ref$wvl_id)]
+Crofts_ref_no_dups<-Crofts_ref[-which(Crofts_ref$wvl_id %in% dup_ids_ref),]
+inter_wvls <- ceiling(min(Crofts_ref_no_dups$wavelength)):floor(max(Crofts_ref_no_dups$wavelength))
 
-Crofts_ref_cleaned <-Crofts_spec_ref_no_dups%>%
+Crofts_ref_cleaned <-Crofts_ref_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -1041,15 +1041,15 @@ colnames(Crofts_ref_sg_wide)<-gsub(pattern = "value_sg.",
 write.csv(Crofts_ref_sg_wide,"ProcessedSpectra/Crofts_ref_processed.csv",row.names=F)
 
 ## now the same for transmittance
-Crofts_spec_trans<-Crofts_spec[Crofts_spec$reflectance.transmittance=="transmittance",]
-Crofts_spec_trans$leaf_id<-apply(Crofts_spec_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
-Crofts_spec_trans$wvl_id<-apply(Crofts_spec_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
+Crofts_trans<-Crofts[Crofts$reflectance.transmittance=="transmittance",]
+Crofts_trans$leaf_id<-apply(Crofts_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
+Crofts_trans$wvl_id<-apply(Crofts_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_trans<-Crofts_spec_trans$wvl_id[duplicated(Crofts_spec_trans$wvl_id)]
-Crofts_spec_trans_no_dups<-Crofts_spec_trans[-which(Crofts_spec_trans$wvl_id %in% dup_ids_trans),]
-inter_wvls <- ceiling(min(Crofts_spec_trans_no_dups$wavelength)):floor(max(Crofts_spec_trans_no_dups$wavelength))
+dup_ids_trans<-Crofts_trans$wvl_id[duplicated(Crofts_trans$wvl_id)]
+Crofts_trans_no_dups<-Crofts_trans[-which(Crofts_trans$wvl_id %in% dup_ids_trans),]
+inter_wvls <- ceiling(min(Crofts_trans_no_dups$wavelength)):floor(max(Crofts_trans_no_dups$wavelength))
 
-Crofts_trans_cleaned <-Crofts_spec_trans_no_dups%>%
+Crofts_trans_cleaned <-Crofts_trans_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -1092,18 +1092,18 @@ write.csv(Crofts_trans_sg_wide,"ProcessedSpectra/Crofts_trans_processed.csv",row
 ###########################################################
 ## Pardo spectra
 
-Pardo_spec<-read.csv("UnprocessedSpectra/project_leaves_combined_Pardo.csv")
+Pardo<-read.csv("UnprocessedSpectra/project_leaves_combined_Pardo.csv")
 
-Pardo_spec_ref<-Pardo_spec[Pardo_spec$reflectance.transmittance=="reflectance",]
+Pardo_ref<-Pardo[Pardo$reflectance.transmittance=="reflectance",]
 
-Pardo_spec_ref$leaf_id<-apply(Pardo_spec_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
-Pardo_spec_ref$wvl_id<-apply(Pardo_spec_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
+Pardo_ref$leaf_id<-apply(Pardo_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
+Pardo_ref$wvl_id<-apply(Pardo_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_ref<-Pardo_spec_ref$wvl_id[duplicated(Pardo_spec_ref$wvl_id)]
-Pardo_spec_ref_no_dups<-Pardo_spec_ref[-which(Pardo_spec_ref$wvl_id %in% dup_ids_ref),]
-inter_wvls <- ceiling(min(Pardo_spec_ref_no_dups$wavelength)):floor(max(Pardo_spec_ref_no_dups$wavelength))
+dup_ids_ref<-Pardo_ref$wvl_id[duplicated(Pardo_ref$wvl_id)]
+Pardo_ref_no_dups<-Pardo_ref[-which(Pardo_ref$wvl_id %in% dup_ids_ref),]
+inter_wvls <- ceiling(min(Pardo_ref_no_dups$wavelength)):floor(max(Pardo_ref_no_dups$wavelength))
 
-Pardo_ref_cleaned <-Pardo_spec_ref_no_dups%>%
+Pardo_ref_cleaned <-Pardo_ref_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -1144,15 +1144,15 @@ colnames(Pardo_ref_sg_wide)<-gsub(pattern = "value_sg.",
 write.csv(Pardo_ref_sg_wide,"ProcessedSpectra/Pardo_ref_processed.csv",row.names=F)
 
 ## now the same for transmittance
-Pardo_spec_trans<-Pardo_spec[Pardo_spec$reflectance.transmittance=="transmittance",]
-Pardo_spec_trans$leaf_id<-apply(Pardo_spec_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
-Pardo_spec_trans$wvl_id<-apply(Pardo_spec_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
+Pardo_trans<-Pardo[Pardo$reflectance.transmittance=="transmittance",]
+Pardo_trans$leaf_id<-apply(Pardo_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
+Pardo_trans$wvl_id<-apply(Pardo_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_trans<-Pardo_spec_trans$wvl_id[duplicated(Pardo_spec_trans$wvl_id)]
-Pardo_spec_trans_no_dups<-Pardo_spec_trans[-which(Pardo_spec_trans$wvl_id %in% dup_ids_trans),]
-inter_wvls <- ceiling(min(Pardo_spec_trans_no_dups$wavelength)):floor(max(Pardo_spec_trans_no_dups$wavelength))
+dup_ids_trans<-Pardo_trans$wvl_id[duplicated(Pardo_trans$wvl_id)]
+Pardo_trans_no_dups<-Pardo_trans[-which(Pardo_trans$wvl_id %in% dup_ids_trans),]
+inter_wvls <- ceiling(min(Pardo_trans_no_dups$wavelength)):floor(max(Pardo_trans_no_dups$wavelength))
 
-Pardo_trans_cleaned <-Pardo_spec_trans_no_dups%>%
+Pardo_trans_cleaned <-Pardo_trans_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -1195,18 +1195,18 @@ write.csv(Pardo_trans_sg_wide,"ProcessedSpectra/Pardo_trans_processed.csv",row.n
 ###########################################################
 ## Phragmites temporal spectra
 
-PhragmitesTemporal_spec<-read.csv("UnprocessedSpectra/project_leaves_combined_PhragmitesTemporal.csv")
+PhragmitesTemporal<-read.csv("UnprocessedSpectra/project_leaves_combined_PhragmitesTemporal.csv")
 
-PhragmitesTemporal_spec_ref<-PhragmitesTemporal_spec[PhragmitesTemporal_spec$reflectance.transmittance=="reflectance",]
+PhragmitesTemporal_ref<-PhragmitesTemporal[PhragmitesTemporal$reflectance.transmittance=="reflectance",]
 
-PhragmitesTemporal_spec_ref$leaf_id<-apply(PhragmitesTemporal_spec_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
-PhragmitesTemporal_spec_ref$wvl_id<-apply(PhragmitesTemporal_spec_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
+PhragmitesTemporal_ref$leaf_id<-apply(PhragmitesTemporal_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
+PhragmitesTemporal_ref$wvl_id<-apply(PhragmitesTemporal_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_ref<-PhragmitesTemporal_spec_ref$wvl_id[duplicated(PhragmitesTemporal_spec_ref$wvl_id)]
-PhragmitesTemporal_spec_ref_no_dups<-PhragmitesTemporal_spec_ref[-which(PhragmitesTemporal_spec_ref$wvl_id %in% dup_ids_ref),]
-inter_wvls <- ceiling(min(PhragmitesTemporal_spec_ref_no_dups$wavelength)):floor(max(PhragmitesTemporal_spec_ref_no_dups$wavelength))
+dup_ids_ref<-PhragmitesTemporal_ref$wvl_id[duplicated(PhragmitesTemporal_ref$wvl_id)]
+PhragmitesTemporal_ref_no_dups<-PhragmitesTemporal_ref[-which(PhragmitesTemporal_ref$wvl_id %in% dup_ids_ref),]
+inter_wvls <- ceiling(min(PhragmitesTemporal_ref_no_dups$wavelength)):floor(max(PhragmitesTemporal_ref_no_dups$wavelength))
 
-PhragmitesTemporal_ref_cleaned <-PhragmitesTemporal_spec_ref_no_dups%>%
+PhragmitesTemporal_ref_cleaned <-PhragmitesTemporal_ref_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -1247,15 +1247,15 @@ colnames(PhragmitesTemporal_ref_sg_wide)<-gsub(pattern = "value_sg.",
 write.csv(PhragmitesTemporal_ref_sg_wide,"ProcessedSpectra/PhragmitesTemporal_ref_processed.csv",row.names=F)
 
 ## now the same for transmittance
-PhragmitesTemporal_spec_trans<-PhragmitesTemporal_spec[PhragmitesTemporal_spec$reflectance.transmittance=="transmittance",]
-PhragmitesTemporal_spec_trans$leaf_id<-apply(PhragmitesTemporal_spec_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
-PhragmitesTemporal_spec_trans$wvl_id<-apply(PhragmitesTemporal_spec_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
+PhragmitesTemporal_trans<-PhragmitesTemporal[PhragmitesTemporal$reflectance.transmittance=="transmittance",]
+PhragmitesTemporal_trans$leaf_id<-apply(PhragmitesTemporal_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
+PhragmitesTemporal_trans$wvl_id<-apply(PhragmitesTemporal_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_trans<-PhragmitesTemporal_spec_trans$wvl_id[duplicated(PhragmitesTemporal_spec_trans$wvl_id)]
-PhragmitesTemporal_spec_trans_no_dups<-PhragmitesTemporal_spec_trans[-which(PhragmitesTemporal_spec_trans$wvl_id %in% dup_ids_trans),]
-inter_wvls <- ceiling(min(PhragmitesTemporal_spec_trans_no_dups$wavelength)):floor(max(PhragmitesTemporal_spec_trans_no_dups$wavelength))
+dup_ids_trans<-PhragmitesTemporal_trans$wvl_id[duplicated(PhragmitesTemporal_trans$wvl_id)]
+PhragmitesTemporal_trans_no_dups<-PhragmitesTemporal_trans[-which(PhragmitesTemporal_trans$wvl_id %in% dup_ids_trans),]
+inter_wvls <- ceiling(min(PhragmitesTemporal_trans_no_dups$wavelength)):floor(max(PhragmitesTemporal_trans_no_dups$wavelength))
 
-PhragmitesTemporal_trans_cleaned <-PhragmitesTemporal_spec_trans_no_dups%>%
+PhragmitesTemporal_trans_cleaned <-PhragmitesTemporal_trans_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -1298,18 +1298,18 @@ write.csv(PhragmitesTemporal_trans_sg_wide,"ProcessedSpectra/PhragmitesTemporal_
 ###########################################################
 ## CABO General Other spectra
 
-CABOGeneralOther_spec<-read.csv("UnprocessedSpectra/project_leaves_combined_CABOGeneralOther.csv")
+CABOGeneralOther<-read.csv("UnprocessedSpectra/project_leaves_combined_CABOGeneralOther.csv")
 
-CABOGeneralOther_spec_ref<-CABOGeneralOther_spec[CABOGeneralOther_spec$reflectance.transmittance=="reflectance",]
+CABOGeneralOther_ref<-CABOGeneralOther[CABOGeneralOther$reflectance.transmittance=="reflectance",]
 
-CABOGeneralOther_spec_ref$leaf_id<-apply(CABOGeneralOther_spec_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
-CABOGeneralOther_spec_ref$wvl_id<-apply(CABOGeneralOther_spec_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
+CABOGeneralOther_ref$leaf_id<-apply(CABOGeneralOther_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
+CABOGeneralOther_ref$wvl_id<-apply(CABOGeneralOther_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_ref<-CABOGeneralOther_spec_ref$wvl_id[duplicated(CABOGeneralOther_spec_ref$wvl_id)]
-CABOGeneralOther_spec_ref_no_dups<-CABOGeneralOther_spec_ref[-which(CABOGeneralOther_spec_ref$wvl_id %in% dup_ids_ref),]
-inter_wvls <- ceiling(min(CABOGeneralOther_spec_ref_no_dups$wavelength)):floor(max(CABOGeneralOther_spec_ref_no_dups$wavelength))
+dup_ids_ref<-CABOGeneralOther_ref$wvl_id[duplicated(CABOGeneralOther_ref$wvl_id)]
+CABOGeneralOther_ref_no_dups<-CABOGeneralOther_ref[-which(CABOGeneralOther_ref$wvl_id %in% dup_ids_ref),]
+inter_wvls <- ceiling(min(CABOGeneralOther_ref_no_dups$wavelength)):floor(max(CABOGeneralOther_ref_no_dups$wavelength))
 
-CABOGeneralOther_ref_cleaned <-CABOGeneralOther_spec_ref_no_dups%>%
+CABOGeneralOther_ref_cleaned <-CABOGeneralOther_ref_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -1350,15 +1350,15 @@ colnames(CABOGeneralOther_ref_sg_wide)<-gsub(pattern = "value_sg.",
 write.csv(CABOGeneralOther_ref_sg_wide,"ProcessedSpectra/CABOGeneralOther_ref_processed.csv",row.names=F)
 
 ## now the same for transmittance
-CABOGeneralOther_spec_trans<-CABOGeneralOther_spec[CABOGeneralOther_spec$reflectance.transmittance=="transmittance",]
-CABOGeneralOther_spec_trans$leaf_id<-apply(CABOGeneralOther_spec_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
-CABOGeneralOther_spec_trans$wvl_id<-apply(CABOGeneralOther_spec_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
+CABOGeneralOther_trans<-CABOGeneralOther[CABOGeneralOther$reflectance.transmittance=="transmittance",]
+CABOGeneralOther_trans$leaf_id<-apply(CABOGeneralOther_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
+CABOGeneralOther_trans$wvl_id<-apply(CABOGeneralOther_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_trans<-CABOGeneralOther_spec_trans$wvl_id[duplicated(CABOGeneralOther_spec_trans$wvl_id)]
-CABOGeneralOther_spec_trans_no_dups<-CABOGeneralOther_spec_trans[-which(CABOGeneralOther_spec_trans$wvl_id %in% dup_ids_trans),]
-inter_wvls <- ceiling(min(CABOGeneralOther_spec_trans_no_dups$wavelength)):floor(max(CABOGeneralOther_spec_trans_no_dups$wavelength))
+dup_ids_trans<-CABOGeneralOther_trans$wvl_id[duplicated(CABOGeneralOther_trans$wvl_id)]
+CABOGeneralOther_trans_no_dups<-CABOGeneralOther_trans[-which(CABOGeneralOther_trans$wvl_id %in% dup_ids_trans),]
+inter_wvls <- ceiling(min(CABOGeneralOther_trans_no_dups$wavelength)):floor(max(CABOGeneralOther_trans_no_dups$wavelength))
 
-CABOGeneralOther_trans_cleaned <-CABOGeneralOther_spec_trans_no_dups%>%
+CABOGeneralOther_trans_cleaned <-CABOGeneralOther_trans_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -1401,18 +1401,18 @@ write.csv(CABOGeneralOther_trans_sg_wide,"ProcessedSpectra/CABOGeneralOther_tran
 ###########################################################
 ## Warren spectra
 
-Warren_spec<-read.csv("UnprocessedSpectra/project_leaves_combined_Warren.csv")
+Warren<-read.csv("UnprocessedSpectra/project_leaves_combined_Warren.csv")
 
-Warren_spec_ref<-Warren_spec[Warren_spec$reflectance.transmittance=="reflectance",]
+Warren_ref<-Warren[Warren$reflectance.transmittance=="reflectance",]
 
-Warren_spec_ref$leaf_id<-apply(Warren_spec_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
-Warren_spec_ref$wvl_id<-apply(Warren_spec_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
+Warren_ref$leaf_id<-apply(Warren_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
+Warren_ref$wvl_id<-apply(Warren_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_ref<-Warren_spec_ref$wvl_id[duplicated(Warren_spec_ref$wvl_id)]
-Warren_spec_ref_no_dups<-Warren_spec_ref[-which(Warren_spec_ref$wvl_id %in% dup_ids_ref),]
-inter_wvls <- ceiling(min(Warren_spec_ref_no_dups$wavelength)):floor(max(Warren_spec_ref_no_dups$wavelength))
+dup_ids_ref<-Warren_ref$wvl_id[duplicated(Warren_ref$wvl_id)]
+Warren_ref_no_dups<-Warren_ref[-which(Warren_ref$wvl_id %in% dup_ids_ref),]
+inter_wvls <- ceiling(min(Warren_ref_no_dups$wavelength)):floor(max(Warren_ref_no_dups$wavelength))
 
-Warren_ref_cleaned <-Warren_spec_ref_no_dups%>%
+Warren_ref_cleaned <-Warren_ref_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
@@ -1453,15 +1453,15 @@ colnames(Warren_ref_sg_wide)<-gsub(pattern = "value_sg.",
 write.csv(Warren_ref_sg_wide,"ProcessedSpectra/Warren_ref_processed.csv",row.names=F)
 
 ## now the same for transmittance
-Warren_spec_trans<-Warren_spec[Warren_spec$reflectance.transmittance=="transmittance",]
-Warren_spec_trans$leaf_id<-apply(Warren_spec_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
-Warren_spec_trans$wvl_id<-apply(Warren_spec_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
+Warren_trans<-Warren[Warren$reflectance.transmittance=="transmittance",]
+Warren_trans$leaf_id<-apply(Warren_trans[,c("sample_id","leaf_number")],1,paste,collapse="_")
+Warren_trans$wvl_id<-apply(Warren_trans[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-dup_ids_trans<-Warren_spec_trans$wvl_id[duplicated(Warren_spec_trans$wvl_id)]
-Warren_spec_trans_no_dups<-Warren_spec_trans[-which(Warren_spec_trans$wvl_id %in% dup_ids_trans),]
-inter_wvls <- ceiling(min(Warren_spec_trans_no_dups$wavelength)):floor(max(Warren_spec_trans_no_dups$wavelength))
+dup_ids_trans<-Warren_trans$wvl_id[duplicated(Warren_trans$wvl_id)]
+Warren_trans_no_dups<-Warren_trans[-which(Warren_trans$wvl_id %in% dup_ids_trans),]
+inter_wvls <- ceiling(min(Warren_trans_no_dups$wavelength)):floor(max(Warren_trans_no_dups$wavelength))
 
-Warren_trans_cleaned <-Warren_spec_trans_no_dups%>%
+Warren_trans_cleaned <-Warren_trans_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
 
