@@ -13,10 +13,6 @@ library(lme4)
 spec.traits<-readRDS("ProcessedSpectra/all_spectra_and_traits.rds")
 ## the Pardo dataset has no trait data (yet)
 spec.traits<-spec.traits[-which(meta(spec.traits)$project=="2019-Pardo-MSc-UdeM")]
-## removing the Dessain dataset since some of these analyses
-## might be sensitive to the exact errors involved
-## and Dessain was measured with a different instrument
-spec.traits<-spec.traits[-which(meta(spec.traits)$project=="2017-Dessain-MSc")]
 
 #########################################
 ## define RMSD function
