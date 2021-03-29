@@ -60,25 +60,6 @@ spec.test<-spec.traits[test.sample,]
 ## K-fold cross validation to get the
 ## optimal number of components
 
-EWT_CVmodel<-plsr(meta(spec.train)$EWT~as.matrix(spec.train),
-                  ncomp=30,method = "oscorespls",validation="CV",segments=10)
-ncomp_EWT_CVmodel <- selectNcomp(EWT_CVmodel, method = "onesigma", plot = FALSE)
-EWT_valid <- which(!is.na(meta(spec.train)$EWT))
-EWT_pred<-data.frame(ID=meta(spec.train)$sample_id[EWT_valid],
-                     Species=meta(spec.train)$species[EWT_valid],
-                     Project=meta(spec.train)$project[EWT_valid],
-                     measured=meta(spec.train)$EWT[EWT_valid],
-                     val_pred=EWT_CVmodel$validation$pred[,,ncomp_EWT_CVmodel])
-ggplot(EWT_pred,aes(y=measured,x=val_pred,color=Project))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  ##  coord_cartesian(xlim=c(38,55),ylim=c(38,55))+
-  theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.2))+
-  labs(y="Measured",x="Predicted")+
-  ggtitle("Predicting %EWT from fresh-leaf spectra")
-
 solubles_mass_CVmodel<-plsr(meta(spec.train)$solubles_mass~as.matrix(spec.train),
                       ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_solubles_mass_CVmodel <- selectNcomp(solubles_mass_CVmodel, method = "onesigma", plot = FALSE)
@@ -231,6 +212,25 @@ ggplot(Nmass_pred,aes(y=measured,x=val_pred,color=Project))+
 #   labs(y="Measured",x="Predicted")+
 #   ggtitle("Predicting N (norm-ind) from fresh-leaf spectra")
 
+EWT_CVmodel<-plsr(meta(spec.train)$EWT~as.matrix(spec.train),
+                  ncomp=30,method = "oscorespls",validation="CV",segments=10)
+ncomp_EWT_CVmodel <- selectNcomp(EWT_CVmodel, method = "onesigma", plot = FALSE)
+EWT_valid <- which(!is.na(meta(spec.train)$EWT))
+EWT_pred<-data.frame(ID=meta(spec.train)$sample_id[EWT_valid],
+                     Species=meta(spec.train)$species[EWT_valid],
+                     Project=meta(spec.train)$project[EWT_valid],
+                     measured=meta(spec.train)$EWT[EWT_valid],
+                     val_pred=EWT_CVmodel$validation$pred[,,ncomp_EWT_CVmodel])
+ggplot(EWT_pred,aes(y=measured,x=val_pred,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  ##  coord_cartesian(xlim=c(38,55),ylim=c(38,55))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.2))+
+  labs(y="Measured",x="Predicted")+
+  ggtitle("Predicting %EWT from fresh-leaf spectra")
+
 LDMC_CVmodel<-plsr(meta(spec.train)$LDMC~as.matrix(spec.train),
                    ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_LDMC_CVmodel <- selectNcomp(LDMC_CVmodel, method = "onesigma", plot = FALSE)
@@ -369,7 +369,6 @@ VIPN.plot<-ggplot(VIPN.long,aes(x=wavelength,y=value,color=variable))+
 #######################################################
 ## jackknife analyses
 
-EWT.jack.coefs<-list()
 solubles_mass.jack.coefs<-list()
 hemicellulose_mass.jack.coefs<-list()
 cellulose_mass.jack.coefs<-list()
@@ -379,10 +378,10 @@ chlB_mass.jack.coefs<-list()
 car_mass.jack.coefs<-list()
 Cmass.jack.coefs<-list()
 Nmass.jack.coefs<-list()
+EWT.jack.coefs<-list()
 LMA.jack.coefs<-list()
 LDMC.jack.coefs<-list()
 
-EWT.jack.stats<-list()
 solubles_mass.jack.stats<-list()
 hemicellulose_mass.jack.stats<-list()
 cellulose_mass.jack.stats<-list()
@@ -392,6 +391,7 @@ chlB_mass.jack.stats<-list()
 car_mass.jack.stats<-list()
 Cmass.jack.stats<-list()
 Nmass.jack.stats<-list()
+EWT.jack.stats<-list()
 LMA.jack.stats<-list()
 LDMC.jack.stats<-list()
 nreps<-100
@@ -406,8 +406,6 @@ for(i in 1:nreps){
   calib.jack<-spec.train[train.jack]
   val.jack<-spec.train[test.jack]
   
-  EWT.jack<-plsr(meta(calib.jack)$EWT~as.matrix(calib.jack),
-                 ncomp=30,method = "oscorespls",validation="none")
   solubles_mass.jack<-plsr(meta(calib.jack)$solubles_mass~as.matrix(calib.jack),
                      ncomp=30,method = "oscorespls",validation="none")
   hemicellulose_mass.jack<-plsr(meta(calib.jack)$hemicellulose_mass~as.matrix(calib.jack),
@@ -426,19 +424,13 @@ for(i in 1:nreps){
                           ncomp=30,method = "oscorespls",validation="none")
   Nmass.jack<-plsr(meta(calib.jack)$Nmass~as.matrix(calib.jack),
                           ncomp=30,method = "oscorespls",validation="none")
+  EWT.jack<-plsr(meta(calib.jack)$EWT~as.matrix(calib.jack),
+                 ncomp=30,method = "oscorespls",validation="none")
   LMA.jack<-plsr(meta(calib.jack)$LMA~as.matrix(calib.jack),
                          ncomp=30,method = "oscorespls",validation="none")
   LDMC.jack<-plsr(meta(calib.jack)$LDMC~as.matrix(calib.jack),
                           ncomp=30,method = "oscorespls",validation="none")
 
-  EWT.jack.val.pred<-as.vector(predict(EWT.jack,newdata=as.matrix(val.jack),ncomp=ncomp_EWT_CVmodel)[,,1])
-  EWT.jack.val.fit<-lm(EWT.jack.val.pred~meta(val.jack)$EWT)
-  EWT.jack.stats[[i]]<-c(R2=summary(EWT.jack.val.fit)$r.squared,
-                         RMSE=RMSD(meta(val.jack)$EWT,EWT.jack.val.pred),
-                         max.val=max(meta(val.jack)$EWT,na.rm=T),
-                         min.val=min(meta(val.jack)$EWT,na.rm=T),
-                         bias=mean(EWT.jack.val.pred,na.rm=T)-mean(meta(val.jack)$EWT,na.rm=T))
-    
   solubles_mass.jack.val.pred<-as.vector(predict(solubles_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_solubles_mass_CVmodel)[,,1])
   solubles_mass.jack.val.fit<-lm(solubles_mass.jack.val.pred~meta(val.jack)$solubles_mass)
   solubles_mass.jack.stats[[i]]<-c(R2=summary(solubles_mass.jack.val.fit)$r.squared,
@@ -510,7 +502,15 @@ for(i in 1:nreps){
                                   max.val=max(meta(val.jack)$Nmass,na.rm=T),
                                   min.val=min(meta(val.jack)$Nmass,na.rm=T),
                                   bias=mean(Nmass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Nmass,na.rm=T))
-  
+
+  EWT.jack.val.pred<-as.vector(predict(EWT.jack,newdata=as.matrix(val.jack),ncomp=ncomp_EWT_CVmodel)[,,1])
+  EWT.jack.val.fit<-lm(EWT.jack.val.pred~meta(val.jack)$EWT)
+  EWT.jack.stats[[i]]<-c(R2=summary(EWT.jack.val.fit)$r.squared,
+                         RMSE=RMSD(meta(val.jack)$EWT,EWT.jack.val.pred),
+                         max.val=max(meta(val.jack)$EWT,na.rm=T),
+                         min.val=min(meta(val.jack)$EWT,na.rm=T),
+                         bias=mean(EWT.jack.val.pred,na.rm=T)-mean(meta(val.jack)$EWT,na.rm=T))
+    
   LMA.jack.val.pred<-as.vector(predict(LMA.jack,newdata=as.matrix(val.jack),ncomp=ncomp_LMA_CVmodel)[,,1])
   LMA.jack.val.fit<-lm(LMA.jack.val.pred~meta(val.jack)$LMA)
   LMA.jack.stats[[i]]<-c(R2=summary(LMA.jack.val.fit)$r.squared,
@@ -527,7 +527,6 @@ for(i in 1:nreps){
                                   min.val=min(meta(val.jack)$LDMC,na.rm=T),
                                   bias=mean(LDMC.jack.val.pred,na.rm=T)-mean(meta(val.jack)$LDMC,na.rm=T))
 
-  EWT.jack.coefs[[i]]<-as.vector(coef(EWT.jack,ncomp=ncomp_EWT_CVmodel,intercept=TRUE))
   solubles_mass.jack.coefs[[i]]<-as.vector(coef(solubles_mass.jack,ncomp=ncomp_solubles_mass_CVmodel,intercept=TRUE))
   hemicellulose_mass.jack.coefs[[i]]<-as.vector(coef(hemicellulose_mass.jack,ncomp=ncomp_hemicellulose_mass_CVmodel,intercept=TRUE))
   cellulose_mass.jack.coefs[[i]]<-as.vector(coef(cellulose_mass.jack,ncomp=ncomp_cellulose_mass_CVmodel,intercept=TRUE))
@@ -537,32 +536,11 @@ for(i in 1:nreps){
   car_mass.jack.coefs[[i]]<-as.vector(coef(car_mass.jack,ncomp=ncomp_car_mass_CVmodel,intercept=TRUE))
   Cmass.jack.coefs[[i]]<-as.vector(coef(Cmass.jack,ncomp=ncomp_Cmass_CVmodel,intercept=TRUE))
   Nmass.jack.coefs[[i]]<-as.vector(coef(Nmass.jack,ncomp=ncomp_Nmass_CVmodel,intercept=TRUE))
+  EWT.jack.coefs[[i]]<-as.vector(coef(EWT.jack,ncomp=ncomp_EWT_CVmodel,intercept=TRUE))
   LMA.jack.coefs[[i]]<-as.vector(coef(LMA.jack,ncomp=ncomp_LMA_CVmodel,intercept=TRUE))
   LDMC.jack.coefs[[i]]<-as.vector(coef(LDMC.jack,ncomp=ncomp_LDMC_CVmodel,intercept=TRUE))
   
 }
-
-EWT.jack.pred<-apply.coefs(EWT.jack.coefs,as.matrix(spec.test))
-EWT.jack.stat<-t(apply(EWT.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
-EWT.jack.df<-data.frame(pred.mean=EWT.jack.stat[,1],
-                        pred.low=EWT.jack.stat[,1]-1.96*EWT.jack.stat[,2],
-                        pred.high=EWT.jack.stat[,1]+1.96*EWT.jack.stat[,2],
-                        Measured=meta(spec.test)$EWT,
-                        Species=meta(spec.test)$species,
-                        Project=meta(spec.test)$project,
-                        ID=meta(spec.test)$sample_id)
-
-EWT.val.plot<-ggplot(EWT.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,0.068),ylim=c(0,0.068))+
-  theme(text = element_text(size=25),
-        legend.position = c(0.8, 0.25))+
-  labs(y="Measured EWT (cm)",x="Predicted EWT (cm)")+
-  guides(color=F)
 
 solubles_mass.jack.pred<-apply.coefs(solubles_mass.jack.coefs,as.matrix(spec.test))
 solubles_mass.jack.stat<-t(apply(solubles_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
@@ -668,7 +646,7 @@ chlA_mass.val.plot<-ggplot(chlA_mass.jack.df,aes(y=Measured,x=pred.mean,color=Pr
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-5,20),ylim=c(-5,20))+
+  coord_cartesian(xlim=c(-3,20),ylim=c(-3,20))+
   theme(text = element_text(size=25),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured Chl a (mg g"^-1*")"),x=expression("Predicted Chl b (mg g"^-1*")"))+
@@ -690,7 +668,7 @@ chlB_mass.val.plot<-ggplot(chlB_mass.jack.df,aes(y=Measured,x=pred.mean,color=Pr
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-5,20),ylim=c(-5,20))+
+  coord_cartesian(xlim=c(-2,9),ylim=c(-2,9))+
   theme(text = element_text(size=25),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured Chl b (mg g"^-1*")"),x=expression("Predicted Chl b (mg g"^-1*")"))+
@@ -712,7 +690,7 @@ car_mass.val.plot<-ggplot(car_mass.jack.df,aes(y=Measured,x=pred.mean,color=Proj
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-5,20),ylim=c(-5,20))+
+  coord_cartesian(xlim=c(-1,6),ylim=c(-1,6))+
   theme(text = element_text(size=25),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured carotenoids (mg g"^-1*")"),x=expression("Predicted carotenoids (mg g"^-1*")"))+
@@ -759,6 +737,28 @@ Nmass.val.plot<-ggplot(Nmass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured N"[mass]*" (%)"),x=expression("Predicted N"[mass]*" (%)"))+  guides(color=F)
 
+EWT.jack.pred<-apply.coefs(EWT.jack.coefs,as.matrix(spec.test))
+EWT.jack.stat<-t(apply(EWT.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+EWT.jack.df<-data.frame(pred.mean=EWT.jack.stat[,1],
+                        pred.low=EWT.jack.stat[,1]-1.96*EWT.jack.stat[,2],
+                        pred.high=EWT.jack.stat[,1]+1.96*EWT.jack.stat[,2],
+                        Measured=meta(spec.test)$EWT,
+                        Species=meta(spec.test)$species,
+                        Project=meta(spec.test)$project,
+                        ID=meta(spec.test)$sample_id)
+
+EWT.val.plot<-ggplot(EWT.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(0,0.068),ylim=c(0,0.068))+
+  theme(text = element_text(size=25),
+        legend.position = c(0.8, 0.25))+
+  labs(y="Measured EWT (cm)",x="Predicted EWT (cm)")+
+  guides(color=F)
+
 LMA.jack.pred<-apply.coefs(LMA.jack.coefs,as.matrix(spec.test))
 LMA.jack.stat<-t(apply(LMA.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 LMA.jack.df<-data.frame(pred.mean=LMA.jack.stat[,1],
@@ -801,8 +801,7 @@ LDMC.val.plot<-ggplot(LDMC.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   labs(y=expression("Measured LDMC (mg g"^-1*")"),x=expression("Predicted LDMC (mg g"^-1*")"))+
   guides(color=F)
 
-all.jack.coef.list<-list(EWT=EWT.jack.coefs,
-                         solubles_mass=solubles_mass.jack.coefs,
+all.jack.coef.list<-list(solubles_mass=solubles_mass.jack.coefs,
                          hemicellulose_mass=hemicellulose_mass.jack.coefs,
                          cellulose_mass=cellulose_mass.jack.coefs,
                          lignin_mass=lignin_mass.jack.coefs,
@@ -811,12 +810,12 @@ all.jack.coef.list<-list(EWT=EWT.jack.coefs,
                          car_mass=car_mass.jack.coefs,
                          Nmass=Nmass.jack.coefs,
                          Cmass=Cmass.jack.coefs,
+                         EWT=EWT.jack.coefs,
                          LDMC=LDMC.jack.coefs,
                          LMA=LMA.jack.coefs)
 saveRDS(all.jack.coef.list,"SavedResults/all_jack_coefs_list.rds")
 
-all.jack.df.list<-list(EWT=EWT.jack.df,
-                       solubles_mass=solubles_mass.jack.df,
+all.jack.df.list<-list(solubles_mass=solubles_mass.jack.df,
                        hemicellulose_mass=hemicellulose_mass.jack.df,
                        cellulose_mass=cellulose_mass.jack.df,
                        lignin_mass=lignin_mass.jack.df,
@@ -825,12 +824,12 @@ all.jack.df.list<-list(EWT=EWT.jack.df,
                        car_mass=car_mass.jack.df,
                        Nmass=Nmass.jack.df,
                        Cmass=Cmass.jack.df,
+                       EWT=EWT.jack.df,
                        LDMC=LDMC.jack.df,
                        LMA=LMA.jack.df)
 saveRDS(all.jack.df.list,"SavedResults/all_jack_df_list.rds")
 
 pdf("Images/val_plots.pdf",width = 10,height = 9)
-EWT.val.plot
 solubles_mass.val.plot
 hemicellulose_mass.val.plot
 cellulose_mass.val.plot
@@ -840,6 +839,7 @@ chlB_mass.val.plot
 car_mass.val.plot
 Nmass.val.plot
 Cmass.val.plot
+EWT.val.plot
 LMA.val.plot
 LDMC.val.plot
 dev.off()
