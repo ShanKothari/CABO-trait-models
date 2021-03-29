@@ -48,12 +48,6 @@ Crofts.ref.spec<-as_spectra(Crofts.ref.df,name_idx=1)
 meta(Crofts.ref.spec)$sample_id<-gsub("spec_","",names(Crofts.ref.spec))
 Crofts.ref.spec<-Crofts.ref.spec[,400:2400]
 
-Dessain.ref.df<-read.csv("ProcessedSpectra/Dessain_ref_processed.csv")
-colnames(Dessain.ref.df)<-gsub("X","",colnames(Dessain.ref.df))
-Dessain.ref.spec<-as_spectra(Dessain.ref.df,name_idx=1)
-meta(Dessain.ref.spec)$sample_id<-gsub("spec_","",names(Dessain.ref.spec))
-Dessain.ref.spec<-Dessain.ref.spec[,400:2400]
-
 Girard.ref.df<-read.csv("ProcessedSpectra/Girard_ref_processed.csv")
 colnames(Girard.ref.df)<-gsub("X","",colnames(Girard.ref.df))
 Girard.ref.spec<-as_spectra(Girard.ref.df,name_idx=1)
@@ -86,7 +80,7 @@ Warren.ref.spec<-Warren.ref.spec[,400:2400]
 
 all.ref.spec<-Reduce(combine, list(BeauchampRioux.ref.spec, Blanchard.ref.spec, Boucherville2018.ref.spec,
                                Boucherville2019.ref.spec, CABOGeneral2019.ref.spec, CABOGeneralOther.ref.spec,
-                               Crofts.ref.spec, Dessain.ref.spec, Girard.ref.spec, Hacker2019.ref.spec,
+                               Crofts.ref.spec, Girard.ref.spec, Hacker2019.ref.spec,
                                Pardo.ref.spec, PhragmitesTemporal.ref.spec, Warren.ref.spec))
 
 #####################################################
@@ -181,16 +175,11 @@ PhragmitesTemporal.summary<-read.csv("SummaryData/leaf_spectra_phragmites_tempor
 PhragmitesTemporal.sub<-data.frame(sample.id=PhragmitesTemporal.summary$sample_id,
                         species=PhragmitesTemporal.summary$scientific_name,
                         project=PhragmitesTemporal.summary$project)
-Dessain.summary<-read.csv("SummaryData/DessainHerbarium.csv")
-Dessain.sub<-data.frame(sample.id=Dessain.summary$parentEventID,
-                        species=Dessain.summary$scientificName,
-                        project="2017-Dessain-MSc")
 Warren.summary<-read.csv("SummaryData/WarrenSummary.csv")
 Warren.sub<-data.frame(sample.id=Warren.summary$Bulk.sample.ID,
                        species=Warren.summary$Species,
                        project="SWA-Warren")
-allmeta.sub<-do.call(rbind,args=list(Fulcrum.sub,Dessain.sub,
-                                  PhragmitesTemporal.sub,Warren.sub))
+allmeta.sub<-do.call(rbind,args=list(Fulcrum.sub,PhragmitesTemporal.sub,Warren.sub))
 
 ## missing full summary data for: Pardo
 
