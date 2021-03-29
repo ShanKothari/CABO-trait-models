@@ -211,23 +211,55 @@ Dessain_sg <- bind_rows(Dessain_sg_VIS,
                         Dessain_sg_SWIR2) %>% 
   arrange(sample_id)
 
-Dessain.ref.df<-reshape(subset(as.data.frame(Dessain_sg),select= -value),
+Dessain.df<-reshape(subset(as.data.frame(Dessain_sg),select= -value),
                          timevar="wvl",idvar="sample_id",direction="wide")
-colnames(Dessain.ref.df)<-gsub(pattern = "value_sg.",
+colnames(Dessain.df)<-gsub(pattern = "value_sg.",
                                 replacement = "X",
-                                x = colnames(Dessain.ref.df))
+                                x = colnames(Dessain.df))
 
-Dessain.ref.spec<-as_spectra(Dessain.ref.df,name_idx=1)
-meta(Dessain.ref.spec)$sample_id<-gsub("spec_","",names(Dessain.ref.spec))
-Dessain.ref.spec<-Dessain.ref.spec[,400:2400]
+Dessain.spec<-as_spectra(Dessain.df,name_idx=1)
+meta(Dessain.spec)$sample_id<-gsub("spec_","",names(Dessain.spec))
+Dessain.spec<-Dessain.spec[,400:2400]
 
 Dessain.summary<-read.csv("SummaryData/DessainHerbarium.csv")
 Dessain.sub<-data.frame(sample.id=Dessain.summary$parentEventID,
                         species=Dessain.summary$scientificName,
                         project="2017-Dessain-MSc")
 
-meta(Dessain.ref.spec)$species<-Dessain.sub$species[match(meta(Dessain.ref.spec)$sample_id,Dessain.sub$sample.id)]
-meta(Dessain.ref.spec)$project<-Dessain.sub$project[match(meta(Dessain.ref.spec)$sample_id,Dessain.sub$sample.id)]
+meta(Dessain.spec)$species<-Dessain.sub$species[match(meta(Dessain.spec)$sample_id,Dessain.sub$sample.id)]
+meta(Dessain.spec)$project<-Dessain.sub$project[match(meta(Dessain.spec)$sample_id,Dessain.sub$sample.id)]
+
+Dessain.area<-read.csv("TraitData/LeafAreaWaterSamples/SLA_data_Aurelie_Dessain - Lab_data.csv")
+Dessain.area$SLA_m2_kg<-as.numeric(as.character(Dessain.area$SLA_m2_kg))
+Dessain.area$LDMC_mg_g<-as.numeric(as.character(Dessain.area$LDMC_mg_g))
+
+Dessain.area.sub<-data.frame(sample_id=Dessain.area$parentEventID,
+                             SLA=Dessain.area$SLA_m2_kg,
+                             LDMC=Dessain.area$LDMC_mg_g)
+
+## SLA in units m^2/kg
+## LDMC in units mg/g
+## EWT in units cm
+meta(Dessain.spec)$SLA<-Dessain.area.sub$SLA[match(meta(Dessain.spec)$sample_id,Dessain.area.sub$sample_id)]
+meta(Dessain.spec)$LDMC<-Dessain.area.sub$LDMC[match(meta(Dessain.spec)$sample_id,Dessain.area.sub$sample_id)]
+meta(Dessain.spec)$EWT<-with(meta(Dessain.spec),(1/(LDMC/1000)-1)*(1/SLA*0.1))
+
+Dessain.CN<-read.csv("TraitData/CNSamples/2017_Dessain_MSc_CN_data_total.csv")
+Dessain.CN.sub<-data.frame(sample_id=Dessain.CN$Sample_id,
+                           Cmass=Dessain.CN$C.....,
+                           Nmass=Dessain.CN$N....)
+
+meta(Dessain.spec)$Cmass<-Dessain.CN$Cmass[match(meta(Dessain.spec)$sample_id,Dessain.CN$sample_id)]
+meta(Dessain.spec)$Nmass<-Dessain.CN$Nmass[match(meta(Dessain.spec)$sample_id,Dessain.CN$sample_id)]
+
+Dessain.pigments<-read.csv("TraitData/Pigments/Aurelie_pigments_valeurs_brutes - Analyses_Aurelie.csv")
+Dessain.pigments<-Dessain.pigments[,c("sample_id","chlA_mg_g","chlB_mg_g","carotenoides._mg_g","Notes")]
+## remove records who notes contain "refaire" or "refait" since these were all redone
+Dessain.pigments<-Dessain.pigments[-which(str_detect(string = Dessain.pigments$Notes,pattern = "efai")),]
+
+meta(Dessain.spec)$chlA_mass<-as.numeric(as.character(Dessain.pigments$chlA_mg_g[match(meta(Dessain.spec)$sample_id,Dessain.pigments$sample_id)]))
+meta(Dessain.spec)$chlB_mass<-as.numeric(as.character(Dessain.pigments$chlB_mg_g[match(meta(Dessain.spec)$sample_id,Dessain.pigments$sample_id)]))
+meta(Dessain.spec)$car_mass<-as.numeric(as.character(Dessain.pigments$carotenoides._mg_g[match(meta(Dessain.spec)$sample_id,Dessain.pigments$sample_id)]))
 
 ##########################################################
 ## Hacker 2018 GOP

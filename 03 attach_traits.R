@@ -115,25 +115,16 @@ meta(all.spec)$functional.group[meta(all.spec)$family %in% c("Pinaceae","Cupress
 ##############################################
 ## read leaf area/water traits
 
-Fulcrum.area<-read.csv("TraitData/LeafAreaWaterSamples/leaf_area_and_water_samples.csv")
-Dessain.area<-read.csv("TraitData/LeafAreaWaterSamples/SLA_data_Aurelie_Dessain - Lab_data.csv")
+all.area<-read.csv("TraitData/LeafAreaWaterSamples/leaf_area_and_water_samples.csv")
 
-Dessain.area$SLA_m2_kg<-as.numeric(as.character(Dessain.area$SLA_m2_kg))
-Dessain.area$LDMC_mg_g<-as.numeric(as.character(Dessain.area$LDMC_mg_g))
-
-Fulcrum.area.sub<-data.frame(sample_id=Fulcrum.area$sample_id,
+all.area.sub<-data.frame(sample_id=Fulcrum.area$sample_id,
                              SLA=Fulcrum.area$specific_leaf_area_m2_kg,
                              LDMC=Fulcrum.area$leaf_dry_matter_content_mg_g)
-Dessain.area.sub<-data.frame(sample_id=Dessain.area$parentEventID,
-                             SLA=Dessain.area$SLA_m2_kg,
-                             LDMC=Dessain.area$LDMC_mg_g)
-
-all.area<-do.call(rbind,list(Fulcrum.area.sub,Dessain.area.sub))
 
 ## SLA in units m^2/kg
 ## LDMC in units mg/g
-meta(all.spec)$SLA<-all.area$SLA[match(meta(all.spec)$sample_id,all.area$sample_id)]
-meta(all.spec)$LDMC<-all.area$LDMC[match(meta(all.spec)$sample_id,all.area$sample_id)]
+meta(all.spec)$SLA<-all.area.sub$SLA[match(meta(all.spec)$sample_id,all.area.sub$sample_id)]
+meta(all.spec)$LDMC<-all.area.sub$LDMC[match(meta(all.spec)$sample_id,all.area.sub$sample_id)]
 
 ## remove bad values, based on notes in Fulcrum data
 meta(all.spec)$LDMC[meta(all.spec)$sample_id %in% c("10290262","10966273","13404937",
@@ -151,11 +142,6 @@ meta(all.spec)$EWT<-with(meta(all.spec),(1/(LDMC/1000)-1)*(1/SLA*0.1))
 
 ##############################################
 ## read C/N
-
-Dessain.CN<-read.csv("TraitData/CNSamples/2017_Dessain_MSc_CN_data_total.csv")
-Dessain.CN.sub<-data.frame(sample_id=Dessain.CN$Sample_id,
-                           Cmass=Dessain.CN$C.....,
-                           Nmass=Dessain.CN$N....)
 
 BeauchampRioux.CN<-read.csv("TraitData/CNSamples/2018_BeauchampRioux_MSc_UdeM_CN_data_total.csv")
 BeauchampRioux.CN<-BeauchampRioux.CN[-which(is.na(BeauchampRioux.CN$Sample_id)),]
@@ -228,7 +214,7 @@ Warren.CN.sub<-data.frame(sample_id=Warren.CN$Sample_id,
 all.CN<-do.call(rbind,list(BeauchampRioux.CN.sub,Blanchard.CN.sub,Boucherville2018.CN.sub,
                            Boucherville2019.CN.sub,CABOGeneralOther.CN.sub,
                            CABOGeneral2019.CN.sub,Crofts.CN.sub,
-                           Dessain.CN.sub,Girard.CN.sub,Hacker2018.CN.sub,
+                           Girard.CN.sub,Hacker2018.CN.sub,
                            Hacker2019.CN.sub,PhragmitesTemporal.CN.sub,
                            Warren.CN.sub))
 
@@ -266,9 +252,6 @@ meta(all.spec)$lignin_mass[which(meta(all.spec)$species=="Alnus incana subsp. ru
 
 #############################################
 ## read pigments
-
-Dessain.pigments<-read.csv("TraitData/Pigments/Aurelie_pigments_valeurs_brutes - Analyses_Aurelie.csv")
-Dessain.pigments<-Dessain.pigments[,c("sample_id","chlA_mg_g","chlB_mg_g","carotenoides._mg_g","Notes")]
 
 BeauchampRioux.pigments<-read.csv("TraitData/Pigments/RBR_pigments_valeurs_brutes - valeurs.csv")
 BeauchampRioux.pigments<-BeauchampRioux.pigments[,c("sample_id","chlA_mg_g","chlB_mg_g","carotenoides_mg_g","Notes")]
@@ -318,7 +301,7 @@ Warren.pigments<-Warren.pigments[,c("sample_id","chlA_mg_g","chlB_mg_g","caroten
 all.pigments<-do.call(rbind,list(BeauchampRioux.pigments,Blanchard.pigments,Boucherville2018.pigments,
                            Boucherville2019.pigments,CABOGeneral.pigments,
                            CABOGeneral2019.pigments,Crofts.pigments,
-                           Dessain.pigments,Girard.pigments,Hacker2018.pigments,
+                           Girard.pigments,Hacker2018.pigments,
                            Hacker2019.pigments,PhragmitesTemporal.pigments,
                            Warren.pigments))
 
