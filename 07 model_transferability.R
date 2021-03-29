@@ -22,6 +22,12 @@ RMSD<-function(measured,predicted){
   return(sqrt(sum((measured-predicted)^2,na.rm=T)/(length(not.na)-1)))
 }
 
+percentRMSD<-function(measured,predicted,min,max){
+  RMSD_data<-RMSD(measured,predicted)
+  range<-quantile(measured,probs=max)-quantile(measured,probs=min)
+  return(RMSD_data/range)
+}
+
 #########################################
 ## processing spectral data
 

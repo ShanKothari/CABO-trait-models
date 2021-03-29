@@ -13,7 +13,6 @@ spec.traits<-readRDS("ProcessedSpectra/all_spectra_and_traits.rds")
 ## to dos
 
 ## try Type II regression?
-## remove Dessain data and instead use as a validation data set
 
 #########################################
 ## define functions
@@ -22,6 +21,15 @@ spec.traits<-readRDS("ProcessedSpectra/all_spectra_and_traits.rds")
 RMSD<-function(measured,predicted){
   not.na<-which(!is.na(measured) & !is.na(predicted))
   return(sqrt(sum((measured-predicted)^2,na.rm=T)/(length(not.na)-1)))
+}
+
+## percent RMSD (based on data quantiles)
+## set min and max to 0 and 1 for range as denominator
+## or to 0.25 and 0.75 for IQR as denominator
+percentRMSD<-function(measured,predicted,min,max){
+  RMSD_data<-RMSD(measured,predicted)
+  range<-quantile(measured,probs=max)-quantile(measured,probs=min)
+  return(RMSD_data/range)
 }
 
 ## applying coefficients to validation spectra
