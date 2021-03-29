@@ -55,7 +55,7 @@ BeauchampRioux_ref<-BeauchampRioux[BeauchampRioux$reflectance.transmittance=="re
 BeauchampRioux_ref$leaf_id<-apply(BeauchampRioux_ref[,c("sample_id","leaf_number")],1,paste,collapse="_")
 BeauchampRioux_ref$wvl_id<-apply(BeauchampRioux_ref[,c("leaf_id","wavelength")],1,paste,collapse="_")
 
-## remove the spectral overlap region and interpolate over it
+## remove the sensor overlap region and interpolate over it
 dup_ids_ref<-BeauchampRioux_ref$wvl_id[duplicated(BeauchampRioux_ref$wvl_id)]
 BeauchampRioux_ref_no_dups<-BeauchampRioux_ref[-which(BeauchampRioux_ref$wvl_id %in% dup_ids_ref),]
 inter_wvls <- ceiling(min(BeauchampRioux_ref_no_dups$wavelength)):floor(max(BeauchampRioux_ref_no_dups$wavelength))

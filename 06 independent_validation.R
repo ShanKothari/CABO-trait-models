@@ -51,48 +51,6 @@ ANGERS_ref<-ANGERS_ref[-which(names(ANGERS_ref) %in% bad_spectra_ANGERS)]
 
 ## smooth here
 
-#################################################
-## combine
-
-LOPEX_ref<-LOPEX_ref[,400:2400]
-ANGERS_ref<-ANGERS_ref[,400:2400]
-all_val_ref<-combine(LOPEX_ref,ANGERS_ref)
-
-meta(all_val_ref)$Nmass_pred<-predict(Nmass_CVmodel,newdata = as.matrix(all_val_ref[,400:2400]),ncomp = ncomp_Nmass_CVmodel)[,,1]
-meta(all_val_ref)$Cmass_pred<-predict(Cmass_CVmodel,newdata = as.matrix(all_val_ref[,400:2400]),ncomp = ncomp_Cmass_CVmodel)[,,1]
-meta(all_val_ref)$EWT_pred<-predict(EWT_CVmodel,newdata = as.matrix(all_val_ref[,400:2400]),ncomp = ncomp_EWT_CVmodel)[,,1]
-meta(all_val_ref)$LMA_pred<-predict(LMA_CVmodel,newdata = as.matrix(all_val_ref[,400:2400]),ncomp = ncomp_LMA_CVmodel)[,,1]
-meta(all_val_ref)$LDMC_pred<-predict(LDMC_CVmodel,newdata = as.matrix(all_val_ref[,400:2400]),ncomp = ncomp_LDMC_CVmodel)[,,1]
-meta(all_val_ref)$cellulose_pred<-predict(cellulose_mass_CVmodel,newdata = as.matrix(all_val_ref[,400:2400]),ncomp = ncomp_cellulose_mass_CVmodel)[,,1]
-
-ggplot(data=meta(all_val_ref),aes(x=EWT_pred,y=EWT,color=dataset))+
-  geom_point()+
-  theme_bw()+
-  theme(text = element_text(size=20))+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
-  labs(y="Measured EWT",x="Predicted EWT")+
-  coord_cartesian(xlim=c(0,0.085),ylim=c(0,0.085))
-
-ggplot(data=meta(all_val_ref),aes(x=LDMC_pred,y=LDMC*1000,color=dataset))+
-  geom_point()+
-  theme_bw()+
-  theme(text = element_text(size=20))+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
-  labs(y="Measured LDMC",x="Predicted LDMC")
-
-ggplot(data=meta(all_val_ref),aes(x=LMA_pred,y=LMA*1000,color=dataset))+
-  geom_point()+
-  theme_bw()+
-  theme(text = element_text(size=20))+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
-  labs(y="Measured LMA",x="Predicted LMA")
-
-##########################################
-## Dessain
-
 ##########################################################
 ## Dessain
 ## These were done with an ASD and integrating sphere
@@ -344,3 +302,44 @@ meta(Dessain.spec)$car_mass<-as.numeric(as.character(Dessain.pigments$carotenoid
 #                                 x = colnames(Hacker2018_sg_wide))
 # 
 # write.csv(Hacker2018_sg_wide,"ProcessedSpectra/Hacker2018_ref_processed.csv",row.names=F)
+
+#################################################
+## combine
+
+## need to add Dessain (and optionally Hacker 2018) data
+
+LOPEX_ref<-LOPEX_ref[,400:2400]
+ANGERS_ref<-ANGERS_ref[,400:2400]
+all_val_ref<-combine(LOPEX_ref,ANGERS_ref)
+
+meta(all_val_ref)$Nmass_pred<-predict(Nmass_CVmodel,newdata = as.matrix(all_val_ref[,400:2400]),ncomp = ncomp_Nmass_CVmodel)[,,1]
+meta(all_val_ref)$Cmass_pred<-predict(Cmass_CVmodel,newdata = as.matrix(all_val_ref[,400:2400]),ncomp = ncomp_Cmass_CVmodel)[,,1]
+meta(all_val_ref)$EWT_pred<-predict(EWT_CVmodel,newdata = as.matrix(all_val_ref[,400:2400]),ncomp = ncomp_EWT_CVmodel)[,,1]
+meta(all_val_ref)$LMA_pred<-predict(LMA_CVmodel,newdata = as.matrix(all_val_ref[,400:2400]),ncomp = ncomp_LMA_CVmodel)[,,1]
+meta(all_val_ref)$LDMC_pred<-predict(LDMC_CVmodel,newdata = as.matrix(all_val_ref[,400:2400]),ncomp = ncomp_LDMC_CVmodel)[,,1]
+meta(all_val_ref)$cellulose_pred<-predict(cellulose_mass_CVmodel,newdata = as.matrix(all_val_ref[,400:2400]),ncomp = ncomp_cellulose_mass_CVmodel)[,,1]
+
+ggplot(data=meta(all_val_ref),aes(x=EWT_pred,y=EWT,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured EWT",x="Predicted EWT")+
+  coord_cartesian(xlim=c(0,0.085),ylim=c(0,0.085))
+
+ggplot(data=meta(all_val_ref),aes(x=LDMC_pred,y=LDMC*1000,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured LDMC",x="Predicted LDMC")
+
+ggplot(data=meta(all_val_ref),aes(x=LMA_pred,y=LMA*1000,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured LMA",x="Predicted LMA")
