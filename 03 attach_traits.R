@@ -5,7 +5,7 @@ library(ggplot2)
 library(reshape2)
 library(stringr)
 
-all.spec<-readRDS("ProcessedSpectra/all_spectra.rds")
+all.spec<-readRDS("ProcessedSpectra/all_ref.rds")
 
 ##############################################
 ## plot quantiles
@@ -117,9 +117,9 @@ meta(all.spec)$functional.group[meta(all.spec)$family %in% c("Pinaceae","Cupress
 
 all.area<-read.csv("TraitData/LeafAreaWaterSamples/leaf_area_and_water_samples.csv")
 
-all.area.sub<-data.frame(sample_id=Fulcrum.area$sample_id,
-                             SLA=Fulcrum.area$specific_leaf_area_m2_kg,
-                             LDMC=Fulcrum.area$leaf_dry_matter_content_mg_g)
+all.area.sub<-data.frame(sample_id=all.area$sample_id,
+                             SLA=all.area$specific_leaf_area_m2_kg,
+                             LDMC=all.area$leaf_dry_matter_content_mg_g)
 
 ## SLA in units m^2/kg
 ## LDMC in units mg/g
