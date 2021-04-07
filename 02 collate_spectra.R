@@ -170,23 +170,28 @@ all.trans.spec<-Reduce(combine, list(BeauchampRioux.trans.spec, Blanchard.trans.
 Fulcrum.summary<-read.csv("SummaryData/leaf_spectra.csv")
 Fulcrum.sub<-data.frame(sample.id=Fulcrum.summary$sample_id,
                         species=Fulcrum.summary$scientific_name,
-                        project=Fulcrum.summary$project)
+                        project=Fulcrum.summary$project
+                        site=Fulcrum.summary$site_id)
 PhragmitesTemporal.summary<-read.csv("SummaryData/leaf_spectra_phragmites_temporal.csv")
 PhragmitesTemporal.sub<-data.frame(sample.id=PhragmitesTemporal.summary$sample_id,
                         species=PhragmitesTemporal.summary$scientific_name,
-                        project=PhragmitesTemporal.summary$project)
+                        project=PhragmitesTemporal.summary$project,
+                        site=PhragmitesTemporal.summary$site_id)
 Warren.summary<-read.csv("SummaryData/WarrenSummary.csv")
 Warren.sub<-data.frame(sample.id=Warren.summary$Bulk.sample.ID,
                        species=Warren.summary$Species,
-                       project="SWA-Warren")
+                       project="SWA-Warren",
+                       site=Warren.summary$Stage)
 allmeta.sub<-do.call(rbind,args=list(Fulcrum.sub,PhragmitesTemporal.sub,Warren.sub))
 
 ## missing full summary data for: Pardo
 
 meta(all.ref.spec)$species<-allmeta.sub$species[match(meta(all.ref.spec)$sample_id,allmeta.sub$sample.id)]
 meta(all.ref.spec)$project<-allmeta.sub$project[match(meta(all.ref.spec)$sample_id,allmeta.sub$sample.id)]
+meta(all.ref.spec)$site<-allmeta.sub$site[match(meta(all.ref.spec)$sample_id,allmeta.sub$sample.id)]
 meta(all.trans.spec)$species<-allmeta.sub$species[match(meta(all.trans.spec)$sample_id,allmeta.sub$sample.id)]
 meta(all.trans.spec)$project<-allmeta.sub$project[match(meta(all.trans.spec)$sample_id,allmeta.sub$sample.id)]
+meta(all.trans.spec)$site<-allmeta.sub$site[match(meta(all.trans.spec)$sample_id,allmeta.sub$sample.id)]
 
 ## this is temporary
 meta(all.ref.spec)$project<-as.character(meta(all.ref.spec)$project)
