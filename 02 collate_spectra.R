@@ -170,7 +170,7 @@ all.trans.spec<-Reduce(combine, list(BeauchampRioux.trans.spec, Blanchard.trans.
 Fulcrum.summary<-read.csv("SummaryData/leaf_spectra.csv")
 Fulcrum.sub<-data.frame(sample.id=Fulcrum.summary$sample_id,
                         species=Fulcrum.summary$scientific_name,
-                        project=Fulcrum.summary$project
+                        project=Fulcrum.summary$project,
                         site=Fulcrum.summary$site_id)
 PhragmitesTemporal.summary<-read.csv("SummaryData/leaf_spectra_phragmites_temporal.csv")
 PhragmitesTemporal.sub<-data.frame(sample.id=PhragmitesTemporal.summary$sample_id,
