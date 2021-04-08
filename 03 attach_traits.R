@@ -274,36 +274,46 @@ meta(all.trans)$Nmass<-all.CN$Nmass[match(meta(all.trans)$sample_id,all.CN$sampl
 ## carbon fractions
 
 CFractions<-read.csv("TraitData/CarbonFractions/carbon_fractions_bags.csv")
+
+CFmatch.ref<-match(meta(all.ref)$sample_id,CFractions$bottle_id)
+meta(all.ref)$NDFmass<-CFractions$ndf_perc[CFmatch.ref]
+meta(all.ref)$ADFmass<-CFractions$adf_perc[CFmatch.ref]
+meta(all.ref)$ADLmass<-CFractions$adl_perc[CFmatch.ref]
+meta(all.ref)$solubles_mass<-CFractions$soluble_perc[CFmatch.ref]
+meta(all.ref)$hemicellulose_mass<-CFractions$hemicellulose_perc[CFmatch.ref]
+meta(all.ref)$cellulose_mass<-CFractions$cellulose_perc[CFmatch.ref]
+meta(all.ref)$lignin_mass<-CFractions$lignin_perc[CFmatch.ref]
+
+CFmatch.trans<-match(meta(all.trans)$sample_id,CFractions$bottle_id)
+meta(all.trans)$NDFmass<-CFractions$ndf_perc[CFmatch.trans]
+meta(all.trans)$ADFmass<-CFractions$adf_perc[CFmatch.trans]
+meta(all.trans)$ADLmass<-CFractions$adl_perc[CFmatch.trans]
+meta(all.trans)$solubles_mass<-CFractions$soluble_perc[CFmatch.trans]
+meta(all.trans)$hemicellulose_mass<-CFractions$hemicellulose_perc[CFmatch.trans]
+meta(all.trans)$cellulose_mass<-CFractions$cellulose_perc[CFmatch.trans]
+meta(all.trans)$lignin_mass<-CFractions$lignin_perc[CFmatch.trans]
+
 ## removing species that have exudates that affect carbon fraction measurements
 ## there may also be a problem with "Polystichum munitum (Kaulfuss) C. Presl" but not confirmed
 NDF_bad<-c("Ulmus rubra Muhlenberg","Acer platanoides Linnaeus",
            "Ulmus americana Linnaeus","Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")
-CFraction$NDFmass[which(CFraction$species %in% NDF_bad)]<-NA
-CFraction$solubles_mass[which(CFraction$species %in% NDF_bad)]<-NA
-CFraction$hemicellulose_mass[which(CFraction$species %in% NDF_bad)]<-NA
+meta(all.ref)$NDFmass[which(meta(all.ref)$species %in% NDF_bad)]<-NA
+meta(all.ref)$solubles_mass[which(meta(all.ref)$species %in% NDF_bad)]<-NA
+meta(all.ref)$hemicellulose_mass[which(meta(all.ref)$species %in% NDF_bad)]<-NA
 
-CFraction$ADFmass[which(CFraction$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
-CFraction$ADLmass[which(CFraction$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
-CFraction$cellulose_mass[which(CFraction$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
-CFraction$lignin_mass[which(CFraction$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
+meta(all.ref)$ADFmass[which(meta(all.ref)$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
+meta(all.ref)$ADLmass[which(meta(all.ref)$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
+meta(all.ref)$cellulose_mass[which(meta(all.ref)$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
+meta(all.ref)$lignin_mass[which(meta(all.ref)$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
 
-CFmatch.ref<-match(meta(all.ref)$sample_id,CFractions$bottle_id)
-meta(all.ref)$NDFmass<-CFractions$ndf_perc[CFmatch]
-meta(all.ref)$ADFmass<-CFractions$adf_perc[CFmatch]
-meta(all.ref)$ADLmass<-CFractions$adl_perc[CFmatch]
-meta(all.ref)$solubles_mass<-CFractions$soluble_perc[CFmatch]
-meta(all.ref)$hemicellulose_mass<-CFractions$hemicellulose_perc[CFmatch]
-meta(all.ref)$cellulose_mass<-CFractions$cellulose_perc[CFmatch]
-meta(all.ref)$lignin_mass<-CFractions$lignin_perc[CFmatch]
+meta(all.trans)$NDFmass[which(meta(all.trans)$species %in% NDF_bad)]<-NA
+meta(all.trans)$solubles_mass[which(meta(all.trans)$species %in% NDF_bad)]<-NA
+meta(all.trans)$hemicellulose_mass[which(meta(all.trans)$species %in% NDF_bad)]<-NA
 
-CFmatch.trans<-match(meta(all.trans)$sample_id,CFractions$bottle_id)
-meta(all.trans)$NDFmass<-CFractions$ndf_perc[CFmatch]
-meta(all.trans)$ADFmass<-CFractions$adf_perc[CFmatch]
-meta(all.trans)$ADLmass<-CFractions$adl_perc[CFmatch]
-meta(all.trans)$solubles_mass<-CFractions$soluble_perc[CFmatch]
-meta(all.trans)$hemicellulose_mass<-CFractions$hemicellulose_perc[CFmatch]
-meta(all.trans)$cellulose_mass<-CFractions$cellulose_perc[CFmatch]
-meta(all.trans)$lignin_mass<-CFractions$lignin_perc[CFmatch]
+meta(all.trans)$ADFmass[which(meta(all.trans)$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
+meta(all.trans)$ADLmass[which(meta(all.trans)$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
+meta(all.trans)$cellulose_mass[which(meta(all.trans)$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
+meta(all.trans)$lignin_mass[which(meta(all.trans)$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
 
 #############################################
 ## read pigments
