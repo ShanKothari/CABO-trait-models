@@ -9,6 +9,7 @@ library(hypervolume)
 library(GSAR)
 library(statip)
 library(lme4)
+library(FNN)
 
 spec.traits<-readRDS("ProcessedSpectra/all_spectra_and_traits.rds")
 ## the Pardo dataset has no trait data (yet)

@@ -138,9 +138,9 @@ Dessain <- refl_corr.df %>%
   summarise(mean.refl.corr = mean(refl_corr)) %>%
   droplevels()
 
-## for consistency with other data sets at this stage
 colnames(Dessain)<-c("sample_id","leaf_number","wvl","DN")
 
+## now aggregate leaves within a sample
 Dessain_agg<- Dessain %>% 
   dplyr::group_by(sample_id, wvl) %>% 
   dplyr::summarise(value = mean(DN, na.rm = T))
@@ -306,7 +306,8 @@ meta(Dessain.spec)$car_mass<-as.numeric(as.character(Dessain.pigments$carotenoid
 #################################################
 ## combine
 
-## need to add Dessain (and optionally Hacker 2018) data
+## !!!!!!!!!
+## need to add Dessain (and optionally Hacker 2018) data!!!
 
 LOPEX_ref<-LOPEX_ref[,400:2400]
 ANGERS_ref<-ANGERS_ref[,400:2400]
