@@ -7,7 +7,7 @@ library(lmodel2)
 library(reshape2)
 source("Scripts/VIP.R")
 
-spec.traits<-readRDS("ProcessedSpectra/all_spectra_and_traits.rds")
+ref.traits<-readRDS("ProcessedSpectra/all_ref_and_traits.rds")
 
 ##########################################
 ## to dos
@@ -53,29 +53,29 @@ apply.coefs<-function(coef.list,val.spec,intercept=T){
 ## divide into training and testing
 
 train.sample <- createDataPartition(
-  y = meta(spec.traits)$project,
+  y = meta(ref.traits)$project,
   p = .8,
   list = FALSE
 )
 
-test.sample<-setdiff(1:nrow(as.matrix(spec.traits)),train.sample)
+test.sample<-setdiff(1:nrow(as.matrix(ref.traits)),train.sample)
 
-spec.train<-spec.traits[train.sample,]
-spec.test<-spec.traits[test.sample,]
+ref.train<-ref.traits[train.sample,]
+ref.test<-ref.traits[test.sample,]
 
 ###########################################
 ## start building first-pass models using
 ## K-fold cross validation to get the
 ## optimal number of components
 
-solubles_mass_CVmodel<-plsr(meta(spec.train)$solubles_mass~as.matrix(spec.train),
+solubles_mass_CVmodel<-plsr(meta(ref.train)$solubles_mass~as.matrix(ref.train),
                       ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_solubles_mass_CVmodel <- selectNcomp(solubles_mass_CVmodel, method = "onesigma", plot = FALSE)
-solubles_mass_valid <- which(!is.na(meta(spec.train)$solubles_mass))
-solubles_mass_pred<-data.frame(ID=meta(spec.train)$sample_id[solubles_mass_valid],
-                         Species=meta(spec.train)$species[solubles_mass_valid],
-                         Project=meta(spec.train)$project[solubles_mass_valid],
-                         measured=meta(spec.train)$solubles_mass[solubles_mass_valid],
+solubles_mass_valid <- which(!is.na(meta(ref.train)$solubles_mass))
+solubles_mass_pred<-data.frame(ID=meta(ref.train)$sample_id[solubles_mass_valid],
+                         Species=meta(ref.train)$species[solubles_mass_valid],
+                         Project=meta(ref.train)$project[solubles_mass_valid],
+                         measured=meta(ref.train)$solubles_mass[solubles_mass_valid],
                          val_pred=solubles_mass_CVmodel$validation$pred[,,ncomp_solubles_mass_CVmodel])
 ggplot(solubles_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -87,14 +87,14 @@ ggplot(solubles_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   labs(y="Measured",x="Predicted")+
   ggtitle("Predicting % solubles from fresh-leaf spectra")
 
-hemicellulose_mass_CVmodel<-plsr(meta(spec.train)$hemicellulose_mass~as.matrix(spec.train),
+hemicellulose_mass_CVmodel<-plsr(meta(ref.train)$hemicellulose_mass~as.matrix(ref.train),
                       ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_hemicellulose_mass_CVmodel <- selectNcomp(hemicellulose_mass_CVmodel, method = "onesigma", plot = FALSE)
-hemicellulose_mass_valid <- which(!is.na(meta(spec.train)$hemicellulose_mass))
-hemicellulose_mass_pred<-data.frame(ID=meta(spec.train)$sample_id[hemicellulose_mass_valid],
-                         Species=meta(spec.train)$species[hemicellulose_mass_valid],
-                         Project=meta(spec.train)$project[hemicellulose_mass_valid],
-                         measured=meta(spec.train)$hemicellulose_mass[hemicellulose_mass_valid],
+hemicellulose_mass_valid <- which(!is.na(meta(ref.train)$hemicellulose_mass))
+hemicellulose_mass_pred<-data.frame(ID=meta(ref.train)$sample_id[hemicellulose_mass_valid],
+                         Species=meta(ref.train)$species[hemicellulose_mass_valid],
+                         Project=meta(ref.train)$project[hemicellulose_mass_valid],
+                         measured=meta(ref.train)$hemicellulose_mass[hemicellulose_mass_valid],
                          val_pred=hemicellulose_mass_CVmodel$validation$pred[,,ncomp_hemicellulose_mass_CVmodel])
 ggplot(hemicellulose_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -106,14 +106,14 @@ ggplot(hemicellulose_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   labs(y="Measured",x="Predicted")+
   ggtitle("Predicting % hemicellulose from fresh-leaf spectra")
 
-cellulose_mass_CVmodel<-plsr(meta(spec.train)$cellulose_mass~as.matrix(spec.train),
+cellulose_mass_CVmodel<-plsr(meta(ref.train)$cellulose_mass~as.matrix(ref.train),
                       ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_cellulose_mass_CVmodel <- selectNcomp(cellulose_mass_CVmodel, method = "onesigma", plot = FALSE)
-cellulose_mass_valid <- which(!is.na(meta(spec.train)$cellulose_mass))
-cellulose_mass_pred<-data.frame(ID=meta(spec.train)$sample_id[cellulose_mass_valid],
-                         Species=meta(spec.train)$species[cellulose_mass_valid],
-                         Project=meta(spec.train)$project[cellulose_mass_valid],
-                         measured=meta(spec.train)$cellulose_mass[cellulose_mass_valid],
+cellulose_mass_valid <- which(!is.na(meta(ref.train)$cellulose_mass))
+cellulose_mass_pred<-data.frame(ID=meta(ref.train)$sample_id[cellulose_mass_valid],
+                         Species=meta(ref.train)$species[cellulose_mass_valid],
+                         Project=meta(ref.train)$project[cellulose_mass_valid],
+                         measured=meta(ref.train)$cellulose_mass[cellulose_mass_valid],
                          val_pred=cellulose_mass_CVmodel$validation$pred[,,ncomp_cellulose_mass_CVmodel])
 ggplot(cellulose_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -125,14 +125,14 @@ ggplot(cellulose_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   labs(y="Measured",x="Predicted")+
   ggtitle("Predicting % cellulose from fresh-leaf spectra")
 
-lignin_mass_CVmodel<-plsr(meta(spec.train)$lignin_mass~as.matrix(spec.train),
+lignin_mass_CVmodel<-plsr(meta(ref.train)$lignin_mass~as.matrix(ref.train),
                       ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_lignin_mass_CVmodel <- selectNcomp(lignin_mass_CVmodel, method = "onesigma", plot = FALSE)
-lignin_mass_valid <- which(!is.na(meta(spec.train)$lignin_mass))
-lignin_mass_pred<-data.frame(ID=meta(spec.train)$sample_id[lignin_mass_valid],
-                         Species=meta(spec.train)$species[lignin_mass_valid],
-                         Project=meta(spec.train)$project[lignin_mass_valid],
-                         measured=meta(spec.train)$lignin_mass[lignin_mass_valid],
+lignin_mass_valid <- which(!is.na(meta(ref.train)$lignin_mass))
+lignin_mass_pred<-data.frame(ID=meta(ref.train)$sample_id[lignin_mass_valid],
+                         Species=meta(ref.train)$species[lignin_mass_valid],
+                         Project=meta(ref.train)$project[lignin_mass_valid],
+                         measured=meta(ref.train)$lignin_mass[lignin_mass_valid],
                          val_pred=lignin_mass_CVmodel$validation$pred[,,ncomp_lignin_mass_CVmodel])
 ggplot(lignin_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -144,14 +144,14 @@ ggplot(lignin_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   labs(y="Measured",x="Predicted")+
   ggtitle("Predicting % lignin from fresh-leaf spectra")
 
-Cmass_CVmodel<-plsr(meta(spec.train)$Cmass~as.matrix(spec.train),
+Cmass_CVmodel<-plsr(meta(ref.train)$Cmass~as.matrix(ref.train),
                  ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_Cmass_CVmodel <- selectNcomp(Cmass_CVmodel, method = "onesigma", plot = FALSE)
-Cmass_valid <- which(!is.na(meta(spec.train)$Cmass))
-Cmass_pred<-data.frame(ID=meta(spec.train)$sample_id[Cmass_valid],
-                            Species=meta(spec.train)$species[Cmass_valid],
-                            Project=meta(spec.train)$project[Cmass_valid],
-                            measured=meta(spec.train)$Cmass[Cmass_valid],
+Cmass_valid <- which(!is.na(meta(ref.train)$Cmass))
+Cmass_pred<-data.frame(ID=meta(ref.train)$sample_id[Cmass_valid],
+                            Species=meta(ref.train)$species[Cmass_valid],
+                            Project=meta(ref.train)$project[Cmass_valid],
+                            measured=meta(ref.train)$Cmass[Cmass_valid],
                             val_pred=Cmass_CVmodel$validation$pred[,,ncomp_Cmass_CVmodel])
 ggplot(Cmass_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -163,14 +163,14 @@ ggplot(Cmass_pred,aes(y=measured,x=val_pred,color=Project))+
   labs(y="Measured",x="Predicted")+
   ggtitle("Predicting %C from fresh-leaf spectra")
 
-Nmass_CVmodel<-plsr(meta(spec.train)$Nmass~as.matrix(spec.train),
+Nmass_CVmodel<-plsr(meta(ref.train)$Nmass~as.matrix(ref.train),
                    ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_Nmass_CVmodel <- selectNcomp(Nmass_CVmodel, method = "onesigma", plot = FALSE)
-Nmass_valid <- which(!is.na(meta(spec.train)$Nmass))
-Nmass_pred<-data.frame(ID=meta(spec.train)$sample_id[Nmass_valid],
-                      Species=meta(spec.train)$species[Nmass_valid],
-                      Project=meta(spec.train)$project[Nmass_valid],
-                      measured=meta(spec.train)$Nmass[Nmass_valid],
+Nmass_valid <- which(!is.na(meta(ref.train)$Nmass))
+Nmass_pred<-data.frame(ID=meta(ref.train)$sample_id[Nmass_valid],
+                      Species=meta(ref.train)$species[Nmass_valid],
+                      Project=meta(ref.train)$project[Nmass_valid],
+                      measured=meta(ref.train)$Nmass[Nmass_valid],
                       val_pred=Nmass_CVmodel$validation$pred[,,ncomp_Nmass_CVmodel])
 ggplot(Nmass_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -182,14 +182,14 @@ ggplot(Nmass_pred,aes(y=measured,x=val_pred,color=Project))+
   labs(y="Measured",x="Predicted")+
   ggtitle("Predicting %N from fresh-leaf spectra")
 
-# Narea_CVmodel<-plsr(meta(spec.train)$Narea~as.matrix(spec.train),
+# Narea_CVmodel<-plsr(meta(ref.train)$Narea~as.matrix(ref.train),
 #                     ncomp=30,method = "oscorespls",validation="CV",segments=10)
 # ncomp_Narea_CVmodel <- selectNcomp(Narea_CVmodel, method = "onesigma", plot = FALSE)
-# Narea_valid <- which(!is.na(meta(spec.train)$Narea))
-# Narea_pred<-data.frame(ID=meta(spec.train)$sample_id[Narea_valid],
-#                        Species=meta(spec.train)$species[Narea_valid],
-#                        Project=meta(spec.train)$project[Narea_valid],
-#                        measured=meta(spec.train)$Narea[Narea_valid],
+# Narea_valid <- which(!is.na(meta(ref.train)$Narea))
+# Narea_pred<-data.frame(ID=meta(ref.train)$sample_id[Narea_valid],
+#                        Species=meta(ref.train)$species[Narea_valid],
+#                        Project=meta(ref.train)$project[Narea_valid],
+#                        measured=meta(ref.train)$Narea[Narea_valid],
 #                        val_pred=Narea_CVmodel$validation$pred[,,ncomp_Narea_CVmodel])
 # ggplot(Narea_pred,aes(y=measured,x=val_pred,color=Project))+
 #   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -201,14 +201,14 @@ ggplot(Nmass_pred,aes(y=measured,x=val_pred,color=Project))+
 #   labs(y="Measured",x="Predicted")+
 #   ggtitle("Predicting Narea from fresh-leaf spectra")
 # 
-# Nnorm_CVmodel<-plsr(meta(spec.train)$Nnorm~as.matrix(spec.train),
+# Nnorm_CVmodel<-plsr(meta(ref.train)$Nnorm~as.matrix(ref.train),
 #                     ncomp=30,method = "oscorespls",validation="CV",segments=10)
 # ncomp_Nnorm_CVmodel <- selectNcomp(Nnorm_CVmodel, method = "onesigma", plot = FALSE)
-# Nnorm_valid <- which(!is.na(meta(spec.train)$Nnorm))
-# Nnorm_pred<-data.frame(ID=meta(spec.train)$sample_id[Nnorm_valid],
-#                        Species=meta(spec.train)$species[Nnorm_valid],
-#                        Project=meta(spec.train)$project[Nnorm_valid],
-#                        measured=meta(spec.train)$Nnorm[Nnorm_valid],
+# Nnorm_valid <- which(!is.na(meta(ref.train)$Nnorm))
+# Nnorm_pred<-data.frame(ID=meta(ref.train)$sample_id[Nnorm_valid],
+#                        Species=meta(ref.train)$species[Nnorm_valid],
+#                        Project=meta(ref.train)$project[Nnorm_valid],
+#                        measured=meta(ref.train)$Nnorm[Nnorm_valid],
 #                        val_pred=Nnorm_CVmodel$validation$pred[,,ncomp_Nnorm_CVmodel])
 # ggplot(Nnorm_pred,aes(y=measured,x=val_pred,color=Project))+
 #   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -220,14 +220,14 @@ ggplot(Nmass_pred,aes(y=measured,x=val_pred,color=Project))+
 #   labs(y="Measured",x="Predicted")+
 #   ggtitle("Predicting N (norm-ind) from fresh-leaf spectra")
 
-EWT_CVmodel<-plsr(meta(spec.train)$EWT~as.matrix(spec.train),
+EWT_CVmodel<-plsr(meta(ref.train)$EWT~as.matrix(ref.train),
                   ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_EWT_CVmodel <- selectNcomp(EWT_CVmodel, method = "onesigma", plot = FALSE)
-EWT_valid <- which(!is.na(meta(spec.train)$EWT))
-EWT_pred<-data.frame(ID=meta(spec.train)$sample_id[EWT_valid],
-                     Species=meta(spec.train)$species[EWT_valid],
-                     Project=meta(spec.train)$project[EWT_valid],
-                     measured=meta(spec.train)$EWT[EWT_valid],
+EWT_valid <- which(!is.na(meta(ref.train)$EWT))
+EWT_pred<-data.frame(ID=meta(ref.train)$sample_id[EWT_valid],
+                     Species=meta(ref.train)$species[EWT_valid],
+                     Project=meta(ref.train)$project[EWT_valid],
+                     measured=meta(ref.train)$EWT[EWT_valid],
                      val_pred=EWT_CVmodel$validation$pred[,,ncomp_EWT_CVmodel])
 ggplot(EWT_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -239,14 +239,14 @@ ggplot(EWT_pred,aes(y=measured,x=val_pred,color=Project))+
   labs(y="Measured",x="Predicted")+
   ggtitle("Predicting %EWT from fresh-leaf spectra")
 
-LDMC_CVmodel<-plsr(meta(spec.train)$LDMC~as.matrix(spec.train),
+LDMC_CVmodel<-plsr(meta(ref.train)$LDMC~as.matrix(ref.train),
                    ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_LDMC_CVmodel <- selectNcomp(LDMC_CVmodel, method = "onesigma", plot = FALSE)
-LDMC_valid <- which(!is.na(meta(spec.train)$LDMC))
-LDMC_pred<-data.frame(ID=meta(spec.train)$sample_id[LDMC_valid],
-                      Species=meta(spec.train)$species[LDMC_valid],
-                      Project=meta(spec.train)$project[LDMC_valid],
-                      measured=meta(spec.train)$LDMC[LDMC_valid],
+LDMC_valid <- which(!is.na(meta(ref.train)$LDMC))
+LDMC_pred<-data.frame(ID=meta(ref.train)$sample_id[LDMC_valid],
+                      Species=meta(ref.train)$species[LDMC_valid],
+                      Project=meta(ref.train)$project[LDMC_valid],
+                      measured=meta(ref.train)$LDMC[LDMC_valid],
                       val_pred=LDMC_CVmodel$validation$pred[,,ncomp_LDMC_CVmodel])
 ggplot(LDMC_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -258,14 +258,14 @@ ggplot(LDMC_pred,aes(y=measured,x=val_pred,color=Project))+
   labs(y="Measured",x="Predicted")+
   ggtitle("Predicting LDMC from fresh-leaf spectra")
 
-LMA_CVmodel<-plsr(meta(spec.train)$LMA~as.matrix(spec.train),
+LMA_CVmodel<-plsr(meta(ref.train)$LMA~as.matrix(ref.train),
                    ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_LMA_CVmodel <- selectNcomp(LMA_CVmodel, method = "onesigma", plot = FALSE)
-LMA_valid <- which(!is.na(meta(spec.train)$LMA))
-LMA_pred<-data.frame(ID=meta(spec.train)$sample_id[LMA_valid],
-                      Species=meta(spec.train)$species[LMA_valid],
-                      Project=meta(spec.train)$project[LMA_valid],
-                      measured=meta(spec.train)$LMA[LMA_valid],
+LMA_valid <- which(!is.na(meta(ref.train)$LMA))
+LMA_pred<-data.frame(ID=meta(ref.train)$sample_id[LMA_valid],
+                      Species=meta(ref.train)$species[LMA_valid],
+                      Project=meta(ref.train)$project[LMA_valid],
+                      measured=meta(ref.train)$LMA[LMA_valid],
                       val_pred=LMA_CVmodel$validation$pred[,,ncomp_LMA_CVmodel])
 ggplot(LMA_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -277,14 +277,14 @@ ggplot(LMA_pred,aes(y=measured,x=val_pred,color=Project))+
   labs(y="Measured",x="Predicted")+
   ggtitle("Predicting LMA from fresh-leaf spectra")
 
-chlA_mass_CVmodel<-plsr(meta(spec.train)$chlA_mass~as.matrix(spec.train),
+chlA_mass_CVmodel<-plsr(meta(ref.train)$chlA_mass~as.matrix(ref.train),
                   ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_chlA_mass_CVmodel <- selectNcomp(chlA_mass_CVmodel, method = "onesigma", plot = FALSE)
-chlA_mass_valid <- which(!is.na(meta(spec.train)$chlA_mass))
-chlA_mass_pred<-data.frame(ID=meta(spec.train)$sample_id[chlA_mass_valid],
-                     Species=meta(spec.train)$species[chlA_mass_valid],
-                     Project=meta(spec.train)$project[chlA_mass_valid],
-                     measured=meta(spec.train)$chlA_mass[chlA_mass_valid],
+chlA_mass_valid <- which(!is.na(meta(ref.train)$chlA_mass))
+chlA_mass_pred<-data.frame(ID=meta(ref.train)$sample_id[chlA_mass_valid],
+                     Species=meta(ref.train)$species[chlA_mass_valid],
+                     Project=meta(ref.train)$project[chlA_mass_valid],
+                     measured=meta(ref.train)$chlA_mass[chlA_mass_valid],
                      val_pred=chlA_mass_CVmodel$validation$pred[,,ncomp_chlA_mass_CVmodel])
 ggplot(chlA_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -296,14 +296,14 @@ ggplot(chlA_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   labs(y="Measured",x="Predicted")+
   ggtitle("Predicting chlA from fresh-leaf spectra")
 
-chlB_mass_CVmodel<-plsr(meta(spec.train)$chlB_mass~as.matrix(spec.train),
+chlB_mass_CVmodel<-plsr(meta(ref.train)$chlB_mass~as.matrix(ref.train),
                          ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_chlB_mass_CVmodel <- selectNcomp(chlB_mass_CVmodel, method = "onesigma", plot = FALSE)
-chlB_mass_valid <- which(!is.na(meta(spec.train)$chlB_mass))
-chlB_mass_pred<-data.frame(ID=meta(spec.train)$sample_id[chlB_mass_valid],
-                            Species=meta(spec.train)$species[chlB_mass_valid],
-                            Project=meta(spec.train)$project[chlB_mass_valid],
-                            measured=meta(spec.train)$chlB_mass[chlB_mass_valid],
+chlB_mass_valid <- which(!is.na(meta(ref.train)$chlB_mass))
+chlB_mass_pred<-data.frame(ID=meta(ref.train)$sample_id[chlB_mass_valid],
+                            Species=meta(ref.train)$species[chlB_mass_valid],
+                            Project=meta(ref.train)$project[chlB_mass_valid],
+                            measured=meta(ref.train)$chlB_mass[chlB_mass_valid],
                             val_pred=chlB_mass_CVmodel$validation$pred[,,ncomp_chlB_mass_CVmodel])
 ggplot(chlB_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -315,14 +315,14 @@ ggplot(chlB_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   labs(y="Measured",x="Predicted")+
   ggtitle("Predicting chlB from fresh-leaf spectra")
 
-car_mass_CVmodel<-plsr(meta(spec.train)$car_mass~as.matrix(spec.train),
+car_mass_CVmodel<-plsr(meta(ref.train)$car_mass~as.matrix(ref.train),
                          ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_car_mass_CVmodel <- selectNcomp(car_mass_CVmodel, method = "onesigma", plot = FALSE)
-car_mass_valid <- which(!is.na(meta(spec.train)$car_mass))
-car_mass_pred<-data.frame(ID=meta(spec.train)$sample_id[car_mass_valid],
-                            Species=meta(spec.train)$species[car_mass_valid],
-                            Project=meta(spec.train)$project[car_mass_valid],
-                            measured=meta(spec.train)$car_mass[car_mass_valid],
+car_mass_valid <- which(!is.na(meta(ref.train)$car_mass))
+car_mass_pred<-data.frame(ID=meta(ref.train)$sample_id[car_mass_valid],
+                            Species=meta(ref.train)$species[car_mass_valid],
+                            Project=meta(ref.train)$project[car_mass_valid],
+                            measured=meta(ref.train)$car_mass[car_mass_valid],
                             val_pred=car_mass_CVmodel$validation$pred[,,ncomp_car_mass_CVmodel])
 ggplot(car_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -407,12 +407,12 @@ nreps<-100
 for(i in 1:nreps){
   print(i)
   
-  n.cal.spec<-nrow(spec.train)
+  n.cal.spec<-nrow(ref.train)
   train.jack<-sample(1:n.cal.spec,floor(0.7*n.cal.spec))
   test.jack<-setdiff(1:n.cal.spec,train.jack)
   
-  calib.jack<-spec.train[train.jack]
-  val.jack<-spec.train[test.jack]
+  calib.jack<-ref.train[train.jack]
+  val.jack<-ref.train[test.jack]
   
   solubles_mass.jack<-plsr(meta(calib.jack)$solubles_mass~as.matrix(calib.jack),
                      ncomp=30,method = "oscorespls",validation="none")
@@ -550,15 +550,15 @@ for(i in 1:nreps){
   
 }
 
-solubles_mass.jack.pred<-apply.coefs(solubles_mass.jack.coefs,as.matrix(spec.test))
+solubles_mass.jack.pred<-apply.coefs(solubles_mass.jack.coefs,as.matrix(ref.test))
 solubles_mass.jack.stat<-t(apply(solubles_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 solubles_mass.jack.df<-data.frame(pred.mean=solubles_mass.jack.stat[,1],
                             pred.low=solubles_mass.jack.stat[,1]-1.96*solubles_mass.jack.stat[,2],
                             pred.high=solubles_mass.jack.stat[,1]+1.96*solubles_mass.jack.stat[,2],
-                            Measured=meta(spec.test)$solubles_mass,
-                            Species=meta(spec.test)$species,
-                            Project=meta(spec.test)$project,
-                            ID=meta(spec.test)$sample_id)
+                            Measured=meta(ref.test)$solubles_mass,
+                            Species=meta(ref.test)$species,
+                            Project=meta(ref.test)$project,
+                            ID=meta(ref.test)$sample_id)
 
 solubles_mass.val.plot<-ggplot(solubles_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -572,15 +572,15 @@ solubles_mass.val.plot<-ggplot(solubles_mass.jack.df,aes(y=Measured,x=pred.mean,
   labs(y="Measured solubles (%)",x="Predicted solubles (%)")+
   guides(color=F)
 
-hemicellulose_mass.jack.pred<-apply.coefs(hemicellulose_mass.jack.coefs,as.matrix(spec.test))
+hemicellulose_mass.jack.pred<-apply.coefs(hemicellulose_mass.jack.coefs,as.matrix(ref.test))
 hemicellulose_mass.jack.stat<-t(apply(hemicellulose_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 hemicellulose_mass.jack.df<-data.frame(pred.mean=hemicellulose_mass.jack.stat[,1],
                             pred.low=hemicellulose_mass.jack.stat[,1]-1.96*hemicellulose_mass.jack.stat[,2],
                             pred.high=hemicellulose_mass.jack.stat[,1]+1.96*hemicellulose_mass.jack.stat[,2],
-                            Measured=meta(spec.test)$hemicellulose_mass,
-                            Species=meta(spec.test)$species,
-                            Project=meta(spec.test)$project,
-                            ID=meta(spec.test)$sample_id)
+                            Measured=meta(ref.test)$hemicellulose_mass,
+                            Species=meta(ref.test)$species,
+                            Project=meta(ref.test)$project,
+                            ID=meta(ref.test)$sample_id)
 
 hemicellulose_mass.val.plot<-ggplot(hemicellulose_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -594,15 +594,15 @@ hemicellulose_mass.val.plot<-ggplot(hemicellulose_mass.jack.df,aes(y=Measured,x=
   labs(y="Measured hemicellulose (%)",x="Predicted hemicellulose (%)")+
   guides(color=F)
 
-cellulose_mass.jack.pred<-apply.coefs(cellulose_mass.jack.coefs,as.matrix(spec.test))
+cellulose_mass.jack.pred<-apply.coefs(cellulose_mass.jack.coefs,as.matrix(ref.test))
 cellulose_mass.jack.stat<-t(apply(cellulose_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 cellulose_mass.jack.df<-data.frame(pred.mean=cellulose_mass.jack.stat[,1],
                             pred.low=cellulose_mass.jack.stat[,1]-1.96*cellulose_mass.jack.stat[,2],
                             pred.high=cellulose_mass.jack.stat[,1]+1.96*cellulose_mass.jack.stat[,2],
-                            Measured=meta(spec.test)$cellulose_mass,
-                            Species=meta(spec.test)$species,
-                            Project=meta(spec.test)$project,
-                            ID=meta(spec.test)$sample_id)
+                            Measured=meta(ref.test)$cellulose_mass,
+                            Species=meta(ref.test)$species,
+                            Project=meta(ref.test)$project,
+                            ID=meta(ref.test)$sample_id)
 
 cellulose_mass.val.plot<-ggplot(cellulose_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -616,15 +616,15 @@ cellulose_mass.val.plot<-ggplot(cellulose_mass.jack.df,aes(y=Measured,x=pred.mea
   labs(y="Measured cellulose (%)",x="Predicted cellulose (%)")+
   guides(color=F)
 
-lignin_mass.jack.pred<-apply.coefs(lignin_mass.jack.coefs,as.matrix(spec.test))
+lignin_mass.jack.pred<-apply.coefs(lignin_mass.jack.coefs,as.matrix(ref.test))
 lignin_mass.jack.stat<-t(apply(lignin_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 lignin_mass.jack.df<-data.frame(pred.mean=lignin_mass.jack.stat[,1],
                             pred.low=lignin_mass.jack.stat[,1]-1.96*lignin_mass.jack.stat[,2],
                             pred.high=lignin_mass.jack.stat[,1]+1.96*lignin_mass.jack.stat[,2],
-                            Measured=meta(spec.test)$lignin_mass,
-                            Species=meta(spec.test)$species,
-                            Project=meta(spec.test)$project,
-                            ID=meta(spec.test)$sample_id)
+                            Measured=meta(ref.test)$lignin_mass,
+                            Species=meta(ref.test)$species,
+                            Project=meta(ref.test)$project,
+                            ID=meta(ref.test)$sample_id)
 
 lignin_mass.val.plot<-ggplot(lignin_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -638,15 +638,15 @@ lignin_mass.val.plot<-ggplot(lignin_mass.jack.df,aes(y=Measured,x=pred.mean,colo
   labs(y="Measured lignin (%)",x="Predicted lignin (%)")+
   guides(color=F)
 
-chlA_mass.jack.pred<-apply.coefs(chlA_mass.jack.coefs,as.matrix(spec.test))
+chlA_mass.jack.pred<-apply.coefs(chlA_mass.jack.coefs,as.matrix(ref.test))
 chlA_mass.jack.stat<-t(apply(chlA_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 chlA_mass.jack.df<-data.frame(pred.mean=chlA_mass.jack.stat[,1],
                                 pred.low=chlA_mass.jack.stat[,1]-1.96*chlA_mass.jack.stat[,2],
                                 pred.high=chlA_mass.jack.stat[,1]+1.96*chlA_mass.jack.stat[,2],
-                                Measured=meta(spec.test)$chlA_mass,
-                                Species=meta(spec.test)$species,
-                                Project=meta(spec.test)$project,
-                                ID=meta(spec.test)$sample_id)
+                                Measured=meta(ref.test)$chlA_mass,
+                                Species=meta(ref.test)$species,
+                                Project=meta(ref.test)$project,
+                                ID=meta(ref.test)$sample_id)
 
 chlA_mass.val.plot<-ggplot(chlA_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -660,15 +660,15 @@ chlA_mass.val.plot<-ggplot(chlA_mass.jack.df,aes(y=Measured,x=pred.mean,color=Pr
   labs(y=expression("Measured Chl a (mg g"^-1*")"),x=expression("Predicted Chl b (mg g"^-1*")"))+
   guides(color=F)
 
-chlB_mass.jack.pred<-apply.coefs(chlB_mass.jack.coefs,as.matrix(spec.test))
+chlB_mass.jack.pred<-apply.coefs(chlB_mass.jack.coefs,as.matrix(ref.test))
 chlB_mass.jack.stat<-t(apply(chlB_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 chlB_mass.jack.df<-data.frame(pred.mean=chlB_mass.jack.stat[,1],
                                 pred.low=chlB_mass.jack.stat[,1]-1.96*chlB_mass.jack.stat[,2],
                                 pred.high=chlB_mass.jack.stat[,1]+1.96*chlB_mass.jack.stat[,2],
-                                Measured=meta(spec.test)$chlB_mass,
-                                Species=meta(spec.test)$species,
-                                Project=meta(spec.test)$project,
-                                ID=meta(spec.test)$sample_id)
+                                Measured=meta(ref.test)$chlB_mass,
+                                Species=meta(ref.test)$species,
+                                Project=meta(ref.test)$project,
+                                ID=meta(ref.test)$sample_id)
 
 chlB_mass.val.plot<-ggplot(chlB_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -682,15 +682,15 @@ chlB_mass.val.plot<-ggplot(chlB_mass.jack.df,aes(y=Measured,x=pred.mean,color=Pr
   labs(y=expression("Measured Chl b (mg g"^-1*")"),x=expression("Predicted Chl b (mg g"^-1*")"))+
   guides(color=F)
 
-car_mass.jack.pred<-apply.coefs(car_mass.jack.coefs,as.matrix(spec.test))
+car_mass.jack.pred<-apply.coefs(car_mass.jack.coefs,as.matrix(ref.test))
 car_mass.jack.stat<-t(apply(car_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 car_mass.jack.df<-data.frame(pred.mean=car_mass.jack.stat[,1],
                                 pred.low=car_mass.jack.stat[,1]-1.96*car_mass.jack.stat[,2],
                                 pred.high=car_mass.jack.stat[,1]+1.96*car_mass.jack.stat[,2],
-                                Measured=meta(spec.test)$car_mass,
-                                Species=meta(spec.test)$species,
-                                Project=meta(spec.test)$project,
-                                ID=meta(spec.test)$sample_id)
+                                Measured=meta(ref.test)$car_mass,
+                                Species=meta(ref.test)$species,
+                                Project=meta(ref.test)$project,
+                                ID=meta(ref.test)$sample_id)
 
 car_mass.val.plot<-ggplot(car_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -704,15 +704,15 @@ car_mass.val.plot<-ggplot(car_mass.jack.df,aes(y=Measured,x=pred.mean,color=Proj
   labs(y=expression("Measured carotenoids (mg g"^-1*")"),x=expression("Predicted carotenoids (mg g"^-1*")"))+
   guides(color=F)
 
-Cmass.jack.pred<-apply.coefs(Cmass.jack.coefs,as.matrix(spec.test))
+Cmass.jack.pred<-apply.coefs(Cmass.jack.coefs,as.matrix(ref.test))
 Cmass.jack.stat<-t(apply(Cmass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 Cmass.jack.df<-data.frame(pred.mean=Cmass.jack.stat[,1],
                          pred.low=Cmass.jack.stat[,1]-1.96*Cmass.jack.stat[,2],
                          pred.high=Cmass.jack.stat[,1]+1.96*Cmass.jack.stat[,2],
-                         Measured=meta(spec.test)$Cmass,
-                         Species=meta(spec.test)$species,
-                         Project=meta(spec.test)$project,
-                         ID=meta(spec.test)$sample_id)
+                         Measured=meta(ref.test)$Cmass,
+                         Species=meta(ref.test)$species,
+                         Project=meta(ref.test)$project,
+                         ID=meta(ref.test)$sample_id)
 
 Cmass.val.plot<-ggplot(Cmass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -725,15 +725,15 @@ Cmass.val.plot<-ggplot(Cmass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   labs(y=expression("Measured C"[mass]*" (%)"),x=expression("Predicted C"[mass]*" (%)"))+
   guides(color=F)
 
-Nmass.jack.pred<-apply.coefs(Nmass.jack.coefs,as.matrix(spec.test))
+Nmass.jack.pred<-apply.coefs(Nmass.jack.coefs,as.matrix(ref.test))
 Nmass.jack.stat<-t(apply(Nmass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 Nmass.jack.df<-data.frame(pred.mean=Nmass.jack.stat[,1],
                          pred.low=Nmass.jack.stat[,1]-1.96*Nmass.jack.stat[,2],
                          pred.high=Nmass.jack.stat[,1]+1.96*Nmass.jack.stat[,2],
-                         Measured=meta(spec.test)$Nmass,
-                         Species=meta(spec.test)$species,
-                         Project=meta(spec.test)$project,
-                         ID=meta(spec.test)$sample_id)
+                         Measured=meta(ref.test)$Nmass,
+                         Species=meta(ref.test)$species,
+                         Project=meta(ref.test)$project,
+                         ID=meta(ref.test)$sample_id)
 
 Nmass.val.plot<-ggplot(Nmass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -745,15 +745,15 @@ Nmass.val.plot<-ggplot(Nmass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured N"[mass]*" (%)"),x=expression("Predicted N"[mass]*" (%)"))+  guides(color=F)
 
-EWT.jack.pred<-apply.coefs(EWT.jack.coefs,as.matrix(spec.test))
+EWT.jack.pred<-apply.coefs(EWT.jack.coefs,as.matrix(ref.test))
 EWT.jack.stat<-t(apply(EWT.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 EWT.jack.df<-data.frame(pred.mean=EWT.jack.stat[,1],
                         pred.low=EWT.jack.stat[,1]-1.96*EWT.jack.stat[,2],
                         pred.high=EWT.jack.stat[,1]+1.96*EWT.jack.stat[,2],
-                        Measured=meta(spec.test)$EWT,
-                        Species=meta(spec.test)$species,
-                        Project=meta(spec.test)$project,
-                        ID=meta(spec.test)$sample_id)
+                        Measured=meta(ref.test)$EWT,
+                        Species=meta(ref.test)$species,
+                        Project=meta(ref.test)$project,
+                        ID=meta(ref.test)$sample_id)
 
 EWT.val.plot<-ggplot(EWT.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -767,15 +767,15 @@ EWT.val.plot<-ggplot(EWT.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   labs(y="Measured EWT (cm)",x="Predicted EWT (cm)")+
   guides(color=F)
 
-LMA.jack.pred<-apply.coefs(LMA.jack.coefs,as.matrix(spec.test))
+LMA.jack.pred<-apply.coefs(LMA.jack.coefs,as.matrix(ref.test))
 LMA.jack.stat<-t(apply(LMA.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 LMA.jack.df<-data.frame(pred.mean=LMA.jack.stat[,1],
                         pred.low=LMA.jack.stat[,1]-1.96*LMA.jack.stat[,2],
                         pred.high=LMA.jack.stat[,1]+1.96*LMA.jack.stat[,2],
-                        Measured=meta(spec.test)$LMA,
-                        Species=meta(spec.test)$species,
-                        Project=meta(spec.test)$project,
-                        ID=meta(spec.test)$sample_id)
+                        Measured=meta(ref.test)$LMA,
+                        Species=meta(ref.test)$species,
+                        Project=meta(ref.test)$project,
+                        ID=meta(ref.test)$sample_id)
 
 LMA.val.plot<-ggplot(LMA.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -788,15 +788,15 @@ LMA.val.plot<-ggplot(LMA.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   labs(y=expression("Measured LMA (kg m"^-2*")"),x=expression("Predicted LMA (kg m"^-2*")"))+
   guides(color=F)
 
-LDMC.jack.pred<-apply.coefs(LDMC.jack.coefs,as.matrix(spec.test))
+LDMC.jack.pred<-apply.coefs(LDMC.jack.coefs,as.matrix(ref.test))
 LDMC.jack.stat<-t(apply(LDMC.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 LDMC.jack.df<-data.frame(pred.mean=LDMC.jack.stat[,1],
                          pred.low=LDMC.jack.stat[,1]-1.96*LDMC.jack.stat[,2],
                          pred.high=LDMC.jack.stat[,1]+1.96*LDMC.jack.stat[,2],
-                         Measured=meta(spec.test)$LDMC,
-                         Species=meta(spec.test)$species,
-                         Project=meta(spec.test)$project,
-                         ID=meta(spec.test)$sample_id)
+                         Measured=meta(ref.test)$LDMC,
+                         Species=meta(ref.test)$species,
+                         Project=meta(ref.test)$project,
+                         ID=meta(ref.test)$sample_id)
 
 LDMC.val.plot<-ggplot(LDMC.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
