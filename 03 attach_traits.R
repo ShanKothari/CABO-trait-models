@@ -5,15 +5,16 @@ library(ggplot2)
 library(reshape2)
 library(stringr)
 
-all.spec<-readRDS("ProcessedSpectra/all_ref.rds")
+all.ref<-readRDS("ProcessedSpectra/all_ref.rds")
+all.trans<-readRDS("ProcessedSpectra/all_trans.rds")
 
 ##############################################
 ## plot quantiles
 
-# all.quantiles<-quantile(all.spec,probs=c(0.025,0.25,0.5,0.75,0.975))
-# all.CV<-apply(all.spec,2,function(x) sd(x,na.rm=T)/mean(x,na.rm=T))
+# all.ref.quantiles<-quantile(all.ref,probs=c(0.025,0.25,0.5,0.75,0.975))
+# all.ref.CV<-apply(all.ref,2,function(x) sd(x,na.rm=T)/mean(x,na.rm=T))
 # 
-# all.spec.plot<-ggplot()+
+# all.ref.plot<-ggplot()+
 #   geom_line(aes(x=400:2400,y=as.matrix(all.quantiles)[3,]),size=1)+
 #   geom_line(aes(x=400:2400,y=as.matrix(all.quantiles)[2,]),size=1,linetype="dashed")+
 #   geom_line(aes(x=400:2400,y=as.matrix(all.quantiles)[4,]),size=1,linetype="dashed")+
@@ -30,39 +31,39 @@ all.spec<-readRDS("ProcessedSpectra/all_ref.rds")
 ##############################################
 ## plot projects
 
-# meta(all.spec)$project<-factor(meta(all.spec)$project)
-# all.spec.df<-as.data.frame(all.spec)
-# all.spec.df$sample_name<-NULL
+# meta(all.ref)$project<-factor(meta(all.ref)$project)
+# all.ref.df<-as.data.frame(all.ref)
+# all.ref.df$sample_name<-NULL
 # 
-# Girard.samples<-which(all.spec.df$project=="2018-Girard-MSc-UdeM")
-# all.spec.Girard<-all.spec.df[Girard.samples,]
-# Quercus.samples<-grep("Quercus",all.spec.df$species)
-# all.spec.Quercus<-all.spec.df[Quercus.samples,]
+# Girard.samples<-which(all.ref.df$project=="2018-Girard-MSc-UdeM")
+# all.ref.Girard<-all.ref.df[Girard.samples,]
+# Quercus.samples<-grep("Quercus",all.ref.df$species)
+# all.ref.Quercus<-all.ref.df[Quercus.samples,]
 # 
-# all.spec.sample<-all.spec.df[sample(1:nrow(all.spec.df),200),]
+# all.ref.sample<-all.ref.df[sample(1:nrow(all.ref.df),200),]
 # 
-# all.spec.Girard.long<-melt(data=all.spec.Girard,
+# all.ref.Girard.long<-melt(data=all.ref.Girard,
 #                     id.vars=c("sample_id","species","project"),
 #                     variable.name="wavelength",
 #                     value.name="reflectance")
-# all.spec.Girard.long$wavelength<-as.numeric(as.character(all.spec.Girard.long$wavelength))
+# all.ref.Girard.long$wavelength<-as.numeric(as.character(all.ref.Girard.long$wavelength))
 # 
-# all.spec.Quercus.long<-melt(data=all.spec.Quercus,
+# all.ref.Quercus.long<-melt(data=all.ref.Quercus,
 #                            id.vars=c("sample_id","species","project"),
 #                            variable.name="wavelength",
 #                            value.name="reflectance")
-# all.spec.Quercus.long$wavelength<-as.numeric(as.character(all.spec.Quercus.long$wavelength))
+# all.ref.Quercus.long$wavelength<-as.numeric(as.character(all.ref.Quercus.long$wavelength))
 # 
-# all.spec.long<-melt(data=all.spec.sample,
+# all.ref.long<-melt(data=all.ref.sample,
 #                            id.vars=c("sample_id","species","project"),
 #                            variable.name="wavelength",
 #                            value.name="reflectance")
-# all.spec.long$wavelength<-as.numeric(as.character(all.spec.long$wavelength))
+# all.ref.long$wavelength<-as.numeric(as.character(all.ref.long$wavelength))
 # 
 # Quercus_plot<-ggplot()+
-#   geom_line(data=all.spec.long,
+#   geom_line(data=all.ref.long,
 #             aes(x=wavelength,y=reflectance,group=sample_id),color="gray")+
-#   geom_line(data=all.spec.Quercus.long,
+#   geom_line(data=all.ref.Quercus.long,
 #             aes(x=wavelength,y=reflectance,group=sample_id),color="orange",alpha=0.2)+
 #   theme_bw()+
 #   theme(text = element_text(size=20),
@@ -72,9 +73,9 @@ all.spec<-readRDS("ProcessedSpectra/all_ref.rds")
 #   ggtitle("Quercus spectra")
 # 
 # Girard_plot<-ggplot()+
-#   geom_line(data=all.spec.long,
+#   geom_line(data=all.ref.long,
 #             aes(x=wavelength,y=reflectance,group=sample_id),color="gray")+
-#   geom_line(data=all.spec.Girard.long,
+#   geom_line(data=all.ref.Girard.long,
 #             aes(x=wavelength,y=reflectance,group=sample_id),color="blue",alpha=0.2)+
 #   theme_bw()+
 #   theme(text = element_text(size=20),
@@ -87,30 +88,68 @@ all.spec<-readRDS("ProcessedSpectra/all_ref.rds")
 ## growth form
 
 vascan<-read.csv("SummaryData/vascan.csv")
-meta(all.spec)$growth.form<-vascan$growth_form[match(meta(all.spec)$species,vascan$scientific_name)]
-meta(all.spec)$family<-vascan$family[match(meta(all.spec)$species,vascan$scientific_name)]
 
-meta(all.spec)$growth.form[meta(all.spec)$species=="Acer pensylvanicum Linnaeus"]<-"tree"
-meta(all.spec)$growth.form[meta(all.spec)$species=="Betula populifolia Marshall"]<-"tree"
-meta(all.spec)$growth.form[meta(all.spec)$species=="Sorbus decora (Sargent) C.K. Schneider"]<-"tree"
-meta(all.spec)$growth.form[meta(all.spec)$species=="Sorbus americana Marshall"]<-"tree"
-meta(all.spec)$growth.form[meta(all.spec)$species=="Prunus pensylvanica Linnaeus f."]<-"tree"
-meta(all.spec)$growth.form[meta(all.spec)$species=="Frangula alnus Miller"]<-"shrub"
-meta(all.spec)$growth.form[meta(all.spec)$species=="Rhamnus cathartica Linnaeus"]<-"shrub"
-meta(all.spec)$growth.form[meta(all.spec)$species=="Prunus nigra Aiton"]<-"tree"
-meta(all.spec)$growth.form[meta(all.spec)$species=="Salix Linnaeus"]<-"shrub"
+## attach to reflectance
+meta(all.ref)$growth.form<-vascan$growth_form[match(meta(all.ref)$species,vascan$scientific_name)]
+meta(all.ref)$family<-vascan$family[match(meta(all.ref)$species,vascan$scientific_name)]
+meta(all.ref)$genus<-vascan$genus[match(meta(all.ref)$species,vascan$scientific_name)]
+levels(meta(all.ref)$family)<-c(levels(meta(all.ref)$family),"Myrtaceae")
+levels(meta(all.ref)$genus)<-c(levels(meta(all.ref)$genus),"Agonis")
+meta(all.ref)$family[meta(all.ref)$species=="Agonis flexuosa (Willd.) Sweet"]<-"Myrtaceae"
+meta(all.ref)$genus[meta(all.ref)$species=="Agonis flexuosa (Willd.) Sweet"]<-"Agonis"
+
+meta(all.ref)$growth.form[meta(all.ref)$species=="Acer pensylvanicum Linnaeus"]<-"tree"
+meta(all.ref)$growth.form[meta(all.ref)$species=="Betula populifolia Marshall"]<-"tree"
+meta(all.ref)$growth.form[meta(all.ref)$species=="Sorbus decora (Sargent) C.K. Schneider"]<-"tree"
+meta(all.ref)$growth.form[meta(all.ref)$species=="Sorbus americana Marshall"]<-"tree"
+meta(all.ref)$growth.form[meta(all.ref)$species=="Prunus pensylvanica Linnaeus f."]<-"tree"
+meta(all.ref)$growth.form[meta(all.ref)$species=="Frangula alnus Miller"]<-"shrub"
+meta(all.ref)$growth.form[meta(all.ref)$species=="Rhamnus cathartica Linnaeus"]<-"shrub"
+meta(all.ref)$growth.form[meta(all.ref)$species=="Prunus nigra Aiton"]<-"tree"
+meta(all.ref)$growth.form[meta(all.ref)$species=="Salix Linnaeus"]<-"shrub"
 ## the next four, I'm not too sure about the tree/shrub assignment
 ## making a best guess based on max height and project
-meta(all.spec)$growth.form[meta(all.spec)$species=="Prunus virginiana Linnaeus"]<-"shrub"
-meta(all.spec)$growth.form[meta(all.spec)$species=="Staphylea trifolia Linnaeus"]<-"shrub"
-meta(all.spec)$growth.form[meta(all.spec)$species=="Oemleria cerasiformis (Torrey & A. Gray ex Hooker & Arnott) J.W. Landon"]<-"shrub"
-meta(all.spec)$growth.form[meta(all.spec)$species=="Crataegus monogyna Jacquin"]<-"shrub"
-meta(all.spec)$growth.form[meta(all.spec)$species=="Agonis flexuosa (Willd.) Sweet"]<-"tree"
+meta(all.ref)$growth.form[meta(all.ref)$species=="Prunus virginiana Linnaeus"]<-"shrub"
+meta(all.ref)$growth.form[meta(all.ref)$species=="Staphylea trifolia Linnaeus"]<-"shrub"
+meta(all.ref)$growth.form[meta(all.ref)$species=="Oemleria cerasiformis (Torrey & A. Gray ex Hooker & Arnott) J.W. Landon"]<-"shrub"
+meta(all.ref)$growth.form[meta(all.ref)$species=="Crataegus monogyna Jacquin"]<-"shrub"
+meta(all.ref)$growth.form[meta(all.ref)$species=="Agonis flexuosa (Willd.) Sweet"]<-"tree"
 
-meta(all.spec)$functional.group<-as.character(meta(all.spec)$growth.form)
-meta(all.spec)$functional.group[meta(all.spec)$family %in% c("Poaceae","Cyperaceae","Juncaceae")]<-"graminoid"
-meta(all.spec)$functional.group[meta(all.spec)$family=="Fabaceae"]<-"legume"
-meta(all.spec)$functional.group[meta(all.spec)$family %in% c("Pinaceae","Cupressaceae")]<-"conifer"
+meta(all.ref)$functional.group<-as.character(meta(all.ref)$growth.form)
+meta(all.ref)$functional.group[meta(all.ref)$family %in% c("Poaceae","Cyperaceae","Juncaceae")]<-"graminoid"
+meta(all.ref)$functional.group[meta(all.ref)$family=="Fabaceae"]<-"legume"
+meta(all.ref)$functional.group[meta(all.ref)$family %in% c("Pinaceae","Cupressaceae")]<-"conifer"
+
+## attach to transmittance
+meta(all.trans)$growth.form<-vascan$growth_form[match(meta(all.trans)$species,vascan$scientific_name)]
+meta(all.trans)$family<-vascan$family[match(meta(all.trans)$species,vascan$scientific_name)]
+meta(all.trans)$genus<-vascan$genus[match(meta(all.trans)$species,vascan$scientific_name)]
+levels(meta(all.trans)$family)<-c(levels(meta(all.trans)$family),"Myrtaceae")
+levels(meta(all.trans)$genus)<-c(levels(meta(all.trans)$genus),"Agonis")
+meta(all.trans)$family[meta(all.trans)$species=="Agonis flexuosa (Willd.) Sweet"]<-"Myrtaceae"
+meta(all.trans)$genus[meta(all.trans)$species=="Agonis flexuosa (Willd.) Sweet"]<-"Agonis"
+
+meta(all.trans)$growth.form[meta(all.trans)$species=="Acer pensylvanicum Linnaeus"]<-"tree"
+meta(all.trans)$growth.form[meta(all.trans)$species=="Betula populifolia Marshall"]<-"tree"
+meta(all.trans)$growth.form[meta(all.trans)$species=="Sorbus decora (Sargent) C.K. Schneider"]<-"tree"
+meta(all.trans)$growth.form[meta(all.trans)$species=="Sorbus americana Marshall"]<-"tree"
+meta(all.trans)$growth.form[meta(all.trans)$species=="Prunus pensylvanica Linnaeus f."]<-"tree"
+meta(all.trans)$growth.form[meta(all.trans)$species=="Frangula alnus Miller"]<-"shrub"
+meta(all.trans)$growth.form[meta(all.trans)$species=="Rhamnus cathartica Linnaeus"]<-"shrub"
+meta(all.trans)$growth.form[meta(all.trans)$species=="Prunus nigra Aiton"]<-"tree"
+meta(all.trans)$growth.form[meta(all.trans)$species=="Salix Linnaeus"]<-"shrub"
+## the next four, I'm not too sure about the tree/shrub assignment
+## making a best guess based on max height and project
+meta(all.trans)$growth.form[meta(all.trans)$species=="Prunus virginiana Linnaeus"]<-"shrub"
+meta(all.trans)$growth.form[meta(all.trans)$species=="Staphylea trifolia Linnaeus"]<-"shrub"
+meta(all.trans)$growth.form[meta(all.trans)$species=="Oemleria cerasiformis (Torrey & A. Gray ex Hooker & Arnott) J.W. Landon"]<-"shrub"
+meta(all.trans)$growth.form[meta(all.trans)$species=="Crataegus monogyna Jacquin"]<-"shrub"
+meta(all.trans)$growth.form[meta(all.trans)$species=="Agonis flexuosa (Willd.) Sweet"]<-"tree"
+
+meta(all.trans)$functional.group<-as.character(meta(all.trans)$growth.form)
+meta(all.trans)$functional.group[meta(all.trans)$family %in% c("Poaceae","Cyperaceae","Juncaceae")]<-"graminoid"
+meta(all.trans)$functional.group[meta(all.trans)$family=="Fabaceae"]<-"legume"
+meta(all.trans)$functional.group[meta(all.trans)$family %in% c("Pinaceae","Cupressaceae")]<-"conifer"
 
 ##############################################
 ## read leaf area/water traits
@@ -121,24 +160,28 @@ all.area.sub<-data.frame(sample_id=all.area$sample_id,
                              SLA=all.area$specific_leaf_area_m2_kg,
                              LDMC=all.area$leaf_dry_matter_content_mg_g)
 
+## remove bad values, based on notes in Fulcrum data
+all.area.sub$LDMC[all.area.sub$sample_id %in% c("10290262","10966273","13404937",
+                                                  "38530951","41809826","42944395",
+                                                  "43711631","43713406","43717241",
+                                                  "43718957","43718799","43712000","43721033",
+                                                  "44060633","44142362","44148646",
+                                                  "44683516","45108236")]<-NA
+
+all.area.sub$SLA[all.area.sub$sample_id %in% c("13404937","44227362",
+                                                 "44683516","45108236","44142362")]<-NA
+
+
 ## SLA in units m^2/kg
 ## LDMC in units mg/g
-meta(all.spec)$SLA<-all.area.sub$SLA[match(meta(all.spec)$sample_id,all.area.sub$sample_id)]
-meta(all.spec)$LDMC<-all.area.sub$LDMC[match(meta(all.spec)$sample_id,all.area.sub$sample_id)]
-
-## remove bad values, based on notes in Fulcrum data
-meta(all.spec)$LDMC[meta(all.spec)$sample_id %in% c("10290262","10966273","13404937",
-                                                    "38530951","41809826","42944395",
-                                                    "43711631","43713406","43717241",
-                                                    "43718957","43718799","43712000","43721033",
-                                                    "44060633","44142362","44148646",
-                                                    "44683516","45108236")]<-NA
-
-meta(all.spec)$SLA[meta(all.spec)$sample_id %in% c("13404937","44227362",
-                                                   "44683516","45108236","44142362")]<-NA
-
 ## EWT in units cm
-meta(all.spec)$EWT<-with(meta(all.spec),(1/(LDMC/1000)-1)*(1/SLA*0.1))
+meta(all.ref)$SLA<-all.area.sub$SLA[match(meta(all.ref)$sample_id,all.area.sub$sample_id)]
+meta(all.ref)$LDMC<-all.area.sub$LDMC[match(meta(all.ref)$sample_id,all.area.sub$sample_id)]
+meta(all.ref)$EWT<-with(meta(all.ref),(1/(LDMC/1000)-1)*(1/SLA*0.1))
+
+meta(all.trans)$SLA<-all.area.sub$SLA[match(meta(all.trans)$sample_id,all.area.sub$sample_id)]
+meta(all.trans)$LDMC<-all.area.sub$LDMC[match(meta(all.trans)$sample_id,all.area.sub$sample_id)]
+meta(all.trans)$EWT<-with(meta(all.trans),(1/(LDMC/1000)-1)*(1/SLA*0.1))
 
 ##############################################
 ## read C/N
@@ -218,37 +261,49 @@ all.CN<-do.call(rbind,list(BeauchampRioux.CN.sub,Blanchard.CN.sub,Boucherville20
                            Hacker2019.CN.sub,PhragmitesTemporal.CN.sub,
                            Warren.CN.sub))
 
-meta(all.spec)$Cmass<-all.CN$Cmass[match(meta(all.spec)$sample_id,all.CN$sample_id)]
-meta(all.spec)$Nmass<-all.CN$Nmass[match(meta(all.spec)$sample_id,all.CN$sample_id)]
+all.CN$Cmass[all.CN$sample_id=="38707392"]<-NA
+all.CN$Nmass[all.CN$sample_id=="38707392"]<-NA
 
-meta(all.spec)$Cmass[meta(all.spec)$sample_id=="38707392"]<-NA
-meta(all.spec)$Nmass[meta(all.spec)$sample_id=="38707392"]<-NA
+meta(all.ref)$Cmass<-all.CN$Cmass[match(meta(all.ref)$sample_id,all.CN$sample_id)]
+meta(all.ref)$Nmass<-all.CN$Nmass[match(meta(all.ref)$sample_id,all.CN$sample_id)]
+
+meta(all.trans)$Cmass<-all.CN$Cmass[match(meta(all.trans)$sample_id,all.CN$sample_id)]
+meta(all.trans)$Nmass<-all.CN$Nmass[match(meta(all.trans)$sample_id,all.CN$sample_id)]
 
 #############################################
 ## carbon fractions
 
 CFractions<-read.csv("TraitData/CarbonFractions/carbon_fractions_bags.csv")
-CFmatch<-match(meta(all.spec)$sample_id,CFractions$bottle_id)
-meta(all.spec)$NDFmass<-CFractions$ndf_perc[CFmatch]
-meta(all.spec)$ADFmass<-CFractions$adf_perc[CFmatch]
-meta(all.spec)$ADLmass<-CFractions$adl_perc[CFmatch]
-meta(all.spec)$solubles_mass<-CFractions$soluble_perc[CFmatch]
-meta(all.spec)$hemicellulose_mass<-CFractions$hemicellulose_perc[CFmatch]
-meta(all.spec)$cellulose_mass<-CFractions$cellulose_perc[CFmatch]
-meta(all.spec)$lignin_mass<-CFractions$lignin_perc[CFmatch]
-
 ## removing species that have exudates that affect carbon fraction measurements
 ## there may also be a problem with "Polystichum munitum (Kaulfuss) C. Presl" but not confirmed
 NDF_bad<-c("Ulmus rubra Muhlenberg","Acer platanoides Linnaeus",
            "Ulmus americana Linnaeus","Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")
-meta(all.spec)$NDFmass[which(meta(all.spec)$species %in% NDF_bad)]<-NA
-meta(all.spec)$solubles_mass[which(meta(all.spec)$species %in% NDF_bad)]<-NA
-meta(all.spec)$hemicellulose_mass[which(meta(all.spec)$species %in% NDF_bad)]<-NA
+CFraction$NDFmass[which(CFraction$species %in% NDF_bad)]<-NA
+CFraction$solubles_mass[which(CFraction$species %in% NDF_bad)]<-NA
+CFraction$hemicellulose_mass[which(CFraction$species %in% NDF_bad)]<-NA
 
-meta(all.spec)$ADFmass[which(meta(all.spec)$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
-meta(all.spec)$ADLmass[which(meta(all.spec)$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
-meta(all.spec)$cellulose_mass[which(meta(all.spec)$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
-meta(all.spec)$lignin_mass[which(meta(all.spec)$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
+CFraction$ADFmass[which(CFraction$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
+CFraction$ADLmass[which(CFraction$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
+CFraction$cellulose_mass[which(CFraction$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
+CFraction$lignin_mass[which(CFraction$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
+
+CFmatch.ref<-match(meta(all.ref)$sample_id,CFractions$bottle_id)
+meta(all.ref)$NDFmass<-CFractions$ndf_perc[CFmatch]
+meta(all.ref)$ADFmass<-CFractions$adf_perc[CFmatch]
+meta(all.ref)$ADLmass<-CFractions$adl_perc[CFmatch]
+meta(all.ref)$solubles_mass<-CFractions$soluble_perc[CFmatch]
+meta(all.ref)$hemicellulose_mass<-CFractions$hemicellulose_perc[CFmatch]
+meta(all.ref)$cellulose_mass<-CFractions$cellulose_perc[CFmatch]
+meta(all.ref)$lignin_mass<-CFractions$lignin_perc[CFmatch]
+
+CFmatch.trans<-match(meta(all.trans)$sample_id,CFractions$bottle_id)
+meta(all.trans)$NDFmass<-CFractions$ndf_perc[CFmatch]
+meta(all.trans)$ADFmass<-CFractions$adf_perc[CFmatch]
+meta(all.trans)$ADLmass<-CFractions$adl_perc[CFmatch]
+meta(all.trans)$solubles_mass<-CFractions$soluble_perc[CFmatch]
+meta(all.trans)$hemicellulose_mass<-CFractions$hemicellulose_perc[CFmatch]
+meta(all.trans)$cellulose_mass<-CFractions$cellulose_perc[CFmatch]
+meta(all.trans)$lignin_mass<-CFractions$lignin_perc[CFmatch]
 
 #############################################
 ## read pigments
@@ -312,63 +367,68 @@ all.pigments$carotenoides._mg_g[all.pigments$sample_id==13404937]<-NA
 ## remove records who notes contain "refaire" or "refait" since these were all redone
 all.pigments<-all.pigments[-which(str_detect(string = all.pigments$Notes,pattern = "efai")),]
 
-meta(all.spec)$chlA_mass<-as.numeric(as.character(all.pigments$chlA_mg_g[match(meta(all.spec)$sample_id,all.pigments$sample_id)]))
-meta(all.spec)$chlB_mass<-as.numeric(as.character(all.pigments$chlB_mg_g[match(meta(all.spec)$sample_id,all.pigments$sample_id)]))
-meta(all.spec)$car_mass<-as.numeric(as.character(all.pigments$carotenoides._mg_g[match(meta(all.spec)$sample_id,all.pigments$sample_id)]))
+meta(all.ref)$chlA_mass<-as.numeric(as.character(all.pigments$chlA_mg_g[match(meta(all.ref)$sample_id,all.pigments$sample_id)]))
+meta(all.ref)$chlB_mass<-as.numeric(as.character(all.pigments$chlB_mg_g[match(meta(all.ref)$sample_id,all.pigments$sample_id)]))
+meta(all.ref)$car_mass<-as.numeric(as.character(all.pigments$carotenoides._mg_g[match(meta(all.ref)$sample_id,all.pigments$sample_id)]))
+
+meta(all.trans)$chlA_mass<-as.numeric(as.character(all.pigments$chlA_mg_g[match(meta(all.trans)$sample_id,all.pigments$sample_id)]))
+meta(all.trans)$chlB_mass<-as.numeric(as.character(all.pigments$chlB_mg_g[match(meta(all.trans)$sample_id,all.pigments$sample_id)]))
+meta(all.trans)$car_mass<-as.numeric(as.character(all.pigments$carotenoides._mg_g[match(meta(all.trans)$sample_id,all.pigments$sample_id)]))
 
 #############################################
 ## area-normalized chemical traits and
 ## normalization-independent chemical traits sensu Osnas
 
 ## LMA in kg/m^2
-meta(all.spec)$LMA<-1/meta(all.spec)$SLA
+meta(all.ref)$LMA<-1/meta(all.ref)$SLA
 
 ## area basis, in g/cm^2
-meta(all.spec)$Narea<-meta(all.spec)$Nmass*meta(all.spec)$LMA/1000
-Narea_norm<-lm(log(Narea)~log(0.1*LMA),data=meta(all.spec),na.action=na.exclude)
-meta(all.spec)$Nnorm<-resid(Narea_norm)
+meta(all.ref)$Narea<-meta(all.ref)$Nmass*meta(all.ref)$LMA/1000
+Narea_norm<-lm(log(Narea)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Nnorm<-resid(Narea_norm)
 
 ## area basis, in g/cm^2
-meta(all.spec)$Carea<-meta(all.spec)$Cmass*meta(all.spec)$LMA/1000
-Carea_norm<-lm(log(Carea)~log(0.1*LMA),data=meta(all.spec),na.action=na.exclude)
-meta(all.spec)$Cnorm<-resid(Carea_norm)
+meta(all.ref)$Carea<-meta(all.ref)$Cmass*meta(all.ref)$LMA/1000
+Carea_norm<-lm(log(Carea)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Cnorm<-resid(Carea_norm)
 
 ## area basis, in g/cm^2
-meta(all.spec)$solubles_area<-meta(all.spec)$solubles_mass*meta(all.spec)$LMA/1000
-solubles_area_norm<-lm(log(solubles_area)~log(0.1*LMA),data=meta(all.spec),na.action=na.exclude)
-meta(all.spec)$solubles_norm<-resid(solubles_area_norm)
+meta(all.ref)$solubles_area<-meta(all.ref)$solubles_mass*meta(all.ref)$LMA/1000
+solubles_area_norm<-lm(log(solubles_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$solubles_norm<-resid(solubles_area_norm)
 
 ## area basis, in g/cm^2
-meta(all.spec)$hemicellulose_area<-meta(all.spec)$hemicellulose_mass*meta(all.spec)$LMA/1000
-hemicellulose_area_norm<-lm(log(hemicellulose_area)~log(0.1*LMA),data=meta(all.spec),na.action=na.exclude)
-meta(all.spec)$hemicellulose_norm<-resid(hemicellulose_area_norm)
+meta(all.ref)$hemicellulose_area<-meta(all.ref)$hemicellulose_mass*meta(all.ref)$LMA/1000
+hemicellulose_area_norm<-lm(log(hemicellulose_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$hemicellulose_norm<-resid(hemicellulose_area_norm)
 
 ## area basis, in g/cm^2
-meta(all.spec)$cellulose_area<-meta(all.spec)$cellulose_mass*meta(all.spec)$LMA/1000
-cellulose_area_norm<-lm(log(cellulose_area)~log(0.1*LMA),data=meta(all.spec),na.action=na.exclude)
-meta(all.spec)$cellulose_norm<-resid(cellulose_area_norm)
+meta(all.ref)$cellulose_area<-meta(all.ref)$cellulose_mass*meta(all.ref)$LMA/1000
+cellulose_area_norm<-lm(log(cellulose_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$cellulose_norm<-resid(cellulose_area_norm)
 
 ## area basis, in g/cm^2
-meta(all.spec)$lignin_area<-meta(all.spec)$lignin_mass*meta(all.spec)$LMA/1000
-lignin_area_norm<-lm(log(lignin_area)~log(0.1*LMA),data=meta(all.spec),na.action=na.exclude)
-meta(all.spec)$lignin_norm<-resid(lignin_area_norm)
+meta(all.ref)$lignin_area<-meta(all.ref)$lignin_mass*meta(all.ref)$LMA/1000
+lignin_area_norm<-lm(log(lignin_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$lignin_norm<-resid(lignin_area_norm)
 
 ## then to area basis
-meta(all.spec)$chlA_area<-meta(all.spec)$chlA_mass*meta(all.spec)$LMA/1000
-chlA_area_norm<-lm(log(chlA_area)~log(0.1*LMA),data=meta(all.spec),na.action=na.exclude)
-meta(all.spec)$chlA_norm<-resid(chlA_area_norm)
+meta(all.ref)$chlA_area<-meta(all.ref)$chlA_mass*meta(all.ref)$LMA/1000
+chlA_area_norm<-lm(log(chlA_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$chlA_norm<-resid(chlA_area_norm)
 
 ## then to area basis
-meta(all.spec)$chlB_area<-meta(all.spec)$chlB_mass*meta(all.spec)$LMA/1000
-chlB_area_norm<-lm(log(chlB_area)~log(0.1*LMA),data=meta(all.spec),na.action=na.exclude)
-meta(all.spec)$chlB_norm<-resid(chlB_area_norm)
+meta(all.ref)$chlB_area<-meta(all.ref)$chlB_mass*meta(all.ref)$LMA/1000
+chlB_area_norm<-lm(log(chlB_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$chlB_norm<-resid(chlB_area_norm)
 
 ## then to area basis
-meta(all.spec)$car_area<-meta(all.spec)$car_mass*meta(all.spec)$LMA/1000
-car_area_norm<-lm(log(car_area)~log(0.1*LMA),data=meta(all.spec),na.action=na.exclude)
-meta(all.spec)$car_norm<-resid(car_area_norm)
+meta(all.ref)$car_area<-meta(all.ref)$car_mass*meta(all.ref)$LMA/1000
+car_area_norm<-lm(log(car_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$car_norm<-resid(car_area_norm)
 
 ################
 ## eventually
 
-saveRDS(all.spec,"ProcessedSpectra/all_spectra_and_traits.rds")
+saveRDS(all.ref,"ProcessedSpectra/all_ref_and_traits.rds")
+saveRDS(all.trans,"ProcessedSpectra/all_trans_and_traits.rds")
