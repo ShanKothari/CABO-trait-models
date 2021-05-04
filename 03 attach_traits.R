@@ -107,13 +107,13 @@ meta(all.ref)$growth.form[meta(all.ref)$species=="Frangula alnus Miller"]<-"shru
 meta(all.ref)$growth.form[meta(all.ref)$species=="Rhamnus cathartica Linnaeus"]<-"shrub"
 meta(all.ref)$growth.form[meta(all.ref)$species=="Prunus nigra Aiton"]<-"tree"
 meta(all.ref)$growth.form[meta(all.ref)$species=="Salix Linnaeus"]<-"shrub"
+meta(all.ref)$growth.form[meta(all.ref)$species=="Agonis flexuosa (Willd.) Sweet"]<-"tree"
 ## the next four, I'm not too sure about the tree/shrub assignment
 ## making a best guess based on max height and project
 meta(all.ref)$growth.form[meta(all.ref)$species=="Prunus virginiana Linnaeus"]<-"shrub"
 meta(all.ref)$growth.form[meta(all.ref)$species=="Staphylea trifolia Linnaeus"]<-"shrub"
 meta(all.ref)$growth.form[meta(all.ref)$species=="Oemleria cerasiformis (Torrey & A. Gray ex Hooker & Arnott) J.W. Landon"]<-"shrub"
 meta(all.ref)$growth.form[meta(all.ref)$species=="Crataegus monogyna Jacquin"]<-"shrub"
-meta(all.ref)$growth.form[meta(all.ref)$species=="Agonis flexuosa (Willd.) Sweet"]<-"tree"
 
 meta(all.ref)$functional.group<-as.character(meta(all.ref)$growth.form)
 meta(all.ref)$functional.group[meta(all.ref)$family %in% c("Poaceae","Cyperaceae","Juncaceae")]<-"graminoid"
@@ -384,6 +384,55 @@ meta(all.ref)$car_mass<-as.numeric(as.character(all.pigments$carotenoides._mg_g[
 meta(all.trans)$chlA_mass<-as.numeric(as.character(all.pigments$chlA_mg_g[match(meta(all.trans)$sample_id,all.pigments$sample_id)]))
 meta(all.trans)$chlB_mass<-as.numeric(as.character(all.pigments$chlB_mg_g[match(meta(all.trans)$sample_id,all.pigments$sample_id)]))
 meta(all.trans)$car_mass<-as.numeric(as.character(all.pigments$carotenoides._mg_g[match(meta(all.trans)$sample_id,all.pigments$sample_id)]))
+
+#############################################
+## ICP data
+
+ICP12<-read.csv("TraitData/ICP/2020-03-12 1MHCl_Etienne box1,2.csv")
+ICP34<-read.csv("TraitData/ICP/2020-10-20 1MHCl_Etienne box 3,4.csv")
+ICP5<-read.csv("TraitData/ICP/2020-10-21 1MHCl_Etienne box 5.csv")
+ICP67<-read.csv("TraitData/ICP/2020-10-22 1MHCl_Etienne box 6,7.csv")
+ICP8<-read.csv("TraitData/ICP/2020-10-23 1MHCl_Etienne box 8.csv")
+ICP9<-read.csv("TraitData/ICP/2020-11-11 1MHCl_Etienne box 9.csv")
+ICP1011<-read.csv("TraitData/ICP/2020-12-16 1MHCl_Etienne box 10,11.csv")
+ICP_boxes<-do.call(rbind,args=list(ICP12,ICP34,ICP5,ICP67,
+                                   ICP8,ICP9,ICP1011))
+num_cols<-c("Al","B","B.1","Ca","Cu","Fe","K","Mg","Mn","Na","P","Zn")
+ICP_boxes[,num_cols]<-data.frame(sapply(ICP_boxes[,num_cols],
+                                        function(x) as.numeric(as.character(x))))
+
+ICP_Warren<-read.csv("TraitData/ICP/icp_leaf_element_concentrations_Warren.csv")
+ICP_Warren<-data.frame(Sample_id=CFractions$bottle_id[match(ICP_Warren$leaf_chemistry_sample,CFractions$leaf_chemistry_sample)],
+                       Scientific.name=NA,
+                       Al=ICP_Warren$al_mg_g,
+                       B=ICP_Warren$b_mg_g,
+                       B.1=ICP_Warren$b_mg_g,
+                       Ca=ICP_Warren$ca_mg_g,
+                       Cu=ICP_Warren$cu_mg_g,
+                       Fe=ICP_Warren$fe_mg_g,
+                       K=ICP_Warren$k_mg_g,
+                       Mg=ICP_Warren$mg_mg_g,
+                       Mn=ICP_Warren$mn_mg_g,
+                       Na=ICP_Warren$na_mg_g,
+                       P=ICP_Warren$p_mg_g,
+                       Zn=ICP_Warren$zn_mg_g)
+ICP_all<-rbind(ICP_boxes,ICP_Warren)
+
+ICP_all$Al[ICP_all$Sample_id=="2017-08-15-jbmcb-P006"]<-NA
+ICP_all$Cu[ICP_all$Sample_id=="2017-06-07-ireqa-P010"]<-NA
+
+meta(all.ref)$Al<-ICP_all$Al[match(meta(all.ref)$ID,ICP_all$Sample_id)]
+meta(all.ref)$B<-ICP_all$B[match(meta(all.ref)$ID,ICP_all$Sample_id)]
+meta(all.ref)$B.1<-ICP_all$B.1[match(meta(all.ref)$ID,ICP_all$Sample_id)]
+meta(all.ref)$Ca<-ICP_all$Ca[match(meta(all.ref)$ID,ICP_all$Sample_id)]
+meta(all.ref)$Cu<-ICP_all$Cu[match(meta(all.ref)$ID,ICP_all$Sample_id)]
+meta(all.ref)$Fe<-ICP_all$Fe[match(meta(all.ref)$ID,ICP_all$Sample_id)]
+meta(all.ref)$K<-ICP_all$K[match(meta(all.ref)$ID,ICP_all$Sample_id)]
+meta(all.ref)$Mg<-ICP_all$Mg[match(meta(all.ref)$ID,ICP_all$Sample_id)]
+meta(all.ref)$Mn<-ICP_all$Mn[match(meta(all.ref)$ID,ICP_all$Sample_id)]
+meta(all.ref)$Na<-ICP_all$Na[match(meta(all.ref)$ID,ICP_all$Sample_id)]
+meta(all.ref)$P<-ICP_all$P[match(meta(all.ref)$ID,ICP_all$Sample_id)]
+meta(all.ref)$Zn<-ICP_all$Zn[match(meta(all.ref)$ID,ICP_all$Sample_id)]
 
 #############################################
 ## area-normalized chemical traits and
