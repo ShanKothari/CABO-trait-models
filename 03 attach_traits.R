@@ -419,7 +419,9 @@ ICP_Warren<-data.frame(Sample_id=CFractions$bottle_id[match(ICP_Warren$leaf_chem
 ICP_all<-rbind(ICP_boxes,ICP_Warren)
 
 ICP_all$Al[ICP_all$Sample_id=="2017-08-15-jbmcb-P006"]<-NA
+ICP_all$Al[ICP_all$Sample_id=="9157296"]<-NA
 ICP_all$Cu[ICP_all$Sample_id=="2017-06-07-ireqa-P010"]<-NA
+ICP_all$Al[ICP_all$Al<0]<-0
 ICP_all$Na[ICP_all$Na<0]<-0
 
 meta(all.ref)$Al_mass<-ICP_all$Al[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
@@ -454,6 +456,7 @@ meta(all.trans)$Zn_mass<-ICP_all$Zn[match(meta(all.trans)$sample_id,ICP_all$Samp
 
 ## LMA in kg/m^2
 meta(all.ref)$LMA<-1/meta(all.ref)$SLA
+meta(all.trans)$LMA<-1/meta(all.trans)$SLA
 
 ## area basis, in g/cm^2
 meta(all.ref)$Narea<-meta(all.ref)$Nmass*meta(all.ref)$LMA/1000
@@ -502,8 +505,11 @@ meta(all.ref)$car_norm<-resid(car_area_norm)
 
 ## area basis, in g/cm^2
 meta(all.ref)$Al_area<-meta(all.ref)$Al_mass*meta(all.ref)$LMA/1000
-Al_area_norm<-lm(log(Al_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Al_area_omit<-meta(all.ref)$Al_area
+meta(all.ref)$Al_area_omit[which(meta(all.ref)$Al_area_omit==0)]<-NA
+Al_area_norm<-lm(log(Al_area_omit)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
 meta(all.ref)$Al_norm<-resid(Al_area_norm)
+meta(all.ref)$Al_area_omit<-NULL
 
 ## area basis, in g/cm^2
 meta(all.ref)$Ca_area<-meta(all.ref)$Ca_mass*meta(all.ref)$LMA/1000

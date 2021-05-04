@@ -321,6 +321,196 @@ ggplot(car_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   labs(y="Measured",x="Predicted")+
   ggtitle("Predicting carotenoids from fresh-leaf spectra")
 
+Al_mass_CVmodel<-plsr(meta(ref.train)$Al_mass~as.matrix(ref.train),
+                       ncomp=30,method = "oscorespls",validation="CV",segments=10)
+ncomp_Al_mass_CVmodel <- selectNcomp(Al_mass_CVmodel, method = "onesigma", plot = FALSE)
+Al_mass_valid <- which(!is.na(meta(ref.train)$Al_mass))
+Al_mass_pred<-data.frame(ID=meta(ref.train)$sample_id[Al_mass_valid],
+                          Species=meta(ref.train)$species[Al_mass_valid],
+                          Project=meta(ref.train)$project[Al_mass_valid],
+                          measured=meta(ref.train)$Al_mass[Al_mass_valid],
+                          val_pred=Al_mass_CVmodel$validation$pred[,,ncomp_Al_mass_CVmodel])
+ggplot(Al_mass_pred,aes(y=measured,x=val_pred,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  ##  coord_cartesian(xlim=c(38,55),ylim=c(38,55))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.2))+
+  labs(y="Measured",x="Predicted")+
+  ggtitle("Predicting Al from fresh-leaf spectra")
+
+Ca_mass_CVmodel<-plsr(meta(ref.train)$Ca_mass~as.matrix(ref.train),
+                       ncomp=30,method = "oscorespls",validation="CV",segments=10)
+ncomp_Ca_mass_CVmodel <- selectNcomp(Ca_mass_CVmodel, method = "onesigma", plot = FALSE)
+Ca_mass_valid <- which(!is.na(meta(ref.train)$Ca_mass))
+Ca_mass_pred<-data.frame(ID=meta(ref.train)$sample_id[Ca_mass_valid],
+                          Species=meta(ref.train)$species[Ca_mass_valid],
+                          Project=meta(ref.train)$project[Ca_mass_valid],
+                          measured=meta(ref.train)$Ca_mass[Ca_mass_valid],
+                          val_pred=Ca_mass_CVmodel$validation$pred[,,ncomp_Ca_mass_CVmodel])
+ggplot(Ca_mass_pred,aes(y=measured,x=val_pred,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  ##  coord_cartesian(xlim=c(38,55),ylim=c(38,55))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.2))+
+  labs(y="Measured",x="Predicted")+
+  ggtitle("Predicting Ca from fresh-leaf spectra")
+
+Cu_mass_CVmodel<-plsr(meta(ref.train)$Cu_mass~as.matrix(ref.train),
+                       ncomp=30,method = "oscorespls",validation="CV",segments=10)
+ncomp_Cu_mass_CVmodel <- selectNcomp(Cu_mass_CVmodel, method = "onesigma", plot = FALSE)
+Cu_mass_valid <- which(!is.na(meta(ref.train)$Cu_mass))
+Cu_mass_pred<-data.frame(ID=meta(ref.train)$sample_id[Cu_mass_valid],
+                          Species=meta(ref.train)$species[Cu_mass_valid],
+                          Project=meta(ref.train)$project[Cu_mass_valid],
+                          measured=meta(ref.train)$Cu_mass[Cu_mass_valid],
+                          val_pred=Cu_mass_CVmodel$validation$pred[,,ncomp_Cu_mass_CVmodel])
+ggplot(Cu_mass_pred,aes(y=measured,x=val_pred,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  ##  coord_cartesian(xlim=c(38,55),ylim=c(38,55))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.2))+
+  labs(y="Measured",x="Predicted")+
+  ggtitle("Predicting Cu from fresh-leaf spectra")
+
+Fe_mass_CVmodel<-plsr(meta(ref.train)$Fe_mass~as.matrix(ref.train),
+                      ncomp=30,method = "oscorespls",validation="CV",segments=10)
+ncomp_Fe_mass_CVmodel <- selectNcomp(Fe_mass_CVmodel, method = "onesigma", plot = FALSE)
+Fe_mass_valid <- which(!is.na(meta(ref.train)$Fe_mass))
+Fe_mass_pred<-data.frame(ID=meta(ref.train)$sample_id[Fe_mass_valid],
+                         Species=meta(ref.train)$species[Fe_mass_valid],
+                         Project=meta(ref.train)$project[Fe_mass_valid],
+                         measured=meta(ref.train)$Fe_mass[Fe_mass_valid],
+                         val_pred=Fe_mass_CVmodel$validation$pred[,,ncomp_Fe_mass_CVmodel])
+ggplot(Fe_mass_pred,aes(y=measured,x=val_pred,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  ##  coord_cartesian(xlim=c(38,55),ylim=c(38,55))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.2))+
+  labs(y="Measured",x="Predicted")+
+  ggtitle("Predicting Fe from fresh-leaf spectra")
+
+K_mass_CVmodel<-plsr(meta(ref.train)$K_mass~as.matrix(ref.train),
+                      ncomp=30,method = "oscorespls",validation="CV",segments=10)
+ncomp_K_mass_CVmodel <- selectNcomp(K_mass_CVmodel, method = "onesigma", plot = FALSE)
+K_mass_valid <- which(!is.na(meta(ref.train)$K_mass))
+K_mass_pred<-data.frame(ID=meta(ref.train)$sample_id[K_mass_valid],
+                         Species=meta(ref.train)$species[K_mass_valid],
+                         Project=meta(ref.train)$project[K_mass_valid],
+                         measured=meta(ref.train)$K_mass[K_mass_valid],
+                         val_pred=K_mass_CVmodel$validation$pred[,,ncomp_K_mass_CVmodel])
+ggplot(K_mass_pred,aes(y=measured,x=val_pred,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  ##  coord_cartesian(xlim=c(38,55),ylim=c(38,55))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.2))+
+  labs(y="Measured",x="Predicted")+
+  ggtitle("Predicting K from fresh-leaf spectra")
+
+Mg_mass_CVmodel<-plsr(meta(ref.train)$Mg_mass~as.matrix(ref.train),
+                      ncomp=30,method = "oscorespls",validation="CV",segments=10)
+ncomp_Mg_mass_CVmodel <- selectNcomp(Mg_mass_CVmodel, method = "onesigma", plot = FALSE)
+Mg_mass_valid <- which(!is.na(meta(ref.train)$Mg_mass))
+Mg_mass_pred<-data.frame(ID=meta(ref.train)$sample_id[Mg_mass_valid],
+                         Species=meta(ref.train)$species[Mg_mass_valid],
+                         Project=meta(ref.train)$project[Mg_mass_valid],
+                         measured=meta(ref.train)$Mg_mass[Mg_mass_valid],
+                         val_pred=Mg_mass_CVmodel$validation$pred[,,ncomp_Mg_mass_CVmodel])
+ggplot(Mg_mass_pred,aes(y=measured,x=val_pred,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  ##  coord_cartesian(xlim=c(38,55),ylim=c(38,55))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.2))+
+  labs(y="Measured",x="Predicted")+
+  ggtitle("Predicting Mg from fresh-leaf spectra")
+
+Mn_mass_CVmodel<-plsr(meta(ref.train)$Mn_mass~as.matrix(ref.train),
+                      ncomp=30,method = "oscorespls",validation="CV",segments=10)
+ncomp_Mn_mass_CVmodel <- selectNcomp(Mn_mass_CVmodel, method = "onesigma", plot = FALSE)
+Mn_mass_valid <- which(!is.na(meta(ref.train)$Mn_mass))
+Mn_mass_pred<-data.frame(ID=meta(ref.train)$sample_id[Mn_mass_valid],
+                         Species=meta(ref.train)$species[Mn_mass_valid],
+                         Project=meta(ref.train)$project[Mn_mass_valid],
+                         measured=meta(ref.train)$Mn_mass[Mn_mass_valid],
+                         val_pred=Mn_mass_CVmodel$validation$pred[,,ncomp_Mn_mass_CVmodel])
+ggplot(Mn_mass_pred,aes(y=measured,x=val_pred,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  ##  coord_cartesian(xlim=c(38,55),ylim=c(38,55))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.2))+
+  labs(y="Measured",x="Predicted")+
+  ggtitle("Predicting Mn from fresh-leaf spectra")
+
+Na_mass_CVmodel<-plsr(meta(ref.train)$Na_mass~as.matrix(ref.train),
+                      ncomp=30,method = "oscorespls",validation="CV",segments=10)
+ncomp_Na_mass_CVmodel <- selectNcomp(Na_mass_CVmodel, method = "onesigma", plot = FALSE)
+Na_mass_valid <- which(!is.na(meta(ref.train)$Na_mass))
+Na_mass_pred<-data.frame(ID=meta(ref.train)$sample_id[Na_mass_valid],
+                         Species=meta(ref.train)$species[Na_mass_valid],
+                         Project=meta(ref.train)$project[Na_mass_valid],
+                         measured=meta(ref.train)$Na_mass[Na_mass_valid],
+                         val_pred=Na_mass_CVmodel$validation$pred[,,ncomp_Na_mass_CVmodel])
+ggplot(Na_mass_pred,aes(y=measured,x=val_pred,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  ##  coord_cartesian(xlim=c(38,55),ylim=c(38,55))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.2))+
+  labs(y="Measured",x="Predicted")+
+  ggtitle("Predicting Na from fresh-leaf spectra")
+
+P_mass_CVmodel<-plsr(meta(ref.train)$P_mass~as.matrix(ref.train),
+                      ncomp=30,method = "oscorespls",validation="CV",segments=10)
+ncomp_P_mass_CVmodel <- selectNcomp(P_mass_CVmodel, method = "onesigma", plot = FALSE)
+P_mass_valid <- which(!is.na(meta(ref.train)$P_mass))
+P_mass_pred<-data.frame(ID=meta(ref.train)$sample_id[P_mass_valid],
+                         Species=meta(ref.train)$species[P_mass_valid],
+                         Project=meta(ref.train)$project[P_mass_valid],
+                         measured=meta(ref.train)$P_mass[P_mass_valid],
+                         val_pred=P_mass_CVmodel$validation$pred[,,ncomp_P_mass_CVmodel])
+ggplot(P_mass_pred,aes(y=measured,x=val_pred,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  ##  coord_cartesian(xlim=c(38,55),ylim=c(38,55))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.2))+
+  labs(y="Measured",x="Predicted")+
+  ggtitle("Predicting P from fresh-leaf spectra")
+
+Zn_mass_CVmodel<-plsr(meta(ref.train)$Zn_mass~as.matrix(ref.train),
+                      ncomp=30,method = "oscorespls",validation="CV",segments=10)
+ncomp_Zn_mass_CVmodel <- selectNcomp(Zn_mass_CVmodel, method = "onesigma", plot = FALSE)
+Zn_mass_valid <- which(!is.na(meta(ref.train)$Zn_mass))
+Zn_mass_pred<-data.frame(ID=meta(ref.train)$sample_id[Zn_mass_valid],
+                         Species=meta(ref.train)$species[Zn_mass_valid],
+                         Project=meta(ref.train)$project[Zn_mass_valid],
+                         measured=meta(ref.train)$Zn_mass[Zn_mass_valid],
+                         val_pred=Zn_mass_CVmodel$validation$pred[,,ncomp_Zn_mass_CVmodel])
+ggplot(Zn_mass_pred,aes(y=measured,x=val_pred,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  ##  coord_cartesian(xlim=c(38,55),ylim=c(38,55))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.2))+
+  labs(y="Measured",x="Predicted")+
+  ggtitle("Predicting Zn from fresh-leaf spectra")
+
 #######################################################
 ## VIP from calibration models
 
@@ -376,6 +566,16 @@ Nmass.jack.coefs<-list()
 EWT.jack.coefs<-list()
 LMA.jack.coefs<-list()
 LDMC.jack.coefs<-list()
+Al_mass.jack.coefs<-list()
+Ca_mass.jack.coefs<-list()
+Cu_mass.jack.coefs<-list()
+Fe_mass.jack.coefs<-list()
+K_mass.jack.coefs<-list()
+Mg_mass.jack.coefs<-list()
+Mn_mass.jack.coefs<-list()
+Na_mass.jack.coefs<-list()
+P_mass.jack.coefs<-list()
+Zn_mass.jack.coefs<-list()
 
 solubles_mass.jack.stats<-list()
 hemicellulose_mass.jack.stats<-list()
@@ -389,6 +589,16 @@ Nmass.jack.stats<-list()
 EWT.jack.stats<-list()
 LMA.jack.stats<-list()
 LDMC.jack.stats<-list()
+Al_mass.jack.stats<-list()
+Ca_mass.jack.stats<-list()
+Cu_mass.jack.stats<-list()
+Fe_mass.jack.stats<-list()
+K_mass.jack.stats<-list()
+Mg_mass.jack.stats<-list()
+Mn_mass.jack.stats<-list()
+Na_mass.jack.stats<-list()
+P_mass.jack.stats<-list()
+Zn_mass.jack.stats<-list()
 nreps<-100
 
 for(i in 1:nreps){
@@ -425,7 +635,27 @@ for(i in 1:nreps){
                          ncomp=30,method = "oscorespls",validation="none")
   LDMC.jack<-plsr(meta(calib.jack)$LDMC~as.matrix(calib.jack),
                           ncomp=30,method = "oscorespls",validation="none")
-
+  Al_mass.jack<-plsr(meta(calib.jack)$Al_mass~as.matrix(calib.jack),
+                  ncomp=30,method = "oscorespls",validation="none")
+  Ca_mass.jack<-plsr(meta(calib.jack)$Ca_mass~as.matrix(calib.jack),
+                  ncomp=30,method = "oscorespls",validation="none")
+  Cu_mass.jack<-plsr(meta(calib.jack)$Cu_mass~as.matrix(calib.jack),
+                  ncomp=30,method = "oscorespls",validation="none")
+  Fe_mass.jack<-plsr(meta(calib.jack)$Fe_mass~as.matrix(calib.jack),
+                  ncomp=30,method = "oscorespls",validation="none")
+  K_mass.jack<-plsr(meta(calib.jack)$K_mass~as.matrix(calib.jack),
+                  ncomp=30,method = "oscorespls",validation="none")
+  Mg_mass.jack<-plsr(meta(calib.jack)$Mg_mass~as.matrix(calib.jack),
+                  ncomp=30,method = "oscorespls",validation="none")
+  Mn_mass.jack<-plsr(meta(calib.jack)$Mn_mass~as.matrix(calib.jack),
+                  ncomp=30,method = "oscorespls",validation="none")
+  Na_mass.jack<-plsr(meta(calib.jack)$Na_mass~as.matrix(calib.jack),
+                  ncomp=30,method = "oscorespls",validation="none")
+  P_mass.jack<-plsr(meta(calib.jack)$P_mass~as.matrix(calib.jack),
+                  ncomp=30,method = "oscorespls",validation="none")
+  Zn_mass.jack<-plsr(meta(calib.jack)$Zn_mass~as.matrix(calib.jack),
+                  ncomp=30,method = "oscorespls",validation="none")
+  
   solubles_mass.jack.val.pred<-as.vector(predict(solubles_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_solubles_mass_CVmodel)[,,1])
   solubles_mass.jack.val.fit<-lm(solubles_mass.jack.val.pred~meta(val.jack)$solubles_mass)
   solubles_mass.jack.stats[[i]]<-c(R2=summary(solubles_mass.jack.val.fit)$r.squared,
@@ -437,7 +667,7 @@ for(i in 1:nreps){
   hemicellulose_mass.jack.val.pred<-as.vector(predict(hemicellulose_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_hemicellulose_mass_CVmodel)[,,1])
   hemicellulose_mass.jack.val.fit<-lm(hemicellulose_mass.jack.val.pred~meta(val.jack)$hemicellulose_mass)
   hemicellulose_mass.jack.stats[[i]]<-c(R2=summary(hemicellulose_mass.jack.val.fit)$r.squared,
-                             RMSE=RMSD(meta(val.jack)$hemicellulose_mass,hemicellulose.jack.val.pred),
+                             RMSE=RMSD(meta(val.jack)$hemicellulose_mass,hemicellulose_mass.jack.val.pred),
                              max.val=max(meta(val.jack)$hemicellulose_mass,na.rm=T),
                              min.val=min(meta(val.jack)$hemicellulose_mass,na.rm=T),
                              bias=mean(hemicellulose_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$hemicellulose_mass,na.rm=T))
@@ -514,14 +744,86 @@ for(i in 1:nreps){
                                  min.val=min(meta(val.jack)$LMA,na.rm=T),
                                  bias=mean(LMA.jack.val.pred,na.rm=T)-mean(meta(val.jack)$LMA,na.rm=T))
   
-  LDMC.jack.val.pred<-as.vector(predict(LDMC.jack,newdata=as.matrix(val.jack),ncomp=ncomp_LDMC_CVmodel)[,,1])
-  LDMC.jack.val.fit<-lm(LDMC.jack.val.pred~meta(val.jack)$LDMC)
-  LDMC.jack.stats[[i]]<-c(R2=summary(LDMC.jack.val.fit)$r.squared,
-                                  RMSE=RMSD(meta(val.jack)$LDMC,LDMC.jack.val.pred),
-                                  max.val=max(meta(val.jack)$LDMC,na.rm=T),
-                                  min.val=min(meta(val.jack)$LDMC,na.rm=T),
-                                  bias=mean(LDMC.jack.val.pred,na.rm=T)-mean(meta(val.jack)$LDMC,na.rm=T))
+  Al_mass.jack.val.pred<-as.vector(predict(Al_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Al_mass_CVmodel)[,,1])
+  Al_mass.jack.val.fit<-lm(Al_mass.jack.val.pred~meta(val.jack)$Al_mass)
+  Al_mass.jack.stats[[i]]<-c(R2=summary(Al_mass.jack.val.fit)$r.squared,
+                                  RMSE=RMSD(meta(val.jack)$Al_mass,Al_mass.jack.val.pred),
+                                  max.val=max(meta(val.jack)$Al_mass,na.rm=T),
+                                  min.val=min(meta(val.jack)$Al_mass,na.rm=T),
+                                  bias=mean(Al_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Al_mass,na.rm=T))
 
+  Ca_mass.jack.val.pred<-as.vector(predict(Ca_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Ca_mass_CVmodel)[,,1])
+  Ca_mass.jack.val.fit<-lm(Ca_mass.jack.val.pred~meta(val.jack)$Ca_mass)
+  Ca_mass.jack.stats[[i]]<-c(R2=summary(Ca_mass.jack.val.fit)$r.squared,
+                          RMSE=RMSD(meta(val.jack)$Ca_mass,Ca_mass.jack.val.pred),
+                          max.val=max(meta(val.jack)$Ca_mass,na.rm=T),
+                          min.val=min(meta(val.jack)$Ca_mass,na.rm=T),
+                          bias=mean(Ca_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Ca_mass,na.rm=T))
+  
+  Cu_mass.jack.val.pred<-as.vector(predict(Cu_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Cu_mass_CVmodel)[,,1])
+  Cu_mass.jack.val.fit<-lm(Cu_mass.jack.val.pred~meta(val.jack)$Cu_mass)
+  Cu_mass.jack.stats[[i]]<-c(R2=summary(Cu_mass.jack.val.fit)$r.squared,
+                          RMSE=RMSD(meta(val.jack)$Cu_mass,Cu_mass.jack.val.pred),
+                          max.val=max(meta(val.jack)$Cu_mass,na.rm=T),
+                          min.val=min(meta(val.jack)$Cu_mass,na.rm=T),
+                          bias=mean(Cu_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Cu_mass,na.rm=T))
+  
+  Fe_mass.jack.val.pred<-as.vector(predict(Fe_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Fe_mass_CVmodel)[,,1])
+  Fe_mass.jack.val.fit<-lm(Fe_mass.jack.val.pred~meta(val.jack)$Fe_mass)
+  Fe_mass.jack.stats[[i]]<-c(R2=summary(Fe_mass.jack.val.fit)$r.squared,
+                          RMSE=RMSD(meta(val.jack)$Fe_mass,Fe_mass.jack.val.pred),
+                          max.val=max(meta(val.jack)$Fe_mass,na.rm=T),
+                          min.val=min(meta(val.jack)$Fe_mass,na.rm=T),
+                          bias=mean(Fe_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Fe_mass,na.rm=T))
+  
+  K_mass.jack.val.pred<-as.vector(predict(K_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_K_mass_CVmodel)[,,1])
+  K_mass.jack.val.fit<-lm(K_mass.jack.val.pred~meta(val.jack)$K_mass)
+  K_mass.jack.stats[[i]]<-c(R2=summary(K_mass.jack.val.fit)$r.squared,
+                          RMSE=RMSD(meta(val.jack)$K_mass,K_mass.jack.val.pred),
+                          max.val=max(meta(val.jack)$K_mass,na.rm=T),
+                          min.val=min(meta(val.jack)$K_mass,na.rm=T),
+                          bias=mean(K_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$K_mass,na.rm=T))
+  
+  Mg_mass.jack.val.pred<-as.vector(predict(Mg_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Mg_mass_CVmodel)[,,1])
+  Mg_mass.jack.val.fit<-lm(Mg_mass.jack.val.pred~meta(val.jack)$Mg_mass)
+  Mg_mass.jack.stats[[i]]<-c(R2=summary(Mg_mass.jack.val.fit)$r.squared,
+                        RMSE=RMSD(meta(val.jack)$Mg_mass,Mg_mass.jack.val.pred),
+                        max.val=max(meta(val.jack)$Mg_mass,na.rm=T),
+                        min.val=min(meta(val.jack)$Mg_mass,na.rm=T),
+                        bias=mean(Mg_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Mg_mass,na.rm=T))
+  
+  Mn_mass.jack.val.pred<-as.vector(predict(Mn_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Mn_mass_CVmodel)[,,1])
+  Mn_mass.jack.val.fit<-lm(Mn_mass.jack.val.pred~meta(val.jack)$Mn_mass)
+  Mn_mass.jack.stats[[i]]<-c(R2=summary(Mn_mass.jack.val.fit)$r.squared,
+                          RMSE=RMSD(meta(val.jack)$Mn_mass,Mn_mass.jack.val.pred),
+                          max.val=max(meta(val.jack)$Mn_mass,na.rm=T),
+                          min.val=min(meta(val.jack)$Mn_mass,na.rm=T),
+                          bias=mean(Mn_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Mn_mass,na.rm=T))
+  
+  Na_mass.jack.val.pred<-as.vector(predict(Na_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Na_mass_CVmodel)[,,1])
+  Na_mass.jack.val.fit<-lm(Na_mass.jack.val.pred~meta(val.jack)$Na_mass)
+  Na_mass.jack.stats[[i]]<-c(R2=summary(Na_mass.jack.val.fit)$r.squared,
+                          RMSE=RMSD(meta(val.jack)$Na_mass,Na_mass.jack.val.pred),
+                          max.val=max(meta(val.jack)$Na_mass,na.rm=T),
+                          min.val=min(meta(val.jack)$Na_mass,na.rm=T),
+                          bias=mean(Na_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Na_mass,na.rm=T))
+  
+  P_mass.jack.val.pred<-as.vector(predict(P_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_P_mass_CVmodel)[,,1])
+  P_mass.jack.val.fit<-lm(P_mass.jack.val.pred~meta(val.jack)$P_mass)
+  P_mass.jack.stats[[i]]<-c(R2=summary(P_mass.jack.val.fit)$r.squared,
+                          RMSE=RMSD(meta(val.jack)$P_mass,P_mass.jack.val.pred),
+                          max.val=max(meta(val.jack)$P_mass,na.rm=T),
+                          min.val=min(meta(val.jack)$P_mass,na.rm=T),
+                          bias=mean(P_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$P_mass,na.rm=T))
+  
+  Zn_mass.jack.val.pred<-as.vector(predict(Zn_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Zn_mass_CVmodel)[,,1])
+  Zn_mass.jack.val.fit<-lm(Zn_mass.jack.val.pred~meta(val.jack)$Zn_mass)
+  Zn_mass.jack.stats[[i]]<-c(R2=summary(Zn_mass.jack.val.fit)$r.squared,
+                          RMSE=RMSD(meta(val.jack)$Zn_mass,Zn_mass.jack.val.pred),
+                          max.val=max(meta(val.jack)$Zn_mass,na.rm=T),
+                          min.val=min(meta(val.jack)$Zn_mass,na.rm=T),
+                          bias=mean(Zn_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Zn_mass,na.rm=T))
+  
   solubles_mass.jack.coefs[[i]]<-as.vector(coef(solubles_mass.jack,ncomp=ncomp_solubles_mass_CVmodel,intercept=TRUE))
   hemicellulose_mass.jack.coefs[[i]]<-as.vector(coef(hemicellulose_mass.jack,ncomp=ncomp_hemicellulose_mass_CVmodel,intercept=TRUE))
   cellulose_mass.jack.coefs[[i]]<-as.vector(coef(cellulose_mass.jack,ncomp=ncomp_cellulose_mass_CVmodel,intercept=TRUE))
@@ -534,6 +836,16 @@ for(i in 1:nreps){
   EWT.jack.coefs[[i]]<-as.vector(coef(EWT.jack,ncomp=ncomp_EWT_CVmodel,intercept=TRUE))
   LMA.jack.coefs[[i]]<-as.vector(coef(LMA.jack,ncomp=ncomp_LMA_CVmodel,intercept=TRUE))
   LDMC.jack.coefs[[i]]<-as.vector(coef(LDMC.jack,ncomp=ncomp_LDMC_CVmodel,intercept=TRUE))
+  Al_mass.jack.coefs[[i]]<-as.vector(coef(Al_mass.jack,ncomp=ncomp_Al_mass_CVmodel,intercept=TRUE))
+  Ca_mass.jack.coefs[[i]]<-as.vector(coef(Ca_mass.jack,ncomp=ncomp_Ca_mass_CVmodel,intercept=TRUE))
+  Cu_mass.jack.coefs[[i]]<-as.vector(coef(Cu_mass.jack,ncomp=ncomp_Cu_mass_CVmodel,intercept=TRUE))
+  Fe_mass.jack.coefs[[i]]<-as.vector(coef(Fe_mass.jack,ncomp=ncomp_Fe_mass_CVmodel,intercept=TRUE))
+  K_mass.jack.coefs[[i]]<-as.vector(coef(K_mass.jack,ncomp=ncomp_K_mass_CVmodel,intercept=TRUE))
+  Mg_mass.jack.coefs[[i]]<-as.vector(coef(Mg_mass.jack,ncomp=ncomp_Mg_mass_CVmodel,intercept=TRUE))
+  Mn_mass.jack.coefs[[i]]<-as.vector(coef(Mn_mass.jack,ncomp=ncomp_Mn_mass_CVmodel,intercept=TRUE))
+  Na_mass.jack.coefs[[i]]<-as.vector(coef(Na_mass.jack,ncomp=ncomp_Na_mass_CVmodel,intercept=TRUE))
+  P_mass.jack.coefs[[i]]<-as.vector(coef(P_mass.jack,ncomp=ncomp_P_mass_CVmodel,intercept=TRUE))
+  Zn_mass.jack.coefs[[i]]<-as.vector(coef(Zn_mass.jack,ncomp=ncomp_Zn_mass_CVmodel,intercept=TRUE))
   
 }
 
@@ -543,6 +855,7 @@ solubles_mass.jack.df<-data.frame(pred.mean=solubles_mass.jack.stat[,1],
                             pred.low=solubles_mass.jack.stat[,1]-1.96*solubles_mass.jack.stat[,2],
                             pred.high=solubles_mass.jack.stat[,1]+1.96*solubles_mass.jack.stat[,2],
                             Measured=meta(ref.test)$solubles_mass,
+                            ncomp=ncomp_solubles_mass_CVmodel,
                             Species=meta(ref.test)$species,
                             Project=meta(ref.test)$project,
                             ID=meta(ref.test)$sample_id)
@@ -565,6 +878,7 @@ hemicellulose_mass.jack.df<-data.frame(pred.mean=hemicellulose_mass.jack.stat[,1
                             pred.low=hemicellulose_mass.jack.stat[,1]-1.96*hemicellulose_mass.jack.stat[,2],
                             pred.high=hemicellulose_mass.jack.stat[,1]+1.96*hemicellulose_mass.jack.stat[,2],
                             Measured=meta(ref.test)$hemicellulose_mass,
+                            ncomp=ncomp_hemicellulose_mass_CVmodel,
                             Species=meta(ref.test)$species,
                             Project=meta(ref.test)$project,
                             ID=meta(ref.test)$sample_id)
@@ -587,6 +901,7 @@ cellulose_mass.jack.df<-data.frame(pred.mean=cellulose_mass.jack.stat[,1],
                             pred.low=cellulose_mass.jack.stat[,1]-1.96*cellulose_mass.jack.stat[,2],
                             pred.high=cellulose_mass.jack.stat[,1]+1.96*cellulose_mass.jack.stat[,2],
                             Measured=meta(ref.test)$cellulose_mass,
+                            ncomp=ncomp_cellulose_mass_CVmodel,
                             Species=meta(ref.test)$species,
                             Project=meta(ref.test)$project,
                             ID=meta(ref.test)$sample_id)
@@ -609,6 +924,7 @@ lignin_mass.jack.df<-data.frame(pred.mean=lignin_mass.jack.stat[,1],
                             pred.low=lignin_mass.jack.stat[,1]-1.96*lignin_mass.jack.stat[,2],
                             pred.high=lignin_mass.jack.stat[,1]+1.96*lignin_mass.jack.stat[,2],
                             Measured=meta(ref.test)$lignin_mass,
+                            ncomp=ncomp_lignin_mass_CVmodel,
                             Species=meta(ref.test)$species,
                             Project=meta(ref.test)$project,
                             ID=meta(ref.test)$sample_id)
@@ -628,12 +944,13 @@ lignin_mass.val.plot<-ggplot(lignin_mass.jack.df,aes(y=Measured,x=pred.mean,colo
 chlA_mass.jack.pred<-apply.coefs(chlA_mass.jack.coefs,as.matrix(ref.test))
 chlA_mass.jack.stat<-t(apply(chlA_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 chlA_mass.jack.df<-data.frame(pred.mean=chlA_mass.jack.stat[,1],
-                                pred.low=chlA_mass.jack.stat[,1]-1.96*chlA_mass.jack.stat[,2],
-                                pred.high=chlA_mass.jack.stat[,1]+1.96*chlA_mass.jack.stat[,2],
-                                Measured=meta(ref.test)$chlA_mass,
-                                Species=meta(ref.test)$species,
-                                Project=meta(ref.test)$project,
-                                ID=meta(ref.test)$sample_id)
+                              pred.low=chlA_mass.jack.stat[,1]-1.96*chlA_mass.jack.stat[,2],
+                              pred.high=chlA_mass.jack.stat[,1]+1.96*chlA_mass.jack.stat[,2],
+                              Measured=meta(ref.test)$chlA_mass,
+                              ncomp=ncomp_chlA_mass_CVmodel,
+                              Species=meta(ref.test)$species,
+                              Project=meta(ref.test)$project,
+                              ID=meta(ref.test)$sample_id)
 
 chlA_mass.val.plot<-ggplot(chlA_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -653,6 +970,7 @@ chlB_mass.jack.df<-data.frame(pred.mean=chlB_mass.jack.stat[,1],
                                 pred.low=chlB_mass.jack.stat[,1]-1.96*chlB_mass.jack.stat[,2],
                                 pred.high=chlB_mass.jack.stat[,1]+1.96*chlB_mass.jack.stat[,2],
                                 Measured=meta(ref.test)$chlB_mass,
+                              ncomp=ncomp_chlB_mass_CVmodel,
                                 Species=meta(ref.test)$species,
                                 Project=meta(ref.test)$project,
                                 ID=meta(ref.test)$sample_id)
@@ -675,6 +993,7 @@ car_mass.jack.df<-data.frame(pred.mean=car_mass.jack.stat[,1],
                                 pred.low=car_mass.jack.stat[,1]-1.96*car_mass.jack.stat[,2],
                                 pred.high=car_mass.jack.stat[,1]+1.96*car_mass.jack.stat[,2],
                                 Measured=meta(ref.test)$car_mass,
+                             ncomp=ncomp_car_mass_CVmodel,
                                 Species=meta(ref.test)$species,
                                 Project=meta(ref.test)$project,
                                 ID=meta(ref.test)$sample_id)
@@ -697,6 +1016,7 @@ Cmass.jack.df<-data.frame(pred.mean=Cmass.jack.stat[,1],
                          pred.low=Cmass.jack.stat[,1]-1.96*Cmass.jack.stat[,2],
                          pred.high=Cmass.jack.stat[,1]+1.96*Cmass.jack.stat[,2],
                          Measured=meta(ref.test)$Cmass,
+                         ncomp=ncomp_Cmass_CVmodel,
                          Species=meta(ref.test)$species,
                          Project=meta(ref.test)$project,
                          ID=meta(ref.test)$sample_id)
@@ -718,6 +1038,7 @@ Nmass.jack.df<-data.frame(pred.mean=Nmass.jack.stat[,1],
                          pred.low=Nmass.jack.stat[,1]-1.96*Nmass.jack.stat[,2],
                          pred.high=Nmass.jack.stat[,1]+1.96*Nmass.jack.stat[,2],
                          Measured=meta(ref.test)$Nmass,
+                         ncomp=ncomp_Nmass_CVmodel,
                          Species=meta(ref.test)$species,
                          Project=meta(ref.test)$project,
                          ID=meta(ref.test)$sample_id)
@@ -738,6 +1059,7 @@ EWT.jack.df<-data.frame(pred.mean=EWT.jack.stat[,1],
                         pred.low=EWT.jack.stat[,1]-1.96*EWT.jack.stat[,2],
                         pred.high=EWT.jack.stat[,1]+1.96*EWT.jack.stat[,2],
                         Measured=meta(ref.test)$EWT,
+                        ncomp=ncomp_EWT_CVmodel,
                         Species=meta(ref.test)$species,
                         Project=meta(ref.test)$project,
                         ID=meta(ref.test)$sample_id)
@@ -760,6 +1082,7 @@ LMA.jack.df<-data.frame(pred.mean=LMA.jack.stat[,1],
                         pred.low=LMA.jack.stat[,1]-1.96*LMA.jack.stat[,2],
                         pred.high=LMA.jack.stat[,1]+1.96*LMA.jack.stat[,2],
                         Measured=meta(ref.test)$LMA,
+                        ncomp=ncomp_LMA_CVmodel,
                         Species=meta(ref.test)$species,
                         Project=meta(ref.test)$project,
                         ID=meta(ref.test)$sample_id)
@@ -781,6 +1104,7 @@ LDMC.jack.df<-data.frame(pred.mean=LDMC.jack.stat[,1],
                          pred.low=LDMC.jack.stat[,1]-1.96*LDMC.jack.stat[,2],
                          pred.high=LDMC.jack.stat[,1]+1.96*LDMC.jack.stat[,2],
                          Measured=meta(ref.test)$LDMC,
+                         ncomp=ncomp_LDMC_CVmodel,
                          Species=meta(ref.test)$species,
                          Project=meta(ref.test)$project,
                          ID=meta(ref.test)$sample_id)
@@ -796,6 +1120,226 @@ LDMC.val.plot<-ggplot(LDMC.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   labs(y=expression("Measured LDMC (mg g"^-1*")"),x=expression("Predicted LDMC (mg g"^-1*")"))+
   guides(color=F)
 
+Al_mass.jack.pred<-apply.coefs(Al_mass.jack.coefs,as.matrix(ref.test))
+Al_mass.jack.stat<-t(apply(Al_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+Al_mass.jack.df<-data.frame(pred.mean=Al_mass.jack.stat[,1],
+                         pred.low=Al_mass.jack.stat[,1]-1.96*Al_mass.jack.stat[,2],
+                         pred.high=Al_mass.jack.stat[,1]+1.96*Al_mass.jack.stat[,2],
+                         Measured=meta(ref.test)$Al_mass,
+                         ncomp=ncomp_Al_mass_CVmodel,
+                         Species=meta(ref.test)$species,
+                         Project=meta(ref.test)$project,
+                         ID=meta(ref.test)$sample_id)
+
+Al_mass.val.plot<-ggplot(Al_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  theme(text = element_text(size=25))+
+  labs(y=expression("Measured Al (mg g"^-1*")"),x=expression("Predicted Al (mg g"^-1*")"))+
+  guides(color=F)
+
+Ca_mass.jack.pred<-apply.coefs(Ca_mass.jack.coefs,as.matrix(ref.test))
+Ca_mass.jack.stat<-t(apply(Ca_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+Ca_mass.jack.df<-data.frame(pred.mean=Ca_mass.jack.stat[,1],
+                            pred.low=Ca_mass.jack.stat[,1]-1.96*Ca_mass.jack.stat[,2],
+                            pred.high=Ca_mass.jack.stat[,1]+1.96*Ca_mass.jack.stat[,2],
+                            Measured=meta(ref.test)$Ca_mass,
+                            ncomp=ncomp_Ca_mass_CVmodel,
+                            Species=meta(ref.test)$species,
+                            Project=meta(ref.test)$project,
+                            ID=meta(ref.test)$sample_id)
+
+Ca_mass.val.plot<-ggplot(Ca_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  theme(text = element_text(size=25))+
+  labs(y=expression("Measured Ca (mg g"^-1*")"),x=expression("Predicted Ca (mg g"^-1*")"))+
+  guides(color=F)
+
+Cu_mass.jack.pred<-apply.coefs(Cu_mass.jack.coefs,as.matrix(ref.test))
+Cu_mass.jack.stat<-t(apply(Cu_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+Cu_mass.jack.df<-data.frame(pred.mean=Cu_mass.jack.stat[,1],
+                            pred.low=Cu_mass.jack.stat[,1]-1.96*Cu_mass.jack.stat[,2],
+                            pred.high=Cu_mass.jack.stat[,1]+1.96*Cu_mass.jack.stat[,2],
+                            Measured=meta(ref.test)$Cu_mass,
+                            ncomp=ncomp_Cu_mass_CVmodel,
+                            Species=meta(ref.test)$species,
+                            Project=meta(ref.test)$project,
+                            ID=meta(ref.test)$sample_id)
+
+Cu_mass.val.plot<-ggplot(Cu_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  theme(text = element_text(size=25))+
+  labs(y=expression("Measured Cu (mg g"^-1*")"),x=expression("Predicted Cu (mg g"^-1*")"))+
+  guides(color=F)
+
+Fe_mass.jack.pred<-apply.coefs(Fe_mass.jack.coefs,as.matrix(ref.test))
+Fe_mass.jack.stat<-t(apply(Fe_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+Fe_mass.jack.df<-data.frame(pred.mean=Fe_mass.jack.stat[,1],
+                            pred.low=Fe_mass.jack.stat[,1]-1.96*Fe_mass.jack.stat[,2],
+                            pred.high=Fe_mass.jack.stat[,1]+1.96*Fe_mass.jack.stat[,2],
+                            Measured=meta(ref.test)$Fe_mass,
+                            ncomp=ncomp_Fe_mass_CVmodel,
+                            Species=meta(ref.test)$species,
+                            Project=meta(ref.test)$project,
+                            ID=meta(ref.test)$sample_id)
+
+Fe_mass.val.plot<-ggplot(Fe_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  theme(text = element_text(size=25))+
+  labs(y=expression("Measured Fe (mg g"^-1*")"),x=expression("Predicted Fe (mg g"^-1*")"))+
+  guides(color=F)
+
+K_mass.jack.pred<-apply.coefs(K_mass.jack.coefs,as.matrix(ref.test))
+K_mass.jack.stat<-t(apply(K_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+K_mass.jack.df<-data.frame(pred.mean=K_mass.jack.stat[,1],
+                            pred.low=K_mass.jack.stat[,1]-1.96*K_mass.jack.stat[,2],
+                            pred.high=K_mass.jack.stat[,1]+1.96*K_mass.jack.stat[,2],
+                            Measured=meta(ref.test)$K_mass,
+                           ncomp=ncomp_K_mass_CVmodel,
+                            Species=meta(ref.test)$species,
+                            Project=meta(ref.test)$project,
+                            ID=meta(ref.test)$sample_id)
+
+K_mass.val.plot<-ggplot(K_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  theme(text = element_text(size=25))+
+  labs(y=expression("Measured K (mg g"^-1*")"),x=expression("Predicted K (mg g"^-1*")"))+
+  guides(color=F)
+
+Mg_mass.jack.pred<-apply.coefs(Mg_mass.jack.coefs,as.matrix(ref.test))
+Mg_mass.jack.stat<-t(apply(Mg_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+Mg_mass.jack.df<-data.frame(pred.mean=Mg_mass.jack.stat[,1],
+                            pred.low=Mg_mass.jack.stat[,1]-1.96*Mg_mass.jack.stat[,2],
+                            pred.high=Mg_mass.jack.stat[,1]+1.96*Mg_mass.jack.stat[,2],
+                            Measured=meta(ref.test)$Mg_mass,
+                            ncomp=ncomp_Mg_mass_CVmodel,
+                            Species=meta(ref.test)$species,
+                            Project=meta(ref.test)$project,
+                            ID=meta(ref.test)$sample_id)
+
+Mg_mass.val.plot<-ggplot(Mg_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  theme(text = element_text(size=25))+
+  labs(y=expression("Measured Mg (mg g"^-1*")"),x=expression("Predicted Mg (mg g"^-1*")"))+
+  guides(color=F)
+
+Mn_mass.jack.pred<-apply.coefs(Mn_mass.jack.coefs,as.matrix(ref.test))
+Mn_mass.jack.stat<-t(apply(Mn_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+Mn_mass.jack.df<-data.frame(pred.mean=Mn_mass.jack.stat[,1],
+                            pred.low=Mn_mass.jack.stat[,1]-1.96*Mn_mass.jack.stat[,2],
+                            pred.high=Mn_mass.jack.stat[,1]+1.96*Mn_mass.jack.stat[,2],
+                            Measured=meta(ref.test)$Mn_mass,
+                            ncomp=ncomp_Mn_mass_CVmodel,
+                            Species=meta(ref.test)$species,
+                            Project=meta(ref.test)$project,
+                            ID=meta(ref.test)$sample_id)
+
+Mn_mass.val.plot<-ggplot(Mn_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  theme(text = element_text(size=25))+
+  labs(y=expression("Measured Mn (mg g"^-1*")"),x=expression("Predicted Mn (mg g"^-1*")"))+
+  guides(color=F)
+
+Na_mass.jack.pred<-apply.coefs(Na_mass.jack.coefs,as.matrix(ref.test))
+Na_mass.jack.stat<-t(apply(Na_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+Na_mass.jack.df<-data.frame(pred.mean=Na_mass.jack.stat[,1],
+                            pred.low=Na_mass.jack.stat[,1]-1.96*Na_mass.jack.stat[,2],
+                            pred.high=Na_mass.jack.stat[,1]+1.96*Na_mass.jack.stat[,2],
+                            Measured=meta(ref.test)$Na_mass,
+                            ncomp=ncomp_Na_mass_CVmodel,
+                            Species=meta(ref.test)$species,
+                            Project=meta(ref.test)$project,
+                            ID=meta(ref.test)$sample_id)
+
+Na_mass.val.plot<-ggplot(Na_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  theme(text = element_text(size=25))+
+  labs(y=expression("Measured Na (mg g"^-1*")"),x=expression("Predicted Na (mg g"^-1*")"))+
+  guides(color=F)
+
+P_mass.jack.pred<-apply.coefs(P_mass.jack.coefs,as.matrix(ref.test))
+P_mass.jack.stat<-t(apply(P_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+P_mass.jack.df<-data.frame(pred.mean=P_mass.jack.stat[,1],
+                            pred.low=P_mass.jack.stat[,1]-1.96*P_mass.jack.stat[,2],
+                            pred.high=P_mass.jack.stat[,1]+1.96*P_mass.jack.stat[,2],
+                            Measured=meta(ref.test)$P_mass,
+                           ncomp=ncomp_P_mass_CVmodel,
+                            Species=meta(ref.test)$species,
+                            Project=meta(ref.test)$project,
+                            ID=meta(ref.test)$sample_id)
+
+P_mass.val.plot<-ggplot(P_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  theme(text = element_text(size=25))+
+  labs(y=expression("Measured P (mg g"^-1*")"),x=expression("Predicted P (mg g"^-1*")"))+
+  guides(color=F)
+
+Zn_mass.jack.pred<-apply.coefs(Zn_mass.jack.coefs,as.matrix(ref.test))
+Zn_mass.jack.stat<-t(apply(Zn_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+Zn_mass.jack.df<-data.frame(pred.mean=Zn_mass.jack.stat[,1],
+                            pred.low=Zn_mass.jack.stat[,1]-1.96*Zn_mass.jack.stat[,2],
+                            pred.high=Zn_mass.jack.stat[,1]+1.96*Zn_mass.jack.stat[,2],
+                            Measured=meta(ref.test)$Zn_mass,
+                            ncomp=ncomp_Zn_mass_CVmodel,
+                            Species=meta(ref.test)$species,
+                            Project=meta(ref.test)$project,
+                            ID=meta(ref.test)$sample_id)
+
+Zn_mass.val.plot<-ggplot(Zn_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  theme(text = element_text(size=25))+
+  labs(y=expression("Measured Zn (mg g"^-1*")"),x=expression("Predicted Zn (mg g"^-1*")"))+
+  guides(color=F)
+
 all.jack.coef.list<-list(solubles_mass=solubles_mass.jack.coefs,
                          hemicellulose_mass=hemicellulose_mass.jack.coefs,
                          cellulose_mass=cellulose_mass.jack.coefs,
@@ -807,7 +1351,17 @@ all.jack.coef.list<-list(solubles_mass=solubles_mass.jack.coefs,
                          Cmass=Cmass.jack.coefs,
                          EWT=EWT.jack.coefs,
                          LDMC=LDMC.jack.coefs,
-                         LMA=LMA.jack.coefs)
+                         LMA=LMA.jack.coefs,
+                         Al_mass=Al_mass.jack.coefs,
+                         Ca_mass=Ca_mass.jack.coefs,
+                         Cu_mass=Cu_mass.jack.coefs,
+                         Fe_mass=Fe_mass.jack.coefs,
+                         K_mass=K_mass.jack.coefs,
+                         Mg_mass=Mg_mass.jack.coefs,
+                         Mn_mass=Mn_mass.jack.coefs,
+                         Na_mass=Na_mass.jack.coefs,
+                         P_mass=P_mass.jack.coefs,
+                         Zn_mass=Zn_mass.jack.coefs)
 saveRDS(all.jack.coef.list,"SavedResults/all_jack_coefs_list_ref.rds")
 
 all.jack.df.list<-list(solubles_mass=solubles_mass.jack.df,
@@ -821,7 +1375,17 @@ all.jack.df.list<-list(solubles_mass=solubles_mass.jack.df,
                        Cmass=Cmass.jack.df,
                        EWT=EWT.jack.df,
                        LDMC=LDMC.jack.df,
-                       LMA=LMA.jack.df)
+                       LMA=LMA.jack.df,
+                       Al_mass=Al_mass.jack.df,
+                       Ca_mass=Ca_mass.jack.df,
+                       Cu_mass=Cu_mass.jack.df,
+                       Fe_mass=Fe_mass.jack.df,
+                       K_mass=K_mass.jack.df,
+                       Mg_mass=Mg_mass.jack.df,
+                       Mn_mass=Mn_mass.jack.df,
+                       Na_mass=Na_mass.jack.df,
+                       P_mass=P_mass.jack.df,
+                       Zn_mass=Zn_mass.jack.df)
 saveRDS(all.jack.df.list,"SavedResults/all_jack_df_list_ref.rds")
 
 pdf("Images/val_plots_ref.pdf",width = 10,height = 9)
