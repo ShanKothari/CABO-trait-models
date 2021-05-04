@@ -420,19 +420,33 @@ ICP_all<-rbind(ICP_boxes,ICP_Warren)
 
 ICP_all$Al[ICP_all$Sample_id=="2017-08-15-jbmcb-P006"]<-NA
 ICP_all$Cu[ICP_all$Sample_id=="2017-06-07-ireqa-P010"]<-NA
+ICP_all$Na[ICP_all$Na<0]<-0
 
-meta(all.ref)$Al<-ICP_all$Al[match(meta(all.ref)$ID,ICP_all$Sample_id)]
-meta(all.ref)$B<-ICP_all$B[match(meta(all.ref)$ID,ICP_all$Sample_id)]
-meta(all.ref)$B.1<-ICP_all$B.1[match(meta(all.ref)$ID,ICP_all$Sample_id)]
-meta(all.ref)$Ca<-ICP_all$Ca[match(meta(all.ref)$ID,ICP_all$Sample_id)]
-meta(all.ref)$Cu<-ICP_all$Cu[match(meta(all.ref)$ID,ICP_all$Sample_id)]
-meta(all.ref)$Fe<-ICP_all$Fe[match(meta(all.ref)$ID,ICP_all$Sample_id)]
-meta(all.ref)$K<-ICP_all$K[match(meta(all.ref)$ID,ICP_all$Sample_id)]
-meta(all.ref)$Mg<-ICP_all$Mg[match(meta(all.ref)$ID,ICP_all$Sample_id)]
-meta(all.ref)$Mn<-ICP_all$Mn[match(meta(all.ref)$ID,ICP_all$Sample_id)]
-meta(all.ref)$Na<-ICP_all$Na[match(meta(all.ref)$ID,ICP_all$Sample_id)]
-meta(all.ref)$P<-ICP_all$P[match(meta(all.ref)$ID,ICP_all$Sample_id)]
-meta(all.ref)$Zn<-ICP_all$Zn[match(meta(all.ref)$ID,ICP_all$Sample_id)]
+meta(all.ref)$Al_mass<-ICP_all$Al[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
+meta(all.ref)$B_mass<-ICP_all$B[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
+meta(all.ref)$B.1_mass<-ICP_all$B.1[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
+meta(all.ref)$Ca_mass<-ICP_all$Ca[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
+meta(all.ref)$Cu_mass<-ICP_all$Cu[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
+meta(all.ref)$Fe_mass<-ICP_all$Fe[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
+meta(all.ref)$K_mass<-ICP_all$K[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
+meta(all.ref)$Mg_mass<-ICP_all$Mg[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
+meta(all.ref)$Mn_mass<-ICP_all$Mn[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
+meta(all.ref)$Na_mass<-ICP_all$Na[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
+meta(all.ref)$P_mass<-ICP_all$P[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
+meta(all.ref)$Zn_mass<-ICP_all$Zn[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
+
+meta(all.trans)$Al_mass<-ICP_all$Al[match(meta(all.trans)$sample_id,ICP_all$Sample_id)]
+meta(all.trans)$B_mass<-ICP_all$B[match(meta(all.trans)$sample_id,ICP_all$Sample_id)]
+meta(all.trans)$B.1_mass<-ICP_all$B.1[match(meta(all.trans)$sample_id,ICP_all$Sample_id)]
+meta(all.trans)$Ca_mass<-ICP_all$Ca[match(meta(all.trans)$sample_id,ICP_all$Sample_id)]
+meta(all.trans)$Cu_mass<-ICP_all$Cu[match(meta(all.trans)$sample_id,ICP_all$Sample_id)]
+meta(all.trans)$Fe_mass<-ICP_all$Fe[match(meta(all.trans)$sample_id,ICP_all$Sample_id)]
+meta(all.trans)$K_mass<-ICP_all$K[match(meta(all.trans)$sample_id,ICP_all$Sample_id)]
+meta(all.trans)$Mg_mass<-ICP_all$Mg[match(meta(all.trans)$sample_id,ICP_all$Sample_id)]
+meta(all.trans)$Mn_mass<-ICP_all$Mn[match(meta(all.trans)$sample_id,ICP_all$Sample_id)]
+meta(all.trans)$Na_mass<-ICP_all$Na[match(meta(all.trans)$sample_id,ICP_all$Sample_id)]
+meta(all.trans)$P_mass<-ICP_all$P[match(meta(all.trans)$sample_id,ICP_all$Sample_id)]
+meta(all.trans)$Zn_mass<-ICP_all$Zn[match(meta(all.trans)$sample_id,ICP_all$Sample_id)]
 
 #############################################
 ## area-normalized chemical traits and
@@ -471,20 +485,76 @@ meta(all.ref)$lignin_area<-meta(all.ref)$lignin_mass*meta(all.ref)$LMA/1000
 lignin_area_norm<-lm(log(lignin_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
 meta(all.ref)$lignin_norm<-resid(lignin_area_norm)
 
-## then to area basis
+## area basis, in g/cm^2
 meta(all.ref)$chlA_area<-meta(all.ref)$chlA_mass*meta(all.ref)$LMA/1000
 chlA_area_norm<-lm(log(chlA_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
 meta(all.ref)$chlA_norm<-resid(chlA_area_norm)
 
-## then to area basis
+## area basis, in g/cm^2
 meta(all.ref)$chlB_area<-meta(all.ref)$chlB_mass*meta(all.ref)$LMA/1000
 chlB_area_norm<-lm(log(chlB_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
 meta(all.ref)$chlB_norm<-resid(chlB_area_norm)
 
-## then to area basis
+## area basis, in g/cm^2
 meta(all.ref)$car_area<-meta(all.ref)$car_mass*meta(all.ref)$LMA/1000
 car_area_norm<-lm(log(car_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
 meta(all.ref)$car_norm<-resid(car_area_norm)
+
+## area basis, in g/cm^2
+meta(all.ref)$Al_area<-meta(all.ref)$Al_mass*meta(all.ref)$LMA/1000
+Al_area_norm<-lm(log(Al_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Al_norm<-resid(Al_area_norm)
+
+## area basis, in g/cm^2
+meta(all.ref)$Ca_area<-meta(all.ref)$Ca_mass*meta(all.ref)$LMA/1000
+Ca_area_norm<-lm(log(Ca_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Ca_norm<-resid(Ca_area_norm)
+
+## area basis, in g/cm^2
+meta(all.ref)$Cu_area<-meta(all.ref)$Cu_mass*meta(all.ref)$LMA/1000
+Cu_area_norm<-lm(log(Cu_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Cu_norm<-resid(Cu_area_norm)
+
+## area basis, in g/cm^2
+meta(all.ref)$Fe_area<-meta(all.ref)$Fe_mass*meta(all.ref)$LMA/1000
+Fe_area_norm<-lm(log(Fe_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Fe_norm<-resid(Fe_area_norm)
+
+## area basis, in g/cm^2
+meta(all.ref)$K_area<-meta(all.ref)$K_mass*meta(all.ref)$LMA/1000
+K_area_norm<-lm(log(K_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$K_norm<-resid(K_area_norm)
+
+## area basis, in g/cm^2
+meta(all.ref)$Mg_area<-meta(all.ref)$Mg_mass*meta(all.ref)$LMA/1000
+Mg_area_norm<-lm(log(Mg_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Mg_norm<-resid(Mg_area_norm)
+
+## area basis, in g/cm^2
+meta(all.ref)$Mn_area<-meta(all.ref)$Mn_mass*meta(all.ref)$LMA/1000
+meta(all.ref)$Mn_area_omit<-meta(all.ref)$Mn_area
+meta(all.ref)$Mn_area_omit[which(meta(all.ref)$Mn_area_omit==0)]<-NA
+Mn_area_norm<-lm(log(Mn_area_omit)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Mn_norm<-resid(Mn_area_norm)
+meta(all.ref)$Mn_area_omit<-NULL
+
+## area basis, in g/cm^2
+meta(all.ref)$Na_area<-meta(all.ref)$Na_mass*meta(all.ref)$LMA/1000
+meta(all.ref)$Na_area_omit<-meta(all.ref)$Na_area
+meta(all.ref)$Na_area_omit[which(meta(all.ref)$Na_area_omit==0)]<-NA
+Na_area_norm<-lm(log(Na_area_omit)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Na_norm<-resid(Na_area_norm)
+meta(all.ref)$Na_area_omit<-NULL
+
+## area basis, in g/cm^2
+meta(all.ref)$P_area<-meta(all.ref)$P_mass*meta(all.ref)$LMA/1000
+P_area_norm<-lm(log(P_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$P_norm<-resid(P_area_norm)
+
+## area basis, in g/cm^2
+meta(all.ref)$Zn_area<-meta(all.ref)$Zn_mass*meta(all.ref)$LMA/1000
+Zn_area_norm<-lm(log(Zn_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Zn_norm<-resid(Zn_area_norm)
 
 ################
 ## eventually
