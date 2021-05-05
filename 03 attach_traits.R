@@ -531,8 +531,11 @@ meta(all.ref)$Ca_norm<-resid(Ca_area_norm)
 
 ## area basis, in g/cm^2
 meta(all.ref)$Cu_area<-meta(all.ref)$Cu_mass*meta(all.ref)$LMA/1000
-Cu_area_norm<-lm(log(Cu_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Cu_area_omit<-meta(all.ref)$Cu_area
+meta(all.ref)$Cu_area_omit[which(meta(all.ref)$Cu_area_omit==0)]<-NA
+Cu_area_norm<-lm(log(Cu_area_omit)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
 meta(all.ref)$Cu_norm<-resid(Cu_area_norm)
+meta(all.ref)$Cu_area_omit<-NULL
 
 ## area basis, in g/cm^2
 meta(all.ref)$Fe_area<-meta(all.ref)$Fe_mass*meta(all.ref)$LMA/1000
