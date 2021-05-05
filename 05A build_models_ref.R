@@ -27,9 +27,9 @@ RMSD<-function(measured,predicted){
 ## percent RMSD (based on data quantiles)
 ## set min and max to 0 and 1 for range as denominator
 ## or to 0.25 and 0.75 for IQR as denominator
-percentRMSD<-function(measured,predicted,min,max){
+percentRMSD<-function(measured,predicted,min,max,na.rm=T){
   RMSD_data<-RMSD(measured,predicted)
-  range<-quantile(measured,probs=max)-quantile(measured,probs=min)
+  range<-quantile(measured,probs=max,na.rm=na.rm)-quantile(measured,probs=min,na.rm=na.rm)
   return(RMSD_data/range)
 }
 

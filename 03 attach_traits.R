@@ -7,6 +7,12 @@ library(stringr)
 
 all.ref<-readRDS("ProcessedSpectra/all_ref.rds")
 all.trans<-readRDS("ProcessedSpectra/all_trans.rds")
+all.abs<-readRDS("ProcessedSpectra/all_abs.rds")
+
+if(meta(all.ref)$sample_id != meta(all.trans)$sample_id ||
+   meta(all.ref)$sample_id != meta(all.abs)$sample_id){
+  stop("sample ids not the same")
+}
 
 ##############################################
 ## plot quantiles
@@ -91,13 +97,6 @@ vascan<-read.csv("SummaryData/vascan.csv")
 
 ## attach to reflectance
 meta(all.ref)$growth.form<-vascan$growth_form[match(meta(all.ref)$species,vascan$scientific_name)]
-meta(all.ref)$family<-vascan$family[match(meta(all.ref)$species,vascan$scientific_name)]
-meta(all.ref)$genus<-vascan$genus[match(meta(all.ref)$species,vascan$scientific_name)]
-levels(meta(all.ref)$family)<-c(levels(meta(all.ref)$family),"Myrtaceae")
-levels(meta(all.ref)$genus)<-c(levels(meta(all.ref)$genus),"Agonis")
-meta(all.ref)$family[meta(all.ref)$species=="Agonis flexuosa (Willd.) Sweet"]<-"Myrtaceae"
-meta(all.ref)$genus[meta(all.ref)$species=="Agonis flexuosa (Willd.) Sweet"]<-"Agonis"
-
 meta(all.ref)$growth.form[meta(all.ref)$species=="Acer pensylvanicum Linnaeus"]<-"tree"
 meta(all.ref)$growth.form[meta(all.ref)$species=="Betula populifolia Marshall"]<-"tree"
 meta(all.ref)$growth.form[meta(all.ref)$species=="Sorbus decora (Sargent) C.K. Schneider"]<-"tree"
@@ -115,41 +114,29 @@ meta(all.ref)$growth.form[meta(all.ref)$species=="Staphylea trifolia Linnaeus"]<
 meta(all.ref)$growth.form[meta(all.ref)$species=="Oemleria cerasiformis (Torrey & A. Gray ex Hooker & Arnott) J.W. Landon"]<-"shrub"
 meta(all.ref)$growth.form[meta(all.ref)$species=="Crataegus monogyna Jacquin"]<-"shrub"
 
+meta(all.ref)$family<-vascan$family[match(meta(all.ref)$species,vascan$scientific_name)]
+meta(all.ref)$genus<-vascan$genus[match(meta(all.ref)$species,vascan$scientific_name)]
+levels(meta(all.ref)$family)<-c(levels(meta(all.ref)$family),"Myrtaceae")
+levels(meta(all.ref)$genus)<-c(levels(meta(all.ref)$genus),"Agonis")
+meta(all.ref)$family[meta(all.ref)$species=="Agonis flexuosa (Willd.) Sweet"]<-"Myrtaceae"
+meta(all.ref)$genus[meta(all.ref)$species=="Agonis flexuosa (Willd.) Sweet"]<-"Agonis"
+
 meta(all.ref)$functional.group<-as.character(meta(all.ref)$growth.form)
 meta(all.ref)$functional.group[meta(all.ref)$family %in% c("Poaceae","Cyperaceae","Juncaceae")]<-"graminoid"
 meta(all.ref)$functional.group[meta(all.ref)$family=="Fabaceae"]<-"legume"
 meta(all.ref)$functional.group[meta(all.ref)$family %in% c("Pinaceae","Cupressaceae")]<-"conifer"
 
 ## attach to transmittance
-meta(all.trans)$growth.form<-vascan$growth_form[match(meta(all.trans)$species,vascan$scientific_name)]
-meta(all.trans)$family<-vascan$family[match(meta(all.trans)$species,vascan$scientific_name)]
-meta(all.trans)$genus<-vascan$genus[match(meta(all.trans)$species,vascan$scientific_name)]
-levels(meta(all.trans)$family)<-c(levels(meta(all.trans)$family),"Myrtaceae")
-levels(meta(all.trans)$genus)<-c(levels(meta(all.trans)$genus),"Agonis")
-meta(all.trans)$family[meta(all.trans)$species=="Agonis flexuosa (Willd.) Sweet"]<-"Myrtaceae"
-meta(all.trans)$genus[meta(all.trans)$species=="Agonis flexuosa (Willd.) Sweet"]<-"Agonis"
+meta(all.trans)$growth.form<-meta(all.ref)$growth.form
+meta(all.trans)$family<-meta(all.ref)$family
+meta(all.trans)$genus<-meta(all.ref)$genus
+meta(all.trans)$functional.group<-meta(all.ref)$functional.group
 
-meta(all.trans)$growth.form[meta(all.trans)$species=="Acer pensylvanicum Linnaeus"]<-"tree"
-meta(all.trans)$growth.form[meta(all.trans)$species=="Betula populifolia Marshall"]<-"tree"
-meta(all.trans)$growth.form[meta(all.trans)$species=="Sorbus decora (Sargent) C.K. Schneider"]<-"tree"
-meta(all.trans)$growth.form[meta(all.trans)$species=="Sorbus americana Marshall"]<-"tree"
-meta(all.trans)$growth.form[meta(all.trans)$species=="Prunus pensylvanica Linnaeus f."]<-"tree"
-meta(all.trans)$growth.form[meta(all.trans)$species=="Frangula alnus Miller"]<-"shrub"
-meta(all.trans)$growth.form[meta(all.trans)$species=="Rhamnus cathartica Linnaeus"]<-"shrub"
-meta(all.trans)$growth.form[meta(all.trans)$species=="Prunus nigra Aiton"]<-"tree"
-meta(all.trans)$growth.form[meta(all.trans)$species=="Salix Linnaeus"]<-"shrub"
-## the next four, I'm not too sure about the tree/shrub assignment
-## making a best guess based on max height and project
-meta(all.trans)$growth.form[meta(all.trans)$species=="Prunus virginiana Linnaeus"]<-"shrub"
-meta(all.trans)$growth.form[meta(all.trans)$species=="Staphylea trifolia Linnaeus"]<-"shrub"
-meta(all.trans)$growth.form[meta(all.trans)$species=="Oemleria cerasiformis (Torrey & A. Gray ex Hooker & Arnott) J.W. Landon"]<-"shrub"
-meta(all.trans)$growth.form[meta(all.trans)$species=="Crataegus monogyna Jacquin"]<-"shrub"
-meta(all.trans)$growth.form[meta(all.trans)$species=="Agonis flexuosa (Willd.) Sweet"]<-"tree"
-
-meta(all.trans)$functional.group<-as.character(meta(all.trans)$growth.form)
-meta(all.trans)$functional.group[meta(all.trans)$family %in% c("Poaceae","Cyperaceae","Juncaceae")]<-"graminoid"
-meta(all.trans)$functional.group[meta(all.trans)$family=="Fabaceae"]<-"legume"
-meta(all.trans)$functional.group[meta(all.trans)$family %in% c("Pinaceae","Cupressaceae")]<-"conifer"
+## attach to absorptance
+meta(all.abs)$growth.form<-meta(all.ref)$growth.form
+meta(all.abs)$family<-meta(all.ref)$family
+meta(all.abs)$genus<-meta(all.ref)$genus
+meta(all.abs)$functional.group<-meta(all.ref)$functional.group
 
 ##############################################
 ## read leaf area/water traits
@@ -182,6 +169,10 @@ meta(all.ref)$EWT<-with(meta(all.ref),(1/(LDMC/1000)-1)*(1/SLA*0.1))
 meta(all.trans)$SLA<-all.area.sub$SLA[match(meta(all.trans)$sample_id,all.area.sub$sample_id)]
 meta(all.trans)$LDMC<-all.area.sub$LDMC[match(meta(all.trans)$sample_id,all.area.sub$sample_id)]
 meta(all.trans)$EWT<-with(meta(all.trans),(1/(LDMC/1000)-1)*(1/SLA*0.1))
+
+meta(all.abs)$SLA<-all.area.sub$SLA[match(meta(all.abs)$sample_id,all.area.sub$sample_id)]
+meta(all.abs)$LDMC<-all.area.sub$LDMC[match(meta(all.abs)$sample_id,all.area.sub$sample_id)]
+meta(all.abs)$EWT<-with(meta(all.abs),(1/(LDMC/1000)-1)*(1/SLA*0.1))
 
 ##############################################
 ## read C/N
@@ -270,10 +261,27 @@ meta(all.ref)$Nmass<-all.CN$Nmass[match(meta(all.ref)$sample_id,all.CN$sample_id
 meta(all.trans)$Cmass<-all.CN$Cmass[match(meta(all.trans)$sample_id,all.CN$sample_id)]
 meta(all.trans)$Nmass<-all.CN$Nmass[match(meta(all.trans)$sample_id,all.CN$sample_id)]
 
+meta(all.abs)$Cmass<-all.CN$Cmass[match(meta(all.abs)$sample_id,all.CN$sample_id)]
+meta(all.abs)$Nmass<-all.CN$Nmass[match(meta(all.abs)$sample_id,all.CN$sample_id)]
+
 #############################################
 ## carbon fractions
 
 CFractions<-read.csv("TraitData/CarbonFractions/carbon_fractions_bags.csv")
+CFractions$species<-meta(all.ref)$species[match(CFractions$bottle_id,meta(all.ref)$sample_id)]
+
+## removing species that have exudates that affect carbon fraction measurements
+## there may also be a problem with "Polystichum munitum (Kaulfuss) C. Presl" but not confirmed
+NDF_bad<-c("Ulmus rubra Muhlenberg","Acer platanoides Linnaeus",
+           "Ulmus americana Linnaeus","Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")
+CFractions$ndf_perc[which(CFractions$species %in% NDF_bad)]<-NA
+CFractions$soluble_perc[which(CFractions$species %in% NDF_bad)]<-NA
+CFractions$hemicellulose_perc[which(CFractions$species %in% NDF_bad)]<-NA
+
+CFractions$adf_perc[which(CFractions$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
+CFractions$adl_perc[which(CFractions$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
+CFractions$cellulose_perc[which(CFractions$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
+CFractions$lignin_perc[which(CFractions$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
 
 CFmatch.ref<-match(meta(all.ref)$sample_id,CFractions$bottle_id)
 meta(all.ref)$NDFmass<-CFractions$ndf_perc[CFmatch.ref]
@@ -293,27 +301,14 @@ meta(all.trans)$hemicellulose_mass<-CFractions$hemicellulose_perc[CFmatch.trans]
 meta(all.trans)$cellulose_mass<-CFractions$cellulose_perc[CFmatch.trans]
 meta(all.trans)$lignin_mass<-CFractions$lignin_perc[CFmatch.trans]
 
-## removing species that have exudates that affect carbon fraction measurements
-## there may also be a problem with "Polystichum munitum (Kaulfuss) C. Presl" but not confirmed
-NDF_bad<-c("Ulmus rubra Muhlenberg","Acer platanoides Linnaeus",
-           "Ulmus americana Linnaeus","Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")
-meta(all.ref)$NDFmass[which(meta(all.ref)$species %in% NDF_bad)]<-NA
-meta(all.ref)$solubles_mass[which(meta(all.ref)$species %in% NDF_bad)]<-NA
-meta(all.ref)$hemicellulose_mass[which(meta(all.ref)$species %in% NDF_bad)]<-NA
-
-meta(all.ref)$ADFmass[which(meta(all.ref)$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
-meta(all.ref)$ADLmass[which(meta(all.ref)$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
-meta(all.ref)$cellulose_mass[which(meta(all.ref)$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
-meta(all.ref)$lignin_mass[which(meta(all.ref)$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
-
-meta(all.trans)$NDFmass[which(meta(all.trans)$species %in% NDF_bad)]<-NA
-meta(all.trans)$solubles_mass[which(meta(all.trans)$species %in% NDF_bad)]<-NA
-meta(all.trans)$hemicellulose_mass[which(meta(all.trans)$species %in% NDF_bad)]<-NA
-
-meta(all.trans)$ADFmass[which(meta(all.trans)$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
-meta(all.trans)$ADLmass[which(meta(all.trans)$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
-meta(all.trans)$cellulose_mass[which(meta(all.trans)$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
-meta(all.trans)$lignin_mass[which(meta(all.trans)$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
+CFmatch.abs<-match(meta(all.abs)$sample_id,CFractions$bottle_id)
+meta(all.abs)$NDFmass<-CFractions$ndf_perc[CFmatch.abs]
+meta(all.abs)$ADFmass<-CFractions$adf_perc[CFmatch.abs]
+meta(all.abs)$ADLmass<-CFractions$adl_perc[CFmatch.abs]
+meta(all.abs)$solubles_mass<-CFractions$soluble_perc[CFmatch.abs]
+meta(all.abs)$hemicellulose_mass<-CFractions$hemicellulose_perc[CFmatch.abs]
+meta(all.abs)$cellulose_mass<-CFractions$cellulose_perc[CFmatch.abs]
+meta(all.abs)$lignin_mass<-CFractions$lignin_perc[CFmatch.abs]
 
 #############################################
 ## read pigments
@@ -385,6 +380,10 @@ meta(all.trans)$chlA_mass<-as.numeric(as.character(all.pigments$chlA_mg_g[match(
 meta(all.trans)$chlB_mass<-as.numeric(as.character(all.pigments$chlB_mg_g[match(meta(all.trans)$sample_id,all.pigments$sample_id)]))
 meta(all.trans)$car_mass<-as.numeric(as.character(all.pigments$carotenoides._mg_g[match(meta(all.trans)$sample_id,all.pigments$sample_id)]))
 
+meta(all.abs)$chlA_mass<-as.numeric(as.character(all.pigments$chlA_mg_g[match(meta(all.abs)$sample_id,all.pigments$sample_id)]))
+meta(all.abs)$chlB_mass<-as.numeric(as.character(all.pigments$chlB_mg_g[match(meta(all.abs)$sample_id,all.pigments$sample_id)]))
+meta(all.abs)$car_mass<-as.numeric(as.character(all.pigments$carotenoides._mg_g[match(meta(all.abs)$sample_id,all.pigments$sample_id)]))
+
 #############################################
 ## ICP data
 
@@ -450,6 +449,19 @@ meta(all.trans)$Na_mass<-ICP_all$Na[match(meta(all.trans)$sample_id,ICP_all$Samp
 meta(all.trans)$P_mass<-ICP_all$P[match(meta(all.trans)$sample_id,ICP_all$Sample_id)]
 meta(all.trans)$Zn_mass<-ICP_all$Zn[match(meta(all.trans)$sample_id,ICP_all$Sample_id)]
 
+meta(all.abs)$Al_mass<-ICP_all$Al[match(meta(all.abs)$sample_id,ICP_all$Sample_id)]
+meta(all.abs)$B_mass<-ICP_all$B[match(meta(all.abs)$sample_id,ICP_all$Sample_id)]
+meta(all.abs)$B.1_mass<-ICP_all$B.1[match(meta(all.abs)$sample_id,ICP_all$Sample_id)]
+meta(all.abs)$Ca_mass<-ICP_all$Ca[match(meta(all.abs)$sample_id,ICP_all$Sample_id)]
+meta(all.abs)$Cu_mass<-ICP_all$Cu[match(meta(all.abs)$sample_id,ICP_all$Sample_id)]
+meta(all.abs)$Fe_mass<-ICP_all$Fe[match(meta(all.abs)$sample_id,ICP_all$Sample_id)]
+meta(all.abs)$K_mass<-ICP_all$K[match(meta(all.abs)$sample_id,ICP_all$Sample_id)]
+meta(all.abs)$Mg_mass<-ICP_all$Mg[match(meta(all.abs)$sample_id,ICP_all$Sample_id)]
+meta(all.abs)$Mn_mass<-ICP_all$Mn[match(meta(all.abs)$sample_id,ICP_all$Sample_id)]
+meta(all.abs)$Na_mass<-ICP_all$Na[match(meta(all.abs)$sample_id,ICP_all$Sample_id)]
+meta(all.abs)$P_mass<-ICP_all$P[match(meta(all.abs)$sample_id,ICP_all$Sample_id)]
+meta(all.abs)$Zn_mass<-ICP_all$Zn[match(meta(all.abs)$sample_id,ICP_all$Sample_id)]
+
 #############################################
 ## area-normalized chemical traits and
 ## normalization-independent chemical traits sensu Osnas
@@ -457,6 +469,7 @@ meta(all.trans)$Zn_mass<-ICP_all$Zn[match(meta(all.trans)$sample_id,ICP_all$Samp
 ## LMA in kg/m^2
 meta(all.ref)$LMA<-1/meta(all.ref)$SLA
 meta(all.trans)$LMA<-1/meta(all.trans)$SLA
+meta(all.abs)$LMA<-1/meta(all.abs)$SLA
 
 ## area basis, in g/cm^2
 meta(all.ref)$Narea<-meta(all.ref)$Nmass*meta(all.ref)$LMA/1000
@@ -567,3 +580,4 @@ meta(all.ref)$Zn_norm<-resid(Zn_area_norm)
 
 saveRDS(all.ref,"ProcessedSpectra/all_ref_and_traits.rds")
 saveRDS(all.trans,"ProcessedSpectra/all_trans_and_traits.rds")
+saveRDS(all.abs,"ProcessedSpectra/all_abs_and_traits.rds")

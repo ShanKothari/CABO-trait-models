@@ -220,5 +220,13 @@ all.trans.spec<-all.trans.spec[-which(meta(all.trans.spec)$sample_id %in% c("118
 all.ref.spec<-all.ref.spec[-which(is.na(rowSums(as.matrix(all.ref.spec))))]
 all.trans.spec<-all.trans.spec[-which(is.na(rowSums(as.matrix(all.trans.spec))))]
 
+## check that spectra are in the same order
+sum(meta(all.ref.spec)$sample_id==meta(all.trans.spec)$sample_id)==nrow(all.ref.spec)
+
+all.abs.mat<-1-as.matrix(all.ref.spec)-as.matrix(all.trans.spec)
+all.abs.spec<-spectra(all.abs.mat,bands=400:2400,names=names(all.ref.spec))
+meta(all.abs.spec)<-meta(all.ref.spec)
+
 saveRDS(all.ref.spec,file = "ProcessedSpectra/all_ref.rds")
 saveRDS(all.trans.spec,file = "ProcessedSpectra/all_trans.rds")
+saveRDS(all.abs.spec,file = "ProcessedSpectra/all_abs.rds")
