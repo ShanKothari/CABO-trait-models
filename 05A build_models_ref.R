@@ -1137,7 +1137,7 @@ Al_mass.val.plot<-ggplot(Al_mass.jack.df,aes(y=Measured,x=pred.mean,color=Projec
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  coord_cartesian(xlim=c(-0.05,0.35),ylim=c(-0.05,0.35))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Al (mg g"^-1*")"),x=expression("Predicted Al (mg g"^-1*")"))+
   guides(color=F)
@@ -1159,7 +1159,7 @@ Ca_mass.val.plot<-ggplot(Ca_mass.jack.df,aes(y=Measured,x=pred.mean,color=Projec
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  coord_cartesian(xlim=c(-5,35),ylim=c(-5,35))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Ca (mg g"^-1*")"),x=expression("Predicted Ca (mg g"^-1*")"))+
   guides(color=F)
@@ -1181,7 +1181,7 @@ Cu_mass.val.plot<-ggplot(Cu_mass.jack.df,aes(y=Measured,x=pred.mean,color=Projec
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  coord_cartesian(xlim=c(0,0.04),ylim=c(0,0.04))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Cu (mg g"^-1*")"),x=expression("Predicted Cu (mg g"^-1*")"))+
   guides(color=F)
@@ -1203,7 +1203,7 @@ Fe_mass.val.plot<-ggplot(Fe_mass.jack.df,aes(y=Measured,x=pred.mean,color=Projec
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  coord_cartesian(xlim=c(0,0.27),ylim=c(0,0.27))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Fe (mg g"^-1*")"),x=expression("Predicted Fe (mg g"^-1*")"))+
   guides(color=F)
@@ -1211,13 +1211,13 @@ Fe_mass.val.plot<-ggplot(Fe_mass.jack.df,aes(y=Measured,x=pred.mean,color=Projec
 K_mass.jack.pred<-apply.coefs(K_mass.jack.coefs,as.matrix(ref.test))
 K_mass.jack.stat<-t(apply(K_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 K_mass.jack.df<-data.frame(pred.mean=K_mass.jack.stat[,1],
-                            pred.low=K_mass.jack.stat[,1]-1.96*K_mass.jack.stat[,2],
-                            pred.high=K_mass.jack.stat[,1]+1.96*K_mass.jack.stat[,2],
-                            Measured=meta(ref.test)$K_mass,
+                           pred.low=K_mass.jack.stat[,1]-1.96*K_mass.jack.stat[,2],
+                           pred.high=K_mass.jack.stat[,1]+1.96*K_mass.jack.stat[,2],
+                           Measured=meta(ref.test)$K_mass,
                            ncomp=ncomp_K_mass_CVmodel,
-                            Species=meta(ref.test)$species,
-                            Project=meta(ref.test)$project,
-                            ID=meta(ref.test)$sample_id)
+                           Species=meta(ref.test)$species,
+                           Project=meta(ref.test)$project,
+                           ID=meta(ref.test)$sample_id)
 
 K_mass.val.plot<-ggplot(K_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -1225,7 +1225,7 @@ K_mass.val.plot<-ggplot(K_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project)
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  coord_cartesian(xlim=c(0,25),ylim=c(0,25))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured K (mg g"^-1*")"),x=expression("Predicted K (mg g"^-1*")"))+
   guides(color=F)
@@ -1247,7 +1247,7 @@ Mg_mass.val.plot<-ggplot(Mg_mass.jack.df,aes(y=Measured,x=pred.mean,color=Projec
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  coord_cartesian(xlim=c(-0.5,7),ylim=c(-0.5,7))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Mg (mg g"^-1*")"),x=expression("Predicted Mg (mg g"^-1*")"))+
   guides(color=F)
@@ -1269,7 +1269,7 @@ Mn_mass.val.plot<-ggplot(Mn_mass.jack.df,aes(y=Measured,x=pred.mean,color=Projec
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  coord_cartesian(xlim=c(-0.05,1),ylim=c(-0.05,1))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Mn (mg g"^-1*")"),x=expression("Predicted Mn (mg g"^-1*")"))+
   guides(color=F)
@@ -1291,7 +1291,7 @@ Na_mass.val.plot<-ggplot(Na_mass.jack.df,aes(y=Measured,x=pred.mean,color=Projec
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  coord_cartesian(xlim=c(-0.5,2.7),ylim=c(-0.5,2.7))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Na (mg g"^-1*")"),x=expression("Predicted Na (mg g"^-1*")"))+
   guides(color=F)
@@ -1299,13 +1299,13 @@ Na_mass.val.plot<-ggplot(Na_mass.jack.df,aes(y=Measured,x=pred.mean,color=Projec
 P_mass.jack.pred<-apply.coefs(P_mass.jack.coefs,as.matrix(ref.test))
 P_mass.jack.stat<-t(apply(P_mass.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
 P_mass.jack.df<-data.frame(pred.mean=P_mass.jack.stat[,1],
-                            pred.low=P_mass.jack.stat[,1]-1.96*P_mass.jack.stat[,2],
-                            pred.high=P_mass.jack.stat[,1]+1.96*P_mass.jack.stat[,2],
-                            Measured=meta(ref.test)$P_mass,
+                           pred.low=P_mass.jack.stat[,1]-1.96*P_mass.jack.stat[,2],
+                           pred.high=P_mass.jack.stat[,1]+1.96*P_mass.jack.stat[,2],
+                           Measured=meta(ref.test)$P_mass,
                            ncomp=ncomp_P_mass_CVmodel,
-                            Species=meta(ref.test)$species,
-                            Project=meta(ref.test)$project,
-                            ID=meta(ref.test)$sample_id)
+                           Species=meta(ref.test)$species,
+                           Project=meta(ref.test)$project,
+                           ID=meta(ref.test)$sample_id)
 
 P_mass.val.plot<-ggplot(P_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -1313,7 +1313,7 @@ P_mass.val.plot<-ggplot(P_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project)
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  coord_cartesian(xlim=c(-0.5,6),ylim=c(-0.5,6))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured P (mg g"^-1*")"),x=expression("Predicted P (mg g"^-1*")"))+
   guides(color=F)
@@ -1335,7 +1335,7 @@ Zn_mass.val.plot<-ggplot(Zn_mass.jack.df,aes(y=Measured,x=pred.mean,color=Projec
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  coord_cartesian(xlim=c(-0.1,0.3),ylim=c(-0.1,0.3))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Zn (mg g"^-1*")"),x=expression("Predicted Zn (mg g"^-1*")"))+
   guides(color=F)
@@ -1401,4 +1401,14 @@ Cmass.val.plot
 EWT.val.plot
 LMA.val.plot
 LDMC.val.plot
+Al_mass.val.plot
+Ca_mass.val.plot
+Cu_mass.val.plot
+Fe_mass.val.plot
+K_mass.val.plot
+Mg_mass.val.plot
+Mn_mass.val.plot
+Na_mass.val.plot
+P_mass.val.plot
+Zn_mass.val.plot
 dev.off()

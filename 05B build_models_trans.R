@@ -1145,7 +1145,7 @@ Al_mass.val.plot<-ggplot(Al_mass.jack.df,aes(y=Measured,x=pred.mean,color=Projec
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  coord_cartesian(xlim=c(-0.05,0.35),ylim=c(-0.05,0.35))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Al (mg g"^-1*")"),x=expression("Predicted Al (mg g"^-1*")"))+
   guides(color=F)
@@ -1167,7 +1167,7 @@ Ca_mass.val.plot<-ggplot(Ca_mass.jack.df,aes(y=Measured,x=pred.mean,color=Projec
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  coord_cartesian(xlim=c(-5,35),ylim=c(-5,35))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Ca (mg g"^-1*")"),x=expression("Predicted Ca (mg g"^-1*")"))+
   guides(color=F)
@@ -1189,7 +1189,7 @@ Cu_mass.val.plot<-ggplot(Cu_mass.jack.df,aes(y=Measured,x=pred.mean,color=Projec
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  coord_cartesian(xlim=c(0,0.04),ylim=c(0,0.04))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Cu (mg g"^-1*")"),x=expression("Predicted Cu (mg g"^-1*")"))+
   guides(color=F)
@@ -1211,7 +1211,7 @@ Fe_mass.val.plot<-ggplot(Fe_mass.jack.df,aes(y=Measured,x=pred.mean,color=Projec
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  coord_cartesian(xlim=c(0,0.27),ylim=c(0,0.27))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Fe (mg g"^-1*")"),x=expression("Predicted Fe (mg g"^-1*")"))+
   guides(color=F)
@@ -1233,7 +1233,7 @@ K_mass.val.plot<-ggplot(K_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project)
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  coord_cartesian(xlim=c(0,25),ylim=c(0,25))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured K (mg g"^-1*")"),x=expression("Predicted K (mg g"^-1*")"))+
   guides(color=F)
@@ -1255,7 +1255,7 @@ Mg_mass.val.plot<-ggplot(Mg_mass.jack.df,aes(y=Measured,x=pred.mean,color=Projec
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  coord_cartesian(xlim=c(-0.5,7),ylim=c(-0.5,7))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Mg (mg g"^-1*")"),x=expression("Predicted Mg (mg g"^-1*")"))+
   guides(color=F)
@@ -1277,7 +1277,7 @@ Mn_mass.val.plot<-ggplot(Mn_mass.jack.df,aes(y=Measured,x=pred.mean,color=Projec
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  coord_cartesian(xlim=c(-0.05,1),ylim=c(-0.05,1))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Mn (mg g"^-1*")"),x=expression("Predicted Mn (mg g"^-1*")"))+
   guides(color=F)
@@ -1299,7 +1299,7 @@ Na_mass.val.plot<-ggplot(Na_mass.jack.df,aes(y=Measured,x=pred.mean,color=Projec
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  coord_cartesian(xlim=c(-0.5,2.7),ylim=c(-0.5,2.7))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Na (mg g"^-1*")"),x=expression("Predicted Na (mg g"^-1*")"))+
   guides(color=F)
@@ -1321,7 +1321,7 @@ P_mass.val.plot<-ggplot(P_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project)
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  coord_cartesian(xlim=c(-0.5,6),ylim=c(-0.5,6))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured P (mg g"^-1*")"),x=expression("Predicted P (mg g"^-1*")"))+
   guides(color=F)
@@ -1343,7 +1343,7 @@ Zn_mass.val.plot<-ggplot(Zn_mass.jack.df,aes(y=Measured,x=pred.mean,color=Projec
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  coord_cartesian(xlim=c(-0.1,0.3),ylim=c(-0.1,0.3))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Zn (mg g"^-1*")"),x=expression("Predicted Zn (mg g"^-1*")"))+
   guides(color=F)
@@ -1359,7 +1359,17 @@ all.jack.coef.list<-list(solubles_mass=solubles_mass.jack.coefs,
                          Cmass=Cmass.jack.coefs,
                          EWT=EWT.jack.coefs,
                          LDMC=LDMC.jack.coefs,
-                         LMA=LMA.jack.coefs)
+                         LMA=LMA.jack.coefs,
+                         Al_mass=Al_mass.jack.coefs,
+                         Ca_mass=Ca_mass.jack.coefs,
+                         Cu_mass=Cu_mass.jack.coefs,
+                         Fe_mass=Fe_mass.jack.coefs,
+                         K_mass=K_mass.jack.coefs,
+                         Mg_mass=Mg_mass.jack.coefs,
+                         Mn_mass=Mn_mass.jack.coefs,
+                         Na_mass=Na_mass.jack.coefs,
+                         P_mass=P_mass.jack.coefs,
+                         Zn_mass=Zn_mass.jack.coefs)
 saveRDS(all.jack.coef.list,"SavedResults/all_jack_coefs_list_trans.rds")
 
 all.jack.df.list<-list(solubles_mass=solubles_mass.jack.df,
@@ -1373,7 +1383,17 @@ all.jack.df.list<-list(solubles_mass=solubles_mass.jack.df,
                        Cmass=Cmass.jack.df,
                        EWT=EWT.jack.df,
                        LDMC=LDMC.jack.df,
-                       LMA=LMA.jack.df)
+                       LMA=LMA.jack.df,
+                       Al_mass=Al_mass.jack.df,
+                       Ca_mass=Ca_mass.jack.df,
+                       Cu_mass=Cu_mass.jack.df,
+                       Fe_mass=Fe_mass.jack.df,
+                       K_mass=K_mass.jack.df,
+                       Mg_mass=Mg_mass.jack.df,
+                       Mn_mass=Mn_mass.jack.df,
+                       Na_mass=Na_mass.jack.df,
+                       P_mass=P_mass.jack.df,
+                       Zn_mass=Zn_mass.jack.df)
 saveRDS(all.jack.df.list,"SavedResults/all_jack_df_list_trans.rds")
 
 pdf("Images/val_plots_trans.pdf",width = 10,height = 9)
@@ -1389,4 +1409,14 @@ Cmass.val.plot
 EWT.val.plot
 LMA.val.plot
 LDMC.val.plot
+Al_mass.val.plot
+Ca_mass.val.plot
+Cu_mass.val.plot
+Fe_mass.val.plot
+K_mass.val.plot
+Mg_mass.val.plot
+Mn_mass.val.plot
+Na_mass.val.plot
+P_mass.val.plot
+Zn_mass.val.plot
 dev.off()
