@@ -12,7 +12,7 @@ library(caret)
 ## read spectra and traits
 ref.traits<-readRDS("ProcessedSpectra/all_ref_and_traits.rds")
 trans.traits<-readRDS("ProcessedSpectra/all_trans_and_traits.rds")
-abs.traits<-readRDS("ProcessedSpectra/all_trans_and_traits.rds")
+abs.traits<-readRDS("ProcessedSpectra/all_abs_and_traits.rds")
 
 ## check that IDs are the same and in the same order
 if(meta(all.ref)$sample_id != meta(all.trans)$sample_id ||
