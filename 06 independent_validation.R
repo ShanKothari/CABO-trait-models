@@ -1,6 +1,8 @@
 setwd("C:/Users/kotha020/Dropbox/PostdocProjects/FreshLeafModels")
 
+library(tidyverse)
 library(spectrolab)
+library(asdreader)
 
 ################################################
 ## LOPEX
@@ -61,7 +63,7 @@ ANGERS_ref<-ANGERS_ref[-which(names(ANGERS_ref) %in% bad_spectra_ANGERS)]
 
 zenith <- read.table('UnprocessedSpectra/DessainSpectra/c7101904_specchioformat.txt',
                      header = T)
-zenith.sub <-tbl_df(dplyr::filter(zenith, wvl >= 350) )
+zenith.sub <-as_tibble(dplyr::filter(zenith, wvl >= 350) )
 
 ### get paths of .asd files-----
 asd_dirs <- list.dirs('UnprocessedSpectra/DessainSpectra/spectra-20201002T221442Z-001/spectra/',
