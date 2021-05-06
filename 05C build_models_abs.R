@@ -971,7 +971,7 @@ chlA_mass.val.plot<-ggplot(chlA_mass.jack.df,aes(y=Measured,x=pred.mean,color=Pr
   coord_cartesian(xlim=c(-3,20),ylim=c(-3,20))+
   theme(text = element_text(size=25),
         legend.position = c(0.8, 0.25))+
-  labs(y=expression("Measured Chl a (mg g"^-1*")"),x=expression("Predicted Chl b (mg g"^-1*")"))+
+  labs(y=expression("Measured Chl a (mg g"^-1*")"),x=expression("Predicted Chl a (mg g"^-1*")"))+
   guides(color=F)
 
 chlB_mass.jack.pred<-apply.coefs(chlB_mass.jack.coefs,as.matrix(abs.test))
