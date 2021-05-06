@@ -3,53 +3,99 @@ setwd("C:/Users/kotha020/Dropbox/PostdocProjects/FreshLeafModels")
 library(tidyverse)
 library(spectrolab)
 library(asdreader)
+library(signal)
+
+##########################################################
+## defining important functions for later
+
+## this just applies a Savitzy-Golay filter with given p and n
+sg_filter <- function(x, p, n) {
+  x$value_sg <- sgolayfilt(x$value, p, n)
+  return(x)  
+}
+
+## this function is for linear interpolation over the spectral overlap region
+interpolate <- function(x) {
+  wvls <- x$wavelength
+  DNs <- x$calculated_value
+  new_DNs <- approx(wvls, DNs, xout = inter_wvls)$y
+  tmp <- data_frame(wvl = inter_wvls, DN = new_DNs)
+  return(tmp)
+}
+
+## applying coefficients to validation spectra
+apply.coefs<-function(coef.list,val.spec,intercept=T){
+  if(sum(lapply(coef.list,length)==ncol(val.spec)+intercept) < length(coef.list)){
+    stop("some coefficients have the wrong length")
+  }
+  
+  coef.matrix<-matrix(unlist(coef.list),
+                      nrow=length(coef.list),
+                      byrow=T)
+  
+  if(intercept==T){
+    pred.matrix<-t(t(as.matrix(val.spec) %*% t(coef.matrix[,-1]))+coef.matrix[,1])
+  } else {
+    pred.matrix<-as.matrix(val.spec) %*% t(coef.matrix)
+  }
+}
 
 ################################################
 ## LOPEX
 
-LOPEX_ref<-t(read.csv("IndependentValidationData/LOPEX/lopex1993reflectance.csv",row.names = "Sample_."))
-LOPEX_ref<-spectra(LOPEX_ref,
-                   bands=colnames(LOPEX_ref),
-                   names=rownames(LOPEX_ref))
+LOPEX.spec<-t(read.csv("IndependentValidationData/LOPEX/lopex1993reflectance.csv",row.names = "Sample_."))
+LOPEX.spec<-spectra(LOPEX.spec,
+                   bands=colnames(LOPEX.spec),
+                   names=rownames(LOPEX.spec))
 
 LOPEX_traits<-read.csv("IndependentValidationData/LOPEX/lopex1993metadata.csv")
 LOPEX_traits[which(LOPEX_traits== -999,arr.ind=T)]<-NA
-meta(LOPEX_ref)$Nmass<-LOPEX_traits$Nitrogen....DW.
-meta(LOPEX_ref)$Cmass<-LOPEX_traits$Carbon....DW.
-meta(LOPEX_ref)$EWT<-LOPEX_traits$Equivalent.Water.Thickness..g.cm2.
-meta(LOPEX_ref)$LMA<-(LOPEX_traits$Dry.Weight..g./1000)/(LOPEX_traits$Leaf.Area..cm2./10000)
-meta(LOPEX_ref)$LDMC<-(LOPEX_traits$Dry.Weight..g./LOPEX_traits$Fresh.Weight..g.)*1000
-meta(LOPEX_ref)$cellulose1<-LOPEX_traits$Cellulose_1....DW.
-meta(LOPEX_ref)$cellulose2<-LOPEX_traits$Cellulose_2....DW.
-meta(LOPEX_ref)$dataset<-"LOPEX"
+meta(LOPEX.spec)$chlA<-LOPEX_traits$Chlorophyll_a..µg.cm2.
+meta(LOPEX.spec)$Nmass<-LOPEX_traits$Nitrogen....DW.
+meta(LOPEX.spec)$Cmass<-LOPEX_traits$Carbon....DW.
+meta(LOPEX.spec)$EWT<-LOPEX_traits$Equivalent.Water.Thickness..g.cm2.
+meta(LOPEX.spec)$LMA<-(LOPEX_traits$Dry.Weight..g./1000)/(LOPEX_traits$Leaf.Area..cm2./10000)
+meta(LOPEX.spec)$LDMC<-(LOPEX_traits$Dry.Weight..g./LOPEX_traits$Fresh.Weight..g.)*1000
+meta(LOPEX.spec)$chlA<-LOPEX_traits$Chlorophyll_a..µg.cm2./(100*meta(LOPEX.spec)$LMA)
+meta(LOPEX.spec)$chlB<-LOPEX_traits$Chlorophyll_b..µg.cm2./(100*meta(LOPEX.spec)$LMA)
+meta(LOPEX.spec)$car<-LOPEX_traits$Carotenoid..µg.cm2./(100*meta(LOPEX.spec)$LMA)
+meta(LOPEX.spec)$cellulose1<-LOPEX_traits$Cellulose_1....DW.
+meta(LOPEX.spec)$cellulose2<-LOPEX_traits$Cellulose_2....DW.
+meta(LOPEX.spec)$cellulose<-rowMeans(data.frame(meta(LOPEX.spec)$cellulose1,
+                                               meta(LOPEX.spec)$cellulose2))
+meta(LOPEX.spec)$lignin1<-LOPEX_traits$Lignin_1....DW.
+meta(LOPEX.spec)$lignin2<-LOPEX_traits$Lignin_2....DW.
+meta(LOPEX.spec)$lignin<-rowMeans(data.frame(meta(LOPEX.spec)$lignin1,
+                                                meta(LOPEX.spec)$lignin2))
+meta(LOPEX.spec)$dataset<-"LOPEX"
 ## measures of lignin are highly inconsistent, so we ignore them here
 
 bad_spectra_LOPEX<-c("X0176","X0177","X0178","X0179","X0180",
                "X0196","X0197","X0198","X0199","X0200",
                "X0321","X0322","X0323","X0324","X0325")
-LOPEX_ref<-LOPEX_ref[-which(names(LOPEX_ref) %in% bad_spectra_LOPEX)]
+LOPEX.spec<-LOPEX.spec[-which(names(LOPEX.spec) %in% bad_spectra_LOPEX)]
 
-LOPEX_ref<-match_sensors(LOPEX_ref,splice_at = 862,fixed_sensor = 2,interpolate_wvl = 5)
+LOPEX.spec<-match_sensors(LOPEX.spec,splice_at = 862,fixed_sensor = 2,interpolate_wvl = 5)
 ## need to do smoothing here
 
 ################################################
 ## ANGERS
 
-ANGERS_ref<-t(read.csv("IndependentValidationData/ANGERS/angers2003reflectance.csv",row.names = "Sample_."))
-ANGERS_ref<-spectra(ANGERS_ref,
-                   bands=colnames(ANGERS_ref),
-                   names=rownames(ANGERS_ref))
+ANGERS.spec<-t(read.csv("IndependentValidationData/ANGERS/angers2003reflectance.csv",row.names = "Sample_."))
+ANGERS.spec<-spectra(ANGERS.spec,
+                   bands=colnames(ANGERS.spec),
+                   names=rownames(ANGERS.spec))
 
 ANGERS_traits<-read.csv("IndependentValidationData/ANGERS/angers2003metadata.csv")
 ANGERS_traits[which(ANGERS_traits== -999,arr.ind=T)]<-NA
-meta(ANGERS_ref)$EWT<-ANGERS_traits$Equivalent.Water.Thickness..g.cm2.
-meta(ANGERS_ref)$LMA<-ANGERS_traits$Leaf.mass.per.area..g.cm2.*10
-meta(ANGERS_ref)$dataset<-"ANGERS"
+meta(ANGERS.spec)$EWT<-ANGERS_traits$Equivalent.Water.Thickness..g.cm2.
+meta(ANGERS.spec)$LMA<-ANGERS_traits$Leaf.mass.per.area..g.cm2.*10
+meta(ANGERS.spec)$dataset<-"ANGERS"
 
 bad_spectra_ANGERS<-c("X0178","X0179","X0184","X0185","X0196",
                "X0197","X0241","X0250","X0254","X0257",
                "X0258","X0269")
-ANGERS_ref<-ANGERS_ref[-which(names(ANGERS_ref) %in% bad_spectra_ANGERS)]
+ANGERS.spec<-ANGERS.spec[-which(names(ANGERS.spec) %in% bad_spectra_ANGERS)]
 
 ## smooth here
 
@@ -174,7 +220,7 @@ Dessain_sg <- bind_rows(Dessain_sg_VIS,
 Dessain.df<-reshape(subset(as.data.frame(Dessain_sg),select= -value),
                          timevar="wvl",idvar="sample_id",direction="wide")
 colnames(Dessain.df)<-gsub(pattern = "value_sg.",
-                                replacement = "X",
+                                replacement = "",
                                 x = colnames(Dessain.df))
 
 Dessain.spec<-as_spectra(Dessain.df,name_idx=1)
@@ -189,6 +235,7 @@ Dessain.sub<-data.frame(sample.id=Dessain.summary$parentEventID,
 meta(Dessain.spec)$species<-Dessain.sub$species[match(meta(Dessain.spec)$sample_id,Dessain.sub$sample.id)]
 meta(Dessain.spec)$project<-Dessain.sub$project[match(meta(Dessain.spec)$sample_id,Dessain.sub$sample.id)]
 
+## attach structural traits
 Dessain.area<-read.csv("TraitData/LeafAreaWaterSamples/SLA_data_Aurelie_Dessain - Lab_data.csv")
 Dessain.area$SLA_m2_kg<-as.numeric(as.character(Dessain.area$SLA_m2_kg))
 Dessain.area$LDMC_mg_g<-as.numeric(as.character(Dessain.area$LDMC_mg_g))
@@ -201,25 +248,67 @@ Dessain.area.sub<-data.frame(sample_id=Dessain.area$parentEventID,
 ## LDMC in units mg/g
 ## EWT in units cm
 meta(Dessain.spec)$SLA<-Dessain.area.sub$SLA[match(meta(Dessain.spec)$sample_id,Dessain.area.sub$sample_id)]
+meta(Dessain.spec)$LMA<-1/meta(Dessain.spec)$SLA
 meta(Dessain.spec)$LDMC<-Dessain.area.sub$LDMC[match(meta(Dessain.spec)$sample_id,Dessain.area.sub$sample_id)]
 meta(Dessain.spec)$EWT<-with(meta(Dessain.spec),(1/(LDMC/1000)-1)*(1/SLA*0.1))
 
+## attach C and N
 Dessain.CN<-read.csv("TraitData/CNSamples/2017_Dessain_MSc_CN_data_total.csv")
 Dessain.CN.sub<-data.frame(sample_id=Dessain.CN$Sample_id,
                            Cmass=Dessain.CN$C.....,
                            Nmass=Dessain.CN$N....)
 
-meta(Dessain.spec)$Cmass<-Dessain.CN$Cmass[match(meta(Dessain.spec)$sample_id,Dessain.CN$sample_id)]
-meta(Dessain.spec)$Nmass<-Dessain.CN$Nmass[match(meta(Dessain.spec)$sample_id,Dessain.CN$sample_id)]
+meta(Dessain.spec)$Cmass<-Dessain.CN.sub$Cmass[match(meta(Dessain.spec)$sample_id,Dessain.CN.sub$sample_id)]
+meta(Dessain.spec)$Nmass<-Dessain.CN.sub$Nmass[match(meta(Dessain.spec)$sample_id,Dessain.CN.sub$sample_id)]
 
+## attach carbon fractions
+CFractions<-read.csv("TraitData/CarbonFractions/carbon_fractions_bags.csv")
+meta(Dessain.spec)$solubles<-CFractions$soluble_perc[match(meta(Dessain.spec)$sample_id,CFractions$bottle_id)]
+meta(Dessain.spec)$hemicellulose<-CFractions$hemicellulose_perc[match(meta(Dessain.spec)$sample_id,CFractions$bottle_id)]
+meta(Dessain.spec)$cellulose<-CFractions$cellulose_perc[match(meta(Dessain.spec)$sample_id,CFractions$bottle_id)]
+meta(Dessain.spec)$lignin<-CFractions$lignin_perc[match(meta(Dessain.spec)$sample_id,CFractions$bottle_id)]
+
+## attach pigments
 Dessain.pigments<-read.csv("TraitData/Pigments/Aurelie_pigments_valeurs_brutes - Analyses_Aurelie.csv")
 Dessain.pigments<-Dessain.pigments[,c("sample_id","chlA_mg_g","chlB_mg_g","carotenoides._mg_g","Notes")]
 ## remove records who notes contain "refaire" or "refait" since these were all redone
 Dessain.pigments<-Dessain.pigments[-which(str_detect(string = Dessain.pigments$Notes,pattern = "efai")),]
 
-meta(Dessain.spec)$chlA_mass<-as.numeric(as.character(Dessain.pigments$chlA_mg_g[match(meta(Dessain.spec)$sample_id,Dessain.pigments$sample_id)]))
-meta(Dessain.spec)$chlB_mass<-as.numeric(as.character(Dessain.pigments$chlB_mg_g[match(meta(Dessain.spec)$sample_id,Dessain.pigments$sample_id)]))
-meta(Dessain.spec)$car_mass<-as.numeric(as.character(Dessain.pigments$carotenoides._mg_g[match(meta(Dessain.spec)$sample_id,Dessain.pigments$sample_id)]))
+meta(Dessain.spec)$chlA<-as.numeric(as.character(Dessain.pigments$chlA_mg_g[match(meta(Dessain.spec)$sample_id,Dessain.pigments$sample_id)]))
+meta(Dessain.spec)$chlB<-as.numeric(as.character(Dessain.pigments$chlB_mg_g[match(meta(Dessain.spec)$sample_id,Dessain.pigments$sample_id)]))
+meta(Dessain.spec)$car<-as.numeric(as.character(Dessain.pigments$carotenoides._mg_g[match(meta(Dessain.spec)$sample_id,Dessain.pigments$sample_id)]))
+
+## attach ICP data
+ICP12<-read.csv("TraitData/ICP/2020-03-12 1MHCl_Etienne box1,2.csv")
+ICP34<-read.csv("TraitData/ICP/2020-10-20 1MHCl_Etienne box 3,4.csv")
+ICP5<-read.csv("TraitData/ICP/2020-10-21 1MHCl_Etienne box 5.csv")
+ICP67<-read.csv("TraitData/ICP/2020-10-22 1MHCl_Etienne box 6,7.csv")
+ICP8<-read.csv("TraitData/ICP/2020-10-23 1MHCl_Etienne box 8.csv")
+ICP9<-read.csv("TraitData/ICP/2020-11-11 1MHCl_Etienne box 9.csv")
+ICP1011<-read.csv("TraitData/ICP/2020-12-16 1MHCl_Etienne box 10,11.csv")
+ICP_all<-do.call(rbind,args=list(ICP12,ICP34,ICP5,ICP67,
+                                   ICP8,ICP9,ICP1011))
+num_cols<-c("Al","B","B.1","Ca","Cu","Fe","K","Mg","Mn","Na","P","Zn")
+ICP_all[,num_cols]<-data.frame(sapply(ICP_all[,num_cols],
+                                        function(x) as.numeric(as.character(x))))
+
+ICP_all$Al[ICP_all$Sample_id=="2017-08-15-jbmcb-P006"]<-NA
+ICP_all$Cu[ICP_all$Sample_id=="2017-06-07-ireqa-P010"]<-NA
+
+meta(Dessain.spec)$Al_mass<-ICP_all$Al[match(meta(Dessain.spec)$sample_id,ICP_all$Sample_id)]
+meta(Dessain.spec)$B_mass<-ICP_all$B[match(meta(Dessain.spec)$sample_id,ICP_all$Sample_id)]
+meta(Dessain.spec)$B.1_mass<-ICP_all$B.1[match(meta(Dessain.spec)$sample_id,ICP_all$Sample_id)]
+meta(Dessain.spec)$Ca_mass<-ICP_all$Ca[match(meta(Dessain.spec)$sample_id,ICP_all$Sample_id)]
+meta(Dessain.spec)$Cu_mass<-ICP_all$Cu[match(meta(Dessain.spec)$sample_id,ICP_all$Sample_id)]
+meta(Dessain.spec)$Fe_mass<-ICP_all$Fe[match(meta(Dessain.spec)$sample_id,ICP_all$Sample_id)]
+meta(Dessain.spec)$K_mass<-ICP_all$K[match(meta(Dessain.spec)$sample_id,ICP_all$Sample_id)]
+meta(Dessain.spec)$Mg_mass<-ICP_all$Mg[match(meta(Dessain.spec)$sample_id,ICP_all$Sample_id)]
+meta(Dessain.spec)$Mn_mass<-ICP_all$Mn[match(meta(Dessain.spec)$sample_id,ICP_all$Sample_id)]
+meta(Dessain.spec)$Na_mass<-ICP_all$Na[match(meta(Dessain.spec)$sample_id,ICP_all$Sample_id)]
+meta(Dessain.spec)$P_mass<-ICP_all$P[match(meta(Dessain.spec)$sample_id,ICP_all$Sample_id)]
+meta(Dessain.spec)$Zn_mass<-ICP_all$Zn[match(meta(Dessain.spec)$sample_id,ICP_all$Sample_id)]
+
+meta(Dessain.spec)$dataset<-"Dessain"
 
 ##########################################################
 ## Hacker 2018 GOP
@@ -309,18 +398,84 @@ meta(Dessain.spec)$car_mass<-as.numeric(as.character(Dessain.pigments$carotenoid
 ## combine
 
 ## !!!!!!!!!
-## need to add Dessain (and optionally Hacker 2018) data!!!
+## might want to add Hacker data
 
-LOPEX_ref<-LOPEX_ref[,400:2400]
-ANGERS_ref<-ANGERS_ref[,400:2400]
-all_val_ref<-combine(LOPEX_ref,ANGERS_ref)
+LOPEX.spec<-LOPEX.spec[,400:2400]
+ANGERS.spec<-ANGERS.spec[,400:2400]
+Dessain.spec<-Dessain.spec[,400:2400]
 
-meta(all_val_ref)$Nmass_pred<-predict(Nmass_CVmodel,newdata = as.matrix(all_val_ref[,400:2400]),ncomp = ncomp_Nmass_CVmodel)[,,1]
-meta(all_val_ref)$Cmass_pred<-predict(Cmass_CVmodel,newdata = as.matrix(all_val_ref[,400:2400]),ncomp = ncomp_Cmass_CVmodel)[,,1]
-meta(all_val_ref)$EWT_pred<-predict(EWT_CVmodel,newdata = as.matrix(all_val_ref[,400:2400]),ncomp = ncomp_EWT_CVmodel)[,,1]
-meta(all_val_ref)$LMA_pred<-predict(LMA_CVmodel,newdata = as.matrix(all_val_ref[,400:2400]),ncomp = ncomp_LMA_CVmodel)[,,1]
-meta(all_val_ref)$LDMC_pred<-predict(LDMC_CVmodel,newdata = as.matrix(all_val_ref[,400:2400]),ncomp = ncomp_LDMC_CVmodel)[,,1]
-meta(all_val_ref)$cellulose_pred<-predict(cellulose_mass_CVmodel,newdata = as.matrix(all_val_ref[,400:2400]),ncomp = ncomp_cellulose_mass_CVmodel)[,,1]
+LOPEX_ANGERS.spec<-spectrolab::combine(LOPEX.spec,ANGERS.spec)
+all_val_ref<-spectrolab::combine(LOPEX_ANGERS.spec,Dessain.spec)
+
+all_jack_coefs_list_ref<-readRDS("SavedResults/all_jack_coefs_list_ref.rds")
+meta(all_val_ref)$solubles_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$solubles_mass,val.spec = all_val_ref))
+meta(all_val_ref)$hemicellulose_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$hemicellulose_mass,val.spec = all_val_ref))
+meta(all_val_ref)$cellulose_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$cellulose_mass,val.spec = all_val_ref))
+meta(all_val_ref)$lignin_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$lignin_mass,val.spec = all_val_ref))
+meta(all_val_ref)$Nmass_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$Nmass,val.spec = all_val_ref))
+meta(all_val_ref)$Cmass_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$Cmass,val.spec = all_val_ref))
+meta(all_val_ref)$LMA_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$LMA,val.spec = all_val_ref))
+meta(all_val_ref)$LDMC_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$LDMC,val.spec = all_val_ref))
+meta(all_val_ref)$EWT_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$EWT,val.spec = all_val_ref))
+meta(all_val_ref)$chlA_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$chlA_mass,val.spec = all_val_ref))
+meta(all_val_ref)$chlB_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$chlB_mass,val.spec = all_val_ref))
+meta(all_val_ref)$car_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$car_mass,val.spec = all_val_ref))
+
+pdf("Images/ind_val_plots.pdf",width = 10,height = 8)
+
+ggplot(data=meta(all_val_ref),aes(x=solubles_pred,y=solubles,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured solubles",x="Predicted solubles")+
+  coord_cartesian(xlim=c(20,90),ylim=c(20,90))
+
+ggplot(data=meta(all_val_ref),aes(x=hemicellulose_pred,y=hemicellulose,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured hemicellulose",x="Predicted hemicellulose")+
+  coord_cartesian(xlim=c(-5,35),ylim=c(-5,35))
+
+ggplot(data=meta(all_val_ref),aes(x=cellulose_pred,y=cellulose,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured cellulose",x="Predicted cellulose")+
+  coord_cartesian(xlim=c(0,50),ylim=c(0,50))
+
+ggplot(data=meta(all_val_ref),aes(x=lignin_pred,y=lignin,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured lignin",x="Predicted lignin")+
+  coord_cartesian(xlim=c(-12,25),ylim=c(-12,25))
+
+ggplot(data=meta(all_val_ref),aes(x=Nmass_pred,y=Nmass,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured Nmass",x="Predicted Nmass")+
+  coord_cartesian(xlim=c(0,6),ylim=c(0,6))
+
+ggplot(data=meta(all_val_ref),aes(x=Cmass_pred,y=Cmass,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured Cmass",x="Predicted Cmass")+
+  coord_cartesian(xlim=c(37,54),ylim=c(37,54))
 
 ggplot(data=meta(all_val_ref),aes(x=EWT_pred,y=EWT,color=dataset))+
   geom_point()+
@@ -331,18 +486,49 @@ ggplot(data=meta(all_val_ref),aes(x=EWT_pred,y=EWT,color=dataset))+
   labs(y="Measured EWT",x="Predicted EWT")+
   coord_cartesian(xlim=c(0,0.085),ylim=c(0,0.085))
 
-ggplot(data=meta(all_val_ref),aes(x=LDMC_pred,y=LDMC*1000,color=dataset))+
+ggplot(data=meta(all_val_ref),aes(x=LDMC_pred,y=LDMC,color=dataset))+
   geom_point()+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm")+
-  labs(y="Measured LDMC",x="Predicted LDMC")
+  labs(y="Measured LDMC",x="Predicted LDMC")+
+  coord_cartesian(xlim=c(-75,600),ylim=c(-75,600))
 
-ggplot(data=meta(all_val_ref),aes(x=LMA_pred,y=LMA*1000,color=dataset))+
+ggplot(data=meta(all_val_ref),aes(x=LMA_pred,y=LMA,color=dataset))+
   geom_point()+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm")+
-  labs(y="Measured LMA",x="Predicted LMA")
+  labs(y="Measured LMA",x="Predicted LMA")+
+  coord_cartesian(xlim=c(0,0.5),ylim=c(0,0.5))
+
+ggplot(data=meta(all_val_ref),aes(x=chlA_pred,y=chlA,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured chlA",x="Predicted chlA")+
+  coord_cartesian(xlim=c(0,20),ylim=c(0,20))
+
+ggplot(data=meta(all_val_ref),aes(x=chlB_pred,y=chlB,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured chlB",x="Predicted chlB")+
+  coord_cartesian(xlim=c(-1,7),ylim=c(-1,7))
+
+ggplot(data=meta(all_val_ref),aes(x=car_pred,y=car,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured car",x="Predicted car")+
+  coord_cartesian(xlim=c(0,5),ylim=c(0,5))
+
+dev.off()

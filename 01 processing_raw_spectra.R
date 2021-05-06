@@ -19,8 +19,7 @@ library(asdreader)
 ## http://data.caboscience.org/field-data/projects/
 
 ##########################################################
-## defining important functions for the tidyverse bullshit
-## that happens later
+## defining important functions for later
 
 ## this just applies a Savitzy-Golay filter with given p and n
 sg_filter <- function(x, p, n) {
