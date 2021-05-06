@@ -354,7 +354,7 @@ meta(Dessain.spec)$Zn_mass<-ICP_all$Zn[match(meta(Dessain.spec)$sample_id,ICP_al
 meta(Dessain.spec)$dataset<-"Dessain"
 Dessain.spec<-Dessain.spec[,400:2400]
 
-saveRDS(Dessain,"IndependentValidationData/Dessain_processed.rds")
+saveRDS(Dessain.spec,"IndependentValidationData/Dessain_processed.rds")
 
 ##########################################################
 ## Hacker 2018 GOP
@@ -442,6 +442,11 @@ saveRDS(Dessain,"IndependentValidationData/Dessain_processed.rds")
 
 #################################################
 ## combine
+
+## read in processed data if needed
+LOPEX<-readRDS("IndependentValidationData/LOPEX/LOPEX_processed.rds")
+ANGERS<-readRDS("IndependentValidationData/ANGERS/ANGERS_processed.rds")
+Dessain.spec<-readRDS("IndependentValidationData/Dessain_processed.rds")
 
 ## !!!!!!!!!
 ## might want to add Hacker data
