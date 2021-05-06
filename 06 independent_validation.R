@@ -44,63 +44,96 @@ apply.coefs<-function(coef.list,val.spec,intercept=T){
 ## LOPEX
 
 LOPEX.spec<-t(read.csv("IndependentValidationData/LOPEX/lopex1993reflectance.csv",row.names = "Sample_."))
-LOPEX.spec<-spectra(LOPEX.spec,
-                   bands=colnames(LOPEX.spec),
-                   names=rownames(LOPEX.spec))
+bad_spectra_LOPEX<-c("X0176","X0177","X0178","X0179","X0180",
+                     "X0196","X0197","X0198","X0199","X0200",
+                     "X0321","X0322","X0323","X0324","X0325")
+LOPEX.spec<-LOPEX.spec[-which(rownames(LOPEX.spec) %in% bad_spectra_LOPEX),]
+
+LOPEX.spec<-as.matrix(match_sensors(spectra(LOPEX.spec,
+                                            bands=400:2500,
+                                            names=rownames(LOPEX.spec)),
+                                    splice_at = 862,
+                                    fixed_sensor = 2,
+                                    interpolate_wvl = 5))
+
+LOPEX_sg_VIS <- t(apply(LOPEX.spec[,as.character(400:715)],1,
+                        function(x) sgolayfilt(x,p=3,n=21)))
+LOPEX_sg_NIR <- t(apply(LOPEX.spec[,as.character(716:1390)],1,
+                        function(x) sgolayfilt(x,p=3,n=35)))
+LOPEX_sg_SWIR1 <- t(apply(LOPEX.spec[,as.character(1391:1880)],1,
+                          function(x) sgolayfilt(x,p=3,n=75)))
+LOPEX_sg_SWIR2 <- t(apply(LOPEX.spec[,as.character(1881:2500)],1,
+                          function(x) sgolayfilt(x,p=5,n=175)))
+LOPEX_sg<-do.call(cbind,args = list(LOPEX_sg_VIS,
+                                    LOPEX_sg_NIR,
+                                    LOPEX_sg_SWIR1,
+                                    LOPEX_sg_SWIR2))
+LOPEX<-spectra(LOPEX_sg,
+               bands = colnames(LOPEX.spec),
+               names = rownames(LOPEX.spec))
 
 LOPEX_traits<-read.csv("IndependentValidationData/LOPEX/lopex1993metadata.csv")
+LOPEX_traits<-LOPEX_traits[-which(paste("X0",LOPEX_traits$Sample_.,sep="") %in% bad_spectra_LOPEX),]
 LOPEX_traits[which(LOPEX_traits== -999,arr.ind=T)]<-NA
-meta(LOPEX.spec)$chlA<-LOPEX_traits$Chlorophyll_a..µg.cm2.
-meta(LOPEX.spec)$Nmass<-LOPEX_traits$Nitrogen....DW.
-meta(LOPEX.spec)$Cmass<-LOPEX_traits$Carbon....DW.
-meta(LOPEX.spec)$EWT<-LOPEX_traits$Equivalent.Water.Thickness..g.cm2.
-meta(LOPEX.spec)$LMA<-(LOPEX_traits$Dry.Weight..g./1000)/(LOPEX_traits$Leaf.Area..cm2./10000)
-meta(LOPEX.spec)$LDMC<-(LOPEX_traits$Dry.Weight..g./LOPEX_traits$Fresh.Weight..g.)*1000
-meta(LOPEX.spec)$chlA<-LOPEX_traits$Chlorophyll_a..µg.cm2./(100*meta(LOPEX.spec)$LMA)
-meta(LOPEX.spec)$chlB<-LOPEX_traits$Chlorophyll_b..µg.cm2./(100*meta(LOPEX.spec)$LMA)
-meta(LOPEX.spec)$car<-LOPEX_traits$Carotenoid..µg.cm2./(100*meta(LOPEX.spec)$LMA)
-meta(LOPEX.spec)$cellulose1<-LOPEX_traits$Cellulose_1....DW.
-meta(LOPEX.spec)$cellulose2<-LOPEX_traits$Cellulose_2....DW.
-meta(LOPEX.spec)$cellulose<-rowMeans(data.frame(meta(LOPEX.spec)$cellulose1,
-                                               meta(LOPEX.spec)$cellulose2))
-meta(LOPEX.spec)$lignin1<-LOPEX_traits$Lignin_1....DW.
-meta(LOPEX.spec)$lignin2<-LOPEX_traits$Lignin_2....DW.
-meta(LOPEX.spec)$lignin<-rowMeans(data.frame(meta(LOPEX.spec)$lignin1,
-                                                meta(LOPEX.spec)$lignin2))
-meta(LOPEX.spec)$dataset<-"LOPEX"
-## measures of lignin are highly inconsistent, so we ignore them here
+meta(LOPEX)$chlA<-LOPEX_traits$Chlorophyll_a..µg.cm2.
+meta(LOPEX)$Nmass<-LOPEX_traits$Nitrogen....DW.
+meta(LOPEX)$Cmass<-LOPEX_traits$Carbon....DW.
+meta(LOPEX)$EWT<-LOPEX_traits$Equivalent.Water.Thickness..g.cm2.
+meta(LOPEX)$LMA<-LOPEX_traits$Leaf.mass.per.area..g.cm2.*10
+meta(LOPEX)$LDMC<-(LOPEX_traits$Dry.Weight..g./LOPEX_traits$Fresh.Weight..g.)*1000
+meta(LOPEX)$chlA<-LOPEX_traits$Chlorophyll_a..µg.cm2./(100*meta(LOPEX)$LMA)
+meta(LOPEX)$chlB<-LOPEX_traits$Chlorophyll_b..µg.cm2./(100*meta(LOPEX)$LMA)
+meta(LOPEX)$car<-LOPEX_traits$Carotenoid..µg.cm2./(100*meta(LOPEX)$LMA)
 
-bad_spectra_LOPEX<-c("X0176","X0177","X0178","X0179","X0180",
-               "X0196","X0197","X0198","X0199","X0200",
-               "X0321","X0322","X0323","X0324","X0325")
-LOPEX.spec<-LOPEX.spec[-which(names(LOPEX.spec) %in% bad_spectra_LOPEX)]
+## we average the two methods for estimating cellulose and lignin
+meta(LOPEX)$cellulose1<-LOPEX_traits$Cellulose_1....DW.
+meta(LOPEX)$cellulose2<-LOPEX_traits$Cellulose_2....DW.
+meta(LOPEX)$cellulose<-rowMeans(data.frame(meta(LOPEX)$cellulose1,
+                                               meta(LOPEX)$cellulose2))
+meta(LOPEX)$lignin1<-LOPEX_traits$Lignin_1....DW.
+meta(LOPEX)$lignin2<-LOPEX_traits$Lignin_2....DW.
+meta(LOPEX)$lignin<-rowMeans(data.frame(meta(LOPEX)$lignin1,
+                                                meta(LOPEX)$lignin2))
 
-LOPEX.spec<-match_sensors(LOPEX.spec,splice_at = 862,fixed_sensor = 2,interpolate_wvl = 5)
-## need to do smoothing here
+meta(LOPEX)$dataset<-"LOPEX"
 
 ################################################
 ## ANGERS
 
 ANGERS.spec<-t(read.csv("IndependentValidationData/ANGERS/angers2003reflectance.csv",row.names = "Sample_."))
-ANGERS.spec<-spectra(ANGERS.spec,
-                   bands=colnames(ANGERS.spec),
-                   names=rownames(ANGERS.spec))
-
-ANGERS_traits<-read.csv("IndependentValidationData/ANGERS/angers2003metadata.csv")
-ANGERS_traits[which(ANGERS_traits== -999,arr.ind=T)]<-NA
-meta(ANGERS.spec)$EWT<-ANGERS_traits$Equivalent.Water.Thickness..g.cm2.
-meta(ANGERS.spec)$LMA<-ANGERS_traits$Leaf.mass.per.area..g.cm2.*10
-meta(ANGERS.spec)$chlA<-ANGERS_traits$Chlorophyll_a..µg.cm2./(100*meta(ANGERS.spec)$LMA)
-meta(ANGERS.spec)$chlB<-ANGERS_traits$Chlorophyll_b..µg.cm2./(100*meta(ANGERS.spec)$LMA)
-meta(ANGERS.spec)$car<-ANGERS_traits$Carotenoid..µg.cm2./(100*meta(ANGERS.spec)$LMA)
-meta(ANGERS.spec)$dataset<-"ANGERS"
 
 bad_spectra_ANGERS<-c("X0178","X0179","X0184","X0185","X0196",
-               "X0197","X0241","X0250","X0254","X0257",
-               "X0258","X0269")
-ANGERS.spec<-ANGERS.spec[-which(names(ANGERS.spec) %in% bad_spectra_ANGERS)]
+                      "X0197","X0241","X0250","X0254","X0257",
+                      "X0258","X0269")
+ANGERS.spec<-ANGERS.spec[-which(rownames(ANGERS.spec) %in% bad_spectra_ANGERS),]
 
-## smooth here
+## matching sensors is probably not necessary for ANGERS
+## smoothing
+ANGERS_sg_VIS <- t(apply(ANGERS.spec[,as.character(400:715)],1,
+                         function(x) sgolayfilt(x,p=3,n=21)))
+ANGERS_sg_NIR <- t(apply(ANGERS.spec[,as.character(716:1390)],1,
+                         function(x) sgolayfilt(x,p=3,n=35)))
+ANGERS_sg_SWIR1 <- t(apply(ANGERS.spec[,as.character(1391:1880)],1,
+                           function(x) sgolayfilt(x,p=3,n=75)))
+ANGERS_sg_SWIR2 <- t(apply(ANGERS.spec[,as.character(1881:2450)],1,
+                           function(x) sgolayfilt(x,p=5,n=175)))
+ANGERS_sg<-do.call(cbind,args = list(ANGERS_sg_VIS,
+                                     ANGERS_sg_NIR,
+                                     ANGERS_sg_SWIR1,
+                                     ANGERS_sg_SWIR2))
+ANGERS<-spectra(ANGERS_sg,
+                bands=colnames(ANGERS.spec),
+                names = rownames(ANGERS.spec))
+
+ANGERS_traits<-read.csv("IndependentValidationData/ANGERS/angers2003metadata.csv")
+ANGERS_traits<-ANGERS_traits[-which(paste("X0",ANGERS_traits$Sample_.,sep="") %in% bad_spectra_ANGERS),]
+ANGERS_traits[which(ANGERS_traits== -999,arr.ind=T)]<-NA
+meta(ANGERS)$EWT<-ANGERS_traits$Equivalent.Water.Thickness..g.cm2.
+meta(ANGERS)$LMA<-ANGERS_traits$Leaf.mass.per.area..g.cm2.*10
+meta(ANGERS)$chlA<-ANGERS_traits$Chlorophyll_a..µg.cm2./(100*meta(ANGERS)$LMA)
+meta(ANGERS)$chlB<-ANGERS_traits$Chlorophyll_b..µg.cm2./(100*meta(ANGERS)$LMA)
+meta(ANGERS)$car<-ANGERS_traits$Carotenoid..µg.cm2./(100*meta(ANGERS)$LMA)
+meta(ANGERS)$dataset<-"ANGERS"
 
 ##########################################################
 ## Dessain
@@ -128,8 +161,8 @@ dn <- get_spectra(asd_paths, type = 'radiance') # get radiances for target
 wr <- get_spectra(asd_paths, type = 'white_reference') # get radiances for white reference
 
 # convert spectra to tbl data frame
-dn.df <- tbl_df(dn)
-wr.df <- tbl_df(wr)
+dn.df <- as_tibble(dn)
+wr.df <- as_tibble(wr)
 dn.df$fileName <- asd_files_short
 wr.df$fileName <- asd_files_short
 
@@ -403,12 +436,12 @@ meta(Dessain.spec)$dataset<-"Dessain"
 ## !!!!!!!!!
 ## might want to add Hacker data
 
-LOPEX.spec<-LOPEX.spec[,400:2400]
-ANGERS.spec<-ANGERS.spec[,400:2400]
+LOPEX<-LOPEX[,400:2400]
+ANGERS<-ANGERS[,400:2400]
 Dessain.spec<-Dessain.spec[,400:2400]
 
-LOPEX_ANGERS.spec<-spectrolab::combine(LOPEX.spec,ANGERS.spec)
-all_val_ref<-spectrolab::combine(LOPEX_ANGERS.spec,Dessain.spec)
+LOPEX_ANGERS<-spectrolab::combine(LOPEX,ANGERS)
+all_val_ref<-spectrolab::combine(LOPEX_ANGERS,Dessain.spec)
 
 all_jack_coefs_list_ref<-readRDS("SavedResults/all_jack_coefs_list_ref.rds")
 meta(all_val_ref)$solubles_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$solubles_mass,val.spec = all_val_ref))
