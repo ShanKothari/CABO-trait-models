@@ -96,6 +96,9 @@ meta(LOPEX)$lignin<-rowMeans(data.frame(meta(LOPEX)$lignin1,
                                                 meta(LOPEX)$lignin2))
 
 meta(LOPEX)$dataset<-"LOPEX"
+LOPEX<-LOPEX[,400:2400]
+
+saveRDS(LOPEX,"IndependentValidationData/LOPEX/LOPEX_processed.rds")
 
 ################################################
 ## ANGERS
@@ -133,7 +136,11 @@ meta(ANGERS)$LMA<-ANGERS_traits$Leaf.mass.per.area..g.cm2.*10
 meta(ANGERS)$chlA<-ANGERS_traits$Chlorophyll_a..µg.cm2./(100*meta(ANGERS)$LMA)
 meta(ANGERS)$chlB<-ANGERS_traits$Chlorophyll_b..µg.cm2./(100*meta(ANGERS)$LMA)
 meta(ANGERS)$car<-ANGERS_traits$Carotenoid..µg.cm2./(100*meta(ANGERS)$LMA)
+
 meta(ANGERS)$dataset<-"ANGERS"
+ANGERS<-ANGERS[,400:2400]
+
+saveRDS(ANGERS,"IndependentValidationData/ANGERS/ANGERS_processed.rds")
 
 ##########################################################
 ## Dessain
@@ -345,6 +352,9 @@ meta(Dessain.spec)$P_mass<-ICP_all$P[match(meta(Dessain.spec)$sample_id,ICP_all$
 meta(Dessain.spec)$Zn_mass<-ICP_all$Zn[match(meta(Dessain.spec)$sample_id,ICP_all$Sample_id)]
 
 meta(Dessain.spec)$dataset<-"Dessain"
+Dessain.spec<-Dessain.spec[,400:2400]
+
+saveRDS(Dessain,"IndependentValidationData/Dessain_processed.rds")
 
 ##########################################################
 ## Hacker 2018 GOP
@@ -435,10 +445,6 @@ meta(Dessain.spec)$dataset<-"Dessain"
 
 ## !!!!!!!!!
 ## might want to add Hacker data
-
-LOPEX<-LOPEX[,400:2400]
-ANGERS<-ANGERS[,400:2400]
-Dessain.spec<-Dessain.spec[,400:2400]
 
 LOPEX_ANGERS<-spectrolab::combine(LOPEX,ANGERS)
 all_val_ref<-spectrolab::combine(LOPEX_ANGERS,Dessain.spec)

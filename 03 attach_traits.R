@@ -419,6 +419,7 @@ ICP_Warren<-data.frame(Sample_id=CFractions$bottle_id[match(ICP_Warren$leaf_chem
 ICP_all<-rbind(ICP_boxes,ICP_Warren)
 
 ICP_all$Al[ICP_all$Sample_id=="9157296"]<-NA
+ICP_all$Fe[ICP_all$Sample_id=="9157296"]<-NA
 ICP_all$Al[ICP_all$Al<0]<-0
 ICP_all$Na[ICP_all$Na<0]<-0
 
