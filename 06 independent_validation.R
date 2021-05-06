@@ -90,6 +90,9 @@ ANGERS_traits<-read.csv("IndependentValidationData/ANGERS/angers2003metadata.csv
 ANGERS_traits[which(ANGERS_traits== -999,arr.ind=T)]<-NA
 meta(ANGERS.spec)$EWT<-ANGERS_traits$Equivalent.Water.Thickness..g.cm2.
 meta(ANGERS.spec)$LMA<-ANGERS_traits$Leaf.mass.per.area..g.cm2.*10
+meta(ANGERS.spec)$chlA<-ANGERS_traits$Chlorophyll_a..µg.cm2./(100*meta(ANGERS.spec)$LMA)
+meta(ANGERS.spec)$chlB<-ANGERS_traits$Chlorophyll_b..µg.cm2./(100*meta(ANGERS.spec)$LMA)
+meta(ANGERS.spec)$car<-ANGERS_traits$Carotenoid..µg.cm2./(100*meta(ANGERS.spec)$LMA)
 meta(ANGERS.spec)$dataset<-"ANGERS"
 
 bad_spectra_ANGERS<-c("X0178","X0179","X0184","X0185","X0196",
@@ -420,10 +423,18 @@ meta(all_val_ref)$EWT_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$EWT,val
 meta(all_val_ref)$chlA_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$chlA_mass,val.spec = all_val_ref))
 meta(all_val_ref)$chlB_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$chlB_mass,val.spec = all_val_ref))
 meta(all_val_ref)$car_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$car_mass,val.spec = all_val_ref))
+meta(all_val_ref)$Al_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$Al_mass,val.spec = all_val_ref))
+meta(all_val_ref)$Ca_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$Ca_mass,val.spec = all_val_ref))
+meta(all_val_ref)$Cu_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$Cu_mass,val.spec = all_val_ref))
+meta(all_val_ref)$Fe_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$Fe_mass,val.spec = all_val_ref))
+meta(all_val_ref)$K_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$K_mass,val.spec = all_val_ref))
+meta(all_val_ref)$Mg_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$Mg_mass,val.spec = all_val_ref))
+meta(all_val_ref)$Mn_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$Mn_mass,val.spec = all_val_ref))
+meta(all_val_ref)$Na_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$Na_mass,val.spec = all_val_ref))
+meta(all_val_ref)$P_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$P_mass,val.spec = all_val_ref))
+meta(all_val_ref)$Zn_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$Zn_mass,val.spec = all_val_ref))
 
-pdf("Images/ind_val_plots.pdf",width = 10,height = 8)
-
-ggplot(data=meta(all_val_ref),aes(x=solubles_pred,y=solubles,color=dataset))+
+solubles_ind_val<-ggplot(data=meta(all_val_ref),aes(x=solubles_pred,y=solubles,color=dataset))+
   geom_point()+
   theme_bw()+
   theme(text = element_text(size=20))+
@@ -432,7 +443,7 @@ ggplot(data=meta(all_val_ref),aes(x=solubles_pred,y=solubles,color=dataset))+
   labs(y="Measured solubles",x="Predicted solubles")+
   coord_cartesian(xlim=c(20,90),ylim=c(20,90))
 
-ggplot(data=meta(all_val_ref),aes(x=hemicellulose_pred,y=hemicellulose,color=dataset))+
+hemicellulose_ind_val<-ggplot(data=meta(all_val_ref),aes(x=hemicellulose_pred,y=hemicellulose,color=dataset))+
   geom_point()+
   theme_bw()+
   theme(text = element_text(size=20))+
@@ -441,7 +452,7 @@ ggplot(data=meta(all_val_ref),aes(x=hemicellulose_pred,y=hemicellulose,color=dat
   labs(y="Measured hemicellulose",x="Predicted hemicellulose")+
   coord_cartesian(xlim=c(-5,35),ylim=c(-5,35))
 
-ggplot(data=meta(all_val_ref),aes(x=cellulose_pred,y=cellulose,color=dataset))+
+cellulose_ind_val<-ggplot(data=meta(all_val_ref),aes(x=cellulose_pred,y=cellulose,color=dataset))+
   geom_point()+
   theme_bw()+
   theme(text = element_text(size=20))+
@@ -450,7 +461,7 @@ ggplot(data=meta(all_val_ref),aes(x=cellulose_pred,y=cellulose,color=dataset))+
   labs(y="Measured cellulose",x="Predicted cellulose")+
   coord_cartesian(xlim=c(0,50),ylim=c(0,50))
 
-ggplot(data=meta(all_val_ref),aes(x=lignin_pred,y=lignin,color=dataset))+
+lignin_ind_val<-ggplot(data=meta(all_val_ref),aes(x=lignin_pred,y=lignin,color=dataset))+
   geom_point()+
   theme_bw()+
   theme(text = element_text(size=20))+
@@ -459,7 +470,7 @@ ggplot(data=meta(all_val_ref),aes(x=lignin_pred,y=lignin,color=dataset))+
   labs(y="Measured lignin",x="Predicted lignin")+
   coord_cartesian(xlim=c(-12,25),ylim=c(-12,25))
 
-ggplot(data=meta(all_val_ref),aes(x=Nmass_pred,y=Nmass,color=dataset))+
+Nmass_ind_val<-ggplot(data=meta(all_val_ref),aes(x=Nmass_pred,y=Nmass,color=dataset))+
   geom_point()+
   theme_bw()+
   theme(text = element_text(size=20))+
@@ -468,7 +479,7 @@ ggplot(data=meta(all_val_ref),aes(x=Nmass_pred,y=Nmass,color=dataset))+
   labs(y="Measured Nmass",x="Predicted Nmass")+
   coord_cartesian(xlim=c(0,6),ylim=c(0,6))
 
-ggplot(data=meta(all_val_ref),aes(x=Cmass_pred,y=Cmass,color=dataset))+
+Cmass_ind_val<-ggplot(data=meta(all_val_ref),aes(x=Cmass_pred,y=Cmass,color=dataset))+
   geom_point()+
   theme_bw()+
   theme(text = element_text(size=20))+
@@ -477,25 +488,7 @@ ggplot(data=meta(all_val_ref),aes(x=Cmass_pred,y=Cmass,color=dataset))+
   labs(y="Measured Cmass",x="Predicted Cmass")+
   coord_cartesian(xlim=c(37,54),ylim=c(37,54))
 
-ggplot(data=meta(all_val_ref),aes(x=EWT_pred,y=EWT,color=dataset))+
-  geom_point()+
-  theme_bw()+
-  theme(text = element_text(size=20))+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
-  labs(y="Measured EWT",x="Predicted EWT")+
-  coord_cartesian(xlim=c(0,0.085),ylim=c(0,0.085))
-
-ggplot(data=meta(all_val_ref),aes(x=LDMC_pred,y=LDMC,color=dataset))+
-  geom_point()+
-  theme_bw()+
-  theme(text = element_text(size=20))+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
-  labs(y="Measured LDMC",x="Predicted LDMC")+
-  coord_cartesian(xlim=c(-75,600),ylim=c(-75,600))
-
-ggplot(data=meta(all_val_ref),aes(x=LMA_pred,y=LMA,color=dataset))+
+LMA_ind_val<-ggplot(data=meta(all_val_ref),aes(x=LMA_pred,y=LMA,color=dataset))+
   geom_point()+
   theme_bw()+
   theme(text = element_text(size=20))+
@@ -504,7 +497,25 @@ ggplot(data=meta(all_val_ref),aes(x=LMA_pred,y=LMA,color=dataset))+
   labs(y="Measured LMA",x="Predicted LMA")+
   coord_cartesian(xlim=c(0,0.5),ylim=c(0,0.5))
 
-ggplot(data=meta(all_val_ref),aes(x=chlA_pred,y=chlA,color=dataset))+
+LDMC_ind_val<-ggplot(data=meta(all_val_ref),aes(x=LDMC_pred,y=LDMC,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured LDMC",x="Predicted LDMC")+
+  coord_cartesian(xlim=c(-75,600),ylim=c(-75,600))
+
+EWT_ind_val<-ggplot(data=meta(all_val_ref),aes(x=EWT_pred,y=EWT,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured EWT",x="Predicted EWT")+
+  coord_cartesian(xlim=c(0,0.085),ylim=c(0,0.085))
+
+chlA_ind_val<-ggplot(data=meta(all_val_ref),aes(x=chlA_pred,y=chlA,color=dataset))+
   geom_point()+
   theme_bw()+
   theme(text = element_text(size=20))+
@@ -513,7 +524,7 @@ ggplot(data=meta(all_val_ref),aes(x=chlA_pred,y=chlA,color=dataset))+
   labs(y="Measured chlA",x="Predicted chlA")+
   coord_cartesian(xlim=c(0,20),ylim=c(0,20))
 
-ggplot(data=meta(all_val_ref),aes(x=chlB_pred,y=chlB,color=dataset))+
+chlB_ind_val<-ggplot(data=meta(all_val_ref),aes(x=chlB_pred,y=chlB,color=dataset))+
   geom_point()+
   theme_bw()+
   theme(text = element_text(size=20))+
@@ -522,13 +533,126 @@ ggplot(data=meta(all_val_ref),aes(x=chlB_pred,y=chlB,color=dataset))+
   labs(y="Measured chlB",x="Predicted chlB")+
   coord_cartesian(xlim=c(-1,7),ylim=c(-1,7))
 
-ggplot(data=meta(all_val_ref),aes(x=car_pred,y=car,color=dataset))+
+car_ind_val<-ggplot(data=meta(all_val_ref),aes(x=car_pred,y=car,color=dataset))+
   geom_point()+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm")+
   labs(y="Measured car",x="Predicted car")+
-  coord_cartesian(xlim=c(0,5),ylim=c(0,5))
+  coord_cartesian(xlim=c(0,5.5),ylim=c(0,5.5))
 
+Al_ind_val<-ggplot(data=meta(all_val_ref),aes(x=Al_pred,y=Al_mass,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured Al",x="Predicted Al")+
+  coord_cartesian(xlim=c(-0.1,0.4),ylim=c(-0.1,0.4))
+
+Ca_ind_val<-ggplot(data=meta(all_val_ref),aes(x=Ca_pred,y=Ca_mass,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured Al",x="Predicted Al")+
+  coord_cartesian(xlim=c(-5,30),ylim=c(-5,30))
+
+Cu_ind_val<-ggplot(data=meta(all_val_ref),aes(x=Cu_pred,y=Cu_mass,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured Cu",x="Predicted Cu")+
+  coord_cartesian(xlim=c(0,0.1),ylim=c(0,0.1))
+
+Fe_ind_val<-ggplot(data=meta(all_val_ref),aes(x=Fe_pred,y=Fe_mass,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured Fe",x="Predicted Fe")+
+  coord_cartesian(xlim=c(0,0.5),ylim=c(0,0.5))
+
+K_ind_val<-ggplot(data=meta(all_val_ref),aes(x=K_pred,y=K_mass,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured K",x="Predicted K")+
+  coord_cartesian(xlim=c(0,40),ylim=c(0,40))
+
+Mg_ind_val<-ggplot(data=meta(all_val_ref),aes(x=Mg_pred,y=Mg_mass,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured Mg",x="Predicted Mg")+
+  coord_cartesian(xlim=c(-1,8),ylim=c(-1,8))
+
+Mn_ind_val<-ggplot(data=meta(all_val_ref),aes(x=Mn_pred,y=Mn_mass,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured Mn",x="Predicted Mn")+
+  coord_cartesian(xlim=c(-1,4),ylim=c(-1,4))
+
+Na_ind_val<-ggplot(data=meta(all_val_ref),aes(x=Na_pred,y=Na_mass,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured Na",x="Predicted Na")+
+  coord_cartesian(xlim=c(-1,8),ylim=c(-1,8))
+
+P_ind_val<-ggplot(data=meta(all_val_ref),aes(x=P_pred,y=P_mass,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured P",x="Predicted P")+
+  coord_cartesian(xlim=c(-2,7),ylim=c(-2,7))
+
+Zn_ind_val<-ggplot(data=meta(all_val_ref),aes(x=Zn_pred,y=Zn_mass,color=dataset))+
+  geom_point()+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm")+
+  labs(y="Measured Zn",x="Predicted Zn")+
+  coord_cartesian(xlim=c(-0.1,0.7),ylim=c(-0.1,0.7))
+
+pdf("Images/ind_val_plots.pdf",width = 10,height = 8)
+solubles_ind_val
+hemicellulose_ind_val
+cellulose_ind_val
+lignin_ind_val
+Nmass_ind_val
+Cmass_ind_val
+LMA_ind_val
+LDMC_ind_val
+EWT_ind_val
+chlA_ind_val
+chlB_ind_val
+car_ind_val
+Al_ind_val
+Ca_ind_val
+Cu_ind_val
+Fe_ind_val
+K_ind_val
+Mg_ind_val
+Mn_ind_val
+Na_ind_val
+P_ind_val
+Zn_ind_val
 dev.off()
