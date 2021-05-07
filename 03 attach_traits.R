@@ -370,7 +370,7 @@ all.pigments$chlA_mg_g[all.pigments$sample_id==13404937]<-NA
 all.pigments$chlB_mg_g[all.pigments$sample_id==13404937]<-NA
 all.pigments$carotenoides._mg_g[all.pigments$sample_id==13404937]<-NA
 
-## remove records who notes contain "refaire" or "refait" since these were all redone
+## remove records whose notes contain "refaire" or "refait" since these were all redone
 all.pigments<-all.pigments[-which(str_detect(string = all.pigments$Notes,pattern = "efai")),]
 
 meta(all.ref)$chlA_mass<-as.numeric(as.character(all.pigments$chlA_mg_g[match(meta(all.ref)$sample_id,all.pigments$sample_id)]))

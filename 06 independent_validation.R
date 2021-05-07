@@ -133,6 +133,7 @@ ANGERS_traits<-ANGERS_traits[-which(paste("X0",ANGERS_traits$Sample_.,sep="") %i
 ANGERS_traits[which(ANGERS_traits== -999,arr.ind=T)]<-NA
 meta(ANGERS)$EWT<-ANGERS_traits$Equivalent.Water.Thickness..g.cm2.
 meta(ANGERS)$LMA<-ANGERS_traits$Leaf.mass.per.area..g.cm2.*10
+meta(ANGERS)$LDMC<-1/(meta(ANGERS)$EWT/(meta(ANGERS)$LMA*0.1)+1)*1000
 meta(ANGERS)$chlA<-ANGERS_traits$Chlorophyll_a..µg.cm2./(100*meta(ANGERS)$LMA)
 meta(ANGERS)$chlB<-ANGERS_traits$Chlorophyll_b..µg.cm2./(100*meta(ANGERS)$LMA)
 meta(ANGERS)$car<-ANGERS_traits$Carotenoid..µg.cm2./(100*meta(ANGERS)$LMA)
