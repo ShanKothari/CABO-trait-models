@@ -502,22 +502,22 @@ lignin_area_norm<-lm(log(lignin_area)~log(0.1*LMA),data=meta(all.ref),na.action=
 meta(all.ref)$lignin_norm<-resid(lignin_area_norm)
 
 ## area basis, in g/cm^2
-meta(all.ref)$chlA_area<-meta(all.ref)$chlA_mass*meta(all.ref)$LMA/1000
+meta(all.ref)$chlA_area<-meta(all.ref)$chlA_mass*meta(all.ref)$LMA/10000
 chlA_area_norm<-lm(log(chlA_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
 meta(all.ref)$chlA_norm<-resid(chlA_area_norm)
 
 ## area basis, in g/cm^2
-meta(all.ref)$chlB_area<-meta(all.ref)$chlB_mass*meta(all.ref)$LMA/1000
+meta(all.ref)$chlB_area<-meta(all.ref)$chlB_mass*meta(all.ref)$LMA/10000
 chlB_area_norm<-lm(log(chlB_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
 meta(all.ref)$chlB_norm<-resid(chlB_area_norm)
 
 ## area basis, in g/cm^2
-meta(all.ref)$car_area<-meta(all.ref)$car_mass*meta(all.ref)$LMA/1000
+meta(all.ref)$car_area<-meta(all.ref)$car_mass*meta(all.ref)$LMA/10000
 car_area_norm<-lm(log(car_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
 meta(all.ref)$car_norm<-resid(car_area_norm)
 
 ## area basis, in g/cm^2
-meta(all.ref)$Al_area<-meta(all.ref)$Al_mass*meta(all.ref)$LMA/1000
+meta(all.ref)$Al_area<-meta(all.ref)$Al_mass*meta(all.ref)$LMA/10000
 meta(all.ref)$Al_area_omit<-meta(all.ref)$Al_area
 meta(all.ref)$Al_area_omit[which(meta(all.ref)$Al_area_omit==0)]<-NA
 Al_area_norm<-lm(log(Al_area_omit)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
@@ -525,12 +525,12 @@ meta(all.ref)$Al_norm<-resid(Al_area_norm)
 meta(all.ref)$Al_area_omit<-NULL
 
 ## area basis, in g/cm^2
-meta(all.ref)$Ca_area<-meta(all.ref)$Ca_mass*meta(all.ref)$LMA/1000
+meta(all.ref)$Ca_area<-meta(all.ref)$Ca_mass*meta(all.ref)$LMA/10000
 Ca_area_norm<-lm(log(Ca_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
 meta(all.ref)$Ca_norm<-resid(Ca_area_norm)
 
 ## area basis, in g/cm^2
-meta(all.ref)$Cu_area<-meta(all.ref)$Cu_mass*meta(all.ref)$LMA/1000
+meta(all.ref)$Cu_area<-meta(all.ref)$Cu_mass*meta(all.ref)$LMA/10000
 meta(all.ref)$Cu_area_omit<-meta(all.ref)$Cu_area
 meta(all.ref)$Cu_area_omit[which(meta(all.ref)$Cu_area_omit==0)]<-NA
 Cu_area_norm<-lm(log(Cu_area_omit)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
@@ -538,22 +538,22 @@ meta(all.ref)$Cu_norm<-resid(Cu_area_norm)
 meta(all.ref)$Cu_area_omit<-NULL
 
 ## area basis, in g/cm^2
-meta(all.ref)$Fe_area<-meta(all.ref)$Fe_mass*meta(all.ref)$LMA/1000
+meta(all.ref)$Fe_area<-meta(all.ref)$Fe_mass*meta(all.ref)$LMA/10000
 Fe_area_norm<-lm(log(Fe_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
 meta(all.ref)$Fe_norm<-resid(Fe_area_norm)
 
 ## area basis, in g/cm^2
-meta(all.ref)$K_area<-meta(all.ref)$K_mass*meta(all.ref)$LMA/1000
+meta(all.ref)$K_area<-meta(all.ref)$K_mass*meta(all.ref)$LMA/10000
 K_area_norm<-lm(log(K_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
 meta(all.ref)$K_norm<-resid(K_area_norm)
 
 ## area basis, in g/cm^2
-meta(all.ref)$Mg_area<-meta(all.ref)$Mg_mass*meta(all.ref)$LMA/1000
+meta(all.ref)$Mg_area<-meta(all.ref)$Mg_mass*meta(all.ref)$LMA/10000
 Mg_area_norm<-lm(log(Mg_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
 meta(all.ref)$Mg_norm<-resid(Mg_area_norm)
 
 ## area basis, in g/cm^2
-meta(all.ref)$Mn_area<-meta(all.ref)$Mn_mass*meta(all.ref)$LMA/1000
+meta(all.ref)$Mn_area<-meta(all.ref)$Mn_mass*meta(all.ref)$LMA/10000
 meta(all.ref)$Mn_area_omit<-meta(all.ref)$Mn_area
 meta(all.ref)$Mn_area_omit[which(meta(all.ref)$Mn_area_omit==0)]<-NA
 Mn_area_norm<-lm(log(Mn_area_omit)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
@@ -561,7 +561,7 @@ meta(all.ref)$Mn_norm<-resid(Mn_area_norm)
 meta(all.ref)$Mn_area_omit<-NULL
 
 ## area basis, in g/cm^2
-meta(all.ref)$Na_area<-meta(all.ref)$Na_mass*meta(all.ref)$LMA/1000
+meta(all.ref)$Na_area<-meta(all.ref)$Na_mass*meta(all.ref)$LMA/10000
 meta(all.ref)$Na_area_omit<-meta(all.ref)$Na_area
 meta(all.ref)$Na_area_omit[which(meta(all.ref)$Na_area_omit==0)]<-NA
 Na_area_norm<-lm(log(Na_area_omit)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
@@ -569,12 +569,12 @@ meta(all.ref)$Na_norm<-resid(Na_area_norm)
 meta(all.ref)$Na_area_omit<-NULL
 
 ## area basis, in g/cm^2
-meta(all.ref)$P_area<-meta(all.ref)$P_mass*meta(all.ref)$LMA/1000
+meta(all.ref)$P_area<-meta(all.ref)$P_mass*meta(all.ref)$LMA/10000
 P_area_norm<-lm(log(P_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
 meta(all.ref)$P_norm<-resid(P_area_norm)
 
 ## area basis, in g/cm^2
-meta(all.ref)$Zn_area<-meta(all.ref)$Zn_mass*meta(all.ref)$LMA/1000
+meta(all.ref)$Zn_area<-meta(all.ref)$Zn_mass*meta(all.ref)$LMA/10000
 Zn_area_norm<-lm(log(Zn_area)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
 meta(all.ref)$Zn_norm<-resid(Zn_area_norm)
 
