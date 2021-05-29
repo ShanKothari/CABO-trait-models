@@ -269,7 +269,6 @@ colnames(Dessain.df)<-gsub(pattern = "value_sg.",
 
 Dessain.spec<-as_spectra(Dessain.df,name_idx=1)
 meta(Dessain.spec)$sample_id<-gsub("spec_","",names(Dessain.spec))
-Dessain.spec<-Dessain.spec[,400:2400]
 
 Dessain.summary<-read.csv("SummaryData/DessainHerbarium.csv")
 Dessain.sub<-data.frame(sample.id=Dessain.summary$parentEventID,
@@ -363,6 +362,8 @@ saveRDS(Dessain.spec,"IndependentValidationData/Dessain_processed.rds")
 ## bulk samples were collected a year after the spectra
 ## there's also no stray current correction or calibration
 ## spectrum for the white reference panel
+## Also need to reconcile identifiers between
+## Paul's labels and the Fulcrum labels (using Plants app in Fulcrum)
 
 ## this also does not include all the samples from
 ## Paul Hacker's 2018 campaign -- only the Q. garryana
@@ -384,14 +385,14 @@ saveRDS(Dessain.spec,"IndependentValidationData/Dessain_processed.rds")
 # ref <- get_spectra(asd_paths, type = 'reflectance') # get radiances for target
 # 
 # # convert spectra to tbl data frame
-# ref.df <- tbl_df(ref)
+# ref.df <- as_tibble(ref)
 # ref.df$fileName <- asd_files_short
 # 
 # # convert to long format and order by fileName
 # ref.long <- gather(ref.df, wvl.char, target.rad, -fileName) %>%
 #   mutate(wvl = as.numeric(wvl.char)) %>%
 #   arrange(fileName, wvl) %>%
-#   dplyr::select(-wvl.char) 
+#   dplyr::select(-wvl.char)
 # 
 # ## aggregate reps within a leaf
 # Hacker2018 <- ref.long %>%
@@ -405,32 +406,32 @@ saveRDS(Dessain.spec,"IndependentValidationData/Dessain_processed.rds")
 # Hacker2018$leaf_number<-unlist(lapply(strsplit(Hacker2018$sample_id,split="_"),function(x) x[[2]]))
 # Hacker2018$sample_id<-unlist(lapply(strsplit(Hacker2018$sample_id,split="_"),function(x) x[[1]]))
 # 
-# Hacker2018_agg<- Hacker2018 %>% 
-#   dplyr::group_by(sample_id, wvl) %>% 
+# Hacker2018_agg<- Hacker2018 %>%
+#   dplyr::group_by(sample_id, wvl) %>%
 #   dplyr::summarise(value = mean(DN, na.rm = T))
 # 
 # Hacker2018_sg_VIS <- Hacker2018_agg %>%
-#   dplyr::filter(wvl <= 715) %>% 
-#   group_by(sample_id) %>% 
+#   dplyr::filter(wvl <= 715) %>%
+#   group_by(sample_id) %>%
 #   do(sg_filter(., p = 3, n = 21))
 # Hacker2018_sg_NIR <- Hacker2018_agg %>%
 #   dplyr::filter(wvl > 715,
-#                 wvl <= 1390 ) %>% 
-#   group_by(sample_id) %>% 
+#                 wvl <= 1390 ) %>%
+#   group_by(sample_id) %>%
 #   do(sg_filter(., p = 3, n = 35))
 # Hacker2018_sg_SWIR1 <- Hacker2018_agg %>%
 #   dplyr::filter(wvl > 1390,
-#                 wvl <= 1880) %>% 
-#   group_by(sample_id) %>% 
+#                 wvl <= 1880) %>%
+#   group_by(sample_id) %>%
 #   do(sg_filter(., p = 3, n = 75))
 # Hacker2018_sg_SWIR2 <- Hacker2018_agg %>%
-#   dplyr::filter(wvl > 1880) %>% 
-#   group_by(sample_id) %>% 
+#   dplyr::filter(wvl > 1880) %>%
+#   group_by(sample_id) %>%
 #   do(sg_filter(., p = 5, n = 175))
 # Hacker2018_sg <- bind_rows(Hacker2018_sg_VIS,
 #                         Hacker2018_sg_NIR,
 #                         Hacker2018_sg_SWIR1,
-#                         Hacker2018_sg_SWIR2) %>% 
+#                         Hacker2018_sg_SWIR2) %>%
 #   arrange(sample_id)
 # 
 # Hacker2018_sg_wide<-reshape(subset(as.data.frame(Hacker2018_sg),select= -value),
@@ -438,8 +439,40 @@ saveRDS(Dessain.spec,"IndependentValidationData/Dessain_processed.rds")
 # colnames(Hacker2018_sg_wide)<-gsub(pattern = "value_sg.",
 #                                 replacement = "",
 #                                 x = colnames(Hacker2018_sg_wide))
+# Hacker2018.spec<-as_spectra(Hacker2018_sg_wide,name_idx = 1,meta_idxs = 1)
 # 
-# write.csv(Hacker2018_sg_wide,"ProcessedSpectra/Hacker2018_ref_processed.csv",row.names=F)
+# Fulcrum.summary<-read.csv("SummaryData/leaf_spectra.csv")
+# Fulcrum.sub<-data.frame(sample.id=Fulcrum.summary$sample_id,
+#                         species=Fulcrum.summary$scientific_name,
+#                         project=Fulcrum.summary$project,
+#                         site=Fulcrum.summary$site_id)
+# 
+# meta(Hacker2018.spec)$species<-Fulcrum.sub$species[match(meta(Hacker2018.spec)$sample_id,Fulcrum.sub$sample.id)]
+# meta(Hacker2018.spec)$project<-Fulcrum.sub$project[match(meta(Hacker2018.spec)$sample_id,Fulcrum.sub$sample.id)]
+# 
+# ## attach structural traits
+# Fulcrum.area<-read.csv("TraitData/LeafAreaWaterSamples/leaf_area_and_water_samples.csv")
+# Fulcrum.area$specific_leaf_area_m2_kg<-as.numeric(as.character(Fulcrum.area$specific_leaf_area_m2_kg))
+# Fulcrum.area$leaf_dry_matter_content_mg_g<-as.numeric(as.character(Fulcrum.area$leaf_dry_matter_content_mg_g))
+# 
+# Fulcrum.area.sub<-data.frame(sample_id=Fulcrum.area$parentEventID,
+#                              SLA=Fulcrum.area$SLA_m2_kg,
+#                              LDMC=Fulcrum.area$LDMC_mg_g)
+# 
+# ## SLA in units m^2/kg
+# ## LDMC in units mg/g
+# ## EWT in units cm
+# 
+# ## note: this doesn't work because the Hacker data
+# ## have two different sets of sample IDs
+# ## that need to be reconciled!
+# ## so I'm not bothering to add these or other traits
+# meta(Hacker2018.spec)$SLA<-Fulcrum.area.sub$SLA[match(meta(Hacker2018.spec)$sample_id,Fulcrum.area.sub$sample_id)]
+# meta(Hacker2018.spec)$LMA<-1/meta(Hacker2018.spec)$SLA
+# meta(Hacker2018.spec)$LDMC<-Fulcrum.area.sub$LDMC[match(meta(Hacker2018.spec)$sample_id,Fulcrum.area.sub$sample_id)]
+# meta(Hacker2018.spec)$EWT<-with(meta(Hacker2018.spec),(1/(LDMC/1000)-1)*(1/SLA*0.1))
+# 
+# meta(Hacker2018.spec)$dataset<-"Hacker2018"
 
 #################################################
 ## combine
