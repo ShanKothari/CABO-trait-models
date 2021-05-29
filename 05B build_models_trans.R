@@ -58,14 +58,14 @@ apply.coefs<-function(coef.list,val.spec,intercept=T){
 ## optimal number of components
 
 solubles_mass_CVmodel<-plsr(meta(trans.train)$solubles_mass~as.matrix(trans.train),
-                      ncomp=30,method = "oscorespls",validation="CV",segments=10)
+                            ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_solubles_mass_CVmodel <- selectNcomp(solubles_mass_CVmodel, method = "onesigma", plot = FALSE)
 solubles_mass_valid <- which(!is.na(meta(trans.train)$solubles_mass))
 solubles_mass_pred<-data.frame(ID=meta(trans.train)$sample_id[solubles_mass_valid],
-                         Species=meta(trans.train)$species[solubles_mass_valid],
-                         Project=meta(trans.train)$project[solubles_mass_valid],
-                         measured=meta(trans.train)$solubles_mass[solubles_mass_valid],
-                         val_pred=solubles_mass_CVmodel$validation$pred[,,ncomp_solubles_mass_CVmodel])
+                               Species=meta(trans.train)$species[solubles_mass_valid],
+                               Project=meta(trans.train)$project[solubles_mass_valid],
+                               measured=meta(trans.train)$solubles_mass[solubles_mass_valid],
+                               val_pred=solubles_mass_CVmodel$validation$pred[,,ncomp_solubles_mass_CVmodel])
 ggplot(solubles_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
@@ -77,14 +77,14 @@ ggplot(solubles_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   ggtitle("Predicting % solubles from fresh-leaf spectra")
 
 hemicellulose_mass_CVmodel<-plsr(meta(trans.train)$hemicellulose_mass~as.matrix(trans.train),
-                      ncomp=30,method = "oscorespls",validation="CV",segments=10)
+                                 ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_hemicellulose_mass_CVmodel <- selectNcomp(hemicellulose_mass_CVmodel, method = "onesigma", plot = FALSE)
 hemicellulose_mass_valid <- which(!is.na(meta(trans.train)$hemicellulose_mass))
 hemicellulose_mass_pred<-data.frame(ID=meta(trans.train)$sample_id[hemicellulose_mass_valid],
-                         Species=meta(trans.train)$species[hemicellulose_mass_valid],
-                         Project=meta(trans.train)$project[hemicellulose_mass_valid],
-                         measured=meta(trans.train)$hemicellulose_mass[hemicellulose_mass_valid],
-                         val_pred=hemicellulose_mass_CVmodel$validation$pred[,,ncomp_hemicellulose_mass_CVmodel])
+                                    Species=meta(trans.train)$species[hemicellulose_mass_valid],
+                                    Project=meta(trans.train)$project[hemicellulose_mass_valid],
+                                    measured=meta(trans.train)$hemicellulose_mass[hemicellulose_mass_valid],
+                                    val_pred=hemicellulose_mass_CVmodel$validation$pred[,,ncomp_hemicellulose_mass_CVmodel])
 ggplot(hemicellulose_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
@@ -96,14 +96,14 @@ ggplot(hemicellulose_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   ggtitle("Predicting % hemicellulose from fresh-leaf spectra")
 
 cellulose_mass_CVmodel<-plsr(meta(trans.train)$cellulose_mass~as.matrix(trans.train),
-                      ncomp=30,method = "oscorespls",validation="CV",segments=10)
+                             ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_cellulose_mass_CVmodel <- selectNcomp(cellulose_mass_CVmodel, method = "onesigma", plot = FALSE)
 cellulose_mass_valid <- which(!is.na(meta(trans.train)$cellulose_mass))
 cellulose_mass_pred<-data.frame(ID=meta(trans.train)$sample_id[cellulose_mass_valid],
-                         Species=meta(trans.train)$species[cellulose_mass_valid],
-                         Project=meta(trans.train)$project[cellulose_mass_valid],
-                         measured=meta(trans.train)$cellulose_mass[cellulose_mass_valid],
-                         val_pred=cellulose_mass_CVmodel$validation$pred[,,ncomp_cellulose_mass_CVmodel])
+                                Species=meta(trans.train)$species[cellulose_mass_valid],
+                                Project=meta(trans.train)$project[cellulose_mass_valid],
+                                measured=meta(trans.train)$cellulose_mass[cellulose_mass_valid],
+                                val_pred=cellulose_mass_CVmodel$validation$pred[,,ncomp_cellulose_mass_CVmodel])
 ggplot(cellulose_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
@@ -115,14 +115,14 @@ ggplot(cellulose_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   ggtitle("Predicting % cellulose from fresh-leaf spectra")
 
 lignin_mass_CVmodel<-plsr(meta(trans.train)$lignin_mass~as.matrix(trans.train),
-                      ncomp=30,method = "oscorespls",validation="CV",segments=10)
+                          ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_lignin_mass_CVmodel <- selectNcomp(lignin_mass_CVmodel, method = "onesigma", plot = FALSE)
 lignin_mass_valid <- which(!is.na(meta(trans.train)$lignin_mass))
 lignin_mass_pred<-data.frame(ID=meta(trans.train)$sample_id[lignin_mass_valid],
-                         Species=meta(trans.train)$species[lignin_mass_valid],
-                         Project=meta(trans.train)$project[lignin_mass_valid],
-                         measured=meta(trans.train)$lignin_mass[lignin_mass_valid],
-                         val_pred=lignin_mass_CVmodel$validation$pred[,,ncomp_lignin_mass_CVmodel])
+                             Species=meta(trans.train)$species[lignin_mass_valid],
+                             Project=meta(trans.train)$project[lignin_mass_valid],
+                             measured=meta(trans.train)$lignin_mass[lignin_mass_valid],
+                             val_pred=lignin_mass_CVmodel$validation$pred[,,ncomp_lignin_mass_CVmodel])
 ggplot(lignin_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
@@ -134,33 +134,33 @@ ggplot(lignin_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   ggtitle("Predicting % lignin from fresh-leaf spectra")
 
 Cmass_CVmodel<-plsr(meta(trans.train)$Cmass~as.matrix(trans.train),
-                 ncomp=30,method = "oscorespls",validation="CV",segments=10)
+                    ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_Cmass_CVmodel <- selectNcomp(Cmass_CVmodel, method = "onesigma", plot = FALSE)
 Cmass_valid <- which(!is.na(meta(trans.train)$Cmass))
 Cmass_pred<-data.frame(ID=meta(trans.train)$sample_id[Cmass_valid],
-                            Species=meta(trans.train)$species[Cmass_valid],
-                            Project=meta(trans.train)$project[Cmass_valid],
-                            measured=meta(trans.train)$Cmass[Cmass_valid],
-                            val_pred=Cmass_CVmodel$validation$pred[,,ncomp_Cmass_CVmodel])
+                       Species=meta(trans.train)$species[Cmass_valid],
+                       Project=meta(trans.train)$project[Cmass_valid],
+                       measured=meta(trans.train)$Cmass[Cmass_valid],
+                       val_pred=Cmass_CVmodel$validation$pred[,,ncomp_Cmass_CVmodel])
 ggplot(Cmass_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-##  coord_cartesian(xlim=c(38,55),ylim=c(38,55))+
+  ##  coord_cartesian(xlim=c(38,55),ylim=c(38,55))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.2))+
   labs(y="Measured",x="Predicted")+
   ggtitle("Predicting %C from fresh-leaf spectra")
 
 Nmass_CVmodel<-plsr(meta(trans.train)$Nmass~as.matrix(trans.train),
-                   ncomp=30,method = "oscorespls",validation="CV",segments=10)
+                    ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_Nmass_CVmodel <- selectNcomp(Nmass_CVmodel, method = "onesigma", plot = FALSE)
 Nmass_valid <- which(!is.na(meta(trans.train)$Nmass))
 Nmass_pred<-data.frame(ID=meta(trans.train)$sample_id[Nmass_valid],
-                      Species=meta(trans.train)$species[Nmass_valid],
-                      Project=meta(trans.train)$project[Nmass_valid],
-                      measured=meta(trans.train)$Nmass[Nmass_valid],
-                      val_pred=Nmass_CVmodel$validation$pred[,,ncomp_Nmass_CVmodel])
+                       Species=meta(trans.train)$species[Nmass_valid],
+                       Project=meta(trans.train)$project[Nmass_valid],
+                       measured=meta(trans.train)$Nmass[Nmass_valid],
+                       val_pred=Nmass_CVmodel$validation$pred[,,ncomp_Nmass_CVmodel])
 ggplot(Nmass_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
@@ -248,14 +248,14 @@ ggplot(LDMC_pred,aes(y=measured,x=val_pred,color=Project))+
   ggtitle("Predicting LDMC from fresh-leaf spectra")
 
 LMA_CVmodel<-plsr(meta(trans.train)$LMA~as.matrix(trans.train),
-                   ncomp=30,method = "oscorespls",validation="CV",segments=10)
+                  ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_LMA_CVmodel <- selectNcomp(LMA_CVmodel, method = "onesigma", plot = FALSE)
 LMA_valid <- which(!is.na(meta(trans.train)$LMA))
 LMA_pred<-data.frame(ID=meta(trans.train)$sample_id[LMA_valid],
-                      Species=meta(trans.train)$species[LMA_valid],
-                      Project=meta(trans.train)$project[LMA_valid],
-                      measured=meta(trans.train)$LMA[LMA_valid],
-                      val_pred=LMA_CVmodel$validation$pred[,,ncomp_LMA_CVmodel])
+                     Species=meta(trans.train)$species[LMA_valid],
+                     Project=meta(trans.train)$project[LMA_valid],
+                     measured=meta(trans.train)$LMA[LMA_valid],
+                     val_pred=LMA_CVmodel$validation$pred[,,ncomp_LMA_CVmodel])
 ggplot(LMA_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
@@ -267,14 +267,14 @@ ggplot(LMA_pred,aes(y=measured,x=val_pred,color=Project))+
   ggtitle("Predicting LMA from fresh-leaf spectra")
 
 chlA_mass_CVmodel<-plsr(meta(trans.train)$chlA_mass~as.matrix(trans.train),
-                  ncomp=30,method = "oscorespls",validation="CV",segments=10)
+                        ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_chlA_mass_CVmodel <- selectNcomp(chlA_mass_CVmodel, method = "onesigma", plot = FALSE)
 chlA_mass_valid <- which(!is.na(meta(trans.train)$chlA_mass))
 chlA_mass_pred<-data.frame(ID=meta(trans.train)$sample_id[chlA_mass_valid],
-                     Species=meta(trans.train)$species[chlA_mass_valid],
-                     Project=meta(trans.train)$project[chlA_mass_valid],
-                     measured=meta(trans.train)$chlA_mass[chlA_mass_valid],
-                     val_pred=chlA_mass_CVmodel$validation$pred[,,ncomp_chlA_mass_CVmodel])
+                           Species=meta(trans.train)$species[chlA_mass_valid],
+                           Project=meta(trans.train)$project[chlA_mass_valid],
+                           measured=meta(trans.train)$chlA_mass[chlA_mass_valid],
+                           val_pred=chlA_mass_CVmodel$validation$pred[,,ncomp_chlA_mass_CVmodel])
 ggplot(chlA_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
@@ -286,14 +286,14 @@ ggplot(chlA_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   ggtitle("Predicting chlA from fresh-leaf spectra")
 
 chlB_mass_CVmodel<-plsr(meta(trans.train)$chlB_mass~as.matrix(trans.train),
-                         ncomp=30,method = "oscorespls",validation="CV",segments=10)
+                        ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_chlB_mass_CVmodel <- selectNcomp(chlB_mass_CVmodel, method = "onesigma", plot = FALSE)
 chlB_mass_valid <- which(!is.na(meta(trans.train)$chlB_mass))
 chlB_mass_pred<-data.frame(ID=meta(trans.train)$sample_id[chlB_mass_valid],
-                            Species=meta(trans.train)$species[chlB_mass_valid],
-                            Project=meta(trans.train)$project[chlB_mass_valid],
-                            measured=meta(trans.train)$chlB_mass[chlB_mass_valid],
-                            val_pred=chlB_mass_CVmodel$validation$pred[,,ncomp_chlB_mass_CVmodel])
+                           Species=meta(trans.train)$species[chlB_mass_valid],
+                           Project=meta(trans.train)$project[chlB_mass_valid],
+                           measured=meta(trans.train)$chlB_mass[chlB_mass_valid],
+                           val_pred=chlB_mass_CVmodel$validation$pred[,,ncomp_chlB_mass_CVmodel])
 ggplot(chlB_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
@@ -305,14 +305,14 @@ ggplot(chlB_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   ggtitle("Predicting chlB from fresh-leaf spectra")
 
 car_mass_CVmodel<-plsr(meta(trans.train)$car_mass~as.matrix(trans.train),
-                         ncomp=30,method = "oscorespls",validation="CV",segments=10)
+                       ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_car_mass_CVmodel <- selectNcomp(car_mass_CVmodel, method = "onesigma", plot = FALSE)
 car_mass_valid <- which(!is.na(meta(trans.train)$car_mass))
 car_mass_pred<-data.frame(ID=meta(trans.train)$sample_id[car_mass_valid],
-                            Species=meta(trans.train)$species[car_mass_valid],
-                            Project=meta(trans.train)$project[car_mass_valid],
-                            measured=meta(trans.train)$car_mass[car_mass_valid],
-                            val_pred=car_mass_CVmodel$validation$pred[,,ncomp_car_mass_CVmodel])
+                          Species=meta(trans.train)$species[car_mass_valid],
+                          Project=meta(trans.train)$project[car_mass_valid],
+                          measured=meta(trans.train)$car_mass[car_mass_valid],
+                          val_pred=car_mass_CVmodel$validation$pred[,,ncomp_car_mass_CVmodel])
 ggplot(car_mass_pred,aes(y=measured,x=val_pred,color=Project))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
@@ -517,11 +517,11 @@ ggplot(Zn_mass_pred,aes(y=measured,x=val_pred,color=Project))+
 ## VIP from calibration models
 
 VIP1.df<-data.frame(Cmass=VIP(Cmass_CVmodel)[ncomp_Cmass_CVmodel,],
-                   Nmass=VIP(Nmass_CVmodel)[ncomp_Nmass_CVmodel,],
-                   LMA=VIP(LMA_CVmodel)[ncomp_LMA_CVmodel,],
-                   LDMC=VIP(LDMC_CVmodel)[ncomp_LDMC_CVmodel,],
-                   EWT=VIP(EWT_CVmodel)[ncomp_EWT_CVmodel,],
-                   wavelength=400:2400)
+                    Nmass=VIP(Nmass_CVmodel)[ncomp_Nmass_CVmodel,],
+                    LMA=VIP(LMA_CVmodel)[ncomp_LMA_CVmodel,],
+                    LDMC=VIP(LDMC_CVmodel)[ncomp_LDMC_CVmodel,],
+                    EWT=VIP(EWT_CVmodel)[ncomp_EWT_CVmodel,],
+                    wavelength=400:2400)
 
 VIP2.df<-data.frame(NDFmass=VIP(NDFmass_CVmodel)[ncomp_NDFmass_CVmodel,],
                     ADFmass=VIP(ADFmass_CVmodel)[ncomp_ADFmass_CVmodel,],
@@ -614,29 +614,29 @@ for(i in 1:nreps){
   val.jack<-trans.train[test.jack]
   
   solubles_mass.jack<-plsr(meta(calib.jack)$solubles_mass~as.matrix(calib.jack),
-                     ncomp=30,method = "oscorespls",validation="none")
+                           ncomp=30,method = "oscorespls",validation="none")
   hemicellulose_mass.jack<-plsr(meta(calib.jack)$hemicellulose_mass~as.matrix(calib.jack),
-                     ncomp=30,method = "oscorespls",validation="none")
+                                ncomp=30,method = "oscorespls",validation="none")
   cellulose_mass.jack<-plsr(meta(calib.jack)$cellulose_mass~as.matrix(calib.jack),
-                     ncomp=30,method = "oscorespls",validation="none")
+                            ncomp=30,method = "oscorespls",validation="none")
   lignin_mass.jack<-plsr(meta(calib.jack)$lignin_mass~as.matrix(calib.jack),
-                     ncomp=30,method = "oscorespls",validation="none")
+                         ncomp=30,method = "oscorespls",validation="none")
   chlA_mass.jack<-plsr(meta(calib.jack)$chlA_mass~as.matrix(calib.jack),
-                           ncomp=30,method = "oscorespls",validation="none")
+                       ncomp=30,method = "oscorespls",validation="none")
   chlB_mass.jack<-plsr(meta(calib.jack)$chlB_mass~as.matrix(calib.jack),
-                           ncomp=30,method = "oscorespls",validation="none")
+                       ncomp=30,method = "oscorespls",validation="none")
   car_mass.jack<-plsr(meta(calib.jack)$car_mass~as.matrix(calib.jack),
-                           ncomp=30,method = "oscorespls",validation="none")
+                      ncomp=30,method = "oscorespls",validation="none")
   Cmass.jack<-plsr(meta(calib.jack)$Cmass~as.matrix(calib.jack),
-                          ncomp=30,method = "oscorespls",validation="none")
+                   ncomp=30,method = "oscorespls",validation="none")
   Nmass.jack<-plsr(meta(calib.jack)$Nmass~as.matrix(calib.jack),
-                          ncomp=30,method = "oscorespls",validation="none")
+                   ncomp=30,method = "oscorespls",validation="none")
   EWT.jack<-plsr(meta(calib.jack)$EWT~as.matrix(calib.jack),
                  ncomp=30,method = "oscorespls",validation="none")
   LMA.jack<-plsr(meta(calib.jack)$LMA~as.matrix(calib.jack),
-                         ncomp=30,method = "oscorespls",validation="none")
+                 ncomp=30,method = "oscorespls",validation="none")
   LDMC.jack<-plsr(meta(calib.jack)$LDMC~as.matrix(calib.jack),
-                          ncomp=30,method = "oscorespls",validation="none")
+                  ncomp=30,method = "oscorespls",validation="none")
   Al_mass.jack<-plsr(meta(calib.jack)$Al_mass~as.matrix(calib.jack),
                      ncomp=30,method = "oscorespls",validation="none")
   Ca_mass.jack<-plsr(meta(calib.jack)$Ca_mass~as.matrix(calib.jack),
@@ -661,75 +661,75 @@ for(i in 1:nreps){
   solubles_mass.jack.val.pred<-as.vector(predict(solubles_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_solubles_mass_CVmodel)[,,1])
   solubles_mass.jack.val.fit<-lm(solubles_mass.jack.val.pred~meta(val.jack)$solubles_mass)
   solubles_mass.jack.stats[[i]]<-c(R2=summary(solubles_mass.jack.val.fit)$r.squared,
-                             RMSE=RMSD(meta(val.jack)$solubles_mass,solubles_mass.jack.val.pred),
-                             max.val=max(meta(val.jack)$solubles_mass,na.rm=T),
-                             min.val=min(meta(val.jack)$solubles_mass,na.rm=T),
-                             bias=mean(solubles_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$solubles_mass,na.rm=T))
+                                   RMSE=RMSD(meta(val.jack)$solubles_mass,solubles_mass.jack.val.pred),
+                                   max.val=max(meta(val.jack)$solubles_mass,na.rm=T),
+                                   min.val=min(meta(val.jack)$solubles_mass,na.rm=T),
+                                   bias=mean(solubles_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$solubles_mass,na.rm=T))
   
   hemicellulose_mass.jack.val.pred<-as.vector(predict(hemicellulose_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_hemicellulose_mass_CVmodel)[,,1])
   hemicellulose_mass.jack.val.fit<-lm(hemicellulose_mass.jack.val.pred~meta(val.jack)$hemicellulose_mass)
   hemicellulose_mass.jack.stats[[i]]<-c(R2=summary(hemicellulose_mass.jack.val.fit)$r.squared,
-                             RMSE=RMSD(meta(val.jack)$hemicellulose_mass,hemicellulose_mass.jack.val.pred),
-                             max.val=max(meta(val.jack)$hemicellulose_mass,na.rm=T),
-                             min.val=min(meta(val.jack)$hemicellulose_mass,na.rm=T),
-                             bias=mean(hemicellulose_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$hemicellulose_mass,na.rm=T))
+                                        RMSE=RMSD(meta(val.jack)$hemicellulose_mass,hemicellulose_mass.jack.val.pred),
+                                        max.val=max(meta(val.jack)$hemicellulose_mass,na.rm=T),
+                                        min.val=min(meta(val.jack)$hemicellulose_mass,na.rm=T),
+                                        bias=mean(hemicellulose_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$hemicellulose_mass,na.rm=T))
   
   cellulose_mass.jack.val.pred<-as.vector(predict(cellulose_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_cellulose_mass_CVmodel)[,,1])
   cellulose_mass.jack.val.fit<-lm(cellulose_mass.jack.val.pred~meta(val.jack)$cellulose_mass)
   cellulose_mass.jack.stats[[i]]<-c(R2=summary(cellulose_mass.jack.val.fit)$r.squared,
-                             RMSE=RMSD(meta(val.jack)$cellulose_mass,cellulose_mass.jack.val.pred),
-                             max.val=max(meta(val.jack)$cellulose_mass,na.rm=T),
-                             min.val=min(meta(val.jack)$cellulose_mass,na.rm=T),
-                             bias=mean(cellulose_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$cellulose_mass,na.rm=T))
+                                    RMSE=RMSD(meta(val.jack)$cellulose_mass,cellulose_mass.jack.val.pred),
+                                    max.val=max(meta(val.jack)$cellulose_mass,na.rm=T),
+                                    min.val=min(meta(val.jack)$cellulose_mass,na.rm=T),
+                                    bias=mean(cellulose_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$cellulose_mass,na.rm=T))
   
   lignin_mass.jack.val.pred<-as.vector(predict(lignin_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_lignin_mass_CVmodel)[,,1])
   lignin_mass.jack.val.fit<-lm(lignin_mass.jack.val.pred~meta(val.jack)$lignin_mass)
   lignin_mass.jack.stats[[i]]<-c(R2=summary(lignin_mass.jack.val.fit)$r.squared,
-                             RMSE=RMSD(meta(val.jack)$lignin_mass,lignin_mass.jack.val.pred),
-                             max.val=max(meta(val.jack)$lignin_mass,na.rm=T),
-                             min.val=min(meta(val.jack)$lignin_mass,na.rm=T),
-                             bias=mean(lignin_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$lignin_mass,na.rm=T))
+                                 RMSE=RMSD(meta(val.jack)$lignin_mass,lignin_mass.jack.val.pred),
+                                 max.val=max(meta(val.jack)$lignin_mass,na.rm=T),
+                                 min.val=min(meta(val.jack)$lignin_mass,na.rm=T),
+                                 bias=mean(lignin_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$lignin_mass,na.rm=T))
   
   chlA_mass.jack.val.pred<-as.vector(predict(chlA_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_chlA_mass_CVmodel)[,,1])
   chlA_mass.jack.val.fit<-lm(chlA_mass.jack.val.pred~meta(val.jack)$chlA_mass)
   chlA_mass.jack.stats[[i]]<-c(R2=summary(chlA_mass.jack.val.fit)$r.squared,
-                                   RMSE=RMSD(meta(val.jack)$chlA_mass,chlA_mass.jack.val.pred),
-                                   max.val=max(meta(val.jack)$chlA_mass,na.rm=T),
-                                   min.val=min(meta(val.jack)$chlA_mass,na.rm=T),
-                                   bias=mean(chlA_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$chlA_mass,na.rm=T))
+                               RMSE=RMSD(meta(val.jack)$chlA_mass,chlA_mass.jack.val.pred),
+                               max.val=max(meta(val.jack)$chlA_mass,na.rm=T),
+                               min.val=min(meta(val.jack)$chlA_mass,na.rm=T),
+                               bias=mean(chlA_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$chlA_mass,na.rm=T))
   
   chlB_mass.jack.val.pred<-as.vector(predict(chlB_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_chlB_mass_CVmodel)[,,1])
   chlB_mass.jack.val.fit<-lm(chlB_mass.jack.val.pred~meta(val.jack)$chlB_mass)
   chlB_mass.jack.stats[[i]]<-c(R2=summary(chlB_mass.jack.val.fit)$r.squared,
-                                   RMSE=RMSD(meta(val.jack)$chlB_mass,chlB_mass.jack.val.pred),
-                                   max.val=max(meta(val.jack)$chlB_mass,na.rm=T),
-                                   min.val=min(meta(val.jack)$chlB_mass,na.rm=T),
-                                   bias=mean(chlB_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$chlB_mass,na.rm=T))
+                               RMSE=RMSD(meta(val.jack)$chlB_mass,chlB_mass.jack.val.pred),
+                               max.val=max(meta(val.jack)$chlB_mass,na.rm=T),
+                               min.val=min(meta(val.jack)$chlB_mass,na.rm=T),
+                               bias=mean(chlB_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$chlB_mass,na.rm=T))
   
   car_mass.jack.val.pred<-as.vector(predict(car_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_car_mass_CVmodel)[,,1])
   car_mass.jack.val.fit<-lm(car_mass.jack.val.pred~meta(val.jack)$car_mass)
   car_mass.jack.stats[[i]]<-c(R2=summary(car_mass.jack.val.fit)$r.squared,
-                                   RMSE=RMSD(meta(val.jack)$car_mass,car_mass.jack.val.pred),
-                                   max.val=max(meta(val.jack)$car_mass,na.rm=T),
-                                   min.val=min(meta(val.jack)$car_mass,na.rm=T),
-                                   bias=mean(car_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$car_mass,na.rm=T))
+                              RMSE=RMSD(meta(val.jack)$car_mass,car_mass.jack.val.pred),
+                              max.val=max(meta(val.jack)$car_mass,na.rm=T),
+                              min.val=min(meta(val.jack)$car_mass,na.rm=T),
+                              bias=mean(car_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$car_mass,na.rm=T))
   
   Cmass.jack.val.pred<-as.vector(predict(Cmass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Cmass_CVmodel)[,,1])
   Cmass.jack.val.fit<-lm(Cmass.jack.val.pred~meta(val.jack)$Cmass)
   Cmass.jack.stats[[i]]<-c(R2=summary(Cmass.jack.val.fit)$r.squared,
-                                  RMSE=RMSD(meta(val.jack)$Cmass,Cmass.jack.val.pred),
-                                  max.val=max(meta(val.jack)$Cmass,na.rm=T),
-                                  min.val=min(meta(val.jack)$Cmass,na.rm=T),
-                                  bias=mean(Cmass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Cmass,na.rm=T))
+                           RMSE=RMSD(meta(val.jack)$Cmass,Cmass.jack.val.pred),
+                           max.val=max(meta(val.jack)$Cmass,na.rm=T),
+                           min.val=min(meta(val.jack)$Cmass,na.rm=T),
+                           bias=mean(Cmass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Cmass,na.rm=T))
   
   Nmass.jack.val.pred<-as.vector(predict(Nmass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Nmass_CVmodel)[,,1])
   Nmass.jack.val.fit<-lm(Nmass.jack.val.pred~meta(val.jack)$Nmass)
   Nmass.jack.stats[[i]]<-c(R2=summary(Nmass.jack.val.fit)$r.squared,
-                                  RMSE=RMSD(meta(val.jack)$Nmass,Nmass.jack.val.pred),
-                                  max.val=max(meta(val.jack)$Nmass,na.rm=T),
-                                  min.val=min(meta(val.jack)$Nmass,na.rm=T),
-                                  bias=mean(Nmass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Nmass,na.rm=T))
-
+                           RMSE=RMSD(meta(val.jack)$Nmass,Nmass.jack.val.pred),
+                           max.val=max(meta(val.jack)$Nmass,na.rm=T),
+                           min.val=min(meta(val.jack)$Nmass,na.rm=T),
+                           bias=mean(Nmass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Nmass,na.rm=T))
+  
   EWT.jack.val.pred<-as.vector(predict(EWT.jack,newdata=as.matrix(val.jack),ncomp=ncomp_EWT_CVmodel)[,,1])
   EWT.jack.val.fit<-lm(EWT.jack.val.pred~meta(val.jack)$EWT)
   EWT.jack.stats[[i]]<-c(R2=summary(EWT.jack.val.fit)$r.squared,
@@ -737,23 +737,23 @@ for(i in 1:nreps){
                          max.val=max(meta(val.jack)$EWT,na.rm=T),
                          min.val=min(meta(val.jack)$EWT,na.rm=T),
                          bias=mean(EWT.jack.val.pred,na.rm=T)-mean(meta(val.jack)$EWT,na.rm=T))
-    
+  
   LMA.jack.val.pred<-as.vector(predict(LMA.jack,newdata=as.matrix(val.jack),ncomp=ncomp_LMA_CVmodel)[,,1])
   LMA.jack.val.fit<-lm(LMA.jack.val.pred~meta(val.jack)$LMA)
   LMA.jack.stats[[i]]<-c(R2=summary(LMA.jack.val.fit)$r.squared,
-                                 RMSE=RMSD(meta(val.jack)$LMA,LMA.jack.val.pred),
-                                 max.val=max(meta(val.jack)$LMA,na.rm=T),
-                                 min.val=min(meta(val.jack)$LMA,na.rm=T),
-                                 bias=mean(LMA.jack.val.pred,na.rm=T)-mean(meta(val.jack)$LMA,na.rm=T))
+                         RMSE=RMSD(meta(val.jack)$LMA,LMA.jack.val.pred),
+                         max.val=max(meta(val.jack)$LMA,na.rm=T),
+                         min.val=min(meta(val.jack)$LMA,na.rm=T),
+                         bias=mean(LMA.jack.val.pred,na.rm=T)-mean(meta(val.jack)$LMA,na.rm=T))
   
   LDMC.jack.val.pred<-as.vector(predict(LDMC.jack,newdata=as.matrix(val.jack),ncomp=ncomp_LDMC_CVmodel)[,,1])
   LDMC.jack.val.fit<-lm(LDMC.jack.val.pred~meta(val.jack)$LDMC)
   LDMC.jack.stats[[i]]<-c(R2=summary(LDMC.jack.val.fit)$r.squared,
-                                  RMSE=RMSD(meta(val.jack)$LDMC,LDMC.jack.val.pred),
-                                  max.val=max(meta(val.jack)$LDMC,na.rm=T),
-                                  min.val=min(meta(val.jack)$LDMC,na.rm=T),
-                                  bias=mean(LDMC.jack.val.pred,na.rm=T)-mean(meta(val.jack)$LDMC,na.rm=T))
-
+                          RMSE=RMSD(meta(val.jack)$LDMC,LDMC.jack.val.pred),
+                          max.val=max(meta(val.jack)$LDMC,na.rm=T),
+                          min.val=min(meta(val.jack)$LDMC,na.rm=T),
+                          bias=mean(LDMC.jack.val.pred,na.rm=T)-mean(meta(val.jack)$LDMC,na.rm=T))
+  
   Al_mass.jack.val.pred<-as.vector(predict(Al_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Al_mass_CVmodel)[,,1])
   Al_mass.jack.val.fit<-lm(Al_mass.jack.val.pred~meta(val.jack)$Al_mass)
   Al_mass.jack.stats[[i]]<-c(R2=summary(Al_mass.jack.val.fit)$r.squared,
