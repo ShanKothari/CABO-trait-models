@@ -16,6 +16,7 @@ ref.test<-readRDS("ProcessedSpectra/ref_test.rds")
 ## try Type II regression?
 ## eliminate outliers for Cu and Fe
 ## add together Chl a and b?
+## instead of 1.96 * SD, use 2.5 and 97.5 quantiles for error bars
 
 #########################################
 ## define functions
@@ -552,153 +553,134 @@ for(i in 1:nreps){
   solubles_area.jack.val.fit<-lm(solubles_area.jack.val.pred~meta(val.jack)$solubles_area)
   solubles_area.jack.stats[[i]]<-c(R2=summary(solubles_area.jack.val.fit)$r.squared,
                                    RMSE=RMSD(meta(val.jack)$solubles_area,solubles_area.jack.val.pred),
-                                   max.val=max(meta(val.jack)$solubles_area,na.rm=T),
-                                   min.val=min(meta(val.jack)$solubles_area,na.rm=T),
+                                   percentRMSE=percentRMSD(meta(val.jack)$solubles_area,solubles_area.jack.val.pred,0.025,0.975),
                                    bias=mean(solubles_area.jack.val.pred,na.rm=T)-mean(meta(val.jack)$solubles_area,na.rm=T))
   
-  hemicellulose_area.jack.val.pred<-as.vector(predict(hemicellulose_area.jack,newdata=as.matrix(val.jack),ncomp=ncomp_hemicellulose_area_CVmodel)[,,1])
+  hemicellulose_area.jack.val.pred<-as.vector(predict(hemicellulose_area.jack,newdata=as.matrix(val.jack),
+                                                      ncomp=ncomp_hemicellulose_area_CVmodel)[,,1])
   hemicellulose_area.jack.val.fit<-lm(hemicellulose_area.jack.val.pred~meta(val.jack)$hemicellulose_area)
   hemicellulose_area.jack.stats[[i]]<-c(R2=summary(hemicellulose_area.jack.val.fit)$r.squared,
                                         RMSE=RMSD(meta(val.jack)$hemicellulose_area,hemicellulose_area.jack.val.pred),
-                                        max.val=max(meta(val.jack)$hemicellulose_area,na.rm=T),
-                                        min.val=min(meta(val.jack)$hemicellulose_area,na.rm=T),
+                                        percentRMSE=percentRMSD(meta(val.jack)$hemicellulose_area,hemicellulose_area.jack.val.pred,0.025,0.975),
                                         bias=mean(hemicellulose_area.jack.val.pred,na.rm=T)-mean(meta(val.jack)$hemicellulose_area,na.rm=T))
   
   cellulose_area.jack.val.pred<-as.vector(predict(cellulose_area.jack,newdata=as.matrix(val.jack),ncomp=ncomp_cellulose_area_CVmodel)[,,1])
   cellulose_area.jack.val.fit<-lm(cellulose_area.jack.val.pred~meta(val.jack)$cellulose_area)
   cellulose_area.jack.stats[[i]]<-c(R2=summary(cellulose_area.jack.val.fit)$r.squared,
                                     RMSE=RMSD(meta(val.jack)$cellulose_area,cellulose_area.jack.val.pred),
-                                    max.val=max(meta(val.jack)$cellulose_area,na.rm=T),
-                                    min.val=min(meta(val.jack)$cellulose_area,na.rm=T),
+                                    percentRMSE=percentRMSD(meta(val.jack)$cellulose_area,cellulose_area.jack.val.pred,0.025,0.975),
                                     bias=mean(cellulose_area.jack.val.pred,na.rm=T)-mean(meta(val.jack)$cellulose_area,na.rm=T))
   
   lignin_area.jack.val.pred<-as.vector(predict(lignin_area.jack,newdata=as.matrix(val.jack),ncomp=ncomp_lignin_area_CVmodel)[,,1])
   lignin_area.jack.val.fit<-lm(lignin_area.jack.val.pred~meta(val.jack)$lignin_area)
   lignin_area.jack.stats[[i]]<-c(R2=summary(lignin_area.jack.val.fit)$r.squared,
                                  RMSE=RMSD(meta(val.jack)$lignin_area,lignin_area.jack.val.pred),
-                                 max.val=max(meta(val.jack)$lignin_area,na.rm=T),
-                                 min.val=min(meta(val.jack)$lignin_area,na.rm=T),
+                                 percentRMSE=percentRMSD(meta(val.jack)$lignin_area,lignin_area.jack.val.pred,0.025,0.975),
                                  bias=mean(lignin_area.jack.val.pred,na.rm=T)-mean(meta(val.jack)$lignin_area,na.rm=T))
   
   chlA_area.jack.val.pred<-as.vector(predict(chlA_area.jack,newdata=as.matrix(val.jack),ncomp=ncomp_chlA_area_CVmodel)[,,1])
   chlA_area.jack.val.fit<-lm(chlA_area.jack.val.pred~meta(val.jack)$chlA_area)
   chlA_area.jack.stats[[i]]<-c(R2=summary(chlA_area.jack.val.fit)$r.squared,
                                RMSE=RMSD(meta(val.jack)$chlA_area,chlA_area.jack.val.pred),
-                               max.val=max(meta(val.jack)$chlA_area,na.rm=T),
-                               min.val=min(meta(val.jack)$chlA_area,na.rm=T),
+                               percentRMSE=percentRMSD(meta(val.jack)$chlA_area,chlA_area.jack.val.pred,0.025,0.975),
                                bias=mean(chlA_area.jack.val.pred,na.rm=T)-mean(meta(val.jack)$chlA_area,na.rm=T))
   
   chlB_area.jack.val.pred<-as.vector(predict(chlB_area.jack,newdata=as.matrix(val.jack),ncomp=ncomp_chlB_area_CVmodel)[,,1])
   chlB_area.jack.val.fit<-lm(chlB_area.jack.val.pred~meta(val.jack)$chlB_area)
   chlB_area.jack.stats[[i]]<-c(R2=summary(chlB_area.jack.val.fit)$r.squared,
                                RMSE=RMSD(meta(val.jack)$chlB_area,chlB_area.jack.val.pred),
-                               max.val=max(meta(val.jack)$chlB_area,na.rm=T),
-                               min.val=min(meta(val.jack)$chlB_area,na.rm=T),
+                               percentRMSE=percentRMSD(meta(val.jack)$chlB_area,chlB_area.jack.val.pred,0.025,0.975),
                                bias=mean(chlB_area.jack.val.pred,na.rm=T)-mean(meta(val.jack)$chlB_area,na.rm=T))
   
   car_area.jack.val.pred<-as.vector(predict(car_area.jack,newdata=as.matrix(val.jack),ncomp=ncomp_car_area_CVmodel)[,,1])
   car_area.jack.val.fit<-lm(car_area.jack.val.pred~meta(val.jack)$car_area)
   car_area.jack.stats[[i]]<-c(R2=summary(car_area.jack.val.fit)$r.squared,
                               RMSE=RMSD(meta(val.jack)$car_area,car_area.jack.val.pred),
-                              max.val=max(meta(val.jack)$car_area,na.rm=T),
-                              min.val=min(meta(val.jack)$car_area,na.rm=T),
+                              percentRMSE=percentRMSD(meta(val.jack)$car_area,car_area.jack.val.pred,0.025,0.975),
                               bias=mean(car_area.jack.val.pred,na.rm=T)-mean(meta(val.jack)$car_area,na.rm=T))
   
   Carea.jack.val.pred<-as.vector(predict(Carea.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Carea_CVmodel)[,,1])
   Carea.jack.val.fit<-lm(Carea.jack.val.pred~meta(val.jack)$Carea)
   Carea.jack.stats[[i]]<-c(R2=summary(Carea.jack.val.fit)$r.squared,
                            RMSE=RMSD(meta(val.jack)$Carea,Carea.jack.val.pred),
-                           max.val=max(meta(val.jack)$Carea,na.rm=T),
-                           min.val=min(meta(val.jack)$Carea,na.rm=T),
+                           percentRMSE=percentRMSD(meta(val.jack)$Carea,Carea.jack.val.pred,0.025,0.975),
                            bias=mean(Carea.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Carea,na.rm=T))
   
   Narea.jack.val.pred<-as.vector(predict(Narea.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Narea_CVmodel)[,,1])
   Narea.jack.val.fit<-lm(Narea.jack.val.pred~meta(val.jack)$Narea)
   Narea.jack.stats[[i]]<-c(R2=summary(Narea.jack.val.fit)$r.squared,
                            RMSE=RMSD(meta(val.jack)$Narea,Narea.jack.val.pred),
-                           max.val=max(meta(val.jack)$Narea,na.rm=T),
-                           min.val=min(meta(val.jack)$Narea,na.rm=T),
+                           percentRMSE=percentRMSD(meta(val.jack)$Narea,Narea.jack.val.pred,0.025,0.975),
                            bias=mean(Narea.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Narea,na.rm=T))
   
-
   Al_area.jack.val.pred<-as.vector(predict(Al_area.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Al_area_CVmodel)[,,1])
   Al_area.jack.val.fit<-lm(Al_area.jack.val.pred~meta(val.jack)$Al_area)
   Al_area.jack.stats[[i]]<-c(R2=summary(Al_area.jack.val.fit)$r.squared,
                              RMSE=RMSD(meta(val.jack)$Al_area,Al_area.jack.val.pred),
-                             max.val=max(meta(val.jack)$Al_area,na.rm=T),
-                             min.val=min(meta(val.jack)$Al_area,na.rm=T),
+                             percentRMSE=percentRMSD(meta(val.jack)$Al_area,Al_area.jack.val.pred,0.025,0.975),
                              bias=mean(Al_area.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Al_area,na.rm=T))
   
   Ca_area.jack.val.pred<-as.vector(predict(Ca_area.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Ca_area_CVmodel)[,,1])
   Ca_area.jack.val.fit<-lm(Ca_area.jack.val.pred~meta(val.jack)$Ca_area)
   Ca_area.jack.stats[[i]]<-c(R2=summary(Ca_area.jack.val.fit)$r.squared,
                              RMSE=RMSD(meta(val.jack)$Ca_area,Ca_area.jack.val.pred),
-                             max.val=max(meta(val.jack)$Ca_area,na.rm=T),
-                             min.val=min(meta(val.jack)$Ca_area,na.rm=T),
+                             percentRMSE=percentRMSD(meta(val.jack)$Ca_area,Ca_area.jack.val.pred,0.025,0.975),
                              bias=mean(Ca_area.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Ca_area,na.rm=T))
   
   Cu_area.jack.val.pred<-as.vector(predict(Cu_area.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Cu_area_CVmodel)[,,1])
   Cu_area.jack.val.fit<-lm(Cu_area.jack.val.pred~meta(val.jack)$Cu_area)
   Cu_area.jack.stats[[i]]<-c(R2=summary(Cu_area.jack.val.fit)$r.squared,
                              RMSE=RMSD(meta(val.jack)$Cu_area,Cu_area.jack.val.pred),
-                             max.val=max(meta(val.jack)$Cu_area,na.rm=T),
-                             min.val=min(meta(val.jack)$Cu_area,na.rm=T),
+                             percentRMSE=percentRMSD(meta(val.jack)$Cu_area,Cu_area.jack.val.pred,0.025,0.975),
                              bias=mean(Cu_area.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Cu_area,na.rm=T))
   
   Fe_area.jack.val.pred<-as.vector(predict(Fe_area.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Fe_area_CVmodel)[,,1])
   Fe_area.jack.val.fit<-lm(Fe_area.jack.val.pred~meta(val.jack)$Fe_area)
   Fe_area.jack.stats[[i]]<-c(R2=summary(Fe_area.jack.val.fit)$r.squared,
                              RMSE=RMSD(meta(val.jack)$Fe_area,Fe_area.jack.val.pred),
-                             max.val=max(meta(val.jack)$Fe_area,na.rm=T),
-                             min.val=min(meta(val.jack)$Fe_area,na.rm=T),
+                             percentRMSE=percentRMSD(meta(val.jack)$Fe_area,Fe_area.jack.val.pred,0.025,0.975),
                              bias=mean(Fe_area.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Fe_area,na.rm=T))
   
   K_area.jack.val.pred<-as.vector(predict(K_area.jack,newdata=as.matrix(val.jack),ncomp=ncomp_K_area_CVmodel)[,,1])
   K_area.jack.val.fit<-lm(K_area.jack.val.pred~meta(val.jack)$K_area)
   K_area.jack.stats[[i]]<-c(R2=summary(K_area.jack.val.fit)$r.squared,
                             RMSE=RMSD(meta(val.jack)$K_area,K_area.jack.val.pred),
-                            max.val=max(meta(val.jack)$K_area,na.rm=T),
-                            min.val=min(meta(val.jack)$K_area,na.rm=T),
+                            percentRMSE=percentRMSD(meta(val.jack)$K_area,K_area.jack.val.pred,0.025,0.975),
                             bias=mean(K_area.jack.val.pred,na.rm=T)-mean(meta(val.jack)$K_area,na.rm=T))
   
   Mg_area.jack.val.pred<-as.vector(predict(Mg_area.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Mg_area_CVmodel)[,,1])
   Mg_area.jack.val.fit<-lm(Mg_area.jack.val.pred~meta(val.jack)$Mg_area)
   Mg_area.jack.stats[[i]]<-c(R2=summary(Mg_area.jack.val.fit)$r.squared,
                              RMSE=RMSD(meta(val.jack)$Mg_area,Mg_area.jack.val.pred),
-                             max.val=max(meta(val.jack)$Mg_area,na.rm=T),
-                             min.val=min(meta(val.jack)$Mg_area,na.rm=T),
+                             percentRMSE=percentRMSD(meta(val.jack)$Mg_area,Mg_area.jack.val.pred,0.025,0.975),
                              bias=mean(Mg_area.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Mg_area,na.rm=T))
   
   Mn_area.jack.val.pred<-as.vector(predict(Mn_area.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Mn_area_CVmodel)[,,1])
   Mn_area.jack.val.fit<-lm(Mn_area.jack.val.pred~meta(val.jack)$Mn_area)
   Mn_area.jack.stats[[i]]<-c(R2=summary(Mn_area.jack.val.fit)$r.squared,
                              RMSE=RMSD(meta(val.jack)$Mn_area,Mn_area.jack.val.pred),
-                             max.val=max(meta(val.jack)$Mn_area,na.rm=T),
-                             min.val=min(meta(val.jack)$Mn_area,na.rm=T),
+                             percentRMSE=percentRMSD(meta(val.jack)$Mn_area,Mn_area.jack.val.pred,0.025,0.975),
                              bias=mean(Mn_area.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Mn_area,na.rm=T))
   
   Na_area.jack.val.pred<-as.vector(predict(Na_area.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Na_area_CVmodel)[,,1])
   Na_area.jack.val.fit<-lm(Na_area.jack.val.pred~meta(val.jack)$Na_area)
   Na_area.jack.stats[[i]]<-c(R2=summary(Na_area.jack.val.fit)$r.squared,
                              RMSE=RMSD(meta(val.jack)$Na_area,Na_area.jack.val.pred),
-                             max.val=max(meta(val.jack)$Na_area,na.rm=T),
-                             min.val=min(meta(val.jack)$Na_area,na.rm=T),
+                             percentRMSE=percentRMSD(meta(val.jack)$Na_area,Na_area.jack.val.pred,0.025,0.975),
                              bias=mean(Na_area.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Na_area,na.rm=T))
   
   P_area.jack.val.pred<-as.vector(predict(P_area.jack,newdata=as.matrix(val.jack),ncomp=ncomp_P_area_CVmodel)[,,1])
   P_area.jack.val.fit<-lm(P_area.jack.val.pred~meta(val.jack)$P_area)
   P_area.jack.stats[[i]]<-c(R2=summary(P_area.jack.val.fit)$r.squared,
                             RMSE=RMSD(meta(val.jack)$P_area,P_area.jack.val.pred),
-                            max.val=max(meta(val.jack)$P_area,na.rm=T),
-                            min.val=min(meta(val.jack)$P_area,na.rm=T),
+                            percentRMSE=percentRMSD(meta(val.jack)$P_area,P_area.jack.val.pred,0.025,0.975),
                             bias=mean(P_area.jack.val.pred,na.rm=T)-mean(meta(val.jack)$P_area,na.rm=T))
   
   Zn_area.jack.val.pred<-as.vector(predict(Zn_area.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Zn_area_CVmodel)[,,1])
   Zn_area.jack.val.fit<-lm(Zn_area.jack.val.pred~meta(val.jack)$Zn_area)
   Zn_area.jack.stats[[i]]<-c(R2=summary(Zn_area.jack.val.fit)$r.squared,
                              RMSE=RMSD(meta(val.jack)$Zn_area,Zn_area.jack.val.pred),
-                             max.val=max(meta(val.jack)$Zn_area,na.rm=T),
-                             min.val=min(meta(val.jack)$Zn_area,na.rm=T),
+                             percentRMSE=percentRMSD(meta(val.jack)$Zn_area,Zn_area.jack.val.pred,0.025,0.975),
                              bias=mean(Zn_area.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Zn_area,na.rm=T))
   
   solubles_area.jack.coefs[[i]]<-as.vector(coef(solubles_area.jack,ncomp=ncomp_solubles_area_CVmodel,intercept=TRUE))
