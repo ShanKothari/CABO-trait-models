@@ -15,8 +15,8 @@ trans.traits<-readRDS("ProcessedSpectra/all_trans_and_traits.rds")
 abs.traits<-readRDS("ProcessedSpectra/all_abs_and_traits.rds")
 
 ## check that IDs are the same and in the same order
-if(meta(all.ref)$sample_id != meta(all.trans)$sample_id ||
-   meta(all.ref)$sample_id != meta(all.abs)$sample_id){
+if(meta(ref.traits)$sample_id != meta(trans.traits)$sample_id ||
+   meta(ref.traits)$sample_id != meta(abs.traits)$sample_id){
   stop("sample ids not the same")
 }
 
