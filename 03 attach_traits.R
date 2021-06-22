@@ -4,6 +4,7 @@ library(spectrolab)
 library(ggplot2)
 library(reshape2)
 library(stringr)
+library(patchwork)
 
 all.ref<-readRDS("ProcessedSpectra/all_ref.rds")
 all.trans<-readRDS("ProcessedSpectra/all_trans.rds")
@@ -123,8 +124,7 @@ meta(all.ref)$family[meta(all.ref)$species=="Agonis flexuosa (Willd.) Sweet"]<-"
 meta(all.ref)$genus[meta(all.ref)$species=="Agonis flexuosa (Willd.) Sweet"]<-"Agonis"
 
 meta(all.ref)$functional.group<-as.character(meta(all.ref)$growth.form)
-meta(all.ref)$functional.group[meta(all.ref)$family %in% c("Poaceae","Cyperaceae","Juncaceae")]<-"graminoid"
-meta(all.ref)$functional.group[meta(all.ref)$family=="Fabaceae"]<-"legume"
+meta(all.ref)$functional.group[meta(all.ref)$family %in% c("Poaceae","Cyperaceae","Juncaceae","Typhaceae")]<-"graminoid"
 meta(all.ref)$functional.group[meta(all.ref)$family %in% c("Pinaceae","Cupressaceae")]<-"conifer"
 
 ## attach to transmittance
@@ -420,6 +420,7 @@ ICP_all<-rbind(ICP_boxes,ICP_Warren)
 
 ICP_all$Al[ICP_all$Sample_id=="9157296"]<-NA
 ICP_all$Fe[ICP_all$Sample_id=="9157296"]<-NA
+ICP_all$Cu[ICP_all$Sample_id=="12176890"]<-NA
 ICP_all$Al[ICP_all$Al<0]<-0
 ICP_all$Na[ICP_all$Na<0]<-0
 
@@ -584,3 +585,83 @@ meta(all.ref)$Zn_norm<-resid(Zn_area_norm)
 saveRDS(all.ref,"ProcessedSpectra/all_ref_and_traits.rds")
 saveRDS(all.trans,"ProcessedSpectra/all_trans_and_traits.rds")
 saveRDS(all.abs,"ProcessedSpectra/all_abs_and_traits.rds")
+
+################
+## plotting
+
+ref_quantiles<-quantile(all.ref[meta(all.ref)$project!="2019-Pardo-MSc-UdeM"],
+                        probs=c(0.025,0.25,0.5,0.75,0.975))
+trans_quantiles<-quantile(all.trans[meta(all.trans)$project!="2019-Pardo-MSc-UdeM"],
+                          probs=c(0.025,0.25,0.5,0.75,0.975))
+abs_quantiles<-quantile(all.abs[meta(all.abs)$project!="2019-Pardo-MSc-UdeM"],
+                        probs=c(0.025,0.25,0.5,0.75,0.975))
+
+ref_CV<-apply(all.ref,2,function(x) sd(x)/mean(x))
+trans_CV<-apply(all.trans,2,function(x) sd(x)/mean(x))
+abs_CV<-apply(all.abs,2,function(x) sd(x)/mean(x))
+
+ref_spec_plot<-ggplot()+
+  geom_ribbon(aes(x=400:2400,
+                  ymin = as.matrix(ref_quantiles)[1,],
+                  ymax = as.matrix(ref_quantiles)[5,]),
+              alpha = 0.5,fill = "light blue")+
+  geom_ribbon(aes(x=400:2400,
+                  ymin = as.matrix(ref_quantiles)[2,],
+                  ymax = as.matrix(ref_quantiles)[4,]),
+              alpha = 0.5,fill = "blue")+
+  geom_line(aes(x=400:2400,y=as.matrix(ref_quantiles)[3,]),size=1,color="black")+
+  geom_line(aes(x=400:2400,y=ref_CV),size=1,color="red")+
+  theme_bw()+
+  theme(text = element_text(size=20),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        plot.margin=unit(c(0,0.3,0,0),"in"))+
+  labs(x="Wavelength (nm)",y="Reflectance (or CV)")+lims(y=c(0,1))+
+  labs(tag = "A")
+
+trans_spec_plot<-ggplot()+
+  geom_ribbon(aes(x=400:2400,
+                  ymin = as.matrix(trans_quantiles)[1,],
+                  ymax = as.matrix(trans_quantiles)[5,]),
+              alpha = 0.5,fill = "light blue")+
+  geom_ribbon(aes(x=400:2400,
+                  ymin = as.matrix(trans_quantiles)[2,],
+                  ymax = as.matrix(trans_quantiles)[4,]),
+              alpha = 0.5,fill = "blue")+
+  geom_line(aes(x=400:2400,y=as.matrix(trans_quantiles)[3,]),size=1,color="black")+
+  geom_line(aes(x=400:2400,y=trans_CV),size=1,color="red")+
+  theme_bw()+
+  theme(text = element_text(size=20),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        plot.margin=unit(c(0,0.3,0,0),"in"))+
+  labs(x="Wavelength (nm)",y="Transmittance (or CV)")+lims(y=c(0,1))+
+  labs(tag = "B")
+
+abs_spec_plot<-ggplot()+
+  geom_ribbon(aes(x=400:2400,
+                  ymin = as.matrix(abs_quantiles)[1,],
+                  ymax = as.matrix(abs_quantiles)[5,]),
+              alpha = 0.5,fill = "light blue")+
+  geom_ribbon(aes(x=400:2400,
+                  ymin = as.matrix(abs_quantiles)[2,],
+                  ymax = as.matrix(abs_quantiles)[4,]),
+              alpha = 0.5,fill = "blue")+
+  geom_line(aes(x=400:2400,y=as.matrix(abs_quantiles)[3,]),size=1,color="black")+
+  geom_line(aes(x=400:2400,y=abs_CV),size=1,color="red")+
+  theme_bw()+
+  theme(text = element_text(size=20),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.margin=unit(c(0,0.3,0,0),"in"))+
+  labs(x="Wavelength (nm)",y="Absorptance (or CV)")+lims(y=c(0,1))+
+  labs(tag = "C")
+
+pdf("Images/Fig1.pdf",width=7,height=12)
+ref_spec_plot+trans_spec_plot+abs_spec_plot+plot_layout(ncol = 1)
+dev.off()
+
