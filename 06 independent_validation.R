@@ -504,248 +504,507 @@ LOPEX_ANGERS<-spectrolab::combine(LOPEX,ANGERS)
 all_val_ref<-spectrolab::combine(LOPEX_ANGERS,Dessain.spec)
 
 all_jack_coefs_list_ref<-readRDS("SavedResults/all_jack_coefs_list_ref.rds")
-meta(all_val_ref)$solubles_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$solubles_mass,val.spec = all_val_ref))
-meta(all_val_ref)$hemicellulose_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$hemicellulose_mass,val.spec = all_val_ref))
-meta(all_val_ref)$cellulose_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$cellulose_mass,val.spec = all_val_ref))
-meta(all_val_ref)$lignin_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$lignin_mass,val.spec = all_val_ref))
-meta(all_val_ref)$Nmass_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$Nmass,val.spec = all_val_ref))
-meta(all_val_ref)$Cmass_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$Cmass,val.spec = all_val_ref))
-meta(all_val_ref)$LMA_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$LMA,val.spec = all_val_ref))
-meta(all_val_ref)$LDMC_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$LDMC,val.spec = all_val_ref))
-meta(all_val_ref)$EWT_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$EWT,val.spec = all_val_ref))
-meta(all_val_ref)$chlA_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$chlA_mass,val.spec = all_val_ref))
-meta(all_val_ref)$chlB_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$chlB_mass,val.spec = all_val_ref))
-meta(all_val_ref)$car_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$car_mass,val.spec = all_val_ref))
-meta(all_val_ref)$Al_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$Al_mass,val.spec = all_val_ref))
-meta(all_val_ref)$Ca_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$Ca_mass,val.spec = all_val_ref))
-meta(all_val_ref)$Cu_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$Cu_mass,val.spec = all_val_ref))
-meta(all_val_ref)$Fe_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$Fe_mass,val.spec = all_val_ref))
-meta(all_val_ref)$K_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$K_mass,val.spec = all_val_ref))
-meta(all_val_ref)$Mg_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$Mg_mass,val.spec = all_val_ref))
-meta(all_val_ref)$Mn_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$Mn_mass,val.spec = all_val_ref))
-meta(all_val_ref)$Na_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$Na_mass,val.spec = all_val_ref))
-meta(all_val_ref)$P_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$P_mass,val.spec = all_val_ref))
-meta(all_val_ref)$Zn_pred<-rowMeans(apply.coefs(all_jack_coefs_list_ref$Zn_mass,val.spec = all_val_ref))
+solubles_pred<-apply.coefs(all_jack_coefs_list_ref$solubles_mass,val.spec = all_val_ref)
+solubles_stat<-t(apply(solubles_pred,1,
+                       function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+solubles_pred_df<-data.frame(Measured=meta(all_val_ref)$solubles,
+                             pred.mean=solubles_stat[,1],
+                             pred.low=solubles_stat[,2],
+                             pred.high=solubles_stat[,3],
+                             dataset=meta(all_val_ref)$dataset)
 
-solubles_ind_val<-ggplot(data=meta(all_val_ref),aes(x=solubles_pred,y=solubles,color=dataset))+
+hemicellulose_pred<-apply.coefs(all_jack_coefs_list_ref$hemicellulose_mass,val.spec = all_val_ref)
+hemicellulose_stat<-t(apply(hemicellulose_pred,1,
+                       function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+hemicellulose_pred_df<-data.frame(Measured=meta(all_val_ref)$hemicellulose,
+                             pred.mean=hemicellulose_stat[,1],
+                             pred.low=hemicellulose_stat[,2],
+                             pred.high=hemicellulose_stat[,3],
+                             dataset=meta(all_val_ref)$dataset)
+
+cellulose_pred<-apply.coefs(all_jack_coefs_list_ref$cellulose_mass,val.spec = all_val_ref)
+cellulose_stat<-t(apply(cellulose_pred,1,
+                       function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+cellulose_pred_df<-data.frame(Measured=meta(all_val_ref)$cellulose,
+                             pred.mean=cellulose_stat[,1],
+                             pred.low=cellulose_stat[,2],
+                             pred.high=cellulose_stat[,3],
+                             dataset=meta(all_val_ref)$dataset)
+
+lignin_pred<-apply.coefs(all_jack_coefs_list_ref$lignin_mass,val.spec = all_val_ref)
+lignin_stat<-t(apply(lignin_pred,1,
+                     function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+lignin_pred_df<-data.frame(Measured=meta(all_val_ref)$lignin,
+                           pred.mean=lignin_stat[,1],
+                           pred.low=lignin_stat[,2],
+                           pred.high=lignin_stat[,3],
+                           dataset=meta(all_val_ref)$dataset)
+
+Nmass_pred<-apply.coefs(all_jack_coefs_list_ref$Nmass,val.spec = all_val_ref)
+Nmass_stat<-t(apply(Nmass_pred,1,
+                       function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+Nmass_pred_df<-data.frame(Measured=meta(all_val_ref)$Nmass,
+                             pred.mean=Nmass_stat[,1],
+                             pred.low=Nmass_stat[,2],
+                             pred.high=Nmass_stat[,3],
+                             dataset=meta(all_val_ref)$dataset)
+
+Cmass_pred<-apply.coefs(all_jack_coefs_list_ref$Cmass,val.spec = all_val_ref)
+Cmass_stat<-t(apply(Cmass_pred,1,
+                    function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+Cmass_pred_df<-data.frame(Measured=meta(all_val_ref)$Cmass,
+                          pred.mean=Cmass_stat[,1],
+                          pred.low=Cmass_stat[,2],
+                          pred.high=Cmass_stat[,3],
+                          dataset=meta(all_val_ref)$dataset)
+
+LMA_pred<-apply.coefs(all_jack_coefs_list_ref$LMA,val.spec = all_val_ref)
+LMA_stat<-t(apply(LMA_pred,1,
+                       function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+LMA_pred_df<-data.frame(Measured=meta(all_val_ref)$LMA,
+                             pred.mean=LMA_stat[,1],
+                             pred.low=LMA_stat[,2],
+                             pred.high=LMA_stat[,3],
+                             dataset=meta(all_val_ref)$dataset)
+
+LDMC_pred<-apply.coefs(all_jack_coefs_list_ref$LDMC,val.spec = all_val_ref)
+LDMC_stat<-t(apply(LDMC_pred,1,
+                       function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+LDMC_pred_df<-data.frame(Measured=meta(all_val_ref)$LDMC,
+                             pred.mean=LDMC_stat[,1],
+                             pred.low=LDMC_stat[,2],
+                             pred.high=LDMC_stat[,3],
+                             dataset=meta(all_val_ref)$dataset)
+
+EWT_pred<-apply.coefs(all_jack_coefs_list_ref$EWT,val.spec = all_val_ref)
+EWT_stat<-t(apply(EWT_pred,1,
+                       function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+EWT_pred_df<-data.frame(Measured=meta(all_val_ref)$EWT,
+                             pred.mean=EWT_stat[,1],
+                             pred.low=EWT_stat[,2],
+                             pred.high=EWT_stat[,3],
+                             dataset=meta(all_val_ref)$dataset)
+
+chlA_pred<-apply.coefs(all_jack_coefs_list_ref$chlA_mass,val.spec = all_val_ref)
+chlA_stat<-t(apply(chlA_pred,1,
+                       function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+chlA_pred_df<-data.frame(Measured=meta(all_val_ref)$chlA,
+                             pred.mean=chlA_stat[,1],
+                             pred.low=chlA_stat[,2],
+                             pred.high=chlA_stat[,3],
+                             dataset=meta(all_val_ref)$dataset)
+
+chlB_pred<-apply.coefs(all_jack_coefs_list_ref$chlB_mass,val.spec = all_val_ref)
+chlB_stat<-t(apply(chlB_pred,1,
+                       function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+chlB_pred_df<-data.frame(Measured=meta(all_val_ref)$chlB,
+                             pred.mean=chlB_stat[,1],
+                             pred.low=chlB_stat[,2],
+                             pred.high=chlB_stat[,3],
+                             dataset=meta(all_val_ref)$dataset)
+
+car_pred<-apply.coefs(all_jack_coefs_list_ref$car_mass,val.spec = all_val_ref)
+car_stat<-t(apply(car_pred,1,
+                       function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+car_pred_df<-data.frame(Measured=meta(all_val_ref)$car,
+                             pred.mean=car_stat[,1],
+                             pred.low=car_stat[,2],
+                             pred.high=car_stat[,3],
+                             dataset=meta(all_val_ref)$dataset)
+
+Al_pred<-apply.coefs(all_jack_coefs_list_ref$Al_mass,val.spec = all_val_ref)
+Al_stat<-t(apply(Al_pred,1,
+                       function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+Al_pred_df<-data.frame(Measured=meta(all_val_ref)$Al_mass,
+                             pred.mean=Al_stat[,1],
+                             pred.low=Al_stat[,2],
+                             pred.high=Al_stat[,3],
+                             dataset=meta(all_val_ref)$dataset)
+
+Ca_pred<-apply.coefs(all_jack_coefs_list_ref$Ca_mass,val.spec = all_val_ref)
+Ca_stat<-t(apply(Ca_pred,1,
+                 function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+Ca_pred_df<-data.frame(Measured=meta(all_val_ref)$Ca_mass,
+                       pred.mean=Ca_stat[,1],
+                       pred.low=Ca_stat[,2],
+                       pred.high=Ca_stat[,3],
+                       dataset=meta(all_val_ref)$dataset)
+
+Cu_pred<-apply.coefs(all_jack_coefs_list_ref$Cu_mass,val.spec = all_val_ref)
+Cu_stat<-t(apply(Cu_pred,1,
+                 function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+Cu_pred_df<-data.frame(Measured=meta(all_val_ref)$Cu_mass,
+                       pred.mean=Cu_stat[,1],
+                       pred.low=Cu_stat[,2],
+                       pred.high=Cu_stat[,3],
+                       dataset=meta(all_val_ref)$dataset)
+
+Fe_pred<-apply.coefs(all_jack_coefs_list_ref$Fe_mass,val.spec = all_val_ref)
+Fe_stat<-t(apply(Fe_pred,1,
+                 function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+Fe_pred_df<-data.frame(Measured=meta(all_val_ref)$Fe_mass,
+                       pred.mean=Fe_stat[,1],
+                       pred.low=Fe_stat[,2],
+                       pred.high=Fe_stat[,3],
+                       dataset=meta(all_val_ref)$dataset)
+
+K_pred<-apply.coefs(all_jack_coefs_list_ref$K_mass,val.spec = all_val_ref)
+K_stat<-t(apply(K_pred,1,
+                 function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+K_pred_df<-data.frame(Measured=meta(all_val_ref)$K_mass,
+                       pred.mean=K_stat[,1],
+                       pred.low=K_stat[,2],
+                       pred.high=K_stat[,3],
+                       dataset=meta(all_val_ref)$dataset)
+
+Mg_pred<-apply.coefs(all_jack_coefs_list_ref$Mg_mass,val.spec = all_val_ref)
+Mg_stat<-t(apply(Mg_pred,1,
+                 function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+Mg_pred_df<-data.frame(Measured=meta(all_val_ref)$Mg_mass,
+                       pred.mean=Mg_stat[,1],
+                       pred.low=Mg_stat[,2],
+                       pred.high=Mg_stat[,3],
+                       dataset=meta(all_val_ref)$dataset)
+
+Mn_pred<-apply.coefs(all_jack_coefs_list_ref$Mn_mass,val.spec = all_val_ref)
+Mn_stat<-t(apply(Mn_pred,1,
+                 function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+Mn_pred_df<-data.frame(Measured=meta(all_val_ref)$Mn_mass,
+                       pred.mean=Mn_stat[,1],
+                       pred.low=Mn_stat[,2],
+                       pred.high=Mn_stat[,3],
+                       dataset=meta(all_val_ref)$dataset)
+
+Na_pred<-apply.coefs(all_jack_coefs_list_ref$Na_mass,val.spec = all_val_ref)
+Na_stat<-t(apply(Na_pred,1,
+                 function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+Na_pred_df<-data.frame(Measured=meta(all_val_ref)$Na_mass,
+                       pred.mean=Na_stat[,1],
+                       pred.low=Na_stat[,2],
+                       pred.high=Na_stat[,3],
+                       dataset=meta(all_val_ref)$dataset)
+
+P_pred<-apply.coefs(all_jack_coefs_list_ref$P_mass,val.spec = all_val_ref)
+P_stat<-t(apply(P_pred,1,
+                 function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+P_pred_df<-data.frame(Measured=meta(all_val_ref)$P_mass,
+                       pred.mean=P_stat[,1],
+                       pred.low=P_stat[,2],
+                       pred.high=P_stat[,3],
+                       dataset=meta(all_val_ref)$dataset)
+
+Zn_pred<-apply.coefs(all_jack_coefs_list_ref$Zn_mass,val.spec = all_val_ref)
+Zn_stat<-t(apply(Zn_pred,1,
+                 function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+Zn_pred_df<-data.frame(Measured=meta(all_val_ref)$Zn_mass,
+                       pred.mean=Zn_stat[,1],
+                       pred.low=Zn_stat[,2],
+                       pred.high=Zn_stat[,3],
+                       dataset=meta(all_val_ref)$dataset)
+
+solubles_ind_val<-ggplot(data=solubles_pred_df,
+                         aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured solubles",x="Predicted solubles")+
-  coord_cartesian(xlim=c(20,90),ylim=c(20,90))
+  coord_cartesian(xlim=c(15,95),ylim=c(15,95))
 
-hemicellulose_ind_val<-ggplot(data=meta(all_val_ref),aes(x=hemicellulose_pred,y=hemicellulose,color=dataset))+
+hemicellulose_ind_val<-ggplot(data=hemicellulose_pred_df,
+                              aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured hemicellulose",x="Predicted hemicellulose")+
-  coord_cartesian(xlim=c(-5,35),ylim=c(-5,35))
+  coord_cartesian(xlim=c(-6,38),ylim=c(-6,38))
 
-cellulose_ind_val<-ggplot(data=meta(all_val_ref),aes(x=cellulose_pred,y=cellulose,color=dataset))+
+cellulose_ind_val<-ggplot(data=cellulose_pred_df,
+                          aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured cellulose",x="Predicted cellulose")+
   coord_cartesian(xlim=c(0,50),ylim=c(0,50))
 
-lignin_ind_val<-ggplot(data=meta(all_val_ref),aes(x=lignin_pred,y=lignin,color=dataset))+
+lignin_ind_val<-ggplot(data=lignin_pred_df,
+                       aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured lignin",x="Predicted lignin")+
-  coord_cartesian(xlim=c(-12,25),ylim=c(-12,25))
+  coord_cartesian(xlim=c(-18,22),ylim=c(-18,22))
 
-Nmass_ind_val<-ggplot(data=meta(all_val_ref),aes(x=Nmass_pred,y=Nmass,color=dataset))+
+Nmass_ind_val<-ggplot(data=Nmass_pred_df,
+                      aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured Nmass",x="Predicted Nmass")+
-  coord_cartesian(xlim=c(0,6),ylim=c(0,6))
+  coord_cartesian(xlim=c(0,6.2),ylim=c(0,6.2))
 
-Cmass_ind_val<-ggplot(data=meta(all_val_ref),aes(x=Cmass_pred,y=Cmass,color=dataset))+
+Cmass_ind_val<-ggplot(data=Cmass_pred_df,
+                      aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured Cmass",x="Predicted Cmass")+
   coord_cartesian(xlim=c(37,54),ylim=c(37,54))
 
-LMA_ind_val<-ggplot(data=meta(all_val_ref),aes(x=LMA_pred,y=LMA,color=dataset))+
+LMA_ind_val<-ggplot(data=LMA_pred_df,
+                    aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured LMA",x="Predicted LMA")+
   coord_cartesian(xlim=c(0,0.5),ylim=c(0,0.5))
 
-LDMC_ind_val<-ggplot(data=meta(all_val_ref),aes(x=LDMC_pred,y=LDMC,color=dataset))+
+LDMC_ind_val<-ggplot(data=LDMC_pred_df,
+                     aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured LDMC",x="Predicted LDMC")+
-  coord_cartesian(xlim=c(-75,600),ylim=c(-75,600))
+  coord_cartesian(xlim=c(-100,600),ylim=c(-100,600))
 
-EWT_ind_val<-ggplot(data=meta(all_val_ref),aes(x=EWT_pred,y=EWT,color=dataset))+
+EWT_ind_val<-ggplot(data=EWT_pred_df,
+                    aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured EWT",x="Predicted EWT")+
-  coord_cartesian(xlim=c(0,0.085),ylim=c(0,0.085))
+  coord_cartesian(xlim=c(0,0.09),ylim=c(0,0.09))
 
-chlA_ind_val<-ggplot(data=meta(all_val_ref),aes(x=chlA_pred,y=chlA,color=dataset))+
+chlA_ind_val<-ggplot(data=chlA_pred_df,
+                     aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured chlA",x="Predicted chlA")+
-  coord_cartesian(xlim=c(0,20),ylim=c(0,20))
+  coord_cartesian(xlim=c(-3,18),ylim=c(-3,18))
 
-chlB_ind_val<-ggplot(data=meta(all_val_ref),aes(x=chlB_pred,y=chlB,color=dataset))+
+chlB_ind_val<-ggplot(data=chlB_pred_df,
+                     aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured chlB",x="Predicted chlB")+
-  coord_cartesian(xlim=c(-1,7),ylim=c(-1,7))
+  coord_cartesian(xlim=c(-1.5,7.5),ylim=c(-1.5,7.5))
 
-car_ind_val<-ggplot(data=meta(all_val_ref),aes(x=car_pred,y=car,color=dataset))+
+car_ind_val<-ggplot(data=car_pred_df,
+                    aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured car",x="Predicted car")+
-  coord_cartesian(xlim=c(0,5.5),ylim=c(0,5.5))
+  coord_cartesian(xlim=c(-1,5.5),ylim=c(-1,5.5))
 
-Al_ind_val<-ggplot(data=meta(all_val_ref),aes(x=Al_pred,y=Al_mass,color=dataset))+
+Al_ind_val<-ggplot(data=Al_pred_df,
+                   aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured Al",x="Predicted Al")+
   coord_cartesian(xlim=c(-0.1,0.4),ylim=c(-0.1,0.4))
 
-Ca_ind_val<-ggplot(data=meta(all_val_ref),aes(x=Ca_pred,y=Ca_mass,color=dataset))+
+Ca_ind_val<-ggplot(data=Ca_pred_df,
+                   aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured Ca",x="Predicted Ca")+
   coord_cartesian(xlim=c(-5,30),ylim=c(-5,30))
 
-Cu_ind_val<-ggplot(data=meta(all_val_ref),aes(x=Cu_pred,y=Cu_mass,color=dataset))+
+Cu_ind_val<-ggplot(data=Cu_pred_df,
+                   aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured Cu",x="Predicted Cu")+
   coord_cartesian(xlim=c(0,0.1),ylim=c(0,0.1))
 
-Fe_ind_val<-ggplot(data=meta(all_val_ref),aes(x=Fe_pred,y=Fe_mass,color=dataset))+
+Fe_ind_val<-ggplot(data=Fe_pred_df,
+                   aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured Fe",x="Predicted Fe")+
   coord_cartesian(xlim=c(0,0.5),ylim=c(0,0.5))
 
-K_ind_val<-ggplot(data=meta(all_val_ref),aes(x=K_pred,y=K_mass,color=dataset))+
+K_ind_val<-ggplot(data=K_pred_df,
+                  aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured K",x="Predicted K")+
   coord_cartesian(xlim=c(0,40),ylim=c(0,40))
 
-Mg_ind_val<-ggplot(data=meta(all_val_ref),aes(x=Mg_pred,y=Mg_mass,color=dataset))+
+Mg_ind_val<-ggplot(data=Mg_pred_df,
+                   aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured Mg",x="Predicted Mg")+
   coord_cartesian(xlim=c(-1,8),ylim=c(-1,8))
 
-Mn_ind_val<-ggplot(data=meta(all_val_ref),aes(x=Mn_pred,y=Mn_mass,color=dataset))+
+Mn_ind_val<-ggplot(data=Mn_pred_df,
+                   aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured Mn",x="Predicted Mn")+
   coord_cartesian(xlim=c(-1,4),ylim=c(-1,4))
 
-Na_ind_val<-ggplot(data=meta(all_val_ref),aes(x=Na_pred,y=Na_mass,color=dataset))+
+Na_ind_val<-ggplot(data=Na_pred_df,
+                   aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured Na",x="Predicted Na")+
   coord_cartesian(xlim=c(-1,8),ylim=c(-1,8))
 
-P_ind_val<-ggplot(data=meta(all_val_ref),aes(x=P_pred,y=P_mass,color=dataset))+
+P_ind_val<-ggplot(data=P_pred_df,
+                  aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured P",x="Predicted P")+
   coord_cartesian(xlim=c(-2,7),ylim=c(-2,7))
 
-Zn_ind_val<-ggplot(data=meta(all_val_ref),aes(x=Zn_pred,y=Zn_mass,color=dataset))+
+Zn_ind_val<-ggplot(data=Zn_pred_df,
+                   aes(x=pred.mean,y=Measured,color=dataset))+
   geom_point()+
   theme_bw()+
-  theme(text = element_text(size=20))+
+  theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  geom_smooth(method="lm")+
+  geom_smooth(method="lm",se=F)+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
   labs(y="Measured Zn",x="Predicted Zn")+
   coord_cartesian(xlim=c(-0.1,0.7),ylim=c(-0.1,0.7))
 
-pdf("Images/ind_val_plots.pdf",width = 10,height = 8)
-solubles_ind_val
-hemicellulose_ind_val
-cellulose_ind_val
-lignin_ind_val
-Nmass_ind_val
-Cmass_ind_val
-LMA_ind_val
-LDMC_ind_val
-EWT_ind_val
-chlA_ind_val
-chlB_ind_val
-car_ind_val
-Al_ind_val
-Ca_ind_val
-Cu_ind_val
-Fe_ind_val
-K_ind_val
-Mg_ind_val
-Mn_ind_val
-Na_ind_val
-P_ind_val
-Zn_ind_val
+ind_val_list<-list(solubles_mass=solubles_pred_df,
+                   hemicellulose_mass=hemicellulose_pred_df,
+                   cellulose_mass=cellulose_pred_df,
+                   lignin_mass=lignin_pred_df,
+                   Nmass=Nmass_pred_df,
+                   Cmass=Cmass_pred_df,
+                   LMA=LMA_pred_df,
+                   LDMC=LDMC_pred_df,
+                   EWT=EWT_pred_df,
+                   chlA_mass=chlA_pred_df,
+                   chlB_mass=chlB_pred_df,
+                   car_mass=car_pred_df,
+                   Al_mass=Al_pred_df,
+                   Ca_mass=Ca_pred_df,
+                   Cu_mass=Cu_pred_df,
+                   Fe_mass=Fe_pred_df,
+                   K_mass=K_pred_df,
+                   Mg_mass=Mg_pred_df,
+                   Mn_mass=Mn_pred_df,
+                   Na_mass=Na_pred_df,
+                   P_mass=P_pred_df,
+                   Zn_mass=Zn_pred_df)
+saveRDS(ind_val_list,"SavedResults/ind_val_list.rds")
+
+pdf("Images/ind_val_plots1.pdf",width = 16,height = 20, onefile=F)
+ggarrange(plotlist=list(solubles_ind_val,hemicellulose_ind_val,
+                        cellulose_ind_val,lignin_ind_val,
+                        Nmass_ind_val,Cmass_ind_val,
+                        LMA_ind_val,LDMC_ind_val,EWT_ind_val,
+                        chlA_ind_val,chlB_ind_val,car_ind_val),
+          common.legend = T,legend = "bottom",
+          nrow=4,ncol=3)
+dev.off()
+
+pdf("Images/ind_val_plots2.pdf",width = 16,height = 20, onefile=F)
+ggarrange(plotlist=list(Al_ind_val,Ca_ind_val,Cu_ind_val,
+                        Fe_ind_val,K_ind_val,Mg_ind_val,
+                        Mn_ind_val,Na_ind_val,P_ind_val,
+                        Zn_ind_val),
+          common.legend = T,legend = "bottom",
+          nrow=4,ncol=3)
 dev.off()
