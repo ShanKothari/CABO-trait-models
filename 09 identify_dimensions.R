@@ -122,10 +122,20 @@ traits.samp<-meta(ref.traits.samp)[,c("LDMC","EWT","LMA","Cmass","Nmass",
                                       "chlB_mass","car_mass")]
 traits.norm<-apply(traits.samp,2,function(x) (x-mean(x,na.rm=T))/sd(x,na.rm = T))
 
-
 maxLikGlobalDimEst(ref.traits.norm,k=3)
-
 maxLikGlobalDimEst(na.omit(traits.norm),k=3)
+convU(x = ref.traits.norm)
+convU(x = na.omit(traits.norm))
+## Grassberger-Procaccia; unsure about correct choice of p or k1/k2
+corint(x=ref.traits.norm,p=20)
+corint(x=na.omit(traits.norm),p=20)
+## ML; not sure about correct choice of p or k1/k2
+lbmle(x = ref.traits.norm, k1=5, k2=10)
+lbmle(x = na.omit(traits.norm), k1=5, k2=10)
+mada(x = ref.traits.norm, k = NULL, comb = "average", maxDim = 10)
+mada(x = na.omit(traits.norm), k = NULL, comb = "average", maxDim = 10)
+nni(x = ref.traits.norm, k1 = 5, k2 = 30, eps = 0.01, p = NULL)
+nni(x = na.omit(traits.norm), k1 = 5, k2 = 30, eps = 0.01, p = NULL)
 
 ###########################################
 ## LLE (also with dimensionality estimate)
@@ -152,18 +162,91 @@ ggplot(as.data.frame(ref.lle.coords),
   theme_bw()
 
 #########################################
+## dimensionality of fresh, pressed, and ground spectra
+
+fresh.spec<-readRDS("../../TraitModels2018/HerbariumPaper/ProcessedSpectralData/fresh_spec_EL_agg.rds")
+pressed.spec<-readRDS("../../TraitModels2018/HerbariumPaper/ProcessedSpectralData/pressed_spec_EL_agg.rds")
+ground.spec<-readRDS("../../TraitModels2018/HerbariumPaper/ProcessedSpectralData/ground_spec_EL_agg.rds")
+
+fresh.spec.norm<-apply(as.matrix(fresh.spec),2,function(x) (x-mean(x))/sd(x))
+pressed.spec.norm<-apply(as.matrix(pressed.spec),2,function(x) (x-mean(x))/sd(x))
+ground.spec.norm<-apply(as.matrix(ground.spec),2,function(x) (x-mean(x))/sd(x))
+
+traits.sub<-apply(meta(fresh.spec)[,c("LDMC","EWT","LMA","C","N",
+                                      "solubles","hemicellulose",
+                                      "cellulose","lignin","chlA",
+                                      "chlB","car","Ca","K","P")],2,
+                  function(x) (x-mean(x,na.rm=T))/sd(x,na.rm=T))
+
+maxLikGlobalDimEst(as.matrix(fresh.spec),k=3)
+maxLikGlobalDimEst(as.matrix(pressed.spec),k=3)
+maxLikGlobalDimEst(as.matrix(ground.spec),k=3)
+maxLikGlobalDimEst(na.omit(traits.sub),k=3)
+
+convU(as.matrix(fresh.spec),maxDim=10)
+convU(as.matrix(pressed.spec),maxDim=10)
+convU(as.matrix(ground.spec),maxDim=10)
+convU(na.omit(traits.sub),maxDim=10)
+
+corint(x=as.matrix(fresh.spec),p=20)
+corint(x=as.matrix(pressed.spec),p=20)
+corint(x=as.matrix(ground.spec),p=20)
+corint(x=na.omit(traits.sub),p=20)
+
+## with k1=k2=k, this yields the same result as
+## maxLikGlobalDimEst
+lbmle(x = as.matrix(fresh.spec), k1=5, k2=10)
+lbmle(x = as.matrix(pressed.spec), k1=5, k2=10)
+lbmle(x = as.matrix(ground.spec), k1=5, k2=10)
+
+mada(x = as.matrix(fresh.spec), k = NULL, comb = "average", maxDim = 10)
+mada(x = as.matrix(pressed.spec), k = NULL, comb = "average", maxDim = 10)
+mada(x = as.matrix(ground.spec), k = NULL, comb = "average", maxDim = 10)
+mada(x = na.omit(traits.sub), k = NULL, comb = "average", maxDim = 10)
+
+nni(x = as.matrix(fresh.spec), k1 = 5, k2 = 30, eps = 0.01, p = NULL)
+nni(x = as.matrix(pressed.spec), k1 = 5, k2 = 30, eps = 0.01, p = NULL)
+nni(x = as.matrix(ground.spec), k1 = 5, k2 = 30, eps = 0.01, p = NULL)
+nni(x = na.omit(traits.sub), k1 = 5, k2 = 30, eps = 0.01, p = NULL)
+
+pack(x = as.matrix(fresh.spec))
+pack(x = as.matrix(pressed.spec))
+pack(x = as.matrix(ground.spec))
+pack(x = na.omit(traits.sub))
+
+side(x = as.matrix(fresh.spec),maxDim=10)
+side(x = as.matrix(pressed.spec),maxDim=10)
+side(x = as.matrix(ground.spec),maxDim=10)
+side(x = na.omit(traits.sub),maxDim=10)
+
+lle.fresh<-lle(as.matrix(fresh.spec),m=10,k=10,id = T)
+lle.pressed<-lle(as.matrix(pressed.spec),m=10,k=10,id = T)
+lle.ground<-lle(as.matrix(ground.spec),m=10,k=10,id = T)
+lle.traits<-lle(na.omit(traits.sub),m=10,k=10,id = T)
+
+isomap.fresh<-isomap(dist(as.matrix(fresh.spec),method = "euclidean"),
+                     ndim = 10,k=4)
+isomap.pressed<-isomap(dist(as.matrix(pressed.spec),method = "euclidean"),
+                     ndim = 10,k=4)
+isomap.ground<-isomap(dist(as.matrix(ground.spec),method = "euclidean"),
+                     ndim = 10,k=4)
+isomap.traits<-isomap(dist(na.omit(traits.sub),method = "euclidean"),
+                     ndim = 10,k=4)
+
+## try stressplot() with MDS in vegan
+
+#########################################
 ## does nonlinear dimensionality reduction work
 ## on simulated spectra?
 
-trait.quant<-c(0.025,0.2,0.4,0.6,0.8,0.975)
-N<-seq(1,2,by=0.2)
-Cw<-sample(meta(ref.traits.samp)$EWT,probs=trait.quant,na.rm=T)
-Cab<-quantile((meta(ref.traits.samp)$chlA_area+meta(ref.traits.samp)$chlB_area)*1000000,
-              probs=trait.quant,na.rm=T)
-Cm<-quantile(meta(ref.traits.samp)$LMA/10,probs=trait.quant,na.rm=T)
-param.list<-list(N=N,Cw=Cw,Cab=Cab,Cm=Cm)
-prospect.params<-expand.grid(param.list)
-
+N<-runif(n = 1000,min=1,max=2.2)
+Cw<-sample(na.omit(meta(ref.traits.samp)$EWT),
+                           size = 1000,replace=T)
+Cab<-sample((na.omit(meta(ref.traits.samp)$chlA_area+meta(ref.traits.samp)$chlB_area)*1000000),
+                            size=1000,replace=T)
+Cm<-sample(na.omit(meta(ref.traits.samp)$LMA/10),
+                           size=1000,replace=T)
+prospect.params<-data.frame(N=N,Cw=Cw,Cab=Cab,Cm=Cm)
 prospect.params$Car<-prospect.params$Cab/6.24 ## mean chl:car ratio
 prospect.params$Anth<-0
 prospect.params$Cbrown<-0
@@ -182,9 +265,20 @@ prospect.sim.norm<-apply(prospect.sim,2,function(x) (x-mean(x))/sd(x))
 maxLikGlobalDimEst(prospect.sim,k=10)
 maxLikGlobalDimEst(prospect.sim.norm,k=10)
 convU(x = prospect.sim)
-
+convU(x = prospect.sim.norm)
+## Grassberger-Procaccia; unsure about correct choice of p or k1/k2
+corint(x=prospect.sim,p=20)
+corint(x=prospect.sim.norm,p=20)
+## ML; not sure about correct choice of p or k1/k2
+lbmle(x = prospect.sim, k1=5, k2=10)
+lbmle(x = prospect.sim.norm, k1=5, k2=10)
+mada(x = prospect.sim, k = NULL, comb = "average", maxDim = 10)
+mada(x = prospect.sim.norm, k = NULL, comb = "average", maxDim = 10)
+nni(x = prospect.sim, k1 = 5, k2 = 30, eps = 0.01, p = NULL)
+nni(x = prospect.sim.norm, k1 = 5, k2 = 30, eps = 0.01, p = NULL)
 
 prospect.lle<-lle(prospect.sim,m=7,k=4,id = T)
-prospect.isomap<-isomap(dist(prospect.sim,method="euclidean"),
-                        ndim = 10,k=8)
-plot(prospect.isomap$points[,2]~prospect.params$Cw)
+prospect.isomap<-isomap(dist(prospect.sim.norm,method="euclidean"),
+                        ndim = 10,k=3)
+plot(prospect.isomap$points[,3]~prospect.params$Cab)
+plot(prospect.isomap$points[,1]~prospect.isomap$points[,2])
