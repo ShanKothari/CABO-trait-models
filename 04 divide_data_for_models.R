@@ -14,6 +14,11 @@ ref.traits<-readRDS("ProcessedSpectra/all_ref_and_traits.rds")
 trans.traits<-readRDS("ProcessedSpectra/all_trans_and_traits.rds")
 abs.traits<-readRDS("ProcessedSpectra/all_abs_and_traits.rds")
 
+## remove Pardo project, which currently has no trait or summary data
+ref.traits<-ref.traits[which(meta(ref.traits)$project!="2019-Pardo-MSc-UdeM")]
+trans.traits<-trains.traits[which(meta(trans.traits)$project!="2019-Pardo-MSc-UdeM")]
+abs.traits<-abs.traits[which(meta(abs.traits)$project!="2019-Pardo-MSc-UdeM")]
+
 ## check that IDs are the same and in the same order
 if(meta(ref.traits)$sample_id != meta(trans.traits)$sample_id ||
    meta(ref.traits)$sample_id != meta(abs.traits)$sample_id){
