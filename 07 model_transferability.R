@@ -11,7 +11,7 @@ library(statip)
 library(lme4)
 library(FNN)
 
-spec.traits<-readRDS("ProcessedSpectra/all_spectra_and_traits.rds")
+spec.traits<-readRDS("ProcessedSpectra/all_ref_and_traits.rds")
 ## the Pardo dataset has no trait data (yet)
 spec.traits<-spec.traits[-which(meta(spec.traits)$project=="2019-Pardo-MSc-UdeM")]
 
@@ -355,11 +355,11 @@ chlA_mass_sum_df<-data.frame(dataset=names(chlA_mass_pred_list),
                                trait="chlA_mass")
 
 EWT_sum_df<-data.frame(dataset=names(EWT_pred_list),
-                               RMSD=unlist(lapply(EWT_pred_list,function(x) RMSD(x$measured,x$val_pred))),
-                               R2=unlist(lapply(EWT_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
-                               hellinger=unlist(EWT_dist),
+                       RMSD=unlist(lapply(EWT_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                       R2=unlist(lapply(EWT_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                       hellinger=unlist(EWT_dist),
                        KL=unlist(lapply(EWT_KL,function(x) x[[5]])),
-                               trait="EWT")
+                       trait="EWT")
 
 summary_df<-do.call(rbind,list(LMA_sum_df,LDMC_sum_df,Nmass_sum_df,
                                lignin_mass_sum_df,chlA_mass_sum_df,
@@ -400,18 +400,43 @@ ggplot(data=summary_df,aes(x=trait,y=R2))+
 ## model transferral among growth forms
 
 LMA_pred_list<-list()
+EWT_pred_list<-list()
 LDMC_pred_list<-list()
 Nmass_pred_list<-list()
+Cmass_pred_list<-list()
+solubles_mass_pred_list<-list()
+hemicellulose_mass_pred_list<-list()
+cellulose_mass_pred_list<-list()
 lignin_mass_pred_list<-list()
 chlA_mass_pred_list<-list()
-EWT_pred_list<-list()
+chlB_mass_pred_list<-list()
+car_mass_pred_list<-list()
 
 LMA_dist<-list()
+EWT_dist<-list()
 LDMC_dist<-list()
 Nmass_dist<-list()
+Cmass_dist<-list()
+solubles_mass_dist<-list()
+hemicellulose_mass_dist<-list()
+cellulose_mass_dist<-list()
 lignin_mass_dist<-list()
 chlA_mass_dist<-list()
-EWT_dist<-list()
+chlB_mass_dist<-list()
+car_mass_dist<-list()
+
+LMA_KL<-list()
+EWT_KL<-list()
+LDMC_KL<-list()
+Nmass_KL<-list()
+Cmass_KL<-list()
+solubles_mass_KL<-list()
+hemicellulose_mass_KL<-list()
+cellulose_mass_KL<-list()
+lignin_mass_KL<-list()
+chlA_mass_KL<-list()
+chlB_mass_KL<-list()
+car_mass_KL<-list()
 
 common.fg<-names(table(meta(spec.traits)$functional.group))[table(meta(spec.traits)$functional.group)>30]
 
@@ -430,50 +455,8 @@ for(i in common.fg){
                            na.omit(meta(spec.traits.other)$LMA),
                            lower=-0.2,
                            upper=0.6)
-  
-  LDMC_cal<-plsr(meta(spec.traits.other)$LDMC~as.matrix(spec.traits.other),
-                 ncomp=30,method = "oscorespls",validation="CV",segments=10)
-  ncomp_LDMC<-selectNcomp(LDMC_cal, method = "onesigma", plot = F)
-  LDMC_val<-predict(LDMC_cal,newdata=as.matrix(spec.traits.fg),ncomp=ncomp_LDMC)
-  LDMC_pred_list[[i]]<-data.frame(measured=meta(spec.traits.fg)$LDMC,
-                                  val_pred=as.vector(LDMC_val))
-  LDMC_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$LDMC),
-                            na.omit(meta(spec.traits.other)$LDMC),
-                            lower=-200,
-                            upper=800)
-  
-  Nmass_cal<-plsr(meta(spec.traits.other)$Nmass~as.matrix(spec.traits.other),
-                  ncomp=30,method = "oscorespls",validation="CV",segments=10)
-  ncomp_Nmass<-selectNcomp(Nmass_cal, method = "onesigma", plot = F)
-  Nmass_val<-predict(Nmass_cal,newdata=as.matrix(spec.traits.fg),ncomp=ncomp_Nmass)
-  Nmass_pred_list[[i]]<-data.frame(measured=meta(spec.traits.fg)$Nmass,
-                                   val_pred=as.vector(Nmass_val))
-  Nmass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$Nmass),
-                             na.omit(meta(spec.traits.other)$Nmass),
-                             lower=-1,
-                             upper=8)
-  
-  lignin_mass_cal<-plsr(meta(spec.traits.other)$lignin_mass~as.matrix(spec.traits.other),
-                        ncomp=30,method = "oscorespls",validation="CV",segments=10)
-  ncomp_lignin_mass<-selectNcomp(lignin_mass_cal, method = "onesigma", plot = F)
-  lignin_mass_val<-predict(lignin_mass_cal,newdata=as.matrix(spec.traits.fg),ncomp=ncomp_lignin_mass)
-  lignin_mass_pred_list[[i]]<-data.frame(measured=meta(spec.traits.fg)$lignin_mass,
-                                         val_pred=as.vector(lignin_mass_val))
-  lignin_mass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$lignin_mass),
-                                   na.omit(meta(spec.traits.other)$lignin_mass),
-                                   lower=-5,
-                                   upper=30)
-  
-  chlA_mass_cal<-plsr(meta(spec.traits.other)$chlA_mass~as.matrix(spec.traits.other),
-                       ncomp=30,method = "oscorespls",validation="CV",segments=10)
-  ncomp_chlA_mass<-selectNcomp(chlA_mass_cal, method = "onesigma", plot = F)
-  chlA_mass_val<-predict(chlA_mass_cal,newdata=as.matrix(spec.traits.fg),ncomp=ncomp_chlA_mass)
-  chlA_mass_pred_list[[i]]<-data.frame(measured=meta(spec.traits.fg)$chlA_mass,
-                                        val_pred=as.vector(chlA_mass_val))
-  chlA_mass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$chlA_mass),
-                                  na.omit(meta(spec.traits.other)$chlA_mass),
-                                  lower=-5,
-                                  upper=30)
+  LMA_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$LMA),
+                             na.omit(meta(spec.traits.fg)$LMA))
   
   EWT_cal<-plsr(meta(spec.traits.other)$EWT~as.matrix(spec.traits.other),
                 ncomp=30,method = "oscorespls",validation="CV",segments=10)
@@ -485,6 +468,138 @@ for(i in common.fg){
                            na.omit(meta(spec.traits.other)$EWT),
                            lower=-0.02,
                            upper=0.09)
+  EWT_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$EWT),
+                             na.omit(meta(spec.traits.fg)$EWT))
+  
+  LDMC_cal<-plsr(meta(spec.traits.other)$LDMC~as.matrix(spec.traits.other),
+                 ncomp=30,method = "oscorespls",validation="CV",segments=10)
+  ncomp_LDMC<-selectNcomp(LDMC_cal, method = "onesigma", plot = F)
+  LDMC_val<-predict(LDMC_cal,newdata=as.matrix(spec.traits.fg),ncomp=ncomp_LDMC)
+  LDMC_pred_list[[i]]<-data.frame(measured=meta(spec.traits.fg)$LDMC,
+                                  val_pred=as.vector(LDMC_val))
+  LDMC_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$LDMC),
+                            na.omit(meta(spec.traits.other)$LDMC),
+                            lower=-200,
+                            upper=800)
+  LDMC_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$LDMC),
+                             na.omit(meta(spec.traits.fg)$LDMC))
+  
+  Nmass_cal<-plsr(meta(spec.traits.other)$Nmass~as.matrix(spec.traits.other),
+                  ncomp=30,method = "oscorespls",validation="CV",segments=10)
+  ncomp_Nmass<-selectNcomp(Nmass_cal, method = "onesigma", plot = F)
+  Nmass_val<-predict(Nmass_cal,newdata=as.matrix(spec.traits.fg),ncomp=ncomp_Nmass)
+  Nmass_pred_list[[i]]<-data.frame(measured=meta(spec.traits.fg)$Nmass,
+                                   val_pred=as.vector(Nmass_val))
+  Nmass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$Nmass),
+                             na.omit(meta(spec.traits.other)$Nmass),
+                             lower=-1,
+                             upper=8)
+  Nmass_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$Nmass),
+                             na.omit(meta(spec.traits.fg)$Nmass))
+  
+  Cmass_cal<-plsr(meta(spec.traits.other)$Cmass~as.matrix(spec.traits.other),
+                  ncomp=30,method = "oscorespls",validation="CV",segments=10)
+  ncomp_Cmass<-selectNcomp(Cmass_cal, method = "onesigma", plot = F)
+  Cmass_val<-predict(Cmass_cal,newdata=as.matrix(spec.traits.fg),ncomp=ncomp_Cmass)
+  Cmass_pred_list[[i]]<-data.frame(measured=meta(spec.traits.fg)$Cmass,
+                                   val_pred=as.vector(Cmass_val))
+  Cmass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$Cmass),
+                             na.omit(meta(spec.traits.other)$Cmass),
+                             lower=20,
+                             upper=80)
+  Cmass_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$Cmass),
+                             na.omit(meta(spec.traits.fg)$Cmass))
+  
+  solubles_mass_cal<-plsr(meta(spec.traits.other)$solubles_mass~as.matrix(spec.traits.other),
+                        ncomp=30,method = "oscorespls",validation="CV",segments=10)
+  ncomp_solubles_mass<-selectNcomp(solubles_mass_cal, method = "onesigma", plot = F)
+  solubles_mass_val<-predict(solubles_mass_cal,newdata=as.matrix(spec.traits.fg),ncomp=ncomp_solubles_mass)
+  solubles_mass_pred_list[[i]]<-data.frame(measured=meta(spec.traits.fg)$solubles_mass,
+                                         val_pred=as.vector(solubles_mass_val))
+  solubles_mass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$solubles_mass),
+                                   na.omit(meta(spec.traits.other)$solubles_mass),
+                                   lower=0,
+                                   upper=100)
+  solubles_mass_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$solubles_mass),
+                             na.omit(meta(spec.traits.fg)$solubles_mass))
+  
+  hemicellulose_mass_cal<-plsr(meta(spec.traits.other)$hemicellulose_mass~as.matrix(spec.traits.other),
+                        ncomp=30,method = "oscorespls",validation="CV",segments=10)
+  ncomp_hemicellulose_mass<-selectNcomp(hemicellulose_mass_cal, method = "onesigma", plot = F)
+  hemicellulose_mass_val<-predict(hemicellulose_mass_cal,newdata=as.matrix(spec.traits.fg),ncomp=ncomp_hemicellulose_mass)
+  hemicellulose_mass_pred_list[[i]]<-data.frame(measured=meta(spec.traits.fg)$hemicellulose_mass,
+                                         val_pred=as.vector(hemicellulose_mass_val))
+  hemicellulose_mass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$hemicellulose_mass),
+                                   na.omit(meta(spec.traits.other)$hemicellulose_mass),
+                                   lower=-5,
+                                   upper=50)
+  hemicellulose_mass_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$hemicellulose_mass),
+                             na.omit(meta(spec.traits.fg)$hemicellulose_mass))
+  
+  cellulose_mass_cal<-plsr(meta(spec.traits.other)$cellulose_mass~as.matrix(spec.traits.other),
+                        ncomp=30,method = "oscorespls",validation="CV",segments=10)
+  ncomp_cellulose_mass<-selectNcomp(cellulose_mass_cal, method = "onesigma", plot = F)
+  cellulose_mass_val<-predict(cellulose_mass_cal,newdata=as.matrix(spec.traits.fg),ncomp=ncomp_cellulose_mass)
+  cellulose_mass_pred_list[[i]]<-data.frame(measured=meta(spec.traits.fg)$cellulose_mass,
+                                         val_pred=as.vector(cellulose_mass_val))
+  cellulose_mass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$cellulose_mass),
+                                   na.omit(meta(spec.traits.other)$cellulose_mass),
+                                   lower=-5,
+                                   upper=50)
+  cellulose_mass_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$cellulose_mass),
+                             na.omit(meta(spec.traits.fg)$cellulose_mass))
+  
+  lignin_mass_cal<-plsr(meta(spec.traits.other)$lignin_mass~as.matrix(spec.traits.other),
+                        ncomp=30,method = "oscorespls",validation="CV",segments=10)
+  ncomp_lignin_mass<-selectNcomp(lignin_mass_cal, method = "onesigma", plot = F)
+  lignin_mass_val<-predict(lignin_mass_cal,newdata=as.matrix(spec.traits.fg),ncomp=ncomp_lignin_mass)
+  lignin_mass_pred_list[[i]]<-data.frame(measured=meta(spec.traits.fg)$lignin_mass,
+                                         val_pred=as.vector(lignin_mass_val))
+  lignin_mass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$lignin_mass),
+                                   na.omit(meta(spec.traits.other)$lignin_mass),
+                                   lower=-5,
+                                   upper=40)
+  lignin_mass_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$lignin_mass),
+                             na.omit(meta(spec.traits.fg)$lignin_mass))
+  
+  chlA_mass_cal<-plsr(meta(spec.traits.other)$chlA_mass~as.matrix(spec.traits.other),
+                       ncomp=30,method = "oscorespls",validation="CV",segments=10)
+  ncomp_chlA_mass<-selectNcomp(chlA_mass_cal, method = "onesigma", plot = F)
+  chlA_mass_val<-predict(chlA_mass_cal,newdata=as.matrix(spec.traits.fg),ncomp=ncomp_chlA_mass)
+  chlA_mass_pred_list[[i]]<-data.frame(measured=meta(spec.traits.fg)$chlA_mass,
+                                        val_pred=as.vector(chlA_mass_val))
+  chlA_mass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$chlA_mass),
+                                  na.omit(meta(spec.traits.other)$chlA_mass),
+                                  lower=-5,
+                                  upper=30)
+  chlA_mass_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$chlA_mass),
+                             na.omit(meta(spec.traits.fg)$chlA_mass))
+  
+  chlB_mass_cal<-plsr(meta(spec.traits.other)$chlB_mass~as.matrix(spec.traits.other),
+                      ncomp=30,method = "oscorespls",validation="CV",segments=10)
+  ncomp_chlB_mass<-selectNcomp(chlB_mass_cal, method = "onesigma", plot = F)
+  chlB_mass_val<-predict(chlB_mass_cal,newdata=as.matrix(spec.traits.fg),ncomp=ncomp_chlB_mass)
+  chlB_mass_pred_list[[i]]<-data.frame(measured=meta(spec.traits.fg)$chlB_mass,
+                                       val_pred=as.vector(chlB_mass_val))
+  chlB_mass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$chlB_mass),
+                                 na.omit(meta(spec.traits.other)$chlB_mass),
+                                 lower=-5,
+                                 upper=15)
+  chlB_mass_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$chlB_mass),
+                             na.omit(meta(spec.traits.fg)$chlB_mass))
+  
+  car_mass_cal<-plsr(meta(spec.traits.other)$car_mass~as.matrix(spec.traits.other),
+                      ncomp=30,method = "oscorespls",validation="CV",segments=10)
+  ncomp_car_mass<-selectNcomp(car_mass_cal, method = "onesigma", plot = F)
+  car_mass_val<-predict(car_mass_cal,newdata=as.matrix(spec.traits.fg),ncomp=ncomp_car_mass)
+  car_mass_pred_list[[i]]<-data.frame(measured=meta(spec.traits.fg)$car_mass,
+                                       val_pred=as.vector(car_mass_val))
+  car_mass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$car_mass),
+                                 na.omit(meta(spec.traits.other)$car_mass),
+                                 lower=-5,
+                                 upper=10)
+  car_mass_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$car_mass),
+                             na.omit(meta(spec.traits.fg)$car_mass))
   
 }
 
@@ -492,56 +607,229 @@ LMA_sum_df<-data.frame(functional.group=names(LMA_pred_list),
                        RMSD=unlist(lapply(LMA_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                        R2=unlist(lapply(LMA_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
                        hellinger=unlist(LMA_dist),
+                       KL=unlist(lapply(LMA_KL,function(x) x[[5]])),
                        trait="LMA")
+
+EWT_sum_df<-data.frame(functional.group=names(EWT_pred_list),
+                       RMSD=unlist(lapply(EWT_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                       R2=unlist(lapply(EWT_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                       hellinger=unlist(EWT_dist),
+                       KL=unlist(lapply(EWT_KL,function(x) x[[5]])),
+                       trait="EWT")
 
 LDMC_sum_df<-data.frame(functional.group=names(LDMC_pred_list),
                         RMSD=unlist(lapply(LDMC_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                         R2=unlist(lapply(LDMC_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
                         hellinger=unlist(LDMC_dist),
+                        KL=unlist(lapply(LDMC_KL,function(x) x[[5]])),
                         trait="LDMC")
 
 Nmass_sum_df<-data.frame(functional.group=names(Nmass_pred_list),
                          RMSD=unlist(lapply(Nmass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                          R2=unlist(lapply(Nmass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
                          hellinger=unlist(Nmass_dist),
+                         KL=unlist(lapply(Nmass_KL,function(x) x[[5]])),
                          trait="Nmass")
+
+## not sure why KL divergence for C mass comes up infinite
+## for K<8 or so
+Cmass_sum_df<-data.frame(functional.group=names(Cmass_pred_list),
+                         RMSD=unlist(lapply(Cmass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                         R2=unlist(lapply(Cmass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                         hellinger=unlist(Cmass_dist),
+                         KL=unlist(lapply(Cmass_KL,function(x) x[[10]])),
+                         trait="Cmass")
+
+solubles_mass_sum_df<-data.frame(functional.group=names(solubles_mass_pred_list),
+                                 RMSD=unlist(lapply(solubles_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                                 R2=unlist(lapply(solubles_mass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                                 hellinger=unlist(solubles_mass_dist),
+                                 KL=unlist(lapply(solubles_mass_KL,function(x) x[[5]])),
+                                 trait="solubles_mass")
+
+hemicellulose_mass_sum_df<-data.frame(functional.group=names(hemicellulose_mass_pred_list),
+                                      RMSD=unlist(lapply(hemicellulose_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                                      R2=unlist(lapply(hemicellulose_mass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                                      hellinger=unlist(hemicellulose_mass_dist),
+                                      KL=unlist(lapply(hemicellulose_mass_KL,function(x) x[[5]])),
+                                      trait="hemicellulose_mass")
+
+cellulose_mass_sum_df<-data.frame(functional.group=names(cellulose_mass_pred_list),
+                                  RMSD=unlist(lapply(cellulose_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                                  R2=unlist(lapply(cellulose_mass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                                  hellinger=unlist(cellulose_mass_dist),
+                                  KL=unlist(lapply(cellulose_mass_KL,function(x) x[[5]])),
+                                  trait="cellulose_mass")
 
 lignin_mass_sum_df<-data.frame(functional.group=names(lignin_mass_pred_list),
                                RMSD=unlist(lapply(lignin_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                                R2=unlist(lapply(lignin_mass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
                                hellinger=unlist(lignin_mass_dist),
+                               KL=unlist(lapply(lignin_mass_KL,function(x) x[[5]])),
                                trait="lignin_mass")
 
 chlA_mass_sum_df<-data.frame(functional.group=names(chlA_mass_pred_list),
-                              RMSD=unlist(lapply(chlA_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
-                              R2=unlist(lapply(chlA_mass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
-                              hellinger=unlist(chlA_mass_dist),
-                              trait="chlA_mass")
+                             RMSD=unlist(lapply(chlA_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                             R2=unlist(lapply(chlA_mass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                             hellinger=unlist(chlA_mass_dist),
+                             KL=unlist(lapply(chlA_mass_KL,function(x) x[[5]])),
+                             trait="chlA_mass")
 
-EWT_sum_df<-data.frame(functional.group=names(EWT_pred_list),
-                       RMSD=unlist(lapply(EWT_pred_list,function(x) RMSD(x$measured,x$val_pred))),
-                       R2=unlist(lapply(EWT_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
-                       hellinger=unlist(EWT_dist),
-                       trait="EWT")
+chlB_mass_sum_df<-data.frame(functional.group=names(chlB_mass_pred_list),
+                             RMSD=unlist(lapply(chlB_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                             R2=unlist(lapply(chlB_mass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                             hellinger=unlist(chlB_mass_dist),
+                             KL=unlist(lapply(chlB_mass_KL,function(x) x[[5]])),
+                             trait="chlB_mass")
 
-summary_df<-do.call(rbind,list(LMA_sum_df,LDMC_sum_df,Nmass_sum_df,
+car_mass_sum_df<-data.frame(functional.group=names(car_mass_pred_list),
+                            RMSD=unlist(lapply(car_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                            R2=unlist(lapply(car_mass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                            hellinger=unlist(car_mass_dist),
+                            KL=unlist(lapply(car_mass_KL,function(x) x[[5]])),
+                            trait="car_mass")
+
+summary_df<-do.call(rbind,list(LMA_sum_df,LDMC_sum_df,EWT_sum_df,
+                               Nmass_sum_df,Cmass_sum_df,solubles_mass_sum_df,
+                               hemicellulose_mass_sum_df,cellulose_mass_sum_df,
                                lignin_mass_sum_df,chlA_mass_sum_df,
-                               EWT_sum_df))
+                               chlB_mass_sum_df,car_mass_sum_df))
 
 ## bringing in randomized validation data
 val_models<-readRDS("SavedResults/all_jack_df_list.rds")
 summary_df$R2_val<-NA
-summary_df$R2_val[summary_df$trait=="EWT"]<-summary(lm(Measured~pred.mean,data=val_models[["EWT"]]))$r.squared
 summary_df$R2_val[summary_df$trait=="LMA"]<-summary(lm(Measured~pred.mean,val_models[["LMA"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="EWT"]<-summary(lm(Measured~pred.mean,data=val_models[["EWT"]]))$r.squared
 summary_df$R2_val[summary_df$trait=="LDMC"]<-summary(lm(Measured~pred.mean,val_models[["LDMC"]]))$r.squared
 summary_df$R2_val[summary_df$trait=="Nmass"]<-summary(lm(Measured~pred.mean,val_models[["Nmass"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="Cmass"]<-summary(lm(Measured~pred.mean,val_models[["Cmass"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="solubles_mass"]<-summary(lm(Measured~pred.mean,val_models[["solubles_mass"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="hemicellulose_mass"]<-summary(lm(Measured~pred.mean,val_models[["hemicellulose_mass"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="cellulose_mass"]<-summary(lm(Measured~pred.mean,val_models[["cellulose_mass"]]))$r.squared
 summary_df$R2_val[summary_df$trait=="lignin_mass"]<-summary(lm(Measured~pred.mean,val_models[["lignin_mass"]]))$r.squared
 summary_df$R2_val[summary_df$trait=="chlA_mass"]<-summary(lm(Measured~pred.mean,val_models[["chlA_mass"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="chlB_mass"]<-summary(lm(Measured~pred.mean,val_models[["chlB_mass"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="car_mass"]<-summary(lm(Measured~pred.mean,val_models[["car_mass"]]))$r.squared
 
+ind_val_list<-readRDS("SavedResults/ind_val_list.rds")
+summary_df$R2_Dessain<-NA
+summary_df$R2_LOPEX<-NA
+summary_df$R2_ANGERS<-NA
+
+LMA_pred_df<-ind_val_list[["LMA"]]
+summary_df$R2_Dessain[summary_df$trait=="LMA"]<-summary(lm(Measured~pred.mean,
+                                                           LMA_pred_df[which(LMA_pred_df$dataset=="Dessain"),]))$r.squared
+summary_df$R2_LOPEX[summary_df$trait=="LMA"]<-summary(lm(Measured~pred.mean,
+                                                         LMA_pred_df[which(LMA_pred_df$dataset=="LOPEX"),]))$r.squared
+summary_df$R2_ANGERS[summary_df$trait=="LMA"]<-summary(lm(Measured~pred.mean,
+                                                          LMA_pred_df[which(LMA_pred_df$dataset=="ANGERS"),]))$r.squared
+
+LDMC_pred_df<-ind_val_list[["LDMC"]]
+summary_df$R2_Dessain[summary_df$trait=="LDMC"]<-summary(lm(Measured~pred.mean,
+                                                           LDMC_pred_df[which(LDMC_pred_df$dataset=="Dessain"),]))$r.squared
+summary_df$R2_LOPEX[summary_df$trait=="LDMC"]<-summary(lm(Measured~pred.mean,
+                                                         LDMC_pred_df[which(LDMC_pred_df$dataset=="LOPEX"),]))$r.squared
+# summary_df$R2_ANGERS[summary_df$trait=="LDMC"]<-summary(lm(Measured~pred.mean,
+#                                                           LDMC_pred_df[which(LDMC_pred_df$dataset=="ANGERS"),]))$r.squared
+
+EWT_pred_df<-ind_val_list[["EWT"]]
+summary_df$R2_Dessain[summary_df$trait=="EWT"]<-summary(lm(Measured~pred.mean,
+                                                           EWT_pred_df[which(EWT_pred_df$dataset=="Dessain"),]))$r.squared
+summary_df$R2_LOPEX[summary_df$trait=="EWT"]<-summary(lm(Measured~pred.mean,
+                                                         EWT_pred_df[which(EWT_pred_df$dataset=="LOPEX"),]))$r.squared
+summary_df$R2_ANGERS[summary_df$trait=="EWT"]<-summary(lm(Measured~pred.mean,
+                                                          EWT_pred_df[which(EWT_pred_df$dataset=="ANGERS"),]))$r.squared
+
+solubles_mass_pred_df<-ind_val_list[["solubles_mass"]]
+summary_df$R2_Dessain[summary_df$trait=="solubles_mass"]<-summary(lm(Measured~pred.mean,
+                                                           solubles_mass_pred_df[which(solubles_mass_pred_df$dataset=="Dessain"),]))$r.squared
+summary_df$R2_LOPEX[summary_df$trait=="solubles_mass"]<-summary(lm(Measured~pred.mean,
+                                                         solubles_mass_pred_df[which(solubles_mass_pred_df$dataset=="LOPEX"),]))$r.squared
+summary_df$R2_ANGERS[summary_df$trait=="solubles_mass"]<-summary(lm(Measured~pred.mean,
+                                                          solubles_mass_pred_df[which(solubles_mass_pred_df$dataset=="ANGERS"),]))$r.squared
+
+hemicellulose_mass_pred_df<-ind_val_list[["hemicellulose_mass"]]
+summary_df$R2_Dessain[summary_df$trait=="hemicellulose_mass"]<-summary(lm(Measured~pred.mean,
+                                                           hemicellulose_mass_pred_df[which(hemicellulose_mass_pred_df$dataset=="Dessain"),]))$r.squared
+summary_df$R2_LOPEX[summary_df$trait=="hemicellulose_mass"]<-summary(lm(Measured~pred.mean,
+                                                         hemicellulose_mass_pred_df[which(hemicellulose_mass_pred_df$dataset=="LOPEX"),]))$r.squared
+summary_df$R2_ANGERS[summary_df$trait=="hemicellulose_mass"]<-summary(lm(Measured~pred.mean,
+                                                          hemicellulose_mass_pred_df[which(hemicellulose_mass_pred_df$dataset=="ANGERS"),]))$r.squared
+
+cellulose_mass_pred_df<-ind_val_list[["cellulose_mass"]]
+summary_df$R2_Dessain[summary_df$trait=="cellulose_mass"]<-summary(lm(Measured~pred.mean,
+                                                           cellulose_mass_pred_df[which(cellulose_mass_pred_df$dataset=="Dessain"),]))$r.squared
+summary_df$R2_LOPEX[summary_df$trait=="cellulose_mass"]<-summary(lm(Measured~pred.mean,
+                                                         cellulose_mass_pred_df[which(cellulose_mass_pred_df$dataset=="LOPEX"),]))$r.squared
+summary_df$R2_ANGERS[summary_df$trait=="cellulose_mass"]<-summary(lm(Measured~pred.mean,
+                                                          cellulose_mass_pred_df[which(cellulose_mass_pred_df$dataset=="ANGERS"),]))$r.squared
+
+lignin_mass_pred_df<-ind_val_list[["lignin_mass"]]
+summary_df$R2_Dessain[summary_df$trait=="lignin_mass"]<-summary(lm(Measured~pred.mean,
+                                                           lignin_mass_pred_df[which(lignin_mass_pred_df$dataset=="Dessain"),]))$r.squared
+summary_df$R2_LOPEX[summary_df$trait=="lignin_mass"]<-summary(lm(Measured~pred.mean,
+                                                         lignin_mass_pred_df[which(lignin_mass_pred_df$dataset=="LOPEX"),]))$r.squared
+summary_df$R2_ANGERS[summary_df$trait=="lignin_mass"]<-summary(lm(Measured~pred.mean,
+                                                          lignin_mass_pred_df[which(lignin_mass_pred_df$dataset=="ANGERS"),]))$r.squared
+
+Nmass_pred_df<-ind_val_list[["Nmass"]]
+summary_df$R2_Dessain[summary_df$trait=="Nmass"]<-summary(lm(Measured~pred.mean,
+                                                           Nmass_pred_df[which(Nmass_pred_df$dataset=="Dessain"),]))$r.squared
+summary_df$R2_LOPEX[summary_df$trait=="Nmass"]<-summary(lm(Measured~pred.mean,
+                                                         Nmass_pred_df[which(Nmass_pred_df$dataset=="LOPEX"),]))$r.squared
+summary_df$R2_ANGERS[summary_df$trait=="Nmass"]<-summary(lm(Measured~pred.mean,
+                                                          Nmass_pred_df[which(Nmass_pred_df$dataset=="ANGERS"),]))$r.squared
+
+Cmass_pred_df<-ind_val_list[["Cmass"]]
+summary_df$R2_Dessain[summary_df$trait=="Cmass"]<-summary(lm(Measured~pred.mean,
+                                                           Cmass_pred_df[which(Cmass_pred_df$dataset=="Dessain"),]))$r.squared
+summary_df$R2_LOPEX[summary_df$trait=="Cmass"]<-summary(lm(Measured~pred.mean,
+                                                         Cmass_pred_df[which(Cmass_pred_df$dataset=="LOPEX"),]))$r.squared
+summary_df$R2_ANGERS[summary_df$trait=="Cmass"]<-summary(lm(Measured~pred.mean,
+                                                          Cmass_pred_df[which(Cmass_pred_df$dataset=="ANGERS"),]))$r.squared
+
+chlA_mass_pred_df<-ind_val_list[["chlA_mass"]]
+summary_df$R2_Dessain[summary_df$trait=="chlA_mass"]<-summary(lm(Measured~pred.mean,
+                                                           chlA_mass_pred_df[which(chlA_mass_pred_df$dataset=="Dessain"),]))$r.squared
+summary_df$R2_LOPEX[summary_df$trait=="chlA_mass"]<-summary(lm(Measured~pred.mean,
+                                                         chlA_mass_pred_df[which(chlA_mass_pred_df$dataset=="LOPEX"),]))$r.squared
+summary_df$R2_ANGERS[summary_df$trait=="chlA_mass"]<-summary(lm(Measured~pred.mean,
+                                                          chlA_mass_pred_df[which(chlA_mass_pred_df$dataset=="ANGERS"),]))$r.squared
+
+chlB_mass_pred_df<-ind_val_list[["chlB_mass"]]
+summary_df$R2_Dessain[summary_df$trait=="chlB_mass"]<-summary(lm(Measured~pred.mean,
+                                                           chlB_mass_pred_df[which(chlB_mass_pred_df$dataset=="Dessain"),]))$r.squared
+summary_df$R2_LOPEX[summary_df$trait=="chlB_mass"]<-summary(lm(Measured~pred.mean,
+                                                         chlB_mass_pred_df[which(chlB_mass_pred_df$dataset=="LOPEX"),]))$r.squared
+summary_df$R2_ANGERS[summary_df$trait=="chlB_mass"]<-summary(lm(Measured~pred.mean,
+                                                          chlB_mass_pred_df[which(chlB_mass_pred_df$dataset=="ANGERS"),]))$r.squared
+
+
+car_mass_pred_df<-ind_val_list[["car_mass"]]
+summary_df$R2_Dessain[summary_df$trait=="car_mass"]<-summary(lm(Measured~pred.mean,
+                                                           car_mass_pred_df[which(car_mass_pred_df$dataset=="Dessain"),]))$r.squared
+summary_df$R2_LOPEX[summary_df$trait=="car_mass"]<-summary(lm(Measured~pred.mean,
+                                                         car_mass_pred_df[which(car_mass_pred_df$dataset=="LOPEX"),]))$r.squared
+summary_df$R2_ANGERS[summary_df$trait=="car_mass"]<-summary(lm(Measured~pred.mean,
+                                                          car_mass_pred_df[which(car_mass_pred_df$dataset=="ANGERS"),]))$r.squared
+
+pdf("Images/R2_summary.pdf",height = 6,width=8,onefile=F)
 ggplot(data=summary_df,aes(x=trait,y=R2))+
-  geom_violin()+
-  geom_point(data=summary_df,aes(x=trait,y=R2_val),color="red")+
-  theme_bw()
+  geom_point(color="blue",size=2)+
+  geom_point(data=summary_df,aes(x=trait,y=R2_Dessain),color="black",size=2)+
+  geom_point(data=summary_df,aes(x=trait,y=R2_LOPEX),color="black",size=2)+
+  geom_point(data=summary_df,aes(x=trait,y=R2_ANGERS),color="black",size=2)+
+  geom_point(data=summary_df,aes(x=trait,y=R2_val),color="red",size=2)+
+  theme_bw()+
+  scale_x_discrete(labels=expression("LMA","LDMC","EWT","N"[mass],
+                            "C"[mass],"sol","hemi","cell",
+                            "lign","Chl "~italic("a"),
+                            "Chl "~italic("b"),"car"))+
+  theme(text=element_text(size=20),
+        axis.text.x = element_text(angle = 90,hjust=1,vjust=0))+
+  coord_cartesian(ylim=c(0,1))+
+  labs(x="Trait",y=expression("R"^2))
+dev.off()
 
 RMSD_df<-data.frame(functional.group=LMA_sum_df$functional.group,
                     LMA=LMA_sum_df$RMSD,
@@ -559,5 +847,7 @@ R2_df<-data.frame(functional.group=LMA_sum_df$functional.group,
                     chlA_mass=chlA_mass_sum_df$R2,
                     EWT=EWT_sum_df$R2)
 
-ggplot(data=summary_df,aes(x=hellinger,y=R2,color=trait))+
-  geom_point()+geom_smooth(method="lm",se=F)
+ggplot(data=summary_df,aes(x=hellinger,y=R2,
+                           color=trait))+
+  geom_point(size=2,aes(shape=functional.group))+
+  geom_smooth(method="lm",se=F)
