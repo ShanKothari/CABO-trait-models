@@ -704,266 +704,283 @@ Zn_pred_df<-data.frame(Measured=meta(all_val_ref)$Zn_mass,
 
 solubles_ind_val<-ggplot(data=solubles_pred_df,
                          aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured solubles",x="Predicted solubles")+
+  labs(y="Measured solubles (%)",x="Predicted solubles (%)")+
   coord_cartesian(xlim=c(15,95),ylim=c(15,95))
 
 hemicellulose_ind_val<-ggplot(data=hemicellulose_pred_df,
                               aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured hemicellulose",x="Predicted hemicellulose")+
+  labs(y="Measured hemicellulose (%)",x="Predicted hemicellulose (%)")+
   coord_cartesian(xlim=c(-6,38),ylim=c(-6,38))
 
 cellulose_ind_val<-ggplot(data=cellulose_pred_df,
                           aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured cellulose",x="Predicted cellulose")+
+  labs(y="Measured cellulose (%)",x="Predicted cellulose (%)")+
   coord_cartesian(xlim=c(0,50),ylim=c(0,50))
 
 lignin_ind_val<-ggplot(data=lignin_pred_df,
                        aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured lignin",x="Predicted lignin")+
+  labs(y="Measured lignin (%)",x="Predicted lignin (%)")+
   coord_cartesian(xlim=c(-18,22),ylim=c(-18,22))
 
 Nmass_ind_val<-ggplot(data=Nmass_pred_df,
                       aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured Nmass",x="Predicted Nmass")+
+  labs(y=expression("Measured N"[mass]*" (%)"),
+       x=expression("Predicted N"[mass]*" (%)"))+
   coord_cartesian(xlim=c(0,6.2),ylim=c(0,6.2))
 
 Cmass_ind_val<-ggplot(data=Cmass_pred_df,
                       aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured Cmass",x="Predicted Cmass")+
+  labs(y=expression("Measured C"[mass]*" (%)"),
+       x=expression("Predicted C"[mass]*" (%)"))+
   coord_cartesian(xlim=c(37,54),ylim=c(37,54))
 
 LMA_ind_val<-ggplot(data=LMA_pred_df,
                     aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured LMA",x="Predicted LMA")+
+  labs(y=expression("Measured LMA (kg m"^-2*")"),
+       x=expression("Predicted LMA (kg m"^-2*")"))+
   coord_cartesian(xlim=c(0,0.5),ylim=c(0,0.5))
 
 LDMC_ind_val<-ggplot(data=LDMC_pred_df,
                      aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured LDMC",x="Predicted LDMC")+
+  labs(y=expression("Measured LDMC (mg g"^-1*")"),
+       x=expression("Predicted LDMC (mg g"^-1*")"))+
   coord_cartesian(xlim=c(-100,600),ylim=c(-100,600))
 
 EWT_ind_val<-ggplot(data=EWT_pred_df,
                     aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured EWT",x="Predicted EWT")+
+  labs(y="Measured EWT (cm)",x="Predicted EWT (cm)")+
   coord_cartesian(xlim=c(0,0.09),ylim=c(0,0.09))
 
 chlA_ind_val<-ggplot(data=chlA_pred_df,
                      aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured chlA",x="Predicted chlA")+
+  labs(y=expression("Measured Chl"~italic("a")~"(mg g"^-1*")"),
+       x=expression("Predicted Chl"~italic("a")~"(mg g"^-1*")"))+
   coord_cartesian(xlim=c(-3,18),ylim=c(-3,18))
 
 chlB_ind_val<-ggplot(data=chlB_pred_df,
                      aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured chlB",x="Predicted chlB")+
+  labs(y=expression("Measured Chl"~italic("b")~"(mg g"^-1*")"),
+       x=expression("Predicted Chl"~italic("b")~"(mg g"^-1*")"))+
   coord_cartesian(xlim=c(-1.5,7.5),ylim=c(-1.5,7.5))
 
 car_ind_val<-ggplot(data=car_pred_df,
                     aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured car",x="Predicted car")+
+  labs(y=expression("Measured carotenoids (mg g"^-1*")"),
+       x=expression("Predicted carotenoids (mg g"^-1*")"))+
   coord_cartesian(xlim=c(-1,5.5),ylim=c(-1,5.5))
 
 Al_ind_val<-ggplot(data=Al_pred_df,
                    aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured Al",x="Predicted Al")+
+  labs(y=expression("Measured Al (mg g"^-1*")"),
+       x=expression("Predicted Al (mg g"^-1*")"))+
   coord_cartesian(xlim=c(-0.1,0.4),ylim=c(-0.1,0.4))
 
 Ca_ind_val<-ggplot(data=Ca_pred_df,
                    aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured Ca",x="Predicted Ca")+
+  labs(y=expression("Measured Ca (mg g"^-1*")"),
+       x=expression("Predicted Ca (mg g"^-1*")"))+
   coord_cartesian(xlim=c(-5,30),ylim=c(-5,30))
 
 Cu_ind_val<-ggplot(data=Cu_pred_df,
                    aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured Cu",x="Predicted Cu")+
+  labs(y=expression("Measured Cu (mg g"^-1*")"),
+       x=expression("Predicted Cu (mg g"^-1*")"))+
   coord_cartesian(xlim=c(0,0.1),ylim=c(0,0.1))
 
 Fe_ind_val<-ggplot(data=Fe_pred_df,
                    aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured Fe",x="Predicted Fe")+
+  labs(y=expression("Measured Fe (mg g"^-1*")"),
+       x=expression("Predicted Fe (mg g"^-1*")"))+
   coord_cartesian(xlim=c(0,0.5),ylim=c(0,0.5))
 
 K_ind_val<-ggplot(data=K_pred_df,
                   aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured K",x="Predicted K")+
+  labs(y=expression("Measured K (mg g"^-1*")"),
+       x=expression("Predicted K (mg g"^-1*")"))+
   coord_cartesian(xlim=c(0,40),ylim=c(0,40))
 
 Mg_ind_val<-ggplot(data=Mg_pred_df,
                    aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured Mg",x="Predicted Mg")+
+  labs(y=expression("Measured Mg (mg g"^-1*")"),
+       x=expression("Predicted Mg (mg g"^-1*")"))+
   coord_cartesian(xlim=c(-1,8),ylim=c(-1,8))
 
 Mn_ind_val<-ggplot(data=Mn_pred_df,
                    aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured Mn",x="Predicted Mn")+
+  labs(y=expression("Measured Mn (mg g"^-1*")"),
+       x=expression("Predicted Mn (mg g"^-1*")"))+
   coord_cartesian(xlim=c(-1,4),ylim=c(-1,4))
 
 Na_ind_val<-ggplot(data=Na_pred_df,
                    aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured Na",x="Predicted Na")+
+  labs(y=expression("Measured Na (mg g"^-1*")"),
+       x=expression("Predicted Na (mg g"^-1*")"))+
   coord_cartesian(xlim=c(-1,8),ylim=c(-1,8))
 
 P_ind_val<-ggplot(data=P_pred_df,
                   aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured P",x="Predicted P")+
+  labs(y=expression("Measured P (mg g"^-1*")"),
+       x=expression("Predicted P (mg g"^-1*")"))+
   coord_cartesian(xlim=c(-2,7),ylim=c(-2,7))
 
 Zn_ind_val<-ggplot(data=Zn_pred_df,
                    aes(x=pred.mean,y=Measured,color=dataset))+
-  geom_point()+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+
   theme_bw()+
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  labs(y="Measured Zn",x="Predicted Zn")+
+  labs(y=expression("Measured Zn (mg g"^-1*")"),
+       x=expression("Predicted Zn (mg g"^-1*")"))+
   coord_cartesian(xlim=c(-0.1,0.7),ylim=c(-0.1,0.7))
 
 ind_val_list<-list(solubles_mass=solubles_pred_df,
