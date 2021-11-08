@@ -4,6 +4,7 @@ library(tidyverse)
 library(spectrolab)
 library(asdreader)
 library(signal)
+library(ggpubr)
 
 ##########################################################
 ## defining important functions for later

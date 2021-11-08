@@ -21,7 +21,6 @@ ref.test<-ref.test[which(meta(ref.test)$project!="2019-Pardo-MSc-UdeM")]
 ## try Type II regression?
 ## eliminate outliers for Cu and Fe
 ## add together Chl a and b?
-## instead of 1.96 * SD, use 2.5 and 97.5 quantiles for error bars
 
 #########################################
 ## define functions
