@@ -1,9 +1,7 @@
 setwd("C:/Users/kotha020/Dropbox/PostdocProjects/FreshLeafModels")
 
 library(spectrolab)
-library(caret)
 library(pls)
-library(lmodel2)
 library(reshape2)
 library(RColorBrewer)
 library(patchwork)
@@ -11,9 +9,6 @@ source("Scripts/VIP.R")
 
 ref.train<-readRDS("ProcessedSpectra/ref_train.rds")
 ref.test<-readRDS("ProcessedSpectra/ref_test.rds")
-
-ref.train<-ref.train[which(meta(ref.train)$project!="2019-Pardo-MSc-UdeM")]
-ref.test<-ref.test[which(meta(ref.test)$project!="2019-Pardo-MSc-UdeM")]
 
 ##########################################
 ## to dos

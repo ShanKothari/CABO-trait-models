@@ -1,9 +1,7 @@
 setwd("C:/Users/kotha020/Dropbox/PostdocProjects/FreshLeafModels")
 
 library(spectrolab)
-library(caret)
 library(pls)
-library(lmodel2)
 library(reshape2)
 source("Scripts/VIP.R")
 
