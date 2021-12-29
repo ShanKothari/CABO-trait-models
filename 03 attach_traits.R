@@ -126,6 +126,8 @@ meta(all.ref)$genus[meta(all.ref)$species=="Agonis flexuosa (Willd.) Sweet"]<-"A
 meta(all.ref)$functional.group<-as.character(meta(all.ref)$growth.form)
 meta(all.ref)$functional.group[meta(all.ref)$family %in% c("Poaceae","Cyperaceae","Juncaceae","Typhaceae")]<-"graminoid"
 meta(all.ref)$functional.group[meta(all.ref)$family %in% c("Pinaceae","Cupressaceae")]<-"conifer"
+meta(all.ref)$functional.group[meta(all.ref)$functional.group=="herb"]<-"forb"
+meta(all.ref)$functional.group[meta(all.ref)$functional.group=="tree"]<-"broadleaf"
 
 ## attach to transmittance
 meta(all.trans)$growth.form<-meta(all.ref)$growth.form
