@@ -214,65 +214,24 @@ TRY_SLA$LMA<-1/TRY_SLA$StdValue
 ####################################
 ## plot trait distributions
 
-## find projects with more than 30 samples (all but CABO-General)
-common.proj<-names(table(trait.df$project))[table(trait.df$project)>30]
+trait.df$cat<-"CABO"
 
-ggplot(data=trait.df[trait.df$project %in% common.proj,],
+ggplot(data=trait.df,
        aes(x=chlA_mass,color=functional.group))+
   geom_density(size=1.25)+
   theme_bw()+
   scale_color_brewer(palette="Set3")
 
-LMA_KL<-list()
-LDMC_KL<-list()
-Nmass_KL<-list()
-hemicellulose_mass_KL<-list()
-lignin_mass_KL<-list()
-chlA_mass_KL<-list()
-EWT_KL<-list()
-
-for(i in common.proj){
-  print(i)
-  trait.df.proj<-trait.df[trait.df$project==i,]
-  trait.df.other<-trait.df[trait.df$project!=i,]
-  
-  LMA_KL[[i]]<-KL.divergence(na.omit(trait.df.other$LMA),
-                             na.omit(trait.df.proj$LMA))
-  
-  LDMC_KL[[i]]<-KL.divergence(na.omit(trait.df.other$LDMC),
-                              na.omit(trait.df.proj$LDMC))
-
-  Nmass_KL[[i]]<-KL.divergence(na.omit(trait.df.other$Nmass),
-                               na.omit(trait.df.proj$Nmass))
-
-  hemicellulose_mass_KL[[i]]<-KL.divergence(na.omit(trait.df.other$hemicellulose_mass),
-                                     na.omit(trait.df.proj$hemicellulose_mass))
-  
-  lignin_mass_KL[[i]]<-KL.divergence(na.omit(trait.df.other$lignin_mass),
-                                     na.omit(trait.df.proj$lignin_mass))
-  
-  chlA_mass_KL[[i]]<-KL.divergence(na.omit(trait.df.other$chlA_mass),
-                                   na.omit(trait.df.proj$chlA_mass))
-  
-  EWT_KL[[i]]<-KL.divergence(na.omit(trait.df.other$EWT),
-                             na.omit(trait.df.proj$EWT))
-  
-}
-
 ## LMA density plot
-LMA_diff<-common.proj[which.max(unlist(lapply(LMA_KL,function(x) x[[5]])))]
-trait.df$LMA_cat<-"CABO"
-# trait.df$LMA_cat[trait.df$project==LMA_diff]<-LMA_diff
-LMA_sub<-trait.df[trait.df$project %in% common.proj,
-                  c("sample_id","LMA","LMA_cat")]
+LMA_sub<-trait.df[,c("sample_id","LMA","cat")]
 
 TRY_SLA_sub<-data.frame(sample_id=TRY_SLA$ObsDataID,
                         LMA=TRY_SLA$LMA,
-                        LMA_cat="TRY")
+                        cat="TRY")
 all.LMA<-rbind(LMA_sub,TRY_SLA_sub)
 
 LMA_density<-ggplot(data=all.LMA,
-                    aes(x=LMA,color=LMA_cat))+
+                    aes(x=LMA,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
@@ -285,14 +244,10 @@ LMA_density<-ggplot(data=all.LMA,
                                 paste("TRY (n=",sum(!is.na(TRY_SLA$LMA)),")",sep="")))
 
 ## EWT density plot
-EWT_diff<-common.proj[which.max(unlist(lapply(EWT_KL,function(x) x[[5]])))]
-trait.df$EWT_cat<-"CABO"
-# trait.df$EWT_cat[trait.df$project==EWT_diff]<-EWT_diff
-EWT_sub<-trait.df[trait.df$project %in% common.proj,
-                   c("sample_id","EWT","EWT_cat")]
+EWT_sub<-trait.df[,c("sample_id","EWT","cat")]
 
 EWT_density<-ggplot(data=EWT_sub,
-                     aes(x=EWT,color=EWT_cat))+
+                     aes(x=EWT,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
@@ -304,19 +259,15 @@ EWT_density<-ggplot(data=EWT_sub,
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$EWT)),")",sep="")))
 
 ## LDMC density plot
-LDMC_diff<-common.proj[which.max(unlist(lapply(LDMC_KL,function(x) x[[5]])))]
-trait.df$LDMC_cat<-"CABO"
-# trait.df$LDMC_cat[trait.df$project==LDMC_diff]<-LDMC_diff
-LDMC_sub<-trait.df[trait.df$project %in% common.proj,
-                  c("sample_id","LDMC","LDMC_cat")]
+LDMC_sub<-trait.df[,c("sample_id","LDMC","cat")]
 
 TRY_LDMC_sub<-data.frame(sample_id=TRY_LDMC$ObsDataID,
                         LDMC=TRY_LDMC$StdValue*1000,
-                        LDMC_cat="TRY")
+                        cat="TRY")
 all.LDMC<-rbind(LDMC_sub,TRY_LDMC_sub)
 
 LDMC_density<-ggplot(data=all.LDMC,
-                     aes(x=LDMC,color=LDMC_cat))+
+                     aes(x=LDMC,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
@@ -329,19 +280,15 @@ LDMC_density<-ggplot(data=all.LDMC,
                                 paste("TRY (n=",sum(!is.na(TRY_LDMC$StdValue)),")",sep="")))
 
 ## Nmass density plot
-Nmass_diff<-common.proj[which.max(unlist(lapply(Nmass_KL,function(x) x[[5]])))]
-trait.df$Nmass_cat<-"CABO"
-# trait.df$Nmass_cat[trait.df$project==Nmass_diff]<-Nmass_diff
-Nmass_sub<-trait.df[trait.df$project %in% common.proj,
-                   c("sample_id","Nmass","Nmass_cat")]
+Nmass_sub<-trait.df[,c("sample_id","Nmass","cat")]
 
 TRY_N_sub<-data.frame(sample_id=TRY_N$ObsDataID,
-                         Nmass=TRY_N$StdValue/10,
-                         Nmass_cat="TRY")
+                      Nmass=TRY_N$StdValue/10,
+                      cat="TRY")
 all.Nmass<-rbind(Nmass_sub,TRY_N_sub)
 
 Nmass_density<-ggplot(data=all.Nmass,
-                     aes(x=Nmass,color=Nmass_cat))+
+                     aes(x=Nmass,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
@@ -354,19 +301,15 @@ Nmass_density<-ggplot(data=all.Nmass,
                                 paste("TRY (n=",sum(!is.na(TRY_N$StdValue)),")",sep="")))
 
 ## Cmass density plot
-# Cmass_diff<-common.proj[which.max(unlist(lapply(Cmass_KL,function(x) x[[5]])))]
-trait.df$Cmass_cat<-"CABO"
-# trait.df$Cmass_cat[trait.df$project==Cmass_diff]<-Cmass_diff
-Cmass_sub<-trait.df[trait.df$project %in% common.proj,
-                    c("sample_id","Cmass","Cmass_cat")]
+Cmass_sub<-trait.df[,c("sample_id","Cmass","cat")]
 
 TRY_C_sub<-data.frame(sample_id=TRY_C$ObsDataID,
                       Cmass=TRY_C$StdValue/10,
-                      Cmass_cat="TRY")
+                      cat="TRY")
 all.Cmass<-rbind(Cmass_sub,TRY_C_sub)
 
 Cmass_density<-ggplot(data=all.Cmass,
-                      aes(x=Cmass,color=Cmass_cat))+
+                      aes(x=Cmass,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
@@ -379,19 +322,15 @@ Cmass_density<-ggplot(data=all.Cmass,
                                 paste("TRY (n=",sum(!is.na(TRY_C$StdValue)),")",sep="")))
 
 ## solubles density plot
-# solubles_mass_diff<-common.proj[which.max(unlist(lapply(solubles_mass_KL,function(x) x[[5]])))]
-trait.df$solubles_mass_cat<-"CABO"
-# trait.df$solubles_mass_cat[trait.df$project==solubles_mass_diff]<-solubles_mass_diff
-solubles_mass_sub<-trait.df[trait.df$project %in% common.proj,
-                                 c("sample_id","solubles_mass","solubles_mass_cat")]
+solubles_mass_sub<-trait.df[,c("sample_id","solubles_mass","cat")]
 
 TRY_solubles_sub<-data.frame(sample_id=TRY_solubles$ObsDataID,
                                   solubles_mass=TRY_solubles$StdValue/10,
-                                  solubles_mass_cat="TRY")
+                                  cat="TRY")
 all.solubles_mass<-rbind(solubles_mass_sub,TRY_solubles_sub)
 
 solubles_mass_density<-ggplot(data=all.solubles_mass,
-                                   aes(x=solubles_mass,color=solubles_mass_cat))+
+                                   aes(x=solubles_mass,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
@@ -404,19 +343,15 @@ solubles_mass_density<-ggplot(data=all.solubles_mass,
                                 paste("TRY (n=",sum(!is.na(TRY_solubles$StdValue)),")",sep="")))
 
 ## hemicellulose density plot
-hemicellulose_mass_diff<-common.proj[which.max(unlist(lapply(hemicellulose_mass_KL,function(x) x[[5]])))]
-trait.df$hemicellulose_mass_cat<-"CABO"
-# trait.df$hemicellulose_mass_cat[trait.df$project==hemicellulose_mass_diff]<-hemicellulose_mass_diff
-hemicellulose_mass_sub<-trait.df[trait.df$project %in% common.proj,
-                    c("sample_id","hemicellulose_mass","hemicellulose_mass_cat")]
+hemicellulose_mass_sub<-trait.df[,c("sample_id","hemicellulose_mass","cat")]
 
 TRY_hemicellulose_sub<-data.frame(sample_id=TRY_hemicellulose$ObsDataID,
-                      hemicellulose_mass=TRY_hemicellulose$StdValue/10,
-                      hemicellulose_mass_cat="TRY")
+                                  hemicellulose_mass=TRY_hemicellulose$StdValue/10,
+                                  cat="TRY")
 all.hemicellulose_mass<-rbind(hemicellulose_mass_sub,TRY_hemicellulose_sub)
 
 hemicellulose_mass_density<-ggplot(data=all.hemicellulose_mass,
-                      aes(x=hemicellulose_mass,color=hemicellulose_mass_cat))+
+                      aes(x=hemicellulose_mass,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
@@ -429,19 +364,15 @@ hemicellulose_mass_density<-ggplot(data=all.hemicellulose_mass,
                                 paste("TRY (n=",sum(!is.na(TRY_hemicellulose$StdValue)),")",sep="")))
 
 ## cellulose density plot
-# cellulose_mass_diff<-common.proj[which.max(unlist(lapply(cellulose_mass_KL,function(x) x[[5]])))]
-trait.df$cellulose_mass_cat<-"CABO"
-# trait.df$cellulose_mass_cat[trait.df$project==cellulose_mass_diff]<-cellulose_mass_diff
-cellulose_mass_sub<-trait.df[trait.df$project %in% common.proj,
-                                 c("sample_id","cellulose_mass","cellulose_mass_cat")]
+cellulose_mass_sub<-trait.df[,c("sample_id","cellulose_mass","cat")]
 
 TRY_cellulose_sub<-data.frame(sample_id=TRY_cellulose$ObsDataID,
                                   cellulose_mass=TRY_cellulose$StdValue/10,
-                                  cellulose_mass_cat="TRY")
+                                  cat="TRY")
 all.cellulose_mass<-rbind(cellulose_mass_sub,TRY_cellulose_sub)
 
 cellulose_mass_density<-ggplot(data=all.cellulose_mass,
-                                   aes(x=cellulose_mass,color=cellulose_mass_cat))+
+                               aes(x=cellulose_mass,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
@@ -454,19 +385,15 @@ cellulose_mass_density<-ggplot(data=all.cellulose_mass,
                                 paste("TRY (n=",sum(!is.na(TRY_cellulose$StdValue)),")",sep="")))
 
 ## lignin density plot
-lignin_mass_diff<-common.proj[which.max(unlist(lapply(lignin_mass_KL,function(x) x[[5]])))]
-trait.df$lignin_mass_cat<-"CABO"
-# trait.df$lignin_mass_cat[trait.df$project==lignin_mass_diff]<-lignin_mass_diff
-lignin_mass_sub<-trait.df[trait.df$project %in% common.proj,
-                                 c("sample_id","lignin_mass","lignin_mass_cat")]
+lignin_mass_sub<-trait.df[,c("sample_id","lignin_mass","cat")]
 
 TRY_lignin_sub<-data.frame(sample_id=TRY_lignin$ObsDataID,
                                   lignin_mass=TRY_lignin$StdValue/10,
-                                  lignin_mass_cat="TRY")
+                                  cat="TRY")
 all.lignin_mass<-rbind(lignin_mass_sub,TRY_lignin_sub)
 
 lignin_mass_density<-ggplot(data=all.lignin_mass,
-                                   aes(x=lignin_mass,color=lignin_mass_cat))+
+                            aes(x=lignin_mass,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
@@ -478,20 +405,38 @@ lignin_mass_density<-ggplot(data=all.lignin_mass,
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$lignin_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_lignin$StdValue)),")",sep="")))
 
+## chl density plot
+trait.df$chl_mass<-trait.df$chlA_mass+trait.df$chlB_mass
+chl_mass_sub<-trait.df[,c("sample_id","chl_mass","cat")]
+
+TRY_Chl_sub<-data.frame(sample_id=TRY_Chl$ObsDataID,
+                        chl_mass=TRY_Chl$StdValue,
+                        cat="TRY")
+all.chl_mass<-rbind(chl_mass_sub,TRY_Chl_sub)
+
+chl_mass_density<-ggplot(data=all.chl_mass,
+                          aes(x=chl_mass,color=cat))+
+  geom_density(size=1.5)+
+  theme_bw()+
+  theme(legend.title = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        text = element_text(size=30),
+        legend.position = c(0.7,0.7))+
+  labs(y="Density",x=expression("Total Chl (mg g"^-1*")"))+
+  scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$chlA_mass)),")",sep=""),
+                                paste("TRY (n=",sum(!is.na(TRY_Chl$StdValue)),")",sep="")))
+
 ## chlA density plot
-# chlA_mass_diff<-common.proj[which.max(unlist(lapply(chlA_mass_KL,function(x) x[[5]])))]
-trait.df$chlA_mass_cat<-"CABO"
-# trait.df$chlA_mass_cat[trait.df$project==chlA_mass_diff]<-chlA_mass_diff
-chlA_mass_sub<-trait.df[trait.df$project %in% common.proj,
-                                 c("sample_id","chlA_mass","chlA_mass_cat")]
+chlA_mass_sub<-trait.df[,c("sample_id","chlA_mass","cat")]
 
 TRY_ChlA_sub<-data.frame(sample_id=TRY_ChlA$ObsDataID,
-                                  chlA_mass=TRY_ChlA$StdValue,
-                                  chlA_mass_cat="TRY")
+                         chlA_mass=TRY_ChlA$StdValue,
+                         cat="TRY")
 all.chlA_mass<-rbind(chlA_mass_sub,TRY_ChlA_sub)
 
 chlA_mass_density<-ggplot(data=all.chlA_mass,
-                                   aes(x=chlA_mass,color=chlA_mass_cat))+
+                          aes(x=chlA_mass,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
@@ -504,19 +449,15 @@ chlA_mass_density<-ggplot(data=all.chlA_mass,
                                 paste("TRY (n=",sum(!is.na(TRY_ChlA$StdValue)),")",sep="")))
 
 ## chlB density plot
-# chlB_mass_diff<-common.proj[which.max(unlist(lapply(chlB_mass_KL,function(x) x[[5]])))]
-trait.df$chlB_mass_cat<-"CABO"
-# trait.df$chlB_mass_cat[trait.df$project==chlB_mass_diff]<-chlB_mass_diff
-chlB_mass_sub<-trait.df[trait.df$project %in% common.proj,
-                        c("sample_id","chlB_mass","chlB_mass_cat")]
+chlB_mass_sub<-trait.df[,c("sample_id","chlB_mass","cat")]
 
 TRY_ChlB_sub<-data.frame(sample_id=TRY_ChlB$ObsDataID,
                          chlB_mass=TRY_ChlB$StdValue,
-                         chlB_mass_cat="TRY")
+                         cat="TRY")
 all.chlB_mass<-rbind(chlB_mass_sub,TRY_ChlB_sub)
 
 chlB_mass_density<-ggplot(data=all.chlB_mass,
-                          aes(x=chlB_mass,color=chlB_mass_cat))+
+                          aes(x=chlB_mass,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
@@ -529,19 +470,15 @@ chlB_mass_density<-ggplot(data=all.chlB_mass,
                                 paste("TRY (n=",sum(!is.na(TRY_ChlB$StdValue)),")",sep="")))
 
 ## car density plot
-# car_mass_diff<-common.proj[which.max(unlist(lapply(car_mass_KL,function(x) x[[5]])))]
-trait.df$car_mass_cat<-"CABO"
-# trait.df$car_mass_cat[trait.df$project==car_mass_diff]<-car_mass_diff
-car_mass_sub<-trait.df[trait.df$project %in% common.proj,
-                        c("sample_id","car_mass","car_mass_cat")]
+car_mass_sub<-trait.df[,c("sample_id","car_mass","cat")]
 
 TRY_Car_sub<-data.frame(sample_id=TRY_Car$ObsDataID,
                          car_mass=TRY_Car$StdValue,
-                         car_mass_cat="TRY")
+                         cat="TRY")
 all.car_mass<-rbind(car_mass_sub,TRY_Car_sub)
 
 car_mass_density<-ggplot(data=all.car_mass,
-                          aes(x=car_mass,color=car_mass_cat))+
+                          aes(x=car_mass,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
@@ -554,19 +491,15 @@ car_mass_density<-ggplot(data=all.car_mass,
                                 paste("TRY (n=",sum(!is.na(TRY_Car$StdValue)),")",sep="")))
 
 ## Al density plot
-# Al_mass_diff<-common.proj[which.max(unlist(lapply(Al_mass_KL,function(x) x[[5]])))]
-trait.df$Al_mass_cat<-"CABO"
-# trait.df$Al_mass_cat[trait.df$project==Al_mass_diff]<-Al_mass_diff
-Al_mass_sub<-trait.df[trait.df$project %in% common.proj,
-                       c("sample_id","Al_mass","Al_mass_cat")]
+Al_mass_sub<-trait.df[,c("sample_id","Al_mass","cat")]
 
 TRY_Al_sub<-data.frame(sample_id=TRY_Al$ObsDataID,
                         Al_mass=TRY_Al$StdValue,
-                        Al_mass_cat="TRY")
+                        cat="TRY")
 all.Al_mass<-rbind(Al_mass_sub,TRY_Al_sub)
 
 Al_mass_density<-ggplot(data=all.Al_mass,
-                         aes(x=Al_mass,color=Al_mass_cat))+
+                         aes(x=Al_mass,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
@@ -580,19 +513,15 @@ Al_mass_density<-ggplot(data=all.Al_mass,
   coord_cartesian(xlim=c(0,1))
 
 ## Ca density plot
-# Ca_mass_diff<-common.proj[which.max(unlist(lapply(Ca_mass_KL,function(x) x[[5]])))]
-trait.df$Ca_mass_cat<-"CABO"
-# trait.df$Ca_mass_cat[trait.df$project==Ca_mass_diff]<-Ca_mass_diff
-Ca_mass_sub<-trait.df[trait.df$project %in% common.proj,
-                       c("sample_id","Ca_mass","Ca_mass_cat")]
+Ca_mass_sub<-trait.df[,c("sample_id","Ca_mass","cat")]
 
 TRY_Ca_sub<-data.frame(sample_id=TRY_Ca$ObsDataID,
                         Ca_mass=TRY_Ca$StdValue,
-                        Ca_mass_cat="TRY")
+                        cat="TRY")
 all.Ca_mass<-rbind(Ca_mass_sub,TRY_Ca_sub)
 
 Ca_mass_density<-ggplot(data=all.Ca_mass,
-                         aes(x=Ca_mass,color=Ca_mass_cat))+
+                         aes(x=Ca_mass,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
@@ -605,19 +534,15 @@ Ca_mass_density<-ggplot(data=all.Ca_mass,
                                 paste("TRY (n=",sum(!is.na(TRY_Ca$StdValue)),")",sep="")))
 
 ## Cu density plot
-# Cu_mass_diff<-common.proj[which.max(unlist(lapply(Cu_mass_KL,function(x) x[[5]])))]
-trait.df$Cu_mass_cat<-"CABO"
-# trait.df$Cu_mass_cat[trait.df$project==Cu_mass_diff]<-Cu_mass_diff
-Cu_mass_sub<-trait.df[trait.df$project %in% common.proj,
-                       c("sample_id","Cu_mass","Cu_mass_cat")]
+Cu_mass_sub<-trait.df[,c("sample_id","Cu_mass","cat")]
 
 TRY_Cu_sub<-data.frame(sample_id=TRY_Cu$ObsDataID,
                         Cu_mass=TRY_Cu$StdValue,
-                        Cu_mass_cat="TRY")
+                        cat="TRY")
 all.Cu_mass<-rbind(Cu_mass_sub,TRY_Cu_sub)
 
 Cu_mass_density<-ggplot(data=all.Cu_mass,
-                         aes(x=Cu_mass,color=Cu_mass_cat))+
+                         aes(x=Cu_mass,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
@@ -630,19 +555,15 @@ Cu_mass_density<-ggplot(data=all.Cu_mass,
                                 paste("TRY (n=",sum(!is.na(TRY_Cu$StdValue)),")",sep="")))
 
 ## Fe density plot
-# Fe_mass_diff<-common.proj[which.max(unlist(lapply(Fe_mass_KL,function(x) x[[5]])))]
-trait.df$Fe_mass_cat<-"CABO"
-# trait.df$Fe_mass_cat[trait.df$project==Fe_mass_diff]<-Fe_mass_diff
-Fe_mass_sub<-trait.df[trait.df$project %in% common.proj,
-                       c("sample_id","Fe_mass","Fe_mass_cat")]
+Fe_mass_sub<-trait.df[,c("sample_id","Fe_mass","cat")]
 
 TRY_Fe_sub<-data.frame(sample_id=TRY_Fe$ObsDataID,
                         Fe_mass=TRY_Fe$StdValue,
-                        Fe_mass_cat="TRY")
+                        cat="TRY")
 all.Fe_mass<-rbind(Fe_mass_sub,TRY_Fe_sub)
 
 Fe_mass_density<-ggplot(data=all.Fe_mass,
-                         aes(x=Fe_mass,color=Fe_mass_cat))+
+                         aes(x=Fe_mass,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
@@ -655,19 +576,15 @@ Fe_mass_density<-ggplot(data=all.Fe_mass,
                                 paste("TRY (n=",sum(!is.na(TRY_Fe$StdValue)),")",sep="")))
 
 ## K density plot
-# K_mass_diff<-common.proj[which.max(unlist(lapply(K_mass_KL,function(x) x[[5]])))]
-trait.df$K_mass_cat<-"CABO"
-# trait.df$K_mass_cat[trait.df$project==K_mass_diff]<-K_mass_diff
-K_mass_sub<-trait.df[trait.df$project %in% common.proj,
-                       c("sample_id","K_mass","K_mass_cat")]
+K_mass_sub<-trait.df[,c("sample_id","K_mass","cat")]
 
 TRY_K_sub<-data.frame(sample_id=TRY_K$ObsDataID,
                         K_mass=TRY_K$StdValue,
-                        K_mass_cat="TRY")
+                        cat="TRY")
 all.K_mass<-rbind(K_mass_sub,TRY_K_sub)
 
 K_mass_density<-ggplot(data=all.K_mass,
-                         aes(x=K_mass,color=K_mass_cat))+
+                         aes(x=K_mass,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
@@ -680,19 +597,15 @@ K_mass_density<-ggplot(data=all.K_mass,
                                 paste("TRY (n=",sum(!is.na(TRY_K$StdValue)),")",sep="")))
 
 ## Mg density plot
-# Mg_mass_diff<-common.proj[which.max(unlist(lapply(Mg_mass_KL,function(x) x[[5]])))]
-trait.df$Mg_mass_cat<-"CABO"
-# trait.df$Mg_mass_cat[trait.df$project==Mg_mass_diff]<-Mg_mass_diff
-Mg_mass_sub<-trait.df[trait.df$project %in% common.proj,
-                       c("sample_id","Mg_mass","Mg_mass_cat")]
+Mg_mass_sub<-trait.df[,c("sample_id","Mg_mass","cat")]
 
 TRY_Mg_sub<-data.frame(sample_id=TRY_Mg$ObsDataID,
                         Mg_mass=TRY_Mg$StdValue,
-                        Mg_mass_cat="TRY")
+                        cat="TRY")
 all.Mg_mass<-rbind(Mg_mass_sub,TRY_Mg_sub)
 
 Mg_mass_density<-ggplot(data=all.Mg_mass,
-                         aes(x=Mg_mass,color=Mg_mass_cat))+
+                         aes(x=Mg_mass,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
@@ -705,19 +618,15 @@ Mg_mass_density<-ggplot(data=all.Mg_mass,
                                 paste("TRY (n=",sum(!is.na(TRY_Mg$StdValue)),")",sep="")))
 
 ## Mn density plot
-# Mn_mass_diff<-common.proj[which.max(unlist(lapply(Mn_mass_KL,function(x) x[[5]])))]
-trait.df$Mn_mass_cat<-"CABO"
-# trait.df$Mn_mass_cat[trait.df$project==Mn_mass_diff]<-Mn_mass_diff
-Mn_mass_sub<-trait.df[trait.df$project %in% common.proj,
-                       c("sample_id","Mn_mass","Mn_mass_cat")]
+Mn_mass_sub<-trait.df[,c("sample_id","Mn_mass","cat")]
 
 TRY_Mn_sub<-data.frame(sample_id=TRY_Mn$ObsDataID,
                         Mn_mass=TRY_Mn$StdValue,
-                        Mn_mass_cat="TRY")
+                        cat="TRY")
 all.Mn_mass<-rbind(Mn_mass_sub,TRY_Mn_sub)
 
 Mn_mass_density<-ggplot(data=all.Mn_mass,
-                         aes(x=Mn_mass,color=Mn_mass_cat))+
+                         aes(x=Mn_mass,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
@@ -730,19 +639,15 @@ Mn_mass_density<-ggplot(data=all.Mn_mass,
                                 paste("TRY (n=",sum(!is.na(TRY_Mn$StdValue)),")",sep="")))
 
 ## Na density plot
-# Na_mass_diff<-common.proj[which.max(unlist(lapply(Na_mass_KL,function(x) x[[5]])))]
-trait.df$Na_mass_cat<-"CABO"
-# trait.df$Na_mass_cat[trait.df$project==Na_mass_diff]<-Na_mass_diff
-Na_mass_sub<-trait.df[trait.df$project %in% common.proj,
-                       c("sample_id","Na_mass","Na_mass_cat")]
+Na_mass_sub<-trait.df[,c("sample_id","Na_mass","cat")]
 
 TRY_Na_sub<-data.frame(sample_id=TRY_Na$ObsDataID,
                         Na_mass=TRY_Na$StdValue,
-                        Na_mass_cat="TRY")
+                        cat="TRY")
 all.Na_mass<-rbind(Na_mass_sub,TRY_Na_sub)
 
 Na_mass_density<-ggplot(data=all.Na_mass,
-                         aes(x=Na_mass,color=Na_mass_cat))+
+                         aes(x=Na_mass,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
@@ -756,19 +661,15 @@ Na_mass_density<-ggplot(data=all.Na_mass,
   coord_cartesian(xlim=c(0,15))
 
 ## P density plot
-# P_mass_diff<-common.proj[which.max(unlist(lapply(P_mass_KL,function(x) x[[5]])))]
-trait.df$P_mass_cat<-"CABO"
-# trait.df$P_mass_cat[trait.df$project==P_mass_diff]<-P_mass_diff
-P_mass_sub<-trait.df[trait.df$project %in% common.proj,
-                       c("sample_id","P_mass","P_mass_cat")]
+P_mass_sub<-trait.df[,c("sample_id","P_mass","cat")]
 
 TRY_P_sub<-data.frame(sample_id=TRY_P$ObsDataID,
                         P_mass=TRY_P$StdValue,
-                        P_mass_cat="TRY")
+                        cat="TRY")
 all.P_mass<-rbind(P_mass_sub,TRY_P_sub)
 
 P_mass_density<-ggplot(data=all.P_mass,
-                         aes(x=P_mass,color=P_mass_cat))+
+                         aes(x=P_mass,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
@@ -781,19 +682,15 @@ P_mass_density<-ggplot(data=all.P_mass,
                                 paste("TRY (n=",sum(!is.na(TRY_P$StdValue)),")",sep="")))
 
 ## Zn density plot
-# Zn_mass_diff<-common.proj[which.max(unlist(lapply(Zn_mass_KL,function(x) x[[5]])))]
-trait.df$Zn_mass_cat<-"CABO"
-# trait.df$Zn_mass_cat[trait.df$project==Zn_mass_diff]<-Zn_mass_diff
-Zn_mass_sub<-trait.df[trait.df$project %in% common.proj,
-                       c("sample_id","Zn_mass","Zn_mass_cat")]
+Zn_mass_sub<-trait.df[,c("sample_id","Zn_mass","cat")]
 
 TRY_Zn_sub<-data.frame(sample_id=TRY_Zn$ObsDataID,
                         Zn_mass=TRY_Zn$StdValue,
-                        Zn_mass_cat="TRY")
+                        cat="TRY")
 all.Zn_mass<-rbind(Zn_mass_sub,TRY_Zn_sub)
 
 Zn_mass_density<-ggplot(data=all.Zn_mass,
-                         aes(x=Zn_mass,color=Zn_mass_cat))+
+                         aes(x=Zn_mass,color=cat))+
   geom_density(size=1.5)+
   theme_bw()+
   theme(legend.title = element_blank(),
