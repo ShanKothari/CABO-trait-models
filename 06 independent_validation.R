@@ -353,6 +353,12 @@ ICP_all[,num_cols]<-data.frame(sapply(ICP_all[,num_cols],
 
 ICP_all$Al[ICP_all$Sample_id=="2017-08-15-jbmcb-P006"]<-NA
 ICP_all$Cu[ICP_all$Sample_id=="2017-06-07-ireqa-P010"]<-NA
+ICP_all$Cu[ICP_all$Sample_id=="2017-08-15-jbmcb-P002"]<-NA
+ICP_all$Fe[ICP_all$Sample_id=="2017-05-31-jbmtb-P011"]<-NA
+ICP_all$Fe[ICP_all$Sample_id=="2017-05-26-jbmcb-P007"]<-NA
+ICP_all$K[ICP_all$Sample_id=="2017-06-15-jbmcb-P003"]<-NA
+ICP_all$Mg[ICP_all$Sample_id=="2017-06-03-sutod-P003"]<-NA
+ICP_all$Na[ICP_all$Sample_id=="2017-06-15-jbmcb-P003"]<-NA
 
 meta(Dessain.spec)$Al_mass<-ICP_all$Al[match(meta(Dessain.spec)$sample_id,ICP_all$Sample_id)]
 meta(Dessain.spec)$B_mass<-ICP_all$B[match(meta(Dessain.spec)$sample_id,ICP_all$Sample_id)]
