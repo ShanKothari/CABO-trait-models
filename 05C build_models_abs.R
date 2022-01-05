@@ -12,7 +12,6 @@ abs.test<-readRDS("ProcessedSpectra/abs_test.rds")
 ## to dos
 
 ## try Type II regression?
-## eliminate outliers for Cu and Fe
 ## add together Chl a and b?
 ## instead of 1.96 * SD, use 2.5 and 97.5 quantiles for error bars
 
@@ -846,6 +845,7 @@ solubles_mass.jack.df<-data.frame(pred.mean=solubles_mass.jack.stat[,1],
                                   ncomp=ncomp_solubles_mass_CVmodel,
                                   Species=meta(abs.test)$species,
                                   Project=meta(abs.test)$project,
+                                  functional.group=meta(abs.test)$functional.group,
                                   ID=meta(abs.test)$sample_id)
 
 solubles_mass.val.plot<-ggplot(solubles_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
@@ -869,6 +869,7 @@ hemicellulose_mass.jack.df<-data.frame(pred.mean=hemicellulose_mass.jack.stat[,1
                                        ncomp=ncomp_hemicellulose_mass_CVmodel,
                                        Species=meta(abs.test)$species,
                                        Project=meta(abs.test)$project,
+                                       functional.group=meta(abs.test)$functional.group,
                                        ID=meta(abs.test)$sample_id)
 
 hemicellulose_mass.val.plot<-ggplot(hemicellulose_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
@@ -892,6 +893,7 @@ cellulose_mass.jack.df<-data.frame(pred.mean=cellulose_mass.jack.stat[,1],
                                    ncomp=ncomp_cellulose_mass_CVmodel,
                                    Species=meta(abs.test)$species,
                                    Project=meta(abs.test)$project,
+                                   functional.group=meta(abs.test)$functional.group,
                                    ID=meta(abs.test)$sample_id)
 
 cellulose_mass.val.plot<-ggplot(cellulose_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
@@ -915,6 +917,7 @@ lignin_mass.jack.df<-data.frame(pred.mean=lignin_mass.jack.stat[,1],
                                 ncomp=ncomp_lignin_mass_CVmodel,
                                 Species=meta(abs.test)$species,
                                 Project=meta(abs.test)$project,
+                                functional.group=meta(abs.test)$functional.group,
                                 ID=meta(abs.test)$sample_id)
 
 lignin_mass.val.plot<-ggplot(lignin_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
@@ -938,6 +941,7 @@ chlA_mass.jack.df<-data.frame(pred.mean=chlA_mass.jack.stat[,1],
                               ncomp=ncomp_chlA_mass_CVmodel,
                               Species=meta(abs.test)$species,
                               Project=meta(abs.test)$project,
+                              functional.group=meta(abs.test)$functional.group,
                               ID=meta(abs.test)$sample_id)
 
 chlA_mass.val.plot<-ggplot(chlA_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
@@ -961,6 +965,7 @@ chlB_mass.jack.df<-data.frame(pred.mean=chlB_mass.jack.stat[,1],
                               ncomp=ncomp_chlB_mass_CVmodel,
                               Species=meta(abs.test)$species,
                               Project=meta(abs.test)$project,
+                              functional.group=meta(abs.test)$functional.group,
                               ID=meta(abs.test)$sample_id)
 
 chlB_mass.val.plot<-ggplot(chlB_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
@@ -984,6 +989,7 @@ car_mass.jack.df<-data.frame(pred.mean=car_mass.jack.stat[,1],
                              ncomp=ncomp_car_mass_CVmodel,
                              Species=meta(abs.test)$species,
                              Project=meta(abs.test)$project,
+                             functional.group=meta(abs.test)$functional.group,
                              ID=meta(abs.test)$sample_id)
 
 car_mass.val.plot<-ggplot(car_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
@@ -1007,6 +1013,7 @@ Cmass.jack.df<-data.frame(pred.mean=Cmass.jack.stat[,1],
                           ncomp=ncomp_Cmass_CVmodel,
                           Species=meta(abs.test)$species,
                           Project=meta(abs.test)$project,
+                          functional.group=meta(abs.test)$functional.group,
                           ID=meta(abs.test)$sample_id)
 
 Cmass.val.plot<-ggplot(Cmass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
@@ -1029,6 +1036,7 @@ Nmass.jack.df<-data.frame(pred.mean=Nmass.jack.stat[,1],
                           ncomp=ncomp_Nmass_CVmodel,
                           Species=meta(abs.test)$species,
                           Project=meta(abs.test)$project,
+                          functional.group=meta(abs.test)$functional.group,
                           ID=meta(abs.test)$sample_id)
 
 Nmass.val.plot<-ggplot(Nmass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
@@ -1050,6 +1058,7 @@ EWT.jack.df<-data.frame(pred.mean=EWT.jack.stat[,1],
                         ncomp=ncomp_EWT_CVmodel,
                         Species=meta(abs.test)$species,
                         Project=meta(abs.test)$project,
+                        functional.group=meta(abs.test)$functional.group,
                         ID=meta(abs.test)$sample_id)
 
 EWT.val.plot<-ggplot(EWT.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
@@ -1073,6 +1082,7 @@ LMA.jack.df<-data.frame(pred.mean=LMA.jack.stat[,1],
                         ncomp=ncomp_LMA_CVmodel,
                         Species=meta(abs.test)$species,
                         Project=meta(abs.test)$project,
+                        functional.group=meta(abs.test)$functional.group,
                         ID=meta(abs.test)$sample_id)
 
 LMA.val.plot<-ggplot(LMA.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
@@ -1095,6 +1105,7 @@ LDMC.jack.df<-data.frame(pred.mean=LDMC.jack.stat[,1],
                          ncomp=ncomp_LDMC_CVmodel,
                          Species=meta(abs.test)$species,
                          Project=meta(abs.test)$project,
+                         functional.group=meta(abs.test)$functional.group,
                          ID=meta(abs.test)$sample_id)
 
 LDMC.val.plot<-ggplot(LDMC.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
@@ -1117,6 +1128,7 @@ Al_mass.jack.df<-data.frame(pred.mean=Al_mass.jack.stat[,1],
                             ncomp=ncomp_Al_mass_CVmodel,
                             Species=meta(abs.test)$species,
                             Project=meta(abs.test)$project,
+                            functional.group=meta(abs.test)$functional.group,
                             ID=meta(abs.test)$sample_id)
 
 Al_mass.val.plot<-ggplot(Al_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
@@ -1139,6 +1151,7 @@ Ca_mass.jack.df<-data.frame(pred.mean=Ca_mass.jack.stat[,1],
                             ncomp=ncomp_Ca_mass_CVmodel,
                             Species=meta(abs.test)$species,
                             Project=meta(abs.test)$project,
+                            functional.group=meta(abs.test)$functional.group,
                             ID=meta(abs.test)$sample_id)
 
 Ca_mass.val.plot<-ggplot(Ca_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
@@ -1161,6 +1174,7 @@ Cu_mass.jack.df<-data.frame(pred.mean=Cu_mass.jack.stat[,1],
                             ncomp=ncomp_Cu_mass_CVmodel,
                             Species=meta(abs.test)$species,
                             Project=meta(abs.test)$project,
+                            functional.group=meta(abs.test)$functional.group,
                             ID=meta(abs.test)$sample_id)
 
 Cu_mass.val.plot<-ggplot(Cu_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
@@ -1183,6 +1197,7 @@ Fe_mass.jack.df<-data.frame(pred.mean=Fe_mass.jack.stat[,1],
                             ncomp=ncomp_Fe_mass_CVmodel,
                             Species=meta(abs.test)$species,
                             Project=meta(abs.test)$project,
+                            functional.group=meta(abs.test)$functional.group,
                             ID=meta(abs.test)$sample_id)
 
 Fe_mass.val.plot<-ggplot(Fe_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
@@ -1205,6 +1220,7 @@ K_mass.jack.df<-data.frame(pred.mean=K_mass.jack.stat[,1],
                            ncomp=ncomp_K_mass_CVmodel,
                            Species=meta(abs.test)$species,
                            Project=meta(abs.test)$project,
+                           functional.group=meta(abs.test)$functional.group,
                            ID=meta(abs.test)$sample_id)
 
 K_mass.val.plot<-ggplot(K_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
@@ -1227,6 +1243,7 @@ Mg_mass.jack.df<-data.frame(pred.mean=Mg_mass.jack.stat[,1],
                             ncomp=ncomp_Mg_mass_CVmodel,
                             Species=meta(abs.test)$species,
                             Project=meta(abs.test)$project,
+                            functional.group=meta(abs.test)$functional.group,
                             ID=meta(abs.test)$sample_id)
 
 Mg_mass.val.plot<-ggplot(Mg_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
@@ -1249,6 +1266,7 @@ Mn_mass.jack.df<-data.frame(pred.mean=Mn_mass.jack.stat[,1],
                             ncomp=ncomp_Mn_mass_CVmodel,
                             Species=meta(abs.test)$species,
                             Project=meta(abs.test)$project,
+                            functional.group=meta(abs.test)$functional.group,
                             ID=meta(abs.test)$sample_id)
 
 Mn_mass.val.plot<-ggplot(Mn_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
@@ -1271,6 +1289,7 @@ Na_mass.jack.df<-data.frame(pred.mean=Na_mass.jack.stat[,1],
                             ncomp=ncomp_Na_mass_CVmodel,
                             Species=meta(abs.test)$species,
                             Project=meta(abs.test)$project,
+                            functional.group=meta(abs.test)$functional.group,
                             ID=meta(abs.test)$sample_id)
 
 Na_mass.val.plot<-ggplot(Na_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
@@ -1293,6 +1312,7 @@ P_mass.jack.df<-data.frame(pred.mean=P_mass.jack.stat[,1],
                            ncomp=ncomp_P_mass_CVmodel,
                            Species=meta(abs.test)$species,
                            Project=meta(abs.test)$project,
+                           functional.group=meta(abs.test)$functional.group,
                            ID=meta(abs.test)$sample_id)
 
 P_mass.val.plot<-ggplot(P_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
@@ -1315,6 +1335,7 @@ Zn_mass.jack.df<-data.frame(pred.mean=Zn_mass.jack.stat[,1],
                             ncomp=ncomp_Zn_mass_CVmodel,
                             Species=meta(abs.test)$species,
                             Project=meta(abs.test)$project,
+                            functional.group=meta(abs.test)$functional.group,
                             ID=meta(abs.test)$sample_id)
 
 Zn_mass.val.plot<-ggplot(Zn_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+

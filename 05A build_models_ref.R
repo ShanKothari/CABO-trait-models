@@ -14,7 +14,6 @@ ref.test<-readRDS("ProcessedSpectra/ref_test.rds")
 ## to dos
 
 ## try Type II regression?
-## eliminate outliers for Cu and Fe
 ## add together Chl a and b?
 
 #########################################
