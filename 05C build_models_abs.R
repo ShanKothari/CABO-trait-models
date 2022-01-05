@@ -1392,53 +1392,77 @@ Zn_mass.val.plot<-ggplot(Zn_mass.jack.df,aes(y=Measured,x=pred.mean,color=functi
        x=expression("Predicted Zn (mg g"^-1*")"))+
   guides(color=F)
 
-all.jack.coef.list<-list(solubles_mass=solubles_mass.jack.coefs,
-                         hemicellulose_mass=hemicellulose_mass.jack.coefs,
-                         cellulose_mass=cellulose_mass.jack.coefs,
-                         lignin_mass=lignin_mass.jack.coefs,
-                         chlA_mass=chlA_mass.jack.coefs,
-                         chlB_mass=chlB_mass.jack.coefs,
-                         car_mass=car_mass.jack.coefs,
-                         Nmass=Nmass.jack.coefs,
-                         Cmass=Cmass.jack.coefs,
+all.jack.coef.list<-list(sol=solubles_mass.jack.coefs,
+                         hemi=hemicellulose_mass.jack.coefs,
+                         cell=cellulose_mass.jack.coefs,
+                         lign=lignin_mass.jack.coefs,
+                         chlA=chlA_mass.jack.coefs,
+                         chlB=chlB_mass.jack.coefs,
+                         car=car_mass.jack.coefs,
+                         N=Nmass.jack.coefs,
+                         C=Cmass.jack.coefs,
                          EWT=EWT.jack.coefs,
                          LDMC=LDMC.jack.coefs,
                          LMA=LMA.jack.coefs,
-                         Al_mass=Al_mass.jack.coefs,
-                         Ca_mass=Ca_mass.jack.coefs,
-                         Cu_mass=Cu_mass.jack.coefs,
-                         Fe_mass=Fe_mass.jack.coefs,
-                         K_mass=K_mass.jack.coefs,
-                         Mg_mass=Mg_mass.jack.coefs,
-                         Mn_mass=Mn_mass.jack.coefs,
-                         Na_mass=Na_mass.jack.coefs,
-                         P_mass=P_mass.jack.coefs,
-                         Zn_mass=Zn_mass.jack.coefs)
+                         Al=Al_mass.jack.coefs,
+                         Ca=Ca_mass.jack.coefs,
+                         Cu=Cu_mass.jack.coefs,
+                         Fe=Fe_mass.jack.coefs,
+                         K=K_mass.jack.coefs,
+                         Mg=Mg_mass.jack.coefs,
+                         Mn=Mn_mass.jack.coefs,
+                         Na=Na_mass.jack.coefs,
+                         P=P_mass.jack.coefs,
+                         Zn=Zn_mass.jack.coefs)
 saveRDS(all.jack.coef.list,"SavedResults/all_jack_coefs_list_abs.rds")
 
-all.jack.df.list<-list(solubles_mass=solubles_mass.jack.df,
-                       hemicellulose_mass=hemicellulose_mass.jack.df,
-                       cellulose_mass=cellulose_mass.jack.df,
-                       lignin_mass=lignin_mass.jack.df,
-                       chlA_mass=chlA_mass.jack.df,
-                       chlB_mass=chlB_mass.jack.df,
-                       car_mass=car_mass.jack.df,
-                       Nmass=Nmass.jack.df,
-                       Cmass=Cmass.jack.df,
+all.jack.df.list<-list(sol=solubles_mass.jack.df,
+                       hemi=hemicellulose_mass.jack.df,
+                       cell=cellulose_mass.jack.df,
+                       lign=lignin_mass.jack.df,
+                       chlA=chlA_mass.jack.df,
+                       chlB=chlB_mass.jack.df,
+                       car=car_mass.jack.df,
+                       N=Nmass.jack.df,
+                       C=Cmass.jack.df,
                        EWT=EWT.jack.df,
                        LDMC=LDMC.jack.df,
                        LMA=LMA.jack.df,
-                       Al_mass=Al_mass.jack.df,
-                       Ca_mass=Ca_mass.jack.df,
-                       Cu_mass=Cu_mass.jack.df,
-                       Fe_mass=Fe_mass.jack.df,
-                       K_mass=K_mass.jack.df,
-                       Mg_mass=Mg_mass.jack.df,
-                       Mn_mass=Mn_mass.jack.df,
-                       Na_mass=Na_mass.jack.df,
-                       P_mass=P_mass.jack.df,
-                       Zn_mass=Zn_mass.jack.df)
+                       Al=Al_mass.jack.df,
+                       Ca=Ca_mass.jack.df,
+                       Cu=Cu_mass.jack.df,
+                       Fe=Fe_mass.jack.df,
+                       K=K_mass.jack.df,
+                       Mg=Mg_mass.jack.df,
+                       Mn=Mn_mass.jack.df,
+                       Na=Na_mass.jack.df,
+                       P=P_mass.jack.df,
+                       Zn=Zn_mass.jack.df)
 saveRDS(all.jack.df.list,"SavedResults/all_jack_df_list_abs.rds")
+
+all.jack.stats.list<-list(sol=solubles_mass.jack.stats,
+                          hemi=hemicellulose_mass.jack.stats,
+                          cell=cellulose_mass.jack.stats,
+                          lign=lignin_mass.jack.stats,
+                          chlA=chlA_mass.jack.stats,
+                          chlB=chlB_mass.jack.stats,
+                          car=car_mass.jack.stats,
+                          N=Nmass.jack.stats,
+                          C=Cmass.jack.stats,
+                          EWT=EWT.jack.stats,
+                          LDMC=LDMC.jack.stats,
+                          LMA=LMA.jack.stats,
+                          Al=Al_mass.jack.stats,
+                          Ca=Ca_mass.jack.stats,
+                          Cu=Cu_mass.jack.stats,
+                          Fe=Fe_mass.jack.stats,
+                          K=K_mass.jack.stats,
+                          Mg=Mg_mass.jack.stats,
+                          Mn=Mn_mass.jack.stats,
+                          Na=Na_mass.jack.stats,
+                          P=P_mass.jack.stats,
+                          Zn=Zn_mass.jack.stats)
+saveRDS(all.jack.stats.list,"SavedResults/all_jack_stats_list_abs.rds")
 
 pdf("Images/val_plots_abs1.pdf",width = 16,height = 20)
 (EWT.val.plot + LDMC.val.plot + LMA.val.plot) / 
@@ -1454,4 +1478,90 @@ pdf("Images/val_plots_abs2.pdf",width = 16,height = 20)
   (Fe_mass.val.plot + Mn_mass.val.plot + Al_mass.val.plot) / 
   (Cu_mass.val.plot + guide_area() + guide_area()) &
   plot_layout(guides="collect")
+dev.off()
+
+######################
+## violin plots
+
+abs_val_summary<-data.frame(variable=names(all.jack.df.list),
+                            perRMSE=unlist(lapply(all.jack.df.list,
+                                                  function(x) percentRMSD(x$Measured,x$pred.mean,0.025,0.975))),
+                            R2=unlist(lapply(all.jack.df.list,
+                                             function(x) summary(lm(Measured~pred.mean,data=x))$r.squared)))
+
+R2.df<-data.frame(LMA=unlist(lapply(LMA.jack.stats,function(x) x[["R2"]])),
+                  LDMC=unlist(lapply(LDMC.jack.stats,function(x) x[["R2"]])),
+                  EWT=unlist(lapply(EWT.jack.stats,function(x) x[["R2"]])),
+                  sol=unlist(lapply(solubles_mass.jack.stats,function(x) x[["R2"]])),
+                  hemi=unlist(lapply(hemicellulose_mass.jack.stats,function(x) x[["R2"]])),
+                  cell=unlist(lapply(cellulose_mass.jack.stats,function(x) x[["R2"]])),
+                  lign=unlist(lapply(lignin_mass.jack.stats,function(x) x[["R2"]])),
+                  C=unlist(lapply(Cmass.jack.stats,function(x) x[["R2"]])),
+                  N=unlist(lapply(Nmass.jack.stats,function(x) x[["R2"]])),
+                  chlA=unlist(lapply(chlA_mass.jack.stats,function(x) x[["R2"]])),
+                  chlB=unlist(lapply(chlB_mass.jack.stats,function(x) x[["R2"]])),
+                  car=unlist(lapply(car_mass.jack.stats,function(x) x[["R2"]])),
+                  Al=unlist(lapply(Al_mass.jack.stats,function(x) x[["R2"]])),
+                  Ca=unlist(lapply(Ca_mass.jack.stats,function(x) x[["R2"]])),
+                  Cu=unlist(lapply(Cu_mass.jack.stats,function(x) x[["R2"]])),
+                  Fe=unlist(lapply(Fe_mass.jack.stats,function(x) x[["R2"]])),
+                  K=unlist(lapply(K_mass.jack.stats,function(x) x[["R2"]])),
+                  Mg=unlist(lapply(Mg_mass.jack.stats,function(x) x[["R2"]])),
+                  Mn=unlist(lapply(Mn_mass.jack.stats,function(x) x[["R2"]])),
+                  Na=unlist(lapply(Na_mass.jack.stats,function(x) x[["R2"]])),
+                  P=unlist(lapply(P_mass.jack.stats,function(x) x[["R2"]])),
+                  Zn=unlist(lapply(Zn_mass.jack.stats,function(x) x[["R2"]])))
+
+R2.long<-melt(R2.df)
+val_R2<-ggplot(R2.long,aes(y=value,x=variable))+
+  geom_violin()+
+  geom_point(data=abs_val_summary,
+             aes(x=variable,y=R2),color="red",size=2)+
+  theme_bw()+
+  theme(text = element_text(size=20),
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank())+
+  labs(y=expression(italic("R"^2)))+
+  ggtitle("Fresh-leaf spectra")+
+  scale_y_continuous(expand = c(0, 0),limits=c(0,1))
+
+perRMSE.df<-data.frame(LMA=unlist(lapply(LMA.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       LDMC=unlist(lapply(LDMC.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       EWT=unlist(lapply(EWT.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       sol=unlist(lapply(solubles_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       hemi=unlist(lapply(hemicellulose_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       cell=unlist(lapply(cellulose_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       lign=unlist(lapply(lignin_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       C=unlist(lapply(Cmass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       N=unlist(lapply(Nmass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       chlA=unlist(lapply(chlA_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       chlB=unlist(lapply(chlB_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       car=unlist(lapply(car_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Al=unlist(lapply(Al_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Ca=unlist(lapply(Ca_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Cu=unlist(lapply(Cu_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Fe=unlist(lapply(Fe_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       K=unlist(lapply(K_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Mg=unlist(lapply(Mg_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Mn=unlist(lapply(Mn_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Na=unlist(lapply(Na_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       P=unlist(lapply(P_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Zn=unlist(lapply(Zn_mass.jack.stats,function(x) 100*x[["perRMSE"]])))
+
+perRMSE.long<-melt(perRMSE.df)
+val_perRMSE<-ggplot(perRMSE.long,aes(y=value,x=variable))+
+  geom_violin()+
+  geom_point(data=abs_val_summary,
+             aes(x=variable,y=perRMSE*100),color="red",size=2)+
+  theme_bw()+
+  theme(text = element_text(size=20),
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(angle = 90,hjust=1,vjust=0.5))+
+  labs(y="%RMSE")+
+  scale_y_continuous(expand = c(0, 0),
+                     limits = c(0,max(perRMSE.long$value)*1.1))
+
+pdf("Images/violin_plots_abs.pdf",width=8,height=6,onefile=F)
+egg::ggarrange(plots = list(val_R2,val_perRMSE),
+               nrow=2,ncol=1)
 dev.off()
