@@ -28,7 +28,7 @@ if(meta(ref.traits)$sample_id != meta(trans.traits)$sample_id ||
 ## divide up data
 train.sample <- createDataPartition(
   y = meta(ref.traits)$project,
-  p = .8,
+  p = .75,
   list = FALSE
 )
 
