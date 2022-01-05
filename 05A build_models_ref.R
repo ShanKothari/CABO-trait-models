@@ -1563,30 +1563,30 @@ val_R2<-ggplot(R2.long,aes(y=value,x=variable))+
 perRMSE.df<-data.frame(LMA=unlist(lapply(LMA.jack.stats,function(x) 100*x[["perRMSE"]])),
                        LDMC=unlist(lapply(LDMC.jack.stats,function(x) 100*x[["perRMSE"]])),
                        EWT=unlist(lapply(EWT.jack.stats,function(x) 100*x[["perRMSE"]])),
-                       sol=unlist(lapply(solubles.jack.stats,function(x) 100*x[["perRMSE"]])),
-                       hemi=unlist(lapply(hemicellulose.jack.stats,function(x) 100*x[["perRMSE"]])),
-                       cell=unlist(lapply(cellulose.jack.stats,function(x) 100*x[["perRMSE"]])),
-                       lign=unlist(lapply(lignin.jack.stats,function(x) 100*x[["perRMSE"]])),
-                       C=unlist(lapply(perC.jack.stats,function(x) 100*x[["perRMSE"]])),
-                       N=unlist(lapply(perN.jack.stats,function(x) 100*x[["perRMSE"]])),
-                       chlA=unlist(lapply(chlA.jack.stats,function(x) 100*x[["perRMSE"]])),
-                       chlB=unlist(lapply(chlB.jack.stats,function(x) 100*x[["perRMSE"]])),
-                       car=unlist(lapply(car.jack.stats,function(x) 100*x[["perRMSE"]])),
-                       Al=unlist(lapply(Al.jack.stats,function(x) 100*x[["perRMSE"]])),
-                       Ca=unlist(lapply(Ca.jack.stats,function(x) 100*x[["perRMSE"]])),
-                       Cu=unlist(lapply(Cu.jack.stats,function(x) 100*x[["perRMSE"]])),
-                       Fe=unlist(lapply(Fe.jack.stats,function(x) 100*x[["perRMSE"]])),
-                       K=unlist(lapply(K.jack.stats,function(x) 100*x[["perRMSE"]])),
-                       Mg=unlist(lapply(Mg.jack.stats,function(x) 100*x[["perRMSE"]])),
-                       Mn=unlist(lapply(Mn.jack.stats,function(x) 100*x[["perRMSE"]])),
-                       Na=unlist(lapply(Na.jack.stats,function(x) 100*x[["perRMSE"]])),
-                       P=unlist(lapply(P.jack.stats,function(x) 100*x[["perRMSE"]])),
-                       Zn=unlist(lapply(Zn.jack.stats,function(x) 100*x[["perRMSE"]])))
+                       sol=unlist(lapply(solubles_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       hemi=unlist(lapply(hemicellulose_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       cell=unlist(lapply(cellulose_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       lign=unlist(lapply(lignin_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       C=unlist(lapply(Cmass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       N=unlist(lapply(Nmass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       chlA=unlist(lapply(chlA_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       chlB=unlist(lapply(chlB_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       car=unlist(lapply(car_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Al=unlist(lapply(Al_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Ca=unlist(lapply(Ca_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Cu=unlist(lapply(Cu_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Fe=unlist(lapply(Fe_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       K=unlist(lapply(K_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Mg=unlist(lapply(Mg_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Mn=unlist(lapply(Mn_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Na=unlist(lapply(Na_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       P=unlist(lapply(P_mass.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Zn=unlist(lapply(Zn_mass.jack.stats,function(x) 100*x[["perRMSE"]])))
 
 perRMSE.long<-melt(perRMSE.df)
-fresh_val_perRMSE<-ggplot(perRMSE.long,aes(y=value,x=variable))+
+val_perRMSE<-ggplot(perRMSE.long,aes(y=value,x=variable))+
   geom_violin()+
-  geom_point(data=fresh_val_summary,
+  geom_point(data=ref_val_summary,
              aes(x=variable,y=perRMSE*100),color="red",size=2)+
   theme_bw()+
   theme(text = element_text(size=20),
@@ -1596,7 +1596,7 @@ fresh_val_perRMSE<-ggplot(perRMSE.long,aes(y=value,x=variable))+
   scale_y_continuous(expand = c(0, 0),
                      limits = c(0,max(perRMSE.long$value)*1.1))
 
-pdf("Manuscript/violin_plots_ref.pdf",width=8,height=6,onefile=F)
-egg::ggarrange(plots = list(fresh_val_R2,fresh_val_perRMSE),
+pdf("Images/violin_plots_ref.pdf",width=8,height=6,onefile=F)
+egg::ggarrange(plots = list(val_R2,val_perRMSE),
                nrow=2,ncol=1)
 dev.off()
