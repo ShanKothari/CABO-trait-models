@@ -668,7 +668,8 @@ for(i in 1:nreps){
   hemicellulose_mass.jack.val.fit<-lm(hemicellulose_mass.jack.val.pred~meta(val.jack)$hemicellulose_mass)
   hemicellulose_mass.jack.stats[[i]]<-c(R2=summary(hemicellulose_mass.jack.val.fit)$r.squared,
                                         RMSE=RMSD(meta(val.jack)$hemicellulose_mass,hemicellulose_mass.jack.val.pred),
-                                        percentRMSE=percentRMSD(meta(val.jack)$hemicellulose_mass,hemicellulose_mass.jack.val.pred,0.025,0.975),
+                                        percentRMSE=percentRMSD(meta(val.jack)$hemicellulose_mass,
+                                                                hemicellulose_mass.jack.val.pred,0.025,0.975),
                                         bias=mean(hemicellulose_mass.jack.val.pred,na.rm=T)-mean(meta(val.jack)$hemicellulose_mass,na.rm=T))
   
   cellulose_mass.jack.val.pred<-as.vector(predict(cellulose_mass.jack,newdata=as.matrix(val.jack),ncomp=ncomp_cellulose_mass_CVmodel)[,,1])
@@ -848,7 +849,7 @@ solubles_mass.jack.df<-data.frame(pred.mean=solubles_mass.jack.stat[,1],
                                   functional.group=meta(abs.test)$functional.group,
                                   ID=meta(abs.test)$sample_id)
 
-solubles_mass.val.plot<-ggplot(solubles_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+solubles_mass.val.plot<-ggplot(solubles_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -872,7 +873,7 @@ hemicellulose_mass.jack.df<-data.frame(pred.mean=hemicellulose_mass.jack.stat[,1
                                        functional.group=meta(abs.test)$functional.group,
                                        ID=meta(abs.test)$sample_id)
 
-hemicellulose_mass.val.plot<-ggplot(hemicellulose_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+hemicellulose_mass.val.plot<-ggplot(hemicellulose_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -896,7 +897,7 @@ cellulose_mass.jack.df<-data.frame(pred.mean=cellulose_mass.jack.stat[,1],
                                    functional.group=meta(abs.test)$functional.group,
                                    ID=meta(abs.test)$sample_id)
 
-cellulose_mass.val.plot<-ggplot(cellulose_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+cellulose_mass.val.plot<-ggplot(cellulose_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -920,7 +921,7 @@ lignin_mass.jack.df<-data.frame(pred.mean=lignin_mass.jack.stat[,1],
                                 functional.group=meta(abs.test)$functional.group,
                                 ID=meta(abs.test)$sample_id)
 
-lignin_mass.val.plot<-ggplot(lignin_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+lignin_mass.val.plot<-ggplot(lignin_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -944,7 +945,7 @@ chlA_mass.jack.df<-data.frame(pred.mean=chlA_mass.jack.stat[,1],
                               functional.group=meta(abs.test)$functional.group,
                               ID=meta(abs.test)$sample_id)
 
-chlA_mass.val.plot<-ggplot(chlA_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+chlA_mass.val.plot<-ggplot(chlA_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -968,7 +969,7 @@ chlB_mass.jack.df<-data.frame(pred.mean=chlB_mass.jack.stat[,1],
                               functional.group=meta(abs.test)$functional.group,
                               ID=meta(abs.test)$sample_id)
 
-chlB_mass.val.plot<-ggplot(chlB_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+chlB_mass.val.plot<-ggplot(chlB_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -992,7 +993,7 @@ car_mass.jack.df<-data.frame(pred.mean=car_mass.jack.stat[,1],
                              functional.group=meta(abs.test)$functional.group,
                              ID=meta(abs.test)$sample_id)
 
-car_mass.val.plot<-ggplot(car_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+car_mass.val.plot<-ggplot(car_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1016,7 +1017,7 @@ Cmass.jack.df<-data.frame(pred.mean=Cmass.jack.stat[,1],
                           functional.group=meta(abs.test)$functional.group,
                           ID=meta(abs.test)$sample_id)
 
-Cmass.val.plot<-ggplot(Cmass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+Cmass.val.plot<-ggplot(Cmass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1039,7 +1040,7 @@ Nmass.jack.df<-data.frame(pred.mean=Nmass.jack.stat[,1],
                           functional.group=meta(abs.test)$functional.group,
                           ID=meta(abs.test)$sample_id)
 
-Nmass.val.plot<-ggplot(Nmass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+Nmass.val.plot<-ggplot(Nmass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1061,7 +1062,7 @@ EWT.jack.df<-data.frame(pred.mean=EWT.jack.stat[,1],
                         functional.group=meta(abs.test)$functional.group,
                         ID=meta(abs.test)$sample_id)
 
-EWT.val.plot<-ggplot(EWT.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+EWT.val.plot<-ggplot(EWT.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1085,7 +1086,7 @@ LMA.jack.df<-data.frame(pred.mean=LMA.jack.stat[,1],
                         functional.group=meta(abs.test)$functional.group,
                         ID=meta(abs.test)$sample_id)
 
-LMA.val.plot<-ggplot(LMA.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+LMA.val.plot<-ggplot(LMA.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1108,7 +1109,7 @@ LDMC.jack.df<-data.frame(pred.mean=LDMC.jack.stat[,1],
                          functional.group=meta(abs.test)$functional.group,
                          ID=meta(abs.test)$sample_id)
 
-LDMC.val.plot<-ggplot(LDMC.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+LDMC.val.plot<-ggplot(LDMC.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1131,7 +1132,7 @@ Al_mass.jack.df<-data.frame(pred.mean=Al_mass.jack.stat[,1],
                             functional.group=meta(abs.test)$functional.group,
                             ID=meta(abs.test)$sample_id)
 
-Al_mass.val.plot<-ggplot(Al_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+Al_mass.val.plot<-ggplot(Al_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1154,7 +1155,7 @@ Ca_mass.jack.df<-data.frame(pred.mean=Ca_mass.jack.stat[,1],
                             functional.group=meta(abs.test)$functional.group,
                             ID=meta(abs.test)$sample_id)
 
-Ca_mass.val.plot<-ggplot(Ca_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+Ca_mass.val.plot<-ggplot(Ca_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1177,7 +1178,7 @@ Cu_mass.jack.df<-data.frame(pred.mean=Cu_mass.jack.stat[,1],
                             functional.group=meta(abs.test)$functional.group,
                             ID=meta(abs.test)$sample_id)
 
-Cu_mass.val.plot<-ggplot(Cu_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+Cu_mass.val.plot<-ggplot(Cu_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1200,7 +1201,7 @@ Fe_mass.jack.df<-data.frame(pred.mean=Fe_mass.jack.stat[,1],
                             functional.group=meta(abs.test)$functional.group,
                             ID=meta(abs.test)$sample_id)
 
-Fe_mass.val.plot<-ggplot(Fe_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+Fe_mass.val.plot<-ggplot(Fe_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1223,7 +1224,7 @@ K_mass.jack.df<-data.frame(pred.mean=K_mass.jack.stat[,1],
                            functional.group=meta(abs.test)$functional.group,
                            ID=meta(abs.test)$sample_id)
 
-K_mass.val.plot<-ggplot(K_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+K_mass.val.plot<-ggplot(K_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1246,7 +1247,7 @@ Mg_mass.jack.df<-data.frame(pred.mean=Mg_mass.jack.stat[,1],
                             functional.group=meta(abs.test)$functional.group,
                             ID=meta(abs.test)$sample_id)
 
-Mg_mass.val.plot<-ggplot(Mg_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+Mg_mass.val.plot<-ggplot(Mg_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1269,7 +1270,7 @@ Mn_mass.jack.df<-data.frame(pred.mean=Mn_mass.jack.stat[,1],
                             functional.group=meta(abs.test)$functional.group,
                             ID=meta(abs.test)$sample_id)
 
-Mn_mass.val.plot<-ggplot(Mn_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+Mn_mass.val.plot<-ggplot(Mn_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1292,7 +1293,7 @@ Na_mass.jack.df<-data.frame(pred.mean=Na_mass.jack.stat[,1],
                             functional.group=meta(abs.test)$functional.group,
                             ID=meta(abs.test)$sample_id)
 
-Na_mass.val.plot<-ggplot(Na_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+Na_mass.val.plot<-ggplot(Na_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1315,7 +1316,7 @@ P_mass.jack.df<-data.frame(pred.mean=P_mass.jack.stat[,1],
                            functional.group=meta(abs.test)$functional.group,
                            ID=meta(abs.test)$sample_id)
 
-P_mass.val.plot<-ggplot(P_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+P_mass.val.plot<-ggplot(P_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1338,7 +1339,7 @@ Zn_mass.jack.df<-data.frame(pred.mean=Zn_mass.jack.stat[,1],
                             functional.group=meta(abs.test)$functional.group,
                             ID=meta(abs.test)$sample_id)
 
-Zn_mass.val.plot<-ggplot(Zn_mass.jack.df,aes(y=Measured,x=pred.mean,color=Project))+
+Zn_mass.val.plot<-ggplot(Zn_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
