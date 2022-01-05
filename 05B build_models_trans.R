@@ -16,7 +16,6 @@ trans.test<-readRDS("ProcessedSpectra/trans_test.rds")
 
 ## try Type II regression?
 ## add together Chl a and b?
-## instead of 1.96 * SD, use 2.5 and 97.5 quantiles for error bars
 
 #########################################
 ## define functions
