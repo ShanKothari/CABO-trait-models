@@ -5,6 +5,7 @@ library(ggplot2)
 library(reshape2)
 library(stringr)
 library(patchwork)
+library(ggfortify)
 
 all.ref<-readRDS("ProcessedSpectra/all_ref.rds")
 all.trans<-readRDS("ProcessedSpectra/all_trans.rds")
@@ -623,7 +624,9 @@ ref_spec_plot<-ggplot()+
         axis.title.x = element_blank(),
         axis.text.x = element_blank(),
         plot.margin=unit(c(0,0.3,0,0),"in"))+
-  labs(x="Wavelength (nm)",y="Reflectance (or CV)")+lims(y=c(0,1))+
+  labs(x="Wavelength (nm)",y="Reflectance (or CV)")+
+  scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
+  scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
   labs(tag = "A")
 
 trans_spec_plot<-ggplot()+
@@ -644,7 +647,9 @@ trans_spec_plot<-ggplot()+
         axis.title.x = element_blank(),
         axis.text.x = element_blank(),
         plot.margin=unit(c(0,0.3,0,0),"in"))+
-  labs(x="Wavelength (nm)",y="Transmittance (or CV)")+lims(y=c(0,1))+
+  labs(x="Wavelength (nm)",y="Transmittance (or CV)")+
+  scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
+  scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
   labs(tag = "B")
 
 abs_spec_plot<-ggplot()+
@@ -663,10 +668,121 @@ abs_spec_plot<-ggplot()+
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         plot.margin=unit(c(0,0.3,0,0),"in"))+
-  labs(x="Wavelength (nm)",y="Absorptance (or CV)")+lims(y=c(0,1))+
+  labs(x="Wavelength (nm)",y="Absorptance (or CV)")+
+  scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
+  scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
   labs(tag = "C")
 
-pdf("Images/Fig1.pdf",width=7,height=12)
+pdf("Images/all_spec.pdf",width=7,height=12)
 ref_spec_plot+trans_spec_plot+abs_spec_plot+plot_layout(ncol = 1)
 dev.off()
 
+################################
+## plot spectra for each functional group
+
+all.ref<-all.ref[which(meta(all.ref)$project!="2019-Pardo-MSc-UdeM")]
+
+all.ref.df<-data.frame(sample_id=meta(all.ref)$sample_id,
+                       functional.group=meta(all.ref)$functional.group,
+                       as.matrix(all.ref))
+all.ref.long<-melt(all.ref.df,id.vars = c("sample_id","functional.group"))
+all.ref.long$variable<-as.numeric(gsub("X","",all.ref.long$variable))
+
+ref_fg_spec_plot<-ggplot(all.ref.long,aes(x=variable,y=value,color=functional.group))+
+  stat_summary(fun=median,na.rm=T,geom="line",size=2)+
+  theme_bw()+theme(text=element_text(size=20))+
+  labs(x="wavelength")+
+  guides(color=guide_legend("Functional group"))+
+  scale_x_continuous(expand = c(0, 0),limits=c(390,2410))
+
+all.trans<-all.trans[which(meta(all.trans)$project!="2019-Pardo-MSc-UdeM")]
+
+all.trans.df<-data.frame(sample_id=meta(all.trans)$sample_id,
+                         functional.group=meta(all.trans)$functional.group,
+                         as.matrix(all.trans))
+all.trans.long<-melt(all.trans.df,id.vars = c("sample_id","functional.group"))
+all.trans.long$variable<-as.numeric(gsub("X","",all.trans.long$variable))
+
+trans_fg_spec_plot<-ggplot(all.trans.long,aes(x=variable,y=value,color=functional.group))+
+  stat_summary(fun=median,na.rm=T,geom="line",size=2)+
+  theme_bw()+theme(text=element_text(size=20))+
+  labs(x="wavelength")+
+  guides(color=guide_legend("Functional group"))+
+  scale_x_continuous(expand = c(0, 0),limits=c(390,2410))
+
+all.abs<-all.abs[which(meta(all.abs)$project!="2019-Pardo-MSc-UdeM")]
+
+all.abs.df<-data.frame(sample_id=meta(all.abs)$sample_id,
+                       functional.group=meta(all.abs)$functional.group,
+                       as.matrix(all.abs))
+all.abs.long<-melt(all.abs.df,id.vars = c("sample_id","functional.group"))
+all.abs.long$variable<-as.numeric(gsub("X","",all.abs.long$variable))
+
+abs_fg_spec_plot<-ggplot(all.abs.long,aes(x=variable,y=value,color=functional.group))+
+  stat_summary(fun=median,na.rm=T,geom="line",size=2)+
+  theme_bw()+theme(text=element_text(size=20))+
+  labs(x="wavelength")+
+  guides(color=guide_legend("Functional group"))+
+  scale_x_continuous(expand = c(0, 0),limits=c(390,2410))
+
+pdf("Images/all_spec_fg.pdf",width=7,height=12)
+ref_fg_spec_plot+trans_fg_spec_plot+
+  abs_fg_spec_plot+plot_layout(ncol = 1)
+dev.off()
+
+#####################
+## PCA of traits
+
+trait.pca<-prcomp(~.,meta(all.ref)[,c("LMA","LDMC","EWT","Cmass","Nmass",
+                                     "solubles_mass","hemicellulose_mass",
+                                     "cellulose_mass","lignin_mass","chlA_mass",
+                                     "chlB_mass","car_mass")],
+                  scale.=T,na.action = na.exclude)
+
+trait.pca.val <- data.frame(functional.group=meta(all.ref)$functional.group,trait.pca$x)
+trait.pca.loadings<-data.frame(variables = rownames(trait.pca$rotation), trait.pca$rotation)
+trait.pca.loadings$variables<-gsub("_mass","",trait.pca.loadings$variables)
+trait.pca.loadings$variables<-gsub("mass","",trait.pca.loadings$variables)
+trait.pca.perc<-trait.pca$sdev^2/sum(trait.pca$sdev^2)*100
+
+trait.pca.plot<-ggplot(trait.pca.val, aes(x = PC1, y = PC2, color = functional.group)) +
+  geom_point(size = 2) +
+  geom_segment(data = trait.pca.loadings, aes(x = 0, y = 0, xend = PC1*10, yend = PC2*10),
+               arrow = arrow(length = unit(1/2, "picas")),
+               color = "black",size=1) +
+  annotate("text", x = trait.pca.loadings$PC1*12, y = trait.pca.loadings$PC2*12,
+           label = trait.pca.loadings$variables)+
+  theme_bw()+theme(text=element_text(size=15))+
+  guides(color=guide_legend("Functional group"))+
+  coord_fixed(ratio=trait.pca.perc[2]/trait.pca.perc[1])+
+  labs(x=paste("PC1 (",round(trait.pca.perc[1],1),"% variance)",sep=""),
+       y=paste("PC2 (",round(trait.pca.perc[2],1),"% variance)",sep=""))
+
+traitnorm.pca<-prcomp(~.,meta(all.ref)[,c("LMA","LDMC","EWT","Cnorm","Nnorm",
+                                          "hemicellulose_norm","cellulose_norm",
+                                          "lignin_norm","chlA_norm")],
+                      scale.=T,na.action = na.exclude)
+
+traitnorm.pca.val <- data.frame(functional.group=meta(all.ref)$functional.group,traitnorm.pca$x)
+traitnorm.pca.loadings<-data.frame(variables = rownames(traitnorm.pca$rotation), traitnorm.pca$rotation)
+traitnorm.pca.loadings$variables<-gsub("_norm","",traitnorm.pca.loadings$variables)
+traitnorm.pca.loadings$variables<-gsub("norm","",traitnorm.pca.loadings$variables)
+traitnorm.pca.perc<-traitnorm.pca$sdev^2/sum(traitnorm.pca$sdev^2)*100
+
+traitnorm.pca.plot<-ggplot(traitnorm.pca.val, aes(x = -PC1*2, y = -PC2*2, color = functional.group)) +
+  geom_point(size = 2) +
+  geom_segment(data = traitnorm.pca.loadings, aes(x = 0, y = 0, xend = -PC1*10, yend = -PC2*10),
+               arrow = arrow(length = unit(1/2, "picas")),
+               color = "black",size=1) +
+  annotate("text", x = -traitnorm.pca.loadings$PC1*12, y = -traitnorm.pca.loadings$PC2*12,
+           label = traitnorm.pca.loadings$variables)+
+  theme_bw()+theme(text=element_text(size=15))+
+  guides(color=guide_legend("Functional group"))+
+  coord_fixed(ratio=traitnorm.pca$sdev[2]^2/traitnorm.pca$sdev[1]^2)+
+  labs(x=paste("PC1 (",round(traitnorm.pca.perc[1],1),"% variance)",sep=""),
+       y=paste("PC2 (",round(traitnorm.pca.perc[2],1),"% variance)",sep=""))
+
+pdf("Images/pca_plot.pdf")
+trait.pca.plot+traitnorm.pca.plot+plot_layout(ncol=1,guides="collect") &
+  theme(legend.position = "bottom")
+dev.off()
