@@ -595,8 +595,11 @@ saveRDS(all.abs,"ProcessedSpectra/all_abs_and_traits.rds")
 ################
 ## plotting
 
-ref_quantiles<-quantile(all.ref[meta(all.ref)$project!="2019-Pardo-MSc-UdeM"],
-                        probs=c(0.025,0.25,0.5,0.75,0.975))
+all.ref<-all.ref[which(meta(all.ref)$project!="2019-Pardo-MSc-UdeM")]
+all.trans<-all.trans[which(meta(all.trans)$project!="2019-Pardo-MSc-UdeM")]
+all.abs<-all.abs[which(meta(all.abs)$project!="2019-Pardo-MSc-UdeM")]
+
+ref_quantiles<-quantile(all.ref,probs=c(0.025,0.25,0.5,0.75,0.975))
 trans_quantiles<-quantile(all.trans[meta(all.trans)$project!="2019-Pardo-MSc-UdeM"],
                           probs=c(0.025,0.25,0.5,0.75,0.975))
 abs_quantiles<-quantile(all.abs[meta(all.abs)$project!="2019-Pardo-MSc-UdeM"],
@@ -605,6 +608,7 @@ abs_quantiles<-quantile(all.abs[meta(all.abs)$project!="2019-Pardo-MSc-UdeM"],
 ref_CV<-apply(all.ref,2,function(x) sd(x)/mean(x))
 trans_CV<-apply(all.trans,2,function(x) sd(x)/mean(x))
 abs_CV<-apply(all.abs,2,function(x) sd(x)/mean(x))
+CV_df<-data.frame(wavelength=400:2400,ref_CV,trans_CV,abs_CV)
 
 ref_spec_plot<-ggplot()+
   geom_ribbon(aes(x=400:2400,
@@ -623,7 +627,7 @@ ref_spec_plot<-ggplot()+
         panel.grid.minor = element_blank(),
         axis.title.x = element_blank(),
         axis.text.x = element_blank(),
-        plot.margin=unit(c(0,0.3,0,0),"in"))+
+        plot.margin=unit(c(0,0.3,0.1,0),"in"))+
   labs(x="Wavelength (nm)",y="Reflectance (or CV)")+
   scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
   scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
@@ -646,7 +650,7 @@ trans_spec_plot<-ggplot()+
         panel.grid.minor = element_blank(),
         axis.title.x = element_blank(),
         axis.text.x = element_blank(),
-        plot.margin=unit(c(0,0.3,0,0),"in"))+
+        plot.margin=unit(c(0,0.3,0.1,0),"in"))+
   labs(x="Wavelength (nm)",y="Transmittance (or CV)")+
   scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
   scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
@@ -680,22 +684,22 @@ dev.off()
 ################################
 ## plot spectra for each functional group
 
-all.ref<-all.ref[which(meta(all.ref)$project!="2019-Pardo-MSc-UdeM")]
-
 all.ref.df<-data.frame(sample_id=meta(all.ref)$sample_id,
                        functional.group=meta(all.ref)$functional.group,
                        as.matrix(all.ref))
 all.ref.long<-melt(all.ref.df,id.vars = c("sample_id","functional.group"))
 all.ref.long$variable<-as.numeric(gsub("X","",all.ref.long$variable))
 
-ref_fg_spec_plot<-ggplot(all.ref.long,aes(x=variable,y=value,color=functional.group))+
-  stat_summary(fun=median,na.rm=T,geom="line",size=2)+
-  theme_bw()+theme(text=element_text(size=20))+
-  labs(x="wavelength")+
+ref_fg_spec_plot<-ggplot(all.ref.long,aes(x=variable,y=value))+
+  stat_summary(fun=median,na.rm=T,geom="line",size=1,aes(color=functional.group))+
+  geom_line(data=CV_df,
+            aes(x=wavelength,y=ref_CV),size=1.5,linetype="longdash")+
+  theme_bw()+theme(text=element_text(size=15))+
+  labs(x="Wavelength (nm)",y="Reflectance (or CV)")+
   guides(color=guide_legend("Functional group"))+
-  scale_x_continuous(expand = c(0, 0),limits=c(390,2410))
-
-all.trans<-all.trans[which(meta(all.trans)$project!="2019-Pardo-MSc-UdeM")]
+  scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
+  scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
+  labs(tag = "A")
 
 all.trans.df<-data.frame(sample_id=meta(all.trans)$sample_id,
                          functional.group=meta(all.trans)$functional.group,
@@ -703,14 +707,16 @@ all.trans.df<-data.frame(sample_id=meta(all.trans)$sample_id,
 all.trans.long<-melt(all.trans.df,id.vars = c("sample_id","functional.group"))
 all.trans.long$variable<-as.numeric(gsub("X","",all.trans.long$variable))
 
-trans_fg_spec_plot<-ggplot(all.trans.long,aes(x=variable,y=value,color=functional.group))+
-  stat_summary(fun=median,na.rm=T,geom="line",size=2)+
-  theme_bw()+theme(text=element_text(size=20))+
-  labs(x="wavelength")+
+trans_fg_spec_plot<-ggplot(all.trans.long,aes(x=variable,y=value))+
+  stat_summary(fun=median,na.rm=T,geom="line",size=1,aes(color=functional.group))+
+  geom_line(data=CV_df,
+            aes(x=wavelength,y=trans_CV),size=1.5,linetype="longdash")+
+  theme_bw()+theme(text=element_text(size=15))+
+  labs(x="Wavelength (nm)",y="Transmittance (or CV)")+
   guides(color=guide_legend("Functional group"))+
-  scale_x_continuous(expand = c(0, 0),limits=c(390,2410))
-
-all.abs<-all.abs[which(meta(all.abs)$project!="2019-Pardo-MSc-UdeM")]
+  scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
+  scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
+  labs(tag = "A")
 
 all.abs.df<-data.frame(sample_id=meta(all.abs)$sample_id,
                        functional.group=meta(all.abs)$functional.group,
@@ -718,16 +724,21 @@ all.abs.df<-data.frame(sample_id=meta(all.abs)$sample_id,
 all.abs.long<-melt(all.abs.df,id.vars = c("sample_id","functional.group"))
 all.abs.long$variable<-as.numeric(gsub("X","",all.abs.long$variable))
 
-abs_fg_spec_plot<-ggplot(all.abs.long,aes(x=variable,y=value,color=functional.group))+
-  stat_summary(fun=median,na.rm=T,geom="line",size=2)+
-  theme_bw()+theme(text=element_text(size=20))+
-  labs(x="wavelength")+
+abs_fg_spec_plot<-ggplot(all.abs.long,aes(x=variable,y=value))+
+  stat_summary(fun=median,na.rm=T,geom="line",size=1,aes(color=functional.group))+
+  geom_line(data=CV_df,
+            aes(x=wavelength,y=abs_CV),size=1.5,linetype="longdash")+
+  theme_bw()+theme(text=element_text(size=15))+
+  labs(x="Wavelength (nm)",y="Absorbance (or CV)")+
   guides(color=guide_legend("Functional group"))+
-  scale_x_continuous(expand = c(0, 0),limits=c(390,2410))
+  scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
+  scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
+  labs(tag = "A")
 
 pdf("Images/all_spec_fg.pdf",width=7,height=12)
 ref_fg_spec_plot+trans_fg_spec_plot+
-  abs_fg_spec_plot+plot_layout(ncol = 1)
+  abs_fg_spec_plot+plot_layout(ncol = 1,guides="collect") &
+  theme(legend.position = "bottom")
 dev.off()
 
 #####################
