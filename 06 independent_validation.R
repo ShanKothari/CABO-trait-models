@@ -294,6 +294,24 @@ Dessain.sub<-data.frame(sample.id=Dessain.summary$parentEventID,
 meta(Dessain.spec)$species<-Dessain.sub$species[match(meta(Dessain.spec)$sample_id,Dessain.sub$sample.id)]
 meta(Dessain.spec)$project<-Dessain.sub$project[match(meta(Dessain.spec)$sample_id,Dessain.sub$sample.id)]
 
+vascan<-read.csv("SummaryData/vascan.csv")
+meta(Dessain.spec)$growth.form<-vascan$growth_form[match(meta(Dessain.spec)$species,vascan$scientific_name)]
+meta(Dessain.spec)$growth.form[meta(Dessain.spec)$species=="Acer pensylvanicum Linnaeus"]<-"tree"
+meta(Dessain.spec)$growth.form[meta(Dessain.spec)$species=="Betula populifolia Marshall"]<-"tree"
+meta(Dessain.spec)$growth.form[meta(Dessain.spec)$species=="Prunus pensylvanica Linnaeus f."]<-"tree"
+meta(Dessain.spec)$growth.form[meta(Dessain.spec)$species=="Rhamnus cathartica Linnaeus"]<-"shrub"
+meta(Dessain.spec)$growth.form[meta(Dessain.spec)$species=="Prunus virginiana Linnaeus"]<-"shrub"
+meta(Dessain.spec)$growth.form[meta(Dessain.spec)$species=="Staphylea trifolia Linnaeus"]<-"shrub"
+meta(Dessain.spec)$growth.form[meta(Dessain.spec)$species=="Salix Linnaeus"]<-"shrub"
+meta(Dessain.spec)$growth.form[meta(Dessain.spec)$species=="Aesculus glabra Wildenow"]<-"tree"
+meta(Dessain.spec)$growth.form[meta(Dessain.spec)$species=="Ginkgo biloba L."]<-"tree"
+
+meta(Dessain.spec)$order<-vascan$order[match(meta(Dessain.spec)$species,vascan$scientific_name)]
+meta(Dessain.spec)$family<-vascan$family[match(meta(Dessain.spec)$species,vascan$scientific_name)]
+meta(Dessain.spec)$genus<-vascan$genus[match(meta(Dessain.spec)$species,vascan$scientific_name)]
+which(meta(Dessain.spec)$family %in% c("Poaceae","Cyperaceae","Juncaceae","Typhaceae"))
+which(meta(Dessain.spec)$family %in% c("Pinaceae","Cupressaceae"))
+
 ## attach structural traits
 Dessain.area<-read.csv("TraitData/LeafAreaWaterSamples/SLA_data_Aurelie_Dessain - Lab_data.csv")
 Dessain.area$SLA_m2_kg<-as.numeric(as.character(Dessain.area$SLA_m2_kg))
