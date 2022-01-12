@@ -23,9 +23,9 @@ RMSD<-function(measured,predicted){
   return(sqrt(sum((measured-predicted)^2,na.rm=T)/(length(not.na)-1)))
 }
 
-percentRMSD<-function(measured,predicted,min,max){
+percentRMSD<-function(measured,predicted,min,max,na.rm=T){
   RMSD_data<-RMSD(measured,predicted)
-  range<-quantile(measured,probs=max)-quantile(measured,probs=min)
+  range<-unname(quantile(measured,probs=max,na.rm=na.rm)-quantile(measured,probs=min,na.rm=na.rm))
   return(RMSD_data/range)
 }
 
@@ -453,8 +453,8 @@ for(i in common.fg){
                                  val_pred=as.vector(LMA_val))
   LMA_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$LMA),
                            na.omit(meta(spec.traits.other)$LMA),
-                           lower=-0.2,
-                           upper=0.6)
+                           lower=-Inf,
+                           upper=Inf)
   LMA_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$LMA),
                              na.omit(meta(spec.traits.fg)$LMA))
   
@@ -466,8 +466,8 @@ for(i in common.fg){
                                  val_pred=as.vector(EWT_val))
   EWT_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$EWT),
                            na.omit(meta(spec.traits.other)$EWT),
-                           lower=-0.02,
-                           upper=0.09)
+                           lower=-Inf,
+                           upper=Inf)
   EWT_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$EWT),
                              na.omit(meta(spec.traits.fg)$EWT))
   
@@ -479,8 +479,8 @@ for(i in common.fg){
                                   val_pred=as.vector(LDMC_val))
   LDMC_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$LDMC),
                             na.omit(meta(spec.traits.other)$LDMC),
-                            lower=-200,
-                            upper=800)
+                            lower=-Inf,
+                            upper=Inf)
   LDMC_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$LDMC),
                              na.omit(meta(spec.traits.fg)$LDMC))
   
@@ -492,8 +492,8 @@ for(i in common.fg){
                                    val_pred=as.vector(Nmass_val))
   Nmass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$Nmass),
                              na.omit(meta(spec.traits.other)$Nmass),
-                             lower=-1,
-                             upper=8)
+                             lower=-Inf,
+                             upper=Inf)
   Nmass_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$Nmass),
                              na.omit(meta(spec.traits.fg)$Nmass))
   
@@ -505,8 +505,8 @@ for(i in common.fg){
                                    val_pred=as.vector(Cmass_val))
   Cmass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$Cmass),
                              na.omit(meta(spec.traits.other)$Cmass),
-                             lower=20,
-                             upper=80)
+                             lower=0,
+                             upper=100)
   Cmass_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$Cmass),
                              na.omit(meta(spec.traits.fg)$Cmass))
   
@@ -518,8 +518,8 @@ for(i in common.fg){
                                          val_pred=as.vector(solubles_mass_val))
   solubles_mass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$solubles_mass),
                                    na.omit(meta(spec.traits.other)$solubles_mass),
-                                   lower=0,
-                                   upper=100)
+                                   lower=-Inf,
+                                   upper=Inf)
   solubles_mass_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$solubles_mass),
                              na.omit(meta(spec.traits.fg)$solubles_mass))
   
@@ -531,8 +531,8 @@ for(i in common.fg){
                                          val_pred=as.vector(hemicellulose_mass_val))
   hemicellulose_mass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$hemicellulose_mass),
                                    na.omit(meta(spec.traits.other)$hemicellulose_mass),
-                                   lower=-5,
-                                   upper=50)
+                                   lower=-Inf,
+                                   upper=Inf)
   hemicellulose_mass_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$hemicellulose_mass),
                              na.omit(meta(spec.traits.fg)$hemicellulose_mass))
   
@@ -544,8 +544,8 @@ for(i in common.fg){
                                          val_pred=as.vector(cellulose_mass_val))
   cellulose_mass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$cellulose_mass),
                                    na.omit(meta(spec.traits.other)$cellulose_mass),
-                                   lower=-5,
-                                   upper=50)
+                                   lower=-Inf,
+                                   upper=Inf)
   cellulose_mass_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$cellulose_mass),
                              na.omit(meta(spec.traits.fg)$cellulose_mass))
   
@@ -557,8 +557,8 @@ for(i in common.fg){
                                          val_pred=as.vector(lignin_mass_val))
   lignin_mass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$lignin_mass),
                                    na.omit(meta(spec.traits.other)$lignin_mass),
-                                   lower=-5,
-                                   upper=40)
+                                   lower=Inf,
+                                   upper=Inf)
   lignin_mass_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$lignin_mass),
                              na.omit(meta(spec.traits.fg)$lignin_mass))
   
@@ -570,8 +570,8 @@ for(i in common.fg){
                                         val_pred=as.vector(chlA_mass_val))
   chlA_mass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$chlA_mass),
                                   na.omit(meta(spec.traits.other)$chlA_mass),
-                                  lower=-5,
-                                  upper=30)
+                                  lower=-Inf,
+                                  upper=Inf)
   chlA_mass_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$chlA_mass),
                              na.omit(meta(spec.traits.fg)$chlA_mass))
   
@@ -583,8 +583,8 @@ for(i in common.fg){
                                        val_pred=as.vector(chlB_mass_val))
   chlB_mass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$chlB_mass),
                                  na.omit(meta(spec.traits.other)$chlB_mass),
-                                 lower=-5,
-                                 upper=15)
+                                 lower=-Inf,
+                                 upper=Inf)
   chlB_mass_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$chlB_mass),
                              na.omit(meta(spec.traits.fg)$chlB_mass))
   
@@ -596,104 +596,206 @@ for(i in common.fg){
                                        val_pred=as.vector(car_mass_val))
   car_mass_dist[[i]]<-hellinger(na.omit(meta(spec.traits.fg)$car_mass),
                                  na.omit(meta(spec.traits.other)$car_mass),
-                                 lower=-5,
-                                 upper=10)
+                                 lower=-Inf,
+                                 upper=Inf)
   car_mass_KL[[i]]<-KL.divergence(na.omit(meta(spec.traits.other)$car_mass),
                              na.omit(meta(spec.traits.fg)$car_mass))
   
 }
 
 LMA_sum_df<-data.frame(functional.group=names(LMA_pred_list),
+                       RSS=unlist(lapply(LMA_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
+                       TSS=unlist(lapply(LMA_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
+                       MAE=unlist(lapply(LMA_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
+                       MAD=unlist(lapply(LMA_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                        RMSD=unlist(lapply(LMA_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                       perRMSD=unlist(lapply(LMA_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
+                       SD=unlist(lapply(LMA_pred_list,function(x) sd(x$measured,na.rm=T))),
                        R2=unlist(lapply(LMA_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                       nsamp=unlist(lapply(LMA_pred_list,nrow)),
                        hellinger=unlist(LMA_dist),
                        KL=unlist(lapply(LMA_KL,function(x) x[[5]])),
                        trait="LMA")
 
 EWT_sum_df<-data.frame(functional.group=names(EWT_pred_list),
+                       RSS=unlist(lapply(EWT_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
+                       TSS=unlist(lapply(EWT_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
+                       MAE=unlist(lapply(EWT_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
+                       MAD=unlist(lapply(EWT_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                        RMSD=unlist(lapply(EWT_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                       perRMSD=unlist(lapply(EWT_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
+                       SD=unlist(lapply(EWT_pred_list,function(x) sd(x$measured,na.rm=T))),
                        R2=unlist(lapply(EWT_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                       nsamp=unlist(lapply(EWT_pred_list,nrow)),
                        hellinger=unlist(EWT_dist),
                        KL=unlist(lapply(EWT_KL,function(x) x[[5]])),
                        trait="EWT")
 
 LDMC_sum_df<-data.frame(functional.group=names(LDMC_pred_list),
+                        RSS=unlist(lapply(LDMC_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
+                        TSS=unlist(lapply(LDMC_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
+                        MAE=unlist(lapply(LDMC_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
+                        MAD=unlist(lapply(LDMC_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                         RMSD=unlist(lapply(LDMC_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                        perRMSD=unlist(lapply(LDMC_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
+                        SD=unlist(lapply(LDMC_pred_list,function(x) sd(x$measured,na.rm=T))),
                         R2=unlist(lapply(LDMC_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                        nsamp=unlist(lapply(LDMC_pred_list,nrow)),
                         hellinger=unlist(LDMC_dist),
                         KL=unlist(lapply(LDMC_KL,function(x) x[[5]])),
                         trait="LDMC")
 
 Nmass_sum_df<-data.frame(functional.group=names(Nmass_pred_list),
+                         RSS=unlist(lapply(Nmass_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
+                         TSS=unlist(lapply(Nmass_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
+                         MAE=unlist(lapply(Nmass_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
+                         MAD=unlist(lapply(Nmass_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                          RMSD=unlist(lapply(Nmass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                         perRMSD=unlist(lapply(Nmass_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
+                         SD=unlist(lapply(Nmass_pred_list,function(x) sd(x$measured,na.rm=T))),
                          R2=unlist(lapply(Nmass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                         nsamp=unlist(lapply(Nmass_pred_list,nrow)),
                          hellinger=unlist(Nmass_dist),
                          KL=unlist(lapply(Nmass_KL,function(x) x[[5]])),
-                         trait="Nmass")
+                         trait="N")
 
 ## not sure why KL divergence for C mass comes up infinite
 ## for K<8 or so
 Cmass_sum_df<-data.frame(functional.group=names(Cmass_pred_list),
+                         RSS=unlist(lapply(Cmass_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
+                         TSS=unlist(lapply(Cmass_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
+                         MAE=unlist(lapply(Cmass_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
+                         MAD=unlist(lapply(Cmass_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                          RMSD=unlist(lapply(Cmass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                         perRMSD=unlist(lapply(Cmass_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
+                         SD=unlist(lapply(Cmass_pred_list,function(x) sd(x$measured,na.rm=T))),
                          R2=unlist(lapply(Cmass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                         nsamp=unlist(lapply(Cmass_pred_list,nrow)),
                          hellinger=unlist(Cmass_dist),
                          KL=unlist(lapply(Cmass_KL,function(x) x[[10]])),
-                         trait="Cmass")
+                         trait="C")
 
 solubles_mass_sum_df<-data.frame(functional.group=names(solubles_mass_pred_list),
+                                 RSS=unlist(lapply(solubles_mass_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
+                                 TSS=unlist(lapply(solubles_mass_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
+                                 MAE=unlist(lapply(solubles_mass_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
+                                 MAD=unlist(lapply(solubles_mass_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                                  RMSD=unlist(lapply(solubles_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                                 perRMSD=unlist(lapply(solubles_mass_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
+                                 SD=unlist(lapply(solubles_mass_pred_list,function(x) sd(x$measured,na.rm=T))),
                                  R2=unlist(lapply(solubles_mass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                                 nsamp=unlist(lapply(solubles_mass_pred_list,nrow)),
                                  hellinger=unlist(solubles_mass_dist),
                                  KL=unlist(lapply(solubles_mass_KL,function(x) x[[5]])),
-                                 trait="solubles_mass")
+                                 trait="solubles")
 
 hemicellulose_mass_sum_df<-data.frame(functional.group=names(hemicellulose_mass_pred_list),
+                                      RSS=unlist(lapply(hemicellulose_mass_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
+                                      TSS=unlist(lapply(hemicellulose_mass_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
+                                      MAE=unlist(lapply(hemicellulose_mass_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
+                                      MAD=unlist(lapply(hemicellulose_mass_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                                       RMSD=unlist(lapply(hemicellulose_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                                      perRMSD=unlist(lapply(hemicellulose_mass_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
+                                      SD=unlist(lapply(hemicellulose_mass_pred_list,function(x) sd(x$measured,na.rm=T))),
                                       R2=unlist(lapply(hemicellulose_mass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                                      nsamp=unlist(lapply(hemicellulose_mass_pred_list,nrow)),
                                       hellinger=unlist(hemicellulose_mass_dist),
                                       KL=unlist(lapply(hemicellulose_mass_KL,function(x) x[[5]])),
-                                      trait="hemicellulose_mass")
+                                      trait="hemicellulose")
 
 cellulose_mass_sum_df<-data.frame(functional.group=names(cellulose_mass_pred_list),
+                                  RSS=unlist(lapply(cellulose_mass_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
+                                  TSS=unlist(lapply(cellulose_mass_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
+                                  MAE=unlist(lapply(cellulose_mass_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
+                                  MAD=unlist(lapply(cellulose_mass_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                                   RMSD=unlist(lapply(cellulose_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                                  perRMSD=unlist(lapply(cellulose_mass_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
+                                  SD=unlist(lapply(cellulose_mass_pred_list,function(x) sd(x$measured,na.rm=T))),
                                   R2=unlist(lapply(cellulose_mass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                                  nsamp=unlist(lapply(cellulose_mass_pred_list,nrow)),
                                   hellinger=unlist(cellulose_mass_dist),
                                   KL=unlist(lapply(cellulose_mass_KL,function(x) x[[5]])),
-                                  trait="cellulose_mass")
+                                  trait="cellulose")
 
 lignin_mass_sum_df<-data.frame(functional.group=names(lignin_mass_pred_list),
+                               RSS=unlist(lapply(lignin_mass_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
+                               TSS=unlist(lapply(lignin_mass_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
+                               MAE=unlist(lapply(lignin_mass_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
+                               MAD=unlist(lapply(lignin_mass_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                                RMSD=unlist(lapply(lignin_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                               perRMSD=unlist(lapply(lignin_mass_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
+                               SD=unlist(lapply(lignin_mass_pred_list,function(x) sd(x$measured,na.rm=T))),
                                R2=unlist(lapply(lignin_mass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                               nsamp=unlist(lapply(lignin_mass_pred_list,nrow)),
                                hellinger=unlist(lignin_mass_dist),
                                KL=unlist(lapply(lignin_mass_KL,function(x) x[[5]])),
-                               trait="lignin_mass")
+                               trait="lignin")
 
 chlA_mass_sum_df<-data.frame(functional.group=names(chlA_mass_pred_list),
+                             RSS=unlist(lapply(chlA_mass_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
+                             TSS=unlist(lapply(chlA_mass_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
+                             MAE=unlist(lapply(chlA_mass_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
+                             MAD=unlist(lapply(chlA_mass_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                              RMSD=unlist(lapply(chlA_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                             perRMSD=unlist(lapply(chlA_mass_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
+                             SD=unlist(lapply(chlA_mass_pred_list,function(x) sd(x$measured,na.rm=T))),
                              R2=unlist(lapply(chlA_mass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                             nsamp=unlist(lapply(chlA_mass_pred_list,nrow)),
                              hellinger=unlist(chlA_mass_dist),
                              KL=unlist(lapply(chlA_mass_KL,function(x) x[[5]])),
-                             trait="chlA_mass")
+                             trait="Chl a")
 
 chlB_mass_sum_df<-data.frame(functional.group=names(chlB_mass_pred_list),
+                             RSS=unlist(lapply(chlB_mass_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
+                             TSS=unlist(lapply(chlB_mass_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
+                             MAE=unlist(lapply(chlB_mass_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
+                             MAD=unlist(lapply(chlB_mass_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                              RMSD=unlist(lapply(chlB_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                             perRMSD=unlist(lapply(chlB_mass_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
+                             SD=unlist(lapply(chlB_mass_pred_list,function(x) sd(x$measured,na.rm=T))),
                              R2=unlist(lapply(chlB_mass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                             nsamp=unlist(lapply(chlB_mass_pred_list,nrow)),
                              hellinger=unlist(chlB_mass_dist),
                              KL=unlist(lapply(chlB_mass_KL,function(x) x[[5]])),
-                             trait="chlB_mass")
+                             trait="Chl b")
 
 car_mass_sum_df<-data.frame(functional.group=names(car_mass_pred_list),
+                            RSS=unlist(lapply(car_mass_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
+                            TSS=unlist(lapply(car_mass_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
+                            MAE=unlist(lapply(car_mass_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
+                            MAD=unlist(lapply(car_mass_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                             RMSD=unlist(lapply(car_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
+                            perRMSD=unlist(lapply(car_mass_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
+                            SD=unlist(lapply(car_mass_pred_list,function(x) sd(x$measured,na.rm=T))),
                             R2=unlist(lapply(car_mass_pred_list,function(x) cor(x$measured,x$val_pred,use="c")^2)),
+                            nsamp=unlist(lapply(car_mass_pred_list,nrow)),
                             hellinger=unlist(car_mass_dist),
                             KL=unlist(lapply(car_mass_KL,function(x) x[[5]])),
-                            trait="car_mass")
+                            trait="carotenoids")
 
 summary_df<-do.call(rbind,list(LMA_sum_df,LDMC_sum_df,EWT_sum_df,
                                Nmass_sum_df,Cmass_sum_df,solubles_mass_sum_df,
                                hemicellulose_mass_sum_df,cellulose_mass_sum_df,
                                lignin_mass_sum_df,chlA_mass_sum_df,
                                chlB_mass_sum_df,car_mass_sum_df))
+
+ggplot(data=summary_df,aes(x=hellinger,y=perRMSD*100,
+                           color=trait))+
+  geom_point(size=2,aes(shape=functional.group))+
+  geom_smooth(method="lm",se=F)+theme_bw()+
+  theme(text=element_text(size=20))+
+  labs(x="Hellinger distance",y="%RMSE")+
+  guides(color=guide_legend("Trait"),
+         shape=guide_legend("Functional group"))
+
+ggplot(Nmass_pred_list$conifer,aes(x=measured,y=val_pred))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(0,3),ylim=c(0,3))+
+  theme_bw()+
+  theme(text=element_text(size=20))+
+  labs(y=expression("Measured N"[mass]*" (%)"),
+       x=expression("Predicted N"[mass]*" (%)"))
 
 ## bringing in randomized validation data
 val_models<-readRDS("SavedResults/all_jack_df_list.rds")
@@ -846,8 +948,3 @@ R2_df<-data.frame(functional.group=LMA_sum_df$functional.group,
                     lignin_mass=lignin_mass_sum_df$R2,
                     chlA_mass=chlA_mass_sum_df$R2,
                     EWT=EWT_sum_df$R2)
-
-ggplot(data=summary_df,aes(x=hellinger,y=R2,
-                           color=trait))+
-  geom_point(size=2,aes(shape=functional.group))+
-  geom_smooth(method="lm",se=F)
