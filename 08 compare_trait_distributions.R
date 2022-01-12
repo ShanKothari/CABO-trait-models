@@ -217,7 +217,7 @@ TRY_SLA$LMA<-1/TRY_SLA$StdValue
 trait.df$cat<-"CABO"
 
 ggplot(data=trait.df,
-       aes(x=chlA_mass,color=functional.group))+
+       aes(x=chlA_mass,color=project))+
   geom_density(size=1.25)+
   theme_bw()+
   scale_color_brewer(palette="Set3")
@@ -255,7 +255,7 @@ EWT_density<-ggplot(data=EWT_sub,
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
         legend.position = c(0.7,0.7))+
-  labs(y="Density",x="EWT (cm)")+
+  labs(y="Density",x="EWT (mm)")+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$EWT)),")",sep="")))
 
 ## LDMC density plot
@@ -316,7 +316,7 @@ Cmass_density<-ggplot(data=all.Cmass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.25,0.85))+
+        legend.position = c(0.25,0.7))+
   labs(y="Density",x=expression("C"[mass]~" (%)"))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$Cmass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_C$StdValue)),")",sep="")))
@@ -337,7 +337,7 @@ solubles_mass_density<-ggplot(data=all.solubles_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.25,0.85))+
+        legend.position = c(0.25,0.92))+
   labs(y="Density",x=expression("Solubles (%)"))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$solubles_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_solubles$StdValue)),")",sep="")))
@@ -358,7 +358,7 @@ hemicellulose_mass_density<-ggplot(data=all.hemicellulose_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.7))+
+        legend.position = c(0.7,0.8))+
   labs(y="Density",x=expression("Hemicellulose (%)"))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$hemicellulose_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_hemicellulose$StdValue)),")",sep="")))
@@ -379,7 +379,7 @@ cellulose_mass_density<-ggplot(data=all.cellulose_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.7))+
+        legend.position = c(0.7,0.8))+
   labs(y="Density",x=expression("Cellulose (%)"))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$cellulose_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_cellulose$StdValue)),")",sep="")))
@@ -400,7 +400,7 @@ lignin_mass_density<-ggplot(data=all.lignin_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.7))+
+        legend.position = c(0.7,0.8))+
   labs(y="Density",x=expression("Lignin (%)"))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$lignin_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_lignin$StdValue)),")",sep="")))
@@ -702,24 +702,15 @@ Zn_mass_density<-ggplot(data=all.Zn_mass,
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$Zn_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_Zn$StdValue)),")",sep="")))
 
-pdf("Images/density_plot1.pdf",width=24,height=30)
+pdf("Images/density_plot.pdf",width=24,height=30)
 ggarrange(plotlist = list(LMA_density,EWT_density,LDMC_density,
-                          Nmass_density,Cmass_density,
-                          solubles_mass_density,hemicellulose_mass_density,
-                          cellulose_mass_density,lignin_mass_density,
-                          chlA_mass_density,chlB_mass_density,
-                          car_mass_density),
-          ncol = 3,nrow=4)
-dev.off()
-
-pdf("Images/density_plot2.pdf",width=24,height=30)
-ggarrange(plotlist = list(Al_mass_density,
-                          Ca_mass_density,Cu_mass_density,
-                          Fe_mass_density,K_mass_density,
-                          Mg_mass_density,Mn_mass_density,
-                          Na_mass_density,P_mass_density,
-                          Zn_mass_density),
-          ncol = 3,nrow=4)
+                          Nmass_density,Cmass_density,solubles_mass_density,
+                          hemicellulose_mass_density,cellulose_mass_density,lignin_mass_density,
+                          chl_mass_density,car_mass_density,Al_mass_density,
+                          Ca_mass_density,Cu_mass_density,Fe_mass_density,
+                          K_mass_density,Mg_mass_density,Mn_mass_density,
+                          Na_mass_density,P_mass_density,Zn_mass_density),
+          ncol = 3,nrow=7)
 dev.off()
 
 ############################
