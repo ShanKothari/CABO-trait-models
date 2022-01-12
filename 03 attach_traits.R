@@ -276,9 +276,10 @@ meta(all.abs)$Nmass<-all.CN$Nmass[match(meta(all.abs)$sample_id,all.CN$sample_id
 
 CFractions<-read.csv("TraitData/CarbonFractions/carbon_fractions_bags.csv")
 CFractions$species<-meta(all.ref)$species[match(CFractions$bottle_id,meta(all.ref)$sample_id)]
+## remove samples that were marked as to be redone
+CFractions<-CFractions[-grep("redone",CFractions$sample_remarks),]
 
 ## removing species that have exudates that affect carbon fraction measurements
-## there may also be a problem with "Polystichum munitum (Kaulfuss) C. Presl" but not confirmed
 NDF_bad<-c("Ulmus rubra Muhlenberg","Acer platanoides Linnaeus",
            "Ulmus americana Linnaeus","Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")
 CFractions$ndf_perc[which(CFractions$species %in% NDF_bad)]<-NA
