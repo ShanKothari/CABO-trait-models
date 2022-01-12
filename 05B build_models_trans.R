@@ -1089,7 +1089,7 @@ EWT.val.plot<-ggplot(EWT.jack.df,aes(y=Measured,x=pred.mean,color=functional.gro
   coord_cartesian(xlim=c(0,0.068),ylim=c(0,0.068))+
   theme(text = element_text(size=25),
         legend.position = c(0.8, 0.25))+
-  labs(y="Measured EWT (cm)",x="Predicted EWT (cm)")+
+  labs(y="Measured EWT (mm)",x="Predicted EWT (mm)")+
   guides(color=F)
 
 LMA.jack.pred<-apply.coefs(LMA.jack.coefs,as.matrix(trans.test))

@@ -117,16 +117,19 @@ meta(all.ref)$growth.form[meta(all.ref)$species=="Staphylea trifolia Linnaeus"]<
 meta(all.ref)$growth.form[meta(all.ref)$species=="Oemleria cerasiformis (Torrey & A. Gray ex Hooker & Arnott) J.W. Landon"]<-"shrub"
 meta(all.ref)$growth.form[meta(all.ref)$species=="Crataegus monogyna Jacquin"]<-"shrub"
 
+meta(all.ref)$order<-vascan$order[match(meta(all.ref)$species,vascan$scientific_name)]
 meta(all.ref)$family<-vascan$family[match(meta(all.ref)$species,vascan$scientific_name)]
 meta(all.ref)$genus<-vascan$genus[match(meta(all.ref)$species,vascan$scientific_name)]
 levels(meta(all.ref)$family)<-c(levels(meta(all.ref)$family),"Myrtaceae")
 levels(meta(all.ref)$genus)<-c(levels(meta(all.ref)$genus),"Agonis")
+meta(all.ref)$order[meta(all.ref)$species=="Agonis flexuosa (Willd.) Sweet"]<-"Myrtales"
 meta(all.ref)$family[meta(all.ref)$species=="Agonis flexuosa (Willd.) Sweet"]<-"Myrtaceae"
 meta(all.ref)$genus[meta(all.ref)$species=="Agonis flexuosa (Willd.) Sweet"]<-"Agonis"
 
 meta(all.ref)$functional.group<-as.character(meta(all.ref)$growth.form)
 meta(all.ref)$functional.group[meta(all.ref)$family %in% c("Poaceae","Cyperaceae","Juncaceae","Typhaceae")]<-"graminoid"
 meta(all.ref)$functional.group[meta(all.ref)$family %in% c("Pinaceae","Cupressaceae")]<-"conifer"
+meta(all.ref)$functional.group[meta(all.ref)$order %in% c("Polypodiales","Osmundales")]<-"fern"
 meta(all.ref)$functional.group[meta(all.ref)$functional.group=="herb"]<-"forb"
 meta(all.ref)$functional.group[meta(all.ref)$functional.group=="tree"]<-"broadleaf"
 
@@ -165,18 +168,18 @@ all.area.sub$SLA[all.area.sub$sample_id %in% c("13404937","44227362",
 
 ## SLA in units m^2/kg
 ## LDMC in units mg/g
-## EWT in units cm
+## EWT in units mm
 meta(all.ref)$SLA<-all.area.sub$SLA[match(meta(all.ref)$sample_id,all.area.sub$sample_id)]
 meta(all.ref)$LDMC<-all.area.sub$LDMC[match(meta(all.ref)$sample_id,all.area.sub$sample_id)]
-meta(all.ref)$EWT<-with(meta(all.ref),(1/(LDMC/1000)-1)*(1/SLA*0.1))
+meta(all.ref)$EWT<-with(meta(all.ref),(1/(LDMC/1000)-1)*(1/SLA*0.1)*10)
 
 meta(all.trans)$SLA<-all.area.sub$SLA[match(meta(all.trans)$sample_id,all.area.sub$sample_id)]
 meta(all.trans)$LDMC<-all.area.sub$LDMC[match(meta(all.trans)$sample_id,all.area.sub$sample_id)]
-meta(all.trans)$EWT<-with(meta(all.trans),(1/(LDMC/1000)-1)*(1/SLA*0.1))
+meta(all.trans)$EWT<-with(meta(all.trans),(1/(LDMC/1000)-1)*(1/SLA*0.1)*10)
 
 meta(all.abs)$SLA<-all.area.sub$SLA[match(meta(all.abs)$sample_id,all.area.sub$sample_id)]
 meta(all.abs)$LDMC<-all.area.sub$LDMC[match(meta(all.abs)$sample_id,all.area.sub$sample_id)]
-meta(all.abs)$EWT<-with(meta(all.abs),(1/(LDMC/1000)-1)*(1/SLA*0.1))
+meta(all.abs)$EWT<-with(meta(all.abs),(1/(LDMC/1000)-1)*(1/SLA*0.1)*10)
 
 ##############################################
 ## read C/N
@@ -687,6 +690,8 @@ dev.off()
 all.ref.df<-data.frame(sample_id=meta(all.ref)$sample_id,
                        functional.group=meta(all.ref)$functional.group,
                        as.matrix(all.ref))
+## remove ferns and vines, which are represented by just one species each
+all.ref.df<-all.ref.df[-which(all.ref.df$functional.group %in% c("fern","vine")),]
 all.ref.long<-melt(all.ref.df,id.vars = c("sample_id","functional.group"))
 all.ref.long$variable<-as.numeric(gsub("X","",all.ref.long$variable))
 
@@ -696,7 +701,7 @@ ref_fg_spec_plot<-ggplot(all.ref.long,aes(x=variable,y=value))+
             aes(x=wavelength,y=ref_CV),size=1.5,linetype="longdash")+
   theme_bw()+theme(text=element_text(size=15))+
   labs(x="Wavelength (nm)",y="Reflectance (or CV)")+
-  guides(color=guide_legend("Functional group"))+
+  guides(color=guide_legend("Functional group",nrow = 2))+
   scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
   scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
   labs(tag = "A")
@@ -704,6 +709,7 @@ ref_fg_spec_plot<-ggplot(all.ref.long,aes(x=variable,y=value))+
 all.trans.df<-data.frame(sample_id=meta(all.trans)$sample_id,
                          functional.group=meta(all.trans)$functional.group,
                          as.matrix(all.trans))
+all.trans.df<-all.trans.df[-which(all.trans.df$functional.group %in% c("fern","vine")),]
 all.trans.long<-melt(all.trans.df,id.vars = c("sample_id","functional.group"))
 all.trans.long$variable<-as.numeric(gsub("X","",all.trans.long$variable))
 
@@ -713,14 +719,15 @@ trans_fg_spec_plot<-ggplot(all.trans.long,aes(x=variable,y=value))+
             aes(x=wavelength,y=trans_CV),size=1.5,linetype="longdash")+
   theme_bw()+theme(text=element_text(size=15))+
   labs(x="Wavelength (nm)",y="Transmittance (or CV)")+
-  guides(color=guide_legend("Functional group"))+
+  guides(color=guide_legend("Functional group",nrow = 2))+
   scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
   scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
-  labs(tag = "A")
+  labs(tag = "B")
 
 all.abs.df<-data.frame(sample_id=meta(all.abs)$sample_id,
                        functional.group=meta(all.abs)$functional.group,
                        as.matrix(all.abs))
+all.abs.df<-all.abs.df[-which(all.abs.df$functional.group %in% c("fern","vine")),]
 all.abs.long<-melt(all.abs.df,id.vars = c("sample_id","functional.group"))
 all.abs.long$variable<-as.numeric(gsub("X","",all.abs.long$variable))
 
@@ -730,10 +737,10 @@ abs_fg_spec_plot<-ggplot(all.abs.long,aes(x=variable,y=value))+
             aes(x=wavelength,y=abs_CV),size=1.5,linetype="longdash")+
   theme_bw()+theme(text=element_text(size=15))+
   labs(x="Wavelength (nm)",y="Absorbance (or CV)")+
-  guides(color=guide_legend("Functional group"))+
+  guides(color=guide_legend("Functional group",nrow = 2))+
   scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
   scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
-  labs(tag = "A")
+  labs(tag = "C")
 
 pdf("Images/all_spec_fg.pdf",width=7,height=12)
 ref_fg_spec_plot+trans_fg_spec_plot+
