@@ -690,6 +690,9 @@ dev.off()
 ################################
 ## plot spectra for each functional group
 
+colorBlind  <- c("#E69F00","#009E73","#56B4E9","#F0E442",
+                 "#0072B2","#CC79A7","#D55E00","#999999")
+
 all.ref.df<-data.frame(sample_id=meta(all.ref)$sample_id,
                        functional.group=meta(all.ref)$functional.group,
                        as.matrix(all.ref))
@@ -707,7 +710,8 @@ ref_fg_spec_plot<-ggplot(all.ref.long,aes(x=variable,y=value))+
   guides(color=guide_legend("Functional group",nrow = 2))+
   scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
   scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
-  labs(tag = "A")
+  labs(tag = "A")+
+  scale_color_manual(values=colorBlind[c(1,2,4,5,6)])
 
 all.trans.df<-data.frame(sample_id=meta(all.trans)$sample_id,
                          functional.group=meta(all.trans)$functional.group,
@@ -725,7 +729,8 @@ trans_fg_spec_plot<-ggplot(all.trans.long,aes(x=variable,y=value))+
   guides(color=guide_legend("Functional group",nrow = 2))+
   scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
   scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
-  labs(tag = "B")
+  labs(tag = "B")+
+  scale_color_manual(values=colorBlind[c(1,2,4,5,6)])
 
 all.abs.df<-data.frame(sample_id=meta(all.abs)$sample_id,
                        functional.group=meta(all.abs)$functional.group,
@@ -743,7 +748,8 @@ abs_fg_spec_plot<-ggplot(all.abs.long,aes(x=variable,y=value))+
   guides(color=guide_legend("Functional group",nrow = 2))+
   scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
   scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
-  labs(tag = "C")
+  labs(tag = "C")+
+  scale_color_manual(values=colorBlind[c(1,2,4,5,6)])
 
 pdf("Images/all_spec_fg.pdf",width=7,height=12)
 ref_fg_spec_plot+trans_fg_spec_plot+
@@ -777,7 +783,8 @@ trait.pca.plot<-ggplot(trait.pca.val, aes(x = PC1, y = PC2, color = functional.g
   guides(color=guide_legend("Functional group"))+
   coord_fixed(ratio=trait.pca.perc[2]/trait.pca.perc[1])+
   labs(x=paste("PC1 (",round(trait.pca.perc[1],1),"% variance)",sep=""),
-       y=paste("PC2 (",round(trait.pca.perc[2],1),"% variance)",sep=""))
+       y=paste("PC2 (",round(trait.pca.perc[2],1),"% variance)",sep=""))+
+  scale_color_manual(values=colorBlind)
 
 traitnorm.pca<-prcomp(~.,meta(all.ref)[,c("LMA","LDMC","EWT","Cnorm","Nnorm",
                                           "hemicellulose_norm","cellulose_norm",
@@ -801,7 +808,8 @@ traitnorm.pca.plot<-ggplot(traitnorm.pca.val, aes(x = -PC1*2, y = -PC2*2, color 
   guides(color=guide_legend("Functional group"))+
   coord_fixed(ratio=traitnorm.pca$sdev[2]^2/traitnorm.pca$sdev[1]^2)+
   labs(x=paste("PC1 (",round(traitnorm.pca.perc[1],1),"% variance)",sep=""),
-       y=paste("PC2 (",round(traitnorm.pca.perc[2],1),"% variance)",sep=""))
+       y=paste("PC2 (",round(traitnorm.pca.perc[2],1),"% variance)",sep=""))+
+  scale_color_manual(values=colorBlind)
 
 pdf("Images/pca_plot.pdf")
 trait.pca.plot+traitnorm.pca.plot+plot_layout(ncol=1,guides="collect") &
