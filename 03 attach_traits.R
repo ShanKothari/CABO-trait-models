@@ -259,6 +259,7 @@ all.CN<-do.call(rbind,list(BeauchampRioux.CN.sub,Blanchard.CN.sub,Boucherville20
                            Hacker2019.CN.sub,PhragmitesTemporal.CN.sub,
                            Warren.CN.sub))
 
+## likely error
 all.CN$Cmass[all.CN$sample_id=="38707392"]<-NA
 all.CN$Nmass[all.CN$sample_id=="38707392"]<-NA
 
@@ -373,6 +374,7 @@ all.pigments<-do.call(rbind,list(BeauchampRioux.pigments,Blanchard.pigments,Bouc
                            Hacker2019.pigments,PhragmitesTemporal.pigments,
                            Warren.pigments))
 
+## likely error
 all.pigments$chlA_mg_g[all.pigments$sample_id==13404937]<-NA
 all.pigments$chlB_mg_g[all.pigments$sample_id==13404937]<-NA
 all.pigments$carotenoides._mg_g[all.pigments$sample_id==13404937]<-NA
