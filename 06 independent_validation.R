@@ -784,8 +784,8 @@ Nmass_ind_val<-ggplot(data=Nmass_pred_df,
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  labs(y=expression("Measured N"[mass]*" (%)"),
-       x=expression("Predicted N"[mass]*" (%)"))+
+  labs(y=expression("Measured N (%)"),
+       x=expression("Predicted N (%)"))+
   coord_cartesian(xlim=c(0,6.2),ylim=c(0,6.2))
 
 Cmass_ind_val<-ggplot(data=Cmass_pred_df,
@@ -797,8 +797,8 @@ Cmass_ind_val<-ggplot(data=Cmass_pred_df,
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  labs(y=expression("Measured C"[mass]*" (%)"),
-       x=expression("Predicted C"[mass]*" (%)"))+
+  labs(y=expression("Measured C (%)"),
+       x=expression("Predicted C (%)"))+
   coord_cartesian(xlim=c(37,54),ylim=c(37,54))
 
 LMA_ind_val<-ggplot(data=LMA_pred_df,
@@ -836,8 +836,8 @@ EWT_ind_val<-ggplot(data=EWT_pred_df,
   theme(text = element_text(size=25))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
-  labs(y="Measured EWT (cm)",x="Predicted EWT (cm)")+
-  coord_cartesian(xlim=c(0,0.09),ylim=c(0,0.09))
+  labs(y="Measured EWT (mm)",x="Predicted EWT (mm)")+
+  coord_cartesian(xlim=c(0,0.9),ylim=c(0,0.9))
 
 chlA_ind_val<-ggplot(data=chlA_pred_df,
                      aes(x=pred.mean,y=Measured,color=dataset))+
