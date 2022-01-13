@@ -933,7 +933,7 @@ lignin_mass.val.plot<-ggplot(lignin_mass.jack.df,aes(y=Measured,x=pred.mean,colo
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-2.5,22.5),ylim=c(-2.5,22.5))+
+  coord_cartesian(xlim=c(-2.5,23.5),ylim=c(-2.5,23.5))+
   theme(text = element_text(size=25),
         legend.position = c(0.8, 0.25))+
   labs(y="Measured lignin (%)",x="Predicted lignin (%)")+
@@ -1038,8 +1038,8 @@ Cmass.val.plot<-ggplot(Cmass.jack.df,aes(y=Measured,x=pred.mean,color=functional
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(38,55),ylim=c(36,55))+
   theme(text = element_text(size=25))+
-  labs(y=expression("Measured C"[mass]*" (%)"),
-       x=expression("Predicted C"[mass]*" (%)"))+
+  labs(y=expression("Measured C (%)"),
+       x=expression("Predicted C (%)"))+
   guides(color=F)
 
 Nmass.jack.pred<-apply.coefs(Nmass.jack.coefs,as.matrix(trans.test))
@@ -1063,8 +1063,8 @@ Nmass.val.plot<-ggplot(Nmass.jack.df,aes(y=Measured,x=pred.mean,color=functional
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,5.5),ylim=c(0,5.5))+
   theme(text = element_text(size=25))+
-  labs(y=expression("Measured N"[mass]*" (%)"),
-       x=expression("Predicted N"[mass]*" (%)"))+
+  labs(y=expression("Measured N (%)"),
+       x=expression("Predicted N (%)"))+
   guides(color=F)
 
 EWT.jack.pred<-apply.coefs(EWT.jack.coefs,as.matrix(trans.test))
@@ -1086,7 +1086,7 @@ EWT.val.plot<-ggplot(EWT.jack.df,aes(y=Measured,x=pred.mean,color=functional.gro
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,0.068),ylim=c(0,0.068))+
+  coord_cartesian(xlim=c(0,0.68),ylim=c(0,0.68))+
   theme(text = element_text(size=25),
         legend.position = c(0.8, 0.25))+
   labs(y="Measured EWT (mm)",x="Predicted EWT (mm)")+

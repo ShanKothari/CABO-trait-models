@@ -296,7 +296,7 @@ Nmass_density<-ggplot(data=all.Nmass,
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
         legend.position = c(0.7,0.7))+
-  labs(y="Density",x=expression("N"[mass]~" (%)"))+
+  labs(y="Density",x=expression("N (%)"))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$Nmass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_N$StdValue)),")",sep="")))
 
@@ -317,7 +317,7 @@ Cmass_density<-ggplot(data=all.Cmass,
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
         legend.position = c(0.25,0.7))+
-  labs(y="Density",x=expression("C"[mass]~" (%)"))+
+  labs(y="Density",x=expression("C (%)"))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$Cmass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_C$StdValue)),")",sep="")))
 
