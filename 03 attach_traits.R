@@ -744,7 +744,7 @@ abs_fg_spec_plot<-ggplot(all.abs.long,aes(x=variable,y=value))+
   geom_line(data=CV_df,
             aes(x=wavelength,y=abs_CV),size=1.5,linetype="longdash")+
   theme_bw()+theme(text=element_text(size=15))+
-  labs(x="Wavelength (nm)",y="Absorbance (or CV)")+
+  labs(x="Wavelength (nm)",y="Absorptance (or CV)")+
   guides(color=guide_legend("Functional group",nrow = 2))+
   scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
   scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
