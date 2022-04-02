@@ -527,9 +527,7 @@ VIP1.plot<-ggplot(VIP1.long,aes(x=wavelength,y=value,color=variable))+
         axis.text.x = element_blank())+
   labs(y="VIP",x="Wavelength",color="Trait")+
   coord_cartesian(ylim=c(0,4))+
-  scale_color_manual(labels=c(expression("C"[mass]),
-                              expression("N"[mass]),
-                              "LMA","LDMC","EWT"),
+  scale_color_manual(labels=c("C","N","LMA","LDMC","EWT"),
                      values=focal_palette)+
   geom_abline(slope=0,intercept=0.8,linetype="dashed",size=1)
 
@@ -585,9 +583,9 @@ VIP5.plot<-ggplot(VIP5.long,aes(x=wavelength,y=value,color=variable))+
                      values=focal_palette)+
   geom_abline(slope=0,intercept=0.8,linetype="dashed",size=1)
 
-# pdf("Images/VIP_ref.pdf",height=12,width=6,onefile = F)
-# VIP1.plot / VIP2.plot / VIP3.plot / VIP4.plot / VIP5.plot
-# dev.off()
+pdf("Images/VIP_ref.pdf",height=12,width=6,onefile = F)
+VIP1.plot / VIP2.plot / VIP3.plot / VIP4.plot / VIP5.plot
+dev.off()
 
 #######################################################
 ## jackknife analyses
@@ -874,6 +872,9 @@ for(i in 1:nreps){
   
 }
 
+colorBlind  <- c("#E69F00","#009E73","#56B4E9","#F0E442",
+                 "#0072B2","#CC79A7","#D55E00","#999999")
+
 solubles_mass.jack.pred<-apply.coefs(solubles_mass.jack.coefs,as.matrix(ref.test))
 solubles_mass.jack.stat<-t(apply(solubles_mass.jack.pred,1,
                                  function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
@@ -886,6 +887,9 @@ solubles_mass.jack.df<-data.frame(pred.mean=solubles_mass.jack.stat[,1],
                                   Project=meta(ref.test)$project,
                                   functional.group=meta(ref.test)$functional.group,
                                   ID=meta(ref.test)$sample_id)
+solubles_all<-with(solubles_mass.jack.df,c(pred.low,pred.high,Measured))
+solubles_upper<-max(solubles_all,na.rm=T)+1
+solubles_lower<-min(solubles_all,na.rm=T)-1
 
 solubles_mass.val.plot<-ggplot(solubles_mass.jack.df,
                                aes(y=Measured,x=pred.mean,color=functional.group))+
@@ -894,11 +898,13 @@ solubles_mass.val.plot<-ggplot(solubles_mass.jack.df,
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(25,95),ylim=c(25,95))+
+  coord_cartesian(xlim=c(solubles_lower,solubles_upper),
+                  ylim=c(solubles_lower,solubles_upper))+
   theme(text = element_text(size=25),
         legend.position = c(0.8, 0.25))+
   labs(y="Measured solubles (%)",x="Predicted solubles (%)")+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 hemicellulose_mass.jack.pred<-apply.coefs(hemicellulose_mass.jack.coefs,as.matrix(ref.test))
 hemicellulose_mass.jack.stat<-t(apply(hemicellulose_mass.jack.pred,1,
@@ -912,6 +918,9 @@ hemicellulose_mass.jack.df<-data.frame(pred.mean=hemicellulose_mass.jack.stat[,1
                                        Project=meta(ref.test)$project,
                                        functional.group=meta(ref.test)$functional.group,
                                        ID=meta(ref.test)$sample_id)
+hemicellulose_all<-with(hemicellulose_mass.jack.df,c(pred.low,pred.high,Measured))
+hemicellulose_upper<-max(hemicellulose_all,na.rm=T)+1
+hemicellulose_lower<-min(hemicellulose_all,na.rm=T)-1
 
 hemicellulose_mass.val.plot<-ggplot(hemicellulose_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -919,11 +928,14 @@ hemicellulose_mass.val.plot<-ggplot(hemicellulose_mass.jack.df,aes(y=Measured,x=
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,44),ylim=c(0,44))+
+  coord_cartesian(xlim=c(hemicellulose_lower,hemicellulose_upper),
+                  ylim=c(hemicellulose_lower,hemicellulose_upper))+
   theme(text = element_text(size=25),
         legend.position = c(0.8, 0.25))+
-  labs(y="Measured hemicellulose (%)",x="Predicted hemicellulose (%)")+
-  guides(color=F)
+  labs(y="Measured hemicellulose (%)",
+       x="Predicted hemicellulose (%)")+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 cellulose_mass.jack.pred<-apply.coefs(cellulose_mass.jack.coefs,as.matrix(ref.test))
 cellulose_mass.jack.stat<-t(apply(cellulose_mass.jack.pred,1,
@@ -937,6 +949,9 @@ cellulose_mass.jack.df<-data.frame(pred.mean=cellulose_mass.jack.stat[,1],
                                    Project=meta(ref.test)$project,
                                    functional.group=meta(ref.test)$functional.group,
                                    ID=meta(ref.test)$sample_id)
+cellulose_all<-with(cellulose_mass.jack.df,c(pred.low,pred.high,Measured))
+cellulose_upper<-max(cellulose_all,na.rm=T)+1
+cellulose_lower<-min(cellulose_all,na.rm=T)-1
 
 cellulose_mass.val.plot<-ggplot(cellulose_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -944,11 +959,13 @@ cellulose_mass.val.plot<-ggplot(cellulose_mass.jack.df,aes(y=Measured,x=pred.mea
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,34),ylim=c(0,34))+
+  coord_cartesian(xlim=c(cellulose_lower,cellulose_upper),
+                  ylim=c(cellulose_lower,cellulose_upper))+
   theme(text = element_text(size=25),
         legend.position = c(0.8, 0.25))+
   labs(y="Measured cellulose (%)",x="Predicted cellulose (%)")+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 lignin_mass.jack.pred<-apply.coefs(lignin_mass.jack.coefs,as.matrix(ref.test))
 lignin_mass.jack.stat<-t(apply(lignin_mass.jack.pred,1,
@@ -962,6 +979,9 @@ lignin_mass.jack.df<-data.frame(pred.mean=lignin_mass.jack.stat[,1],
                                 Project=meta(ref.test)$project,
                                 functional.group=meta(ref.test)$functional.group,
                                 ID=meta(ref.test)$sample_id)
+lignin_all<-with(lignin_mass.jack.df,c(pred.low,pred.high,Measured))
+lignin_upper<-max(lignin_all,na.rm=T)+0.5
+lignin_lower<-min(lignin_all,na.rm=T)-0.5
 
 lignin_mass.val.plot<-ggplot(lignin_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -969,11 +989,13 @@ lignin_mass.val.plot<-ggplot(lignin_mass.jack.df,aes(y=Measured,x=pred.mean,colo
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-2.5,22.5),ylim=c(-2.5,22.5))+
+  coord_cartesian(xlim=c(lignin_lower,lignin_upper),
+                  ylim=c(lignin_lower,lignin_upper))+
   theme(text = element_text(size=25),
         legend.position = c(0.8, 0.25))+
   labs(y="Measured lignin (%)",x="Predicted lignin (%)")+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 chlA_mass.jack.pred<-apply.coefs(chlA_mass.jack.coefs,as.matrix(ref.test))
 chlA_mass.jack.stat<-t(apply(chlA_mass.jack.pred,1,
@@ -987,6 +1009,9 @@ chlA_mass.jack.df<-data.frame(pred.mean=chlA_mass.jack.stat[,1],
                               Project=meta(ref.test)$project,
                               functional.group=meta(ref.test)$functional.group,
                               ID=meta(ref.test)$sample_id)
+chlA_all<-with(chlA_mass.jack.df,c(pred.low,pred.high,Measured))
+chlA_upper<-max(chlA_all,na.rm=T)+1
+chlA_lower<-min(chlA_all,na.rm=T)-1
 
 chlA_mass.val.plot<-ggplot(chlA_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -994,12 +1019,14 @@ chlA_mass.val.plot<-ggplot(chlA_mass.jack.df,aes(y=Measured,x=pred.mean,color=fu
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-2,25),ylim=c(-2,25))+
+  coord_cartesian(xlim=c(chlA_lower,chlA_upper),
+                  ylim=c(chlA_lower,chlA_upper))+
   theme(text = element_text(size=25),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured Chl"~italic("a")~"(mg g"^-1*")"),
        x=expression("Predicted Chl"~italic("a")~"(mg g"^-1*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 chlB_mass.jack.pred<-apply.coefs(chlB_mass.jack.coefs,as.matrix(ref.test))
 chlB_mass.jack.stat<-t(apply(chlB_mass.jack.pred,1,
@@ -1013,6 +1040,9 @@ chlB_mass.jack.df<-data.frame(pred.mean=chlB_mass.jack.stat[,1],
                               Project=meta(ref.test)$project,
                               functional.group=meta(ref.test)$functional.group,
                               ID=meta(ref.test)$sample_id)
+chlB_all<-with(chlB_mass.jack.df,c(pred.low,pred.high,Measured))
+chlB_upper<-max(chlB_all,na.rm=T)+0.5
+chlB_lower<-min(chlB_all,na.rm=T)-0.5
 
 chlB_mass.val.plot<-ggplot(chlB_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1020,12 +1050,14 @@ chlB_mass.val.plot<-ggplot(chlB_mass.jack.df,aes(y=Measured,x=pred.mean,color=fu
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-1.5,9),ylim=c(-1.5,9))+
+  coord_cartesian(xlim=c(chlB_lower,chlB_upper),
+                  ylim=c(chlB_lower,chlB_upper))+
   theme(text = element_text(size=25),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured Chl"~italic("b")~"(mg g"^-1*")"),
        x=expression("Predicted Chl"~italic("b")~"(mg g"^-1*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 car_mass.jack.pred<-apply.coefs(car_mass.jack.coefs,as.matrix(ref.test))
 car_mass.jack.stat<-t(apply(car_mass.jack.pred,1,
@@ -1039,6 +1071,9 @@ car_mass.jack.df<-data.frame(pred.mean=car_mass.jack.stat[,1],
                              Project=meta(ref.test)$project,
                              functional.group=meta(ref.test)$functional.group,
                              ID=meta(ref.test)$sample_id)
+car_all<-with(car_mass.jack.df,c(pred.low,pred.high,Measured))
+car_upper<-max(car_all,na.rm=T)+0.3
+car_lower<-min(car_all,na.rm=T)-0.3
 
 car_mass.val.plot<-ggplot(car_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1046,12 +1081,14 @@ car_mass.val.plot<-ggplot(car_mass.jack.df,aes(y=Measured,x=pred.mean,color=func
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-0.5,5.5),ylim=c(-0.5,5.5))+
+  coord_cartesian(xlim=c(car_lower,car_upper),
+                  ylim=c(car_lower,car_upper))+
   theme(text = element_text(size=25),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured carotenoids (mg g"^-1*")"),
        x=expression("Predicted carotenoids (mg g"^-1*")"),
-       color="Functional group")
+       color="Functional group")+
+  scale_color_manual(values=colorBlind)
 
 Cmass.jack.pred<-apply.coefs(Cmass.jack.coefs,as.matrix(ref.test))
 Cmass.jack.stat<-t(apply(Cmass.jack.pred,1,
@@ -1065,6 +1102,9 @@ Cmass.jack.df<-data.frame(pred.mean=Cmass.jack.stat[,1],
                           Project=meta(ref.test)$project,
                           functional.group=meta(ref.test)$functional.group,
                           ID=meta(ref.test)$sample_id)
+C_all<-with(Cmass.jack.df,c(pred.low,pred.high,Measured))
+C_upper<-max(C_all,na.rm=T)+1
+C_lower<-min(C_all,na.rm=T)-1
 
 Cmass.val.plot<-ggplot(Cmass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1072,11 +1112,13 @@ Cmass.val.plot<-ggplot(Cmass.jack.df,aes(y=Measured,x=pred.mean,color=functional
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(38,55),ylim=c(38,55))+
+  coord_cartesian(xlim=c(C_lower,C_upper),
+                  ylim=c(C_lower,C_upper))+
   theme(text = element_text(size=25))+
-  labs(y=expression("Measured C"[mass]*" (%)"),
-       x=expression("Predicted C"[mass]*" (%)"))+
-  guides(color=F)
+  labs(y=expression("Measured C (%)"),
+       x=expression("Predicted C (%)"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 Nmass.jack.pred<-apply.coefs(Nmass.jack.coefs,as.matrix(ref.test))
 Nmass.jack.stat<-t(apply(Nmass.jack.pred,1,
@@ -1090,6 +1132,9 @@ Nmass.jack.df<-data.frame(pred.mean=Nmass.jack.stat[,1],
                           Project=meta(ref.test)$project,
                           functional.group=meta(ref.test)$functional.group,
                           ID=meta(ref.test)$sample_id)
+N_all<-with(Nmass.jack.df,c(pred.low,pred.high,Measured))
+N_upper<-max(N_all,na.rm=T)+0.1
+N_lower<-min(N_all,na.rm=T)-0.1
 
 Nmass.val.plot<-ggplot(Nmass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1097,11 +1142,13 @@ Nmass.val.plot<-ggplot(Nmass.jack.df,aes(y=Measured,x=pred.mean,color=functional
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,5.5),ylim=c(0,5.5))+
+  coord_cartesian(xlim=c(N_lower,N_upper),
+                  ylim=c(N_lower,N_upper))+
   theme(text = element_text(size=25))+
-  labs(y=expression("Measured N"[mass]*" (%)"),
-       x=expression("Predicted N"[mass]*" (%)"))+
-  guides(color=F)
+  labs(y=expression("Measured N (%)"),
+       x=expression("Predicted N (%)"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 EWT.jack.pred<-apply.coefs(EWT.jack.coefs,as.matrix(ref.test))
 EWT.jack.stat<-t(apply(EWT.jack.pred,1,
@@ -1115,6 +1162,9 @@ EWT.jack.df<-data.frame(pred.mean=EWT.jack.stat[,1],
                         Project=meta(ref.test)$project,
                         functional.group=meta(ref.test)$functional.group,
                         ID=meta(ref.test)$sample_id)
+EWT_all<-with(EWT.jack.df,c(pred.low,pred.high,Measured))
+EWT_upper<-max(EWT_all,na.rm=T)+0.03
+EWT_lower<-min(EWT_all,na.rm=T)-0.03
 
 EWT.val.plot<-ggplot(EWT.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1122,11 +1172,13 @@ EWT.val.plot<-ggplot(EWT.jack.df,aes(y=Measured,x=pred.mean,color=functional.gro
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,0.068),ylim=c(0,0.068))+
+  coord_cartesian(xlim=c(EWT_lower,EWT_upper),
+                  ylim=c(EWT_lower,EWT_upper))+
   theme(text = element_text(size=25),
         legend.position = c(0.8, 0.25))+
   labs(y="Measured EWT (mm)",x="Predicted EWT (mm)")+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 LMA.jack.pred<-apply.coefs(LMA.jack.coefs,as.matrix(ref.test))
 LMA.jack.stat<-t(apply(LMA.jack.pred,1,
@@ -1140,6 +1192,9 @@ LMA.jack.df<-data.frame(pred.mean=LMA.jack.stat[,1],
                         Project=meta(ref.test)$project,
                         functional.group=meta(ref.test)$functional.group,
                         ID=meta(ref.test)$sample_id)
+LMA_all<-with(LMA.jack.df,c(pred.low,pred.high,Measured))
+LMA_upper<-max(LMA_all,na.rm=T)+0.02
+LMA_lower<-min(LMA_all,na.rm=T)-0.02
 
 LMA.val.plot<-ggplot(LMA.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1147,11 +1202,13 @@ LMA.val.plot<-ggplot(LMA.jack.df,aes(y=Measured,x=pred.mean,color=functional.gro
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-0.05,0.4),ylim=c(-0.05,0.4))+
+  coord_cartesian(xlim=c(LMA_lower,LMA_upper),
+                  ylim=c(LMA_lower,LMA_upper))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured LMA (kg m"^-2*")"),
        x=expression("Predicted LMA (kg m"^-2*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 LDMC.jack.pred<-apply.coefs(LDMC.jack.coefs,as.matrix(ref.test))
 LDMC.jack.stat<-t(apply(LDMC.jack.pred,1,
@@ -1165,6 +1222,9 @@ LDMC.jack.df<-data.frame(pred.mean=LDMC.jack.stat[,1],
                          Project=meta(ref.test)$project,
                          functional.group=meta(ref.test)$functional.group,
                          ID=meta(ref.test)$sample_id)
+LDMC_all<-with(LDMC.jack.df,c(pred.low,pred.high,Measured))
+LDMC_upper<-max(LDMC_all,na.rm=T)+10
+LDMC_lower<-min(LDMC_all,na.rm=T)-10
 
 LDMC.val.plot<-ggplot(LDMC.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1172,11 +1232,13 @@ LDMC.val.plot<-ggplot(LDMC.jack.df,aes(y=Measured,x=pred.mean,color=functional.g
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,600),ylim=c(0,600))+
+  coord_cartesian(xlim=c(LDMC_lower,LDMC_upper),
+                  ylim=c(LDMC_lower,LDMC_upper))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured LDMC (mg g"^-1*")"),
        x=expression("Predicted LDMC (mg g"^-1*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 Al_mass.jack.pred<-apply.coefs(Al_mass.jack.coefs,as.matrix(ref.test))
 Al_mass.jack.stat<-t(apply(Al_mass.jack.pred,1,
@@ -1190,6 +1252,11 @@ Al_mass.jack.df<-data.frame(pred.mean=Al_mass.jack.stat[,1],
                             Project=meta(ref.test)$project,
                             functional.group=meta(ref.test)$functional.group,
                             ID=meta(ref.test)$sample_id)
+Al_all<-with(Al_mass.jack.df,c(pred.low[!is.na(Measured)],
+                               pred.high[!is.na(Measured)],
+                               Measured))
+Al_upper<-max(Al_all,na.rm=T)+0.02
+Al_lower<-min(Al_all,na.rm=T)-0.02
 
 Al_mass.val.plot<-ggplot(Al_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1197,10 +1264,12 @@ Al_mass.val.plot<-ggplot(Al_mass.jack.df,aes(y=Measured,x=pred.mean,color=functi
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-0.025,0.25),ylim=c(-0.025,0.25))+
+  coord_cartesian(xlim=c(Al_lower,Al_upper),
+                  ylim=c(Al_lower,Al_upper))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Al (mg g"^-1*")"),x=expression("Predicted Al (mg g"^-1*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 Ca_mass.jack.pred<-apply.coefs(Ca_mass.jack.coefs,as.matrix(ref.test))
 Ca_mass.jack.stat<-t(apply(Ca_mass.jack.pred,1,
@@ -1214,6 +1283,11 @@ Ca_mass.jack.df<-data.frame(pred.mean=Ca_mass.jack.stat[,1],
                             Project=meta(ref.test)$project,
                             functional.group=meta(ref.test)$functional.group,
                             ID=meta(ref.test)$sample_id)
+Ca_all<-with(Ca_mass.jack.df,c(pred.low[!is.na(Measured)],
+                               pred.high[!is.na(Measured)],
+                               Measured))
+Ca_upper<-max(Ca_all,na.rm=T)+1
+Ca_lower<-min(Ca_all,na.rm=T)-1
 
 Ca_mass.val.plot<-ggplot(Ca_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1221,11 +1295,13 @@ Ca_mass.val.plot<-ggplot(Ca_mass.jack.df,aes(y=Measured,x=pred.mean,color=functi
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-5,35),ylim=c(-5,35))+
+  coord_cartesian(xlim=c(Ca_lower,Ca_upper),
+                  ylim=c(Ca_lower,Ca_upper))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Ca (mg g"^-1*")"),
        x=expression("Predicted Ca (mg g"^-1*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 Cu_mass.jack.pred<-apply.coefs(Cu_mass.jack.coefs,as.matrix(ref.test))
 Cu_mass.jack.stat<-t(apply(Cu_mass.jack.pred,1,
@@ -1239,6 +1315,11 @@ Cu_mass.jack.df<-data.frame(pred.mean=Cu_mass.jack.stat[,1],
                             Project=meta(ref.test)$project,
                             functional.group=meta(ref.test)$functional.group,
                             ID=meta(ref.test)$sample_id)
+Cu_all<-with(Cu_mass.jack.df,c(pred.low[!is.na(Measured)],
+                               pred.high[!is.na(Measured)],
+                               Measured))
+Cu_upper<-max(Cu_all,na.rm=T)+0.002
+Cu_lower<-min(Cu_all,na.rm=T)-0.002
 
 Cu_mass.val.plot<-ggplot(Cu_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1246,11 +1327,13 @@ Cu_mass.val.plot<-ggplot(Cu_mass.jack.df,aes(y=Measured,x=pred.mean,color=functi
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-0.002,0.02),ylim=c(-0.002,0.02))+
+  coord_cartesian(xlim=c(Cu_lower,Cu_upper),
+                  ylim=c(Cu_lower,Cu_upper))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Cu (mg g"^-1*")"),
        x=expression("Predicted Cu (mg g"^-1*")"),
-       color="Functional group")
+       color="Functional group")+
+  scale_color_manual(values=colorBlind)
 
 Fe_mass.jack.pred<-apply.coefs(Fe_mass.jack.coefs,as.matrix(ref.test))
 Fe_mass.jack.stat<-t(apply(Fe_mass.jack.pred,1,
@@ -1264,6 +1347,11 @@ Fe_mass.jack.df<-data.frame(pred.mean=Fe_mass.jack.stat[,1],
                             Project=meta(ref.test)$project,
                             functional.group=meta(ref.test)$functional.group,
                             ID=meta(ref.test)$sample_id)
+Fe_all<-with(Fe_mass.jack.df,c(pred.low[!is.na(Measured)],
+                               pred.high[!is.na(Measured)],
+                               Measured))
+Fe_upper<-max(Fe_all,na.rm=T)+0.01
+Fe_lower<-min(Fe_all,na.rm=T)-0.01
 
 Fe_mass.val.plot<-ggplot(Fe_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1271,11 +1359,13 @@ Fe_mass.val.plot<-ggplot(Fe_mass.jack.df,aes(y=Measured,x=pred.mean,color=functi
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,0.17),ylim=c(0,0.17))+
+  coord_cartesian(xlim=c(Fe_lower,Fe_upper),
+                  ylim=c(Fe_lower,Fe_upper))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Fe (mg g"^-1*")"),
        x=expression("Predicted Fe (mg g"^-1*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 K_mass.jack.pred<-apply.coefs(K_mass.jack.coefs,as.matrix(ref.test))
 K_mass.jack.stat<-t(apply(K_mass.jack.pred,1,
@@ -1289,6 +1379,11 @@ K_mass.jack.df<-data.frame(pred.mean=K_mass.jack.stat[,1],
                            Project=meta(ref.test)$project,
                            functional.group=meta(ref.test)$functional.group,
                            ID=meta(ref.test)$sample_id)
+K_all<-with(K_mass.jack.df,c(pred.low[!is.na(Measured)],
+                             pred.high[!is.na(Measured)],
+                             Measured))
+K_upper<-max(K_all,na.rm=T)+1
+K_lower<-min(K_all,na.rm=T)-1
 
 K_mass.val.plot<-ggplot(K_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1296,11 +1391,13 @@ K_mass.val.plot<-ggplot(K_mass.jack.df,aes(y=Measured,x=pred.mean,color=function
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,18),ylim=c(0,18))+
+  coord_cartesian(xlim=c(K_lower,K_upper),
+                  ylim=c(K_lower,K_upper))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured K (mg g"^-1*")"),
        x=expression("Predicted K (mg g"^-1*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 Mg_mass.jack.pred<-apply.coefs(Mg_mass.jack.coefs,as.matrix(ref.test))
 Mg_mass.jack.stat<-t(apply(Mg_mass.jack.pred,1,
@@ -1314,6 +1411,11 @@ Mg_mass.jack.df<-data.frame(pred.mean=Mg_mass.jack.stat[,1],
                             Project=meta(ref.test)$project,
                             functional.group=meta(ref.test)$functional.group,
                             ID=meta(ref.test)$sample_id)
+Mg_all<-with(Mg_mass.jack.df,c(pred.low[!is.na(Measured)],
+                               pred.high[!is.na(Measured)],
+                               Measured))
+Mg_upper<-max(Mg_all,na.rm=T)+0.5
+Mg_lower<-min(Mg_all,na.rm=T)-0.5
 
 Mg_mass.val.plot<-ggplot(Mg_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1321,11 +1423,13 @@ Mg_mass.val.plot<-ggplot(Mg_mass.jack.df,aes(y=Measured,x=pred.mean,color=functi
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-0.5,7),ylim=c(-0.5,7))+
+  coord_cartesian(xlim=c(Mg_lower,Mg_upper),
+                  ylim=c(Mg_lower,Mg_upper))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Mg (mg g"^-1*")"),
        x=expression("Predicted Mg (mg g"^-1*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 Mn_mass.jack.pred<-apply.coefs(Mn_mass.jack.coefs,as.matrix(ref.test))
 Mn_mass.jack.stat<-t(apply(Mn_mass.jack.pred,1,
@@ -1339,6 +1443,11 @@ Mn_mass.jack.df<-data.frame(pred.mean=Mn_mass.jack.stat[,1],
                             Project=meta(ref.test)$project,
                             functional.group=meta(ref.test)$functional.group,
                             ID=meta(ref.test)$sample_id)
+Mn_all<-with(Mn_mass.jack.df,c(pred.low[!is.na(Measured)],
+                               pred.high[!is.na(Measured)],
+                               Measured))
+Mn_upper<-max(Mn_all,na.rm=T)+0.05
+Mn_lower<-min(Mn_all,na.rm=T)-0.05
 
 Mn_mass.val.plot<-ggplot(Mn_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1346,11 +1455,13 @@ Mn_mass.val.plot<-ggplot(Mn_mass.jack.df,aes(y=Measured,x=pred.mean,color=functi
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-0.1,1.1),ylim=c(-0.1,1.1))+
+  coord_cartesian(xlim=c(Mn_lower,Mn_upper),
+                  ylim=c(Mn_lower,Mn_upper))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Mn (mg g"^-1*")"),
        x=expression("Predicted Mn (mg g"^-1*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 Na_mass.jack.pred<-apply.coefs(Na_mass.jack.coefs,as.matrix(ref.test))
 Na_mass.jack.stat<-t(apply(Na_mass.jack.pred,1,
@@ -1364,6 +1475,11 @@ Na_mass.jack.df<-data.frame(pred.mean=Na_mass.jack.stat[,1],
                             Project=meta(ref.test)$project,
                             functional.group=meta(ref.test)$functional.group,
                             ID=meta(ref.test)$sample_id)
+Na_all<-with(Na_mass.jack.df,c(pred.low[!is.na(Measured)],
+                               pred.high[!is.na(Measured)],
+                               Measured))
+Na_upper<-max(Na_all,na.rm=T)+0.2
+Na_lower<-min(Na_all,na.rm=T)-0.2
 
 Na_mass.val.plot<-ggplot(Na_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1371,11 +1487,13 @@ Na_mass.val.plot<-ggplot(Na_mass.jack.df,aes(y=Measured,x=pred.mean,color=functi
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-0.3,4.2),ylim=c(-0.3,4.2))+
+  coord_cartesian(xlim=c(Na_lower,Na_upper),
+                  ylim=c(Na_lower,Na_upper))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Na (mg g"^-1*")"),
        x=expression("Predicted Na (mg g"^-1*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 P_mass.jack.pred<-apply.coefs(P_mass.jack.coefs,as.matrix(ref.test))
 P_mass.jack.stat<-t(apply(P_mass.jack.pred,1,
@@ -1389,6 +1507,11 @@ P_mass.jack.df<-data.frame(pred.mean=P_mass.jack.stat[,1],
                            Project=meta(ref.test)$project,
                            functional.group=meta(ref.test)$functional.group,
                            ID=meta(ref.test)$sample_id)
+P_all<-with(P_mass.jack.df,c(pred.low[!is.na(Measured)],
+                             pred.high[!is.na(Measured)],
+                             Measured))
+P_upper<-max(P_all,na.rm=T)+0.5
+P_lower<-min(P_all,na.rm=T)-0.5
 
 P_mass.val.plot<-ggplot(P_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1396,11 +1519,13 @@ P_mass.val.plot<-ggplot(P_mass.jack.df,aes(y=Measured,x=pred.mean,color=function
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-0.5,7.5),ylim=c(-0.5,7.5))+
+  coord_cartesian(xlim=c(P_lower,P_upper),
+                  ylim=c(P_lower,P_upper))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured P (mg g"^-1*")"),
        x=expression("Predicted P (mg g"^-1*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 Zn_mass.jack.pred<-apply.coefs(Zn_mass.jack.coefs,as.matrix(ref.test))
 Zn_mass.jack.stat<-t(apply(Zn_mass.jack.pred,1,
@@ -1414,6 +1539,11 @@ Zn_mass.jack.df<-data.frame(pred.mean=Zn_mass.jack.stat[,1],
                             Project=meta(ref.test)$project,
                             functional.group=meta(ref.test)$functional.group,
                             ID=meta(ref.test)$sample_id)
+Zn_all<-with(Zn_mass.jack.df,c(pred.low[!is.na(Measured)],
+                               pred.high[!is.na(Measured)],
+                               Measured))
+Zn_upper<-max(Zn_all,na.rm=T)+0.03
+Zn_lower<-min(Zn_all,na.rm=T)-0.03
 
 Zn_mass.val.plot<-ggplot(Zn_mass.jack.df,aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -1421,11 +1551,13 @@ Zn_mass.val.plot<-ggplot(Zn_mass.jack.df,aes(y=Measured,x=pred.mean,color=functi
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-0.05,0.35),ylim=c(-0.05,0.35))+
+  coord_cartesian(xlim=c(Zn_lower,Zn_upper),
+                  ylim=c(Zn_lower,Zn_upper))+
   theme(text = element_text(size=25))+
   labs(y=expression("Measured Zn (mg g"^-1*")"),
        x=expression("Predicted Zn (mg g"^-1*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 all.jack.coef.list<-list(sol=solubles_mass.jack.coefs,
                          hemi=hemicellulose_mass.jack.coefs,
@@ -1499,7 +1631,7 @@ all.jack.stats.list<-list(sol=solubles_mass.jack.stats,
                           Zn=Zn_mass.jack.stats)
 saveRDS(all.jack.stats.list,"SavedResults/all_jack_stats_list_ref.rds")
 
-pdf("Images/val_plots_ref1.pdf",width = 16,height = 20)
+pdf("Images/val_plots_ref1.pdf",width = 18,height = 22.5)
 (EWT.val.plot + LDMC.val.plot + LMA.val.plot) / 
   (cellulose_mass.val.plot + solubles_mass.val.plot + Cmass.val.plot) / 
   (hemicellulose_mass.val.plot + Nmass.val.plot + chlB_mass.val.plot) / 
@@ -1507,7 +1639,7 @@ pdf("Images/val_plots_ref1.pdf",width = 16,height = 20)
   plot_layout(guides="collect") & theme(legend.position = "bottom")
 dev.off()
 
-pdf("Images/val_plots_ref2.pdf",width = 16,height = 20)
+pdf("Images/val_plots_ref2.pdf",width = 18,height = 22.5)
 (Ca_mass.val.plot + K_mass.val.plot + Zn_mass.val.plot) / 
   (P_mass.val.plot + Mg_mass.val.plot + Na_mass.val.plot) / 
   (Fe_mass.val.plot + Mn_mass.val.plot + Al_mass.val.plot) / 
