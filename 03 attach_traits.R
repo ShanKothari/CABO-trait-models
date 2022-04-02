@@ -184,93 +184,20 @@ meta(all.abs)$EWT<-with(meta(all.abs),(1/(LDMC/1000)-1)*(1/SLA*0.1)*10)
 ##############################################
 ## read C/N
 
-BeauchampRioux.CN<-read.csv("TraitData/CNSamples/2018_BeauchampRioux_MSc_UdeM_CN_data_total.csv")
-BeauchampRioux.CN<-BeauchampRioux.CN[-which(is.na(BeauchampRioux.CN$Sample_id)),]
-BeauchampRioux.CN.sub<-data.frame(sample_id=BeauchampRioux.CN$Sample_id,
-                           Cmass=BeauchampRioux.CN$C.....,
-                           Nmass=BeauchampRioux.CN$N....)
-
-## note: 20 Pinus samples missing for now
-Blanchard.CN<-read.csv("TraitData/CNSamples/2019_Blanchard_CN_data_total.csv")
-Blanchard.CN<-Blanchard.CN[-which(is.na(Blanchard.CN$Sample_id)),]
-Blanchard.CN.sub<-data.frame(sample_id=Blanchard.CN$Sample_id,
-                                  Cmass=Blanchard.CN$C.....,
-                                  Nmass=Blanchard.CN$N....)
-
-Boucherville2018.CN<-read.csv("TraitData/CNSamples/2018_Boucherville_CN_data_total.csv")
-Boucherville2018.CN<-Boucherville2018.CN[-which(is.na(Boucherville2018.CN$Sample_id)),]
-Boucherville2018.CN.sub<-data.frame(sample_id=Boucherville2018.CN$Sample_id,
-                           Cmass=Boucherville2018.CN$C...,
-                           Nmass=Boucherville2018.CN$N....)
-
-Boucherville2019.CN<-read.csv("TraitData/CNSamples/2019-Boucherville_CN_data_total.csv")
-Boucherville2019.CN.sub<-data.frame(sample_id=Boucherville2019.CN$Sample_id,
-                                    Cmass=Boucherville2019.CN$C...,
-                                    Nmass=Boucherville2019.CN$N....)
-
-Crofts.CN<-read.csv("TraitData/CNSamples/2019-Crofts_CN_data_total.csv")
-Crofts.CN.sub<-data.frame(sample_id=Crofts.CN$Numéro.d.échantillon,
-                              Cmass=Crofts.CN$C.....,
-                              Nmass=Crofts.CN$N....)
-
-Girard.CN<-read.csv("TraitData/CNSamples/2018_Girard_CN_data_total.csv")
-Girard.CN.sub<-data.frame(sample_id=Girard.CN$sample_id,
-                              Cmass=Girard.CN$c_perc,
-                              Nmass=Girard.CN$n_perc)
-
-Hacker2018.CN<-read.csv("TraitData/CNSamples/2018_Hacker_CGOP2018_CN_data_total.csv")
-Hacker2018.CN<-Hacker2018.CN[-which(is.na(Hacker2018.CN$Sample_id)),]
-Hacker2018.CN.sub<-data.frame(sample_id=Hacker2018.CN$Sample_id,
-                                    Cmass=Hacker2018.CN$C...,
-                                    Nmass=Hacker2018.CN$N....)
-
-Hacker2019.CN<-read.csv("TraitData/CNSamples/2018_Hacker_CGOP2019_CN_data_total.csv")
-Hacker2019.CN<-Hacker2019.CN[-which(is.na(Hacker2019.CN$Sample_id)),]
-Hacker2019.CN.sub<-data.frame(sample_id=Hacker2019.CN$Sample_id,
-                              Cmass=Hacker2019.CN$C...,
-                              Nmass=Hacker2019.CN$N....)
-
-PhragmitesTemporal.CN<-read.csv("TraitData/CNSamples/2019-Phragmites-temporal_total_CN.csv")
-PhragmitesTemporal.CN<-PhragmitesTemporal.CN[-which(is.na(PhragmitesTemporal.CN$bulk)),]
-PhragmitesTemporal.CN.sub<-data.frame(sample_id=PhragmitesTemporal.CN$bulk,
-                              Cmass=PhragmitesTemporal.CN$C...,
-                              Nmass=PhragmitesTemporal.CN$N....)
-
-CABOGeneralOther.CN<-read.csv("TraitData/CNSamples/CABO_General_CN_data_total.csv")
-CABOGeneralOther.CN.sub<-data.frame(sample_id=CABOGeneralOther.CN$Sample_id,
-                              Cmass=CABOGeneralOther.CN$C...,
-                              Nmass=CABOGeneralOther.CN$N....)
-
-CABOGeneral2019.CN<-read.csv("TraitData/CNSamples/2019_CABO_General_CN_data_total.csv")
-CABOGeneral2019.CN.sub<-data.frame(sample_id=CABOGeneral2019.CN$Sample_id,
-                                    Cmass=CABOGeneral2019.CN$C...,
-                                    Nmass=CABOGeneral2019.CN$N....)
-
-Warren.CN<-read.csv("TraitData/CNSamples/SWA_Warren_CN_data_total.csv")
-Warren.CN<-Warren.CN[-which(is.na(Warren.CN$Sample_id)),]
-Warren.CN.sub<-data.frame(sample_id=Warren.CN$Sample_id,
-                              Cmass=Warren.CN$C...,
-                              Nmass=Warren.CN$N....)
-
-all.CN<-do.call(rbind,list(BeauchampRioux.CN.sub,Blanchard.CN.sub,Boucherville2018.CN.sub,
-                           Boucherville2019.CN.sub,CABOGeneralOther.CN.sub,
-                           CABOGeneral2019.CN.sub,Crofts.CN.sub,
-                           Girard.CN.sub,Hacker2018.CN.sub,
-                           Hacker2019.CN.sub,PhragmitesTemporal.CN.sub,
-                           Warren.CN.sub))
+all.CN<-read.csv("TraitData/CNSamples/c_n_leaf_concentrations.csv")
 
 ## likely error
-all.CN$Cmass[all.CN$sample_id=="38707392"]<-NA
-all.CN$Nmass[all.CN$sample_id=="38707392"]<-NA
+all.CN$c_perc[all.CN$sample_id=="38707392"]<-NA
+all.CN$n_perc[all.CN$sample_id=="38707392"]<-NA
 
-meta(all.ref)$Cmass<-all.CN$Cmass[match(meta(all.ref)$sample_id,all.CN$sample_id)]
-meta(all.ref)$Nmass<-all.CN$Nmass[match(meta(all.ref)$sample_id,all.CN$sample_id)]
+meta(all.ref)$Cmass<-all.CN$c_perc[match(meta(all.ref)$sample_id,all.CN$sample_id)]
+meta(all.ref)$Nmass<-all.CN$n_perc[match(meta(all.ref)$sample_id,all.CN$sample_id)]
 
-meta(all.trans)$Cmass<-all.CN$Cmass[match(meta(all.trans)$sample_id,all.CN$sample_id)]
-meta(all.trans)$Nmass<-all.CN$Nmass[match(meta(all.trans)$sample_id,all.CN$sample_id)]
+meta(all.trans)$Cmass<-all.CN$c_perc[match(meta(all.trans)$sample_id,all.CN$sample_id)]
+meta(all.trans)$Nmass<-all.CN$n_perc[match(meta(all.trans)$sample_id,all.CN$sample_id)]
 
-meta(all.abs)$Cmass<-all.CN$Cmass[match(meta(all.abs)$sample_id,all.CN$sample_id)]
-meta(all.abs)$Nmass<-all.CN$Nmass[match(meta(all.abs)$sample_id,all.CN$sample_id)]
+meta(all.abs)$Cmass<-all.CN$c_perc[match(meta(all.abs)$sample_id,all.CN$sample_id)]
+meta(all.abs)$Nmass<-all.CN$n_perc[match(meta(all.abs)$sample_id,all.CN$sample_id)]
 
 #############################################
 ## carbon fractions
