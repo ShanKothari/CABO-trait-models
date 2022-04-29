@@ -760,10 +760,10 @@ solubles_area.jack.df<-data.frame(pred.mean=solubles_area.jack.stat[,1],
 
 solubles_area.val.plot<-ggplot(solubles_area.jack.df,
                                aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
   geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
                  color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(-3,25),ylim=c(-3,25))+
   theme(text = element_text(size=20),
@@ -788,10 +788,10 @@ hemicellulose_area.jack.df<-data.frame(pred.mean=hemicellulose_area.jack.stat[,1
 
 hemicellulose_area.val.plot<-ggplot(hemicellulose_area.jack.df,
                                     aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
   geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
                  color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(-1,5.5),ylim=c(-1,5.5))+
   theme(text = element_text(size=20),
@@ -816,10 +816,10 @@ cellulose_area.jack.df<-data.frame(pred.mean=cellulose_area.jack.stat[,1],
 
 cellulose_area.val.plot<-ggplot(cellulose_area.jack.df,
                                 aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
   geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
                  color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(-1,7),ylim=c(-1,7))+
   theme(text = element_text(size=20),
@@ -844,10 +844,10 @@ lignin_area.jack.df<-data.frame(pred.mean=lignin_area.jack.stat[,1],
 
 lignin_area.val.plot<-ggplot(lignin_area.jack.df,
                              aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
   geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
                  color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(-0.5,4.5),ylim=c(-0.5,4.5))+
   theme(text = element_text(size=20),
@@ -872,10 +872,10 @@ chlA_area.jack.df<-data.frame(pred.mean=chlA_area.jack.stat[,1],
 
 chlA_area.val.plot<-ggplot(chlA_area.jack.df,
                            aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
   geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
                  color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,0.25),ylim=c(0,0.25))+
   theme(text = element_text(size=20),
@@ -899,10 +899,10 @@ chlB_area.jack.df<-data.frame(pred.mean=chlB_area.jack.stat[,1],
 
 chlB_area.val.plot<-ggplot(chlB_area.jack.df,
                            aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
   geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
                  color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,0.075),ylim=c(0,0.075))+
   theme(text = element_text(size=20),
@@ -926,10 +926,10 @@ car_area.jack.df<-data.frame(pred.mean=car_area.jack.stat[,1],
 
 car_area.val.plot<-ggplot(car_area.jack.df,
                           aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
   geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
                  color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,0.05),ylim=c(0,0.05))+
   theme(text = element_text(size=20),
@@ -953,10 +953,10 @@ Carea.jack.df<-data.frame(pred.mean=Carea.jack.stat[,1],
 
 Carea.val.plot<-ggplot(Carea.jack.df,
                        aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
   geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
                  color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,18),ylim=c(0,18))+
   theme(text = element_text(size=20))+
@@ -980,10 +980,10 @@ Narea.jack.df<-data.frame(pred.mean=Narea.jack.stat[,1],
 
 Narea.val.plot<-ggplot(Narea.jack.df,
                        aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
   geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
                  color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,0.35),ylim=c(0,0.35))+
   theme(text = element_text(size=20))+
@@ -1007,10 +1007,10 @@ Al_area.jack.df<-data.frame(pred.mean=Al_area.jack.stat[,1],
 
 Al_area.val.plot<-ggplot(Al_area.jack.df,
                          aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
   geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(-0.1,1.8),ylim=c(-0.1,1.8))+
   theme(text = element_text(size=20))+
@@ -1034,10 +1034,10 @@ Ca_area.jack.df<-data.frame(pred.mean=Ca_area.jack.stat[,1],
 
 Ca_area.val.plot<-ggplot(Ca_area.jack.df,
                          aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
   geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(-50,300),ylim=c(-50,300))+
   theme(text = element_text(size=20))+
@@ -1061,10 +1061,10 @@ Cu_area.jack.df<-data.frame(pred.mean=Cu_area.jack.stat[,1],
 
 Cu_area.val.plot<-ggplot(Cu_area.jack.df,
                          aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
   geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(-0.025,0.25),ylim=c(-0.025,0.25))+
   theme(text = element_text(size=20))+
@@ -1088,10 +1088,10 @@ Fe_area.jack.df<-data.frame(pred.mean=Fe_area.jack.stat[,1],
 
 Fe_area.val.plot<-ggplot(Fe_area.jack.df,
                          aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
   geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,2),ylim=c(0,2))+
   theme(text = element_text(size=20))+
@@ -1115,10 +1115,10 @@ K_area.jack.df<-data.frame(pred.mean=K_area.jack.stat[,1],
 
 K_area.val.plot<-ggplot(K_area.jack.df,
                         aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
   geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,150),ylim=c(0,150))+
   theme(text = element_text(size=20))+
@@ -1142,10 +1142,10 @@ Mg_area.jack.df<-data.frame(pred.mean=Mg_area.jack.stat[,1],
 
 Mg_area.val.plot<-ggplot(Mg_area.jack.df,
                          aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
   geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,60),ylim=c(0,60))+
   theme(text = element_text(size=20))+
@@ -1169,10 +1169,10 @@ Mn_area.jack.df<-data.frame(pred.mean=Mn_area.jack.stat[,1],
 
 Mn_area.val.plot<-ggplot(Mn_area.jack.df,
                          aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
   geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(-5,12),ylim=c(-5,12))+
   theme(text = element_text(size=20))+
@@ -1196,10 +1196,10 @@ Na_area.jack.df<-data.frame(pred.mean=Na_area.jack.stat[,1],
 
 Na_area.val.plot<-ggplot(Na_area.jack.df,
                          aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
   geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(-10,60),ylim=c(-10,60))+
   theme(text = element_text(size=20))+
@@ -1223,10 +1223,10 @@ P_area.jack.df<-data.frame(pred.mean=P_area.jack.stat[,1],
 
 P_area.val.plot<-ggplot(P_area.jack.df,
                         aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
   geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,45),ylim=c(0,45))+
   theme(text = element_text(size=20))+
@@ -1250,10 +1250,10 @@ Zn_area.jack.df<-data.frame(pred.mean=Zn_area.jack.stat[,1],
 
 Zn_area.val.plot<-ggplot(Zn_area.jack.df,
                          aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
   geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(-1,2.5),ylim=c(-1,2.5))+
   theme(text = element_text(size=20))+
