@@ -380,7 +380,6 @@ ggplot(data=summary_df,aes(x=KL,y=R2,color=trait))+
 
 summary(lmer(R2~KL+(1|trait)+(1|dataset),data=summary_df))
 
-
 ## bringing in randomized validation data
 val_models<-readRDS("SavedResults/all_jack_df_list.rds")
 summary_df$R2_val<-NA
@@ -604,10 +603,6 @@ for(i in common.fg){
 }
 
 LMA_sum_df<-data.frame(functional.group=names(LMA_pred_list),
-                       RSS=unlist(lapply(LMA_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
-                       TSS=unlist(lapply(LMA_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
-                       MAE=unlist(lapply(LMA_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
-                       MAD=unlist(lapply(LMA_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                        RMSD=unlist(lapply(LMA_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                        perRMSD=unlist(lapply(LMA_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
                        SD=unlist(lapply(LMA_pred_list,function(x) sd(x$measured,na.rm=T))),
@@ -618,10 +613,6 @@ LMA_sum_df<-data.frame(functional.group=names(LMA_pred_list),
                        trait="LMA")
 
 EWT_sum_df<-data.frame(functional.group=names(EWT_pred_list),
-                       RSS=unlist(lapply(EWT_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
-                       TSS=unlist(lapply(EWT_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
-                       MAE=unlist(lapply(EWT_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
-                       MAD=unlist(lapply(EWT_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                        RMSD=unlist(lapply(EWT_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                        perRMSD=unlist(lapply(EWT_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
                        SD=unlist(lapply(EWT_pred_list,function(x) sd(x$measured,na.rm=T))),
@@ -632,10 +623,6 @@ EWT_sum_df<-data.frame(functional.group=names(EWT_pred_list),
                        trait="EWT")
 
 LDMC_sum_df<-data.frame(functional.group=names(LDMC_pred_list),
-                        RSS=unlist(lapply(LDMC_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
-                        TSS=unlist(lapply(LDMC_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
-                        MAE=unlist(lapply(LDMC_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
-                        MAD=unlist(lapply(LDMC_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                         RMSD=unlist(lapply(LDMC_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                         perRMSD=unlist(lapply(LDMC_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
                         SD=unlist(lapply(LDMC_pred_list,function(x) sd(x$measured,na.rm=T))),
@@ -646,10 +633,6 @@ LDMC_sum_df<-data.frame(functional.group=names(LDMC_pred_list),
                         trait="LDMC")
 
 Nmass_sum_df<-data.frame(functional.group=names(Nmass_pred_list),
-                         RSS=unlist(lapply(Nmass_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
-                         TSS=unlist(lapply(Nmass_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
-                         MAE=unlist(lapply(Nmass_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
-                         MAD=unlist(lapply(Nmass_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                          RMSD=unlist(lapply(Nmass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                          perRMSD=unlist(lapply(Nmass_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
                          SD=unlist(lapply(Nmass_pred_list,function(x) sd(x$measured,na.rm=T))),
@@ -662,10 +645,6 @@ Nmass_sum_df<-data.frame(functional.group=names(Nmass_pred_list),
 ## not sure why KL divergence for C mass comes up infinite
 ## for K<8 or so
 Cmass_sum_df<-data.frame(functional.group=names(Cmass_pred_list),
-                         RSS=unlist(lapply(Cmass_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
-                         TSS=unlist(lapply(Cmass_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
-                         MAE=unlist(lapply(Cmass_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
-                         MAD=unlist(lapply(Cmass_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                          RMSD=unlist(lapply(Cmass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                          perRMSD=unlist(lapply(Cmass_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
                          SD=unlist(lapply(Cmass_pred_list,function(x) sd(x$measured,na.rm=T))),
@@ -676,10 +655,6 @@ Cmass_sum_df<-data.frame(functional.group=names(Cmass_pred_list),
                          trait="C")
 
 solubles_mass_sum_df<-data.frame(functional.group=names(solubles_mass_pred_list),
-                                 RSS=unlist(lapply(solubles_mass_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
-                                 TSS=unlist(lapply(solubles_mass_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
-                                 MAE=unlist(lapply(solubles_mass_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
-                                 MAD=unlist(lapply(solubles_mass_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                                  RMSD=unlist(lapply(solubles_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                                  perRMSD=unlist(lapply(solubles_mass_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
                                  SD=unlist(lapply(solubles_mass_pred_list,function(x) sd(x$measured,na.rm=T))),
@@ -690,10 +665,6 @@ solubles_mass_sum_df<-data.frame(functional.group=names(solubles_mass_pred_list)
                                  trait="solubles")
 
 hemicellulose_mass_sum_df<-data.frame(functional.group=names(hemicellulose_mass_pred_list),
-                                      RSS=unlist(lapply(hemicellulose_mass_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
-                                      TSS=unlist(lapply(hemicellulose_mass_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
-                                      MAE=unlist(lapply(hemicellulose_mass_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
-                                      MAD=unlist(lapply(hemicellulose_mass_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                                       RMSD=unlist(lapply(hemicellulose_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                                       perRMSD=unlist(lapply(hemicellulose_mass_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
                                       SD=unlist(lapply(hemicellulose_mass_pred_list,function(x) sd(x$measured,na.rm=T))),
@@ -704,10 +675,6 @@ hemicellulose_mass_sum_df<-data.frame(functional.group=names(hemicellulose_mass_
                                       trait="hemicellulose")
 
 cellulose_mass_sum_df<-data.frame(functional.group=names(cellulose_mass_pred_list),
-                                  RSS=unlist(lapply(cellulose_mass_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
-                                  TSS=unlist(lapply(cellulose_mass_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
-                                  MAE=unlist(lapply(cellulose_mass_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
-                                  MAD=unlist(lapply(cellulose_mass_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                                   RMSD=unlist(lapply(cellulose_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                                   perRMSD=unlist(lapply(cellulose_mass_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
                                   SD=unlist(lapply(cellulose_mass_pred_list,function(x) sd(x$measured,na.rm=T))),
@@ -718,10 +685,6 @@ cellulose_mass_sum_df<-data.frame(functional.group=names(cellulose_mass_pred_lis
                                   trait="cellulose")
 
 lignin_mass_sum_df<-data.frame(functional.group=names(lignin_mass_pred_list),
-                               RSS=unlist(lapply(lignin_mass_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
-                               TSS=unlist(lapply(lignin_mass_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
-                               MAE=unlist(lapply(lignin_mass_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
-                               MAD=unlist(lapply(lignin_mass_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                                RMSD=unlist(lapply(lignin_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                                perRMSD=unlist(lapply(lignin_mass_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
                                SD=unlist(lapply(lignin_mass_pred_list,function(x) sd(x$measured,na.rm=T))),
@@ -732,10 +695,6 @@ lignin_mass_sum_df<-data.frame(functional.group=names(lignin_mass_pred_list),
                                trait="lignin")
 
 chlA_mass_sum_df<-data.frame(functional.group=names(chlA_mass_pred_list),
-                             RSS=unlist(lapply(chlA_mass_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
-                             TSS=unlist(lapply(chlA_mass_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
-                             MAE=unlist(lapply(chlA_mass_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
-                             MAD=unlist(lapply(chlA_mass_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                              RMSD=unlist(lapply(chlA_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                              perRMSD=unlist(lapply(chlA_mass_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
                              SD=unlist(lapply(chlA_mass_pred_list,function(x) sd(x$measured,na.rm=T))),
@@ -746,10 +705,6 @@ chlA_mass_sum_df<-data.frame(functional.group=names(chlA_mass_pred_list),
                              trait="Chl a")
 
 chlB_mass_sum_df<-data.frame(functional.group=names(chlB_mass_pred_list),
-                             RSS=unlist(lapply(chlB_mass_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
-                             TSS=unlist(lapply(chlB_mass_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
-                             MAE=unlist(lapply(chlB_mass_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
-                             MAD=unlist(lapply(chlB_mass_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                              RMSD=unlist(lapply(chlB_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                              perRMSD=unlist(lapply(chlB_mass_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
                              SD=unlist(lapply(chlB_mass_pred_list,function(x) sd(x$measured,na.rm=T))),
@@ -760,10 +715,6 @@ chlB_mass_sum_df<-data.frame(functional.group=names(chlB_mass_pred_list),
                              trait="Chl b")
 
 car_mass_sum_df<-data.frame(functional.group=names(car_mass_pred_list),
-                            RSS=unlist(lapply(car_mass_pred_list,function(x) sum((x$measured-x$val_pred)^2,na.rm=T))),
-                            TSS=unlist(lapply(car_mass_pred_list,function(x) sum((x$measured-mean(x$measured,na.rm=T))^2,na.rm=T))),
-                            MAE=unlist(lapply(car_mass_pred_list,function(x) sum(abs(x$measured-x$val_pred),na.rm=T))),
-                            MAD=unlist(lapply(car_mass_pred_list,function(x) sum(abs(x$measured-mean(x$measured,na.rm=T)),na.rm=T))),
                             RMSD=unlist(lapply(car_mass_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                             perRMSD=unlist(lapply(car_mass_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
                             SD=unlist(lapply(car_mass_pred_list,function(x) sd(x$measured,na.rm=T))),
@@ -779,14 +730,36 @@ summary_df<-do.call(rbind,list(LMA_sum_df,LDMC_sum_df,EWT_sum_df,
                                lignin_mass_sum_df,chlA_mass_sum_df,
                                chlB_mass_sum_df,car_mass_sum_df))
 
-ggplot(data=summary_df,aes(x=hellinger,y=perRMSD*100,
+## 2.5% trimmed range across the dataset
+summary_df$tr95<-NA
+summary_df$tr95[summary_df$trait=="LMA"]<-quantile(meta(spec.traits)$LMA,probs=0.975,na.rm=T)-quantile(meta(spec.traits)$LMA,probs=0.025,na.rm=T)
+summary_df$tr95[summary_df$trait=="EWT"]<-quantile(meta(spec.traits)$EWT,probs=0.975,na.rm=T)-quantile(meta(spec.traits)$EWT,probs=0.025,na.rm=T)
+summary_df$tr95[summary_df$trait=="LDMC"]<-quantile(meta(spec.traits)$LDMC,probs=0.975,na.rm=T)-quantile(meta(spec.traits)$LDMC,probs=0.025,na.rm=T)
+summary_df$tr95[summary_df$trait=="N"]<-quantile(meta(spec.traits)$Nmass,probs=0.975,na.rm=T)-quantile(meta(spec.traits)$Nmass,probs=0.025,na.rm=T)
+summary_df$tr95[summary_df$trait=="C"]<-quantile(meta(spec.traits)$Cmass,probs=0.975,na.rm=T)-quantile(meta(spec.traits)$Cmass,probs=0.025,na.rm=T)
+summary_df$tr95[summary_df$trait=="solubles"]<-quantile(meta(spec.traits)$solubles_mass,probs=0.975,na.rm=T)-quantile(meta(spec.traits)$solubles_mass,probs=0.025,na.rm=T)
+summary_df$tr95[summary_df$trait=="hemicellulose"]<-quantile(meta(spec.traits)$hemicellulose_mass,probs=0.975,na.rm=T)-quantile(meta(spec.traits)$hemicellulose_mass,probs=0.025,na.rm=T)
+summary_df$tr95[summary_df$trait=="cellulose"]<-quantile(meta(spec.traits)$cellulose_mass,probs=0.975,na.rm=T)-quantile(meta(spec.traits)$cellulose_mass,probs=0.025,na.rm=T)
+summary_df$tr95[summary_df$trait=="lignin"]<-quantile(meta(spec.traits)$lignin_mass,probs=0.975,na.rm=T)-quantile(meta(spec.traits)$lignin_mass,probs=0.025,na.rm=T)
+summary_df$tr95[summary_df$trait=="Chl a"]<-quantile(meta(spec.traits)$chlA_mass,probs=0.975,na.rm=T)-quantile(meta(spec.traits)$chlA_mass,probs=0.025,na.rm=T)
+summary_df$tr95[summary_df$trait=="Chl b"]<-quantile(meta(spec.traits)$chlB_mass,probs=0.975,na.rm=T)-quantile(meta(spec.traits)$chlB_mass,probs=0.025,na.rm=T)
+summary_df$tr95[summary_df$trait=="carotenoids"]<-quantile(meta(spec.traits)$car_mass,probs=0.975,na.rm=T)-quantile(meta(spec.traits)$car_mass,probs=0.025,na.rm=T)
+
+pdf("Images/HellingerPerRMSE.pdf",height=6,width=8,onefile=T)
+ggplot(data=summary_df,aes(x=hellinger,y=RMSD/tr95*100,
                            color=trait))+
   geom_point(size=2,aes(shape=functional.group))+
   geom_smooth(method="lm",se=F)+theme_bw()+
   theme(text=element_text(size=20))+
-  labs(x="Hellinger distance",y="%RMSE")+
+  labs(x="Hellinger distance",y=expression("%RMSE"[full]))+
   guides(color=guide_legend("Trait"),
-         shape=guide_legend("Functional group"))
+         shape=guide_legend("Functional group"))+
+  scale_color_discrete(labels=expression("LMA","LDMC","EWT","N",
+                                   "C","solubles","hemicellulose",
+                                   "cellulose","lignin",
+                                   "Chl "~italic("a"),
+                                   "Chl "~italic("b"),"carotenoids"))
+dev.off()
 
 ggplot(Nmass_pred_list$conifer,aes(x=measured,y=val_pred))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -798,20 +771,20 @@ ggplot(Nmass_pred_list$conifer,aes(x=measured,y=val_pred))+
        x=expression("Predicted N"[mass]*" (%)"))
 
 ## bringing in randomized validation data
-val_models<-readRDS("SavedResults/all_jack_df_list.rds")
+val_models<-readRDS("SavedResults/all_jack_df_list_ref.rds")
 summary_df$R2_val<-NA
 summary_df$R2_val[summary_df$trait=="LMA"]<-summary(lm(Measured~pred.mean,val_models[["LMA"]]))$r.squared
 summary_df$R2_val[summary_df$trait=="EWT"]<-summary(lm(Measured~pred.mean,data=val_models[["EWT"]]))$r.squared
 summary_df$R2_val[summary_df$trait=="LDMC"]<-summary(lm(Measured~pred.mean,val_models[["LDMC"]]))$r.squared
-summary_df$R2_val[summary_df$trait=="Nmass"]<-summary(lm(Measured~pred.mean,val_models[["Nmass"]]))$r.squared
-summary_df$R2_val[summary_df$trait=="Cmass"]<-summary(lm(Measured~pred.mean,val_models[["Cmass"]]))$r.squared
-summary_df$R2_val[summary_df$trait=="solubles_mass"]<-summary(lm(Measured~pred.mean,val_models[["solubles_mass"]]))$r.squared
-summary_df$R2_val[summary_df$trait=="hemicellulose_mass"]<-summary(lm(Measured~pred.mean,val_models[["hemicellulose_mass"]]))$r.squared
-summary_df$R2_val[summary_df$trait=="cellulose_mass"]<-summary(lm(Measured~pred.mean,val_models[["cellulose_mass"]]))$r.squared
-summary_df$R2_val[summary_df$trait=="lignin_mass"]<-summary(lm(Measured~pred.mean,val_models[["lignin_mass"]]))$r.squared
-summary_df$R2_val[summary_df$trait=="chlA_mass"]<-summary(lm(Measured~pred.mean,val_models[["chlA_mass"]]))$r.squared
-summary_df$R2_val[summary_df$trait=="chlB_mass"]<-summary(lm(Measured~pred.mean,val_models[["chlB_mass"]]))$r.squared
-summary_df$R2_val[summary_df$trait=="car_mass"]<-summary(lm(Measured~pred.mean,val_models[["car_mass"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="N"]<-summary(lm(Measured~pred.mean,val_models[["N"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="C"]<-summary(lm(Measured~pred.mean,val_models[["C"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="solubles"]<-summary(lm(Measured~pred.mean,val_models[["sol"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="hemicellulose"]<-summary(lm(Measured~pred.mean,val_models[["hemi"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="cellulose"]<-summary(lm(Measured~pred.mean,val_models[["cell"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="lignin"]<-summary(lm(Measured~pred.mean,val_models[["lign"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="Chl a"]<-summary(lm(Measured~pred.mean,val_models[["chlA"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="Chl b"]<-summary(lm(Measured~pred.mean,val_models[["chlB"]]))$r.squared
+summary_df$R2_val[summary_df$trait=="carotenoids"]<-summary(lm(Measured~pred.mean,val_models[["car"]]))$r.squared
 
 ind_val_list<-readRDS("SavedResults/ind_val_list.rds")
 summary_df$R2_Dessain<-NA
@@ -831,8 +804,8 @@ summary_df$R2_Dessain[summary_df$trait=="LDMC"]<-summary(lm(Measured~pred.mean,
                                                            LDMC_pred_df[which(LDMC_pred_df$dataset=="Dessain"),]))$r.squared
 summary_df$R2_LOPEX[summary_df$trait=="LDMC"]<-summary(lm(Measured~pred.mean,
                                                          LDMC_pred_df[which(LDMC_pred_df$dataset=="LOPEX"),]))$r.squared
-# summary_df$R2_ANGERS[summary_df$trait=="LDMC"]<-summary(lm(Measured~pred.mean,
-#                                                           LDMC_pred_df[which(LDMC_pred_df$dataset=="ANGERS"),]))$r.squared
+summary_df$R2_ANGERS[summary_df$trait=="LDMC"]<-summary(lm(Measured~pred.mean,
+                                                          LDMC_pred_df[which(LDMC_pred_df$dataset=="ANGERS"),]))$r.squared
 
 EWT_pred_df<-ind_val_list[["EWT"]]
 summary_df$R2_Dessain[summary_df$trait=="EWT"]<-summary(lm(Measured~pred.mean,
@@ -843,94 +816,102 @@ summary_df$R2_ANGERS[summary_df$trait=="EWT"]<-summary(lm(Measured~pred.mean,
                                                           EWT_pred_df[which(EWT_pred_df$dataset=="ANGERS"),]))$r.squared
 
 solubles_mass_pred_df<-ind_val_list[["solubles_mass"]]
-summary_df$R2_Dessain[summary_df$trait=="solubles_mass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_Dessain[summary_df$trait=="solubles"]<-summary(lm(Measured~pred.mean,
                                                            solubles_mass_pred_df[which(solubles_mass_pred_df$dataset=="Dessain"),]))$r.squared
-summary_df$R2_LOPEX[summary_df$trait=="solubles_mass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_LOPEX[summary_df$trait=="solubles"]<-summary(lm(Measured~pred.mean,
                                                          solubles_mass_pred_df[which(solubles_mass_pred_df$dataset=="LOPEX"),]))$r.squared
-summary_df$R2_ANGERS[summary_df$trait=="solubles_mass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_ANGERS[summary_df$trait=="solubles"]<-summary(lm(Measured~pred.mean,
                                                           solubles_mass_pred_df[which(solubles_mass_pred_df$dataset=="ANGERS"),]))$r.squared
 
 hemicellulose_mass_pred_df<-ind_val_list[["hemicellulose_mass"]]
-summary_df$R2_Dessain[summary_df$trait=="hemicellulose_mass"]<-summary(lm(Measured~pred.mean,
-                                                           hemicellulose_mass_pred_df[which(hemicellulose_mass_pred_df$dataset=="Dessain"),]))$r.squared
-summary_df$R2_LOPEX[summary_df$trait=="hemicellulose_mass"]<-summary(lm(Measured~pred.mean,
-                                                         hemicellulose_mass_pred_df[which(hemicellulose_mass_pred_df$dataset=="LOPEX"),]))$r.squared
-summary_df$R2_ANGERS[summary_df$trait=="hemicellulose_mass"]<-summary(lm(Measured~pred.mean,
-                                                          hemicellulose_mass_pred_df[which(hemicellulose_mass_pred_df$dataset=="ANGERS"),]))$r.squared
+summary_df$R2_Dessain[summary_df$trait=="hemicellulose"]<-summary(lm(Measured~pred.mean,
+                                                                     hemicellulose_mass_pred_df[which(hemicellulose_mass_pred_df$dataset=="Dessain"),]))$r.squared
+summary_df$R2_LOPEX[summary_df$trait=="hemicellulose"]<-summary(lm(Measured~pred.mean,
+                                                                   hemicellulose_mass_pred_df[which(hemicellulose_mass_pred_df$dataset=="LOPEX"),]))$r.squared
+summary_df$R2_ANGERS[summary_df$trait=="hemicellulose"]<-summary(lm(Measured~pred.mean,
+                                                                    hemicellulose_mass_pred_df[which(hemicellulose_mass_pred_df$dataset=="ANGERS"),]))$r.squared
 
 cellulose_mass_pred_df<-ind_val_list[["cellulose_mass"]]
-summary_df$R2_Dessain[summary_df$trait=="cellulose_mass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_Dessain[summary_df$trait=="cellulose"]<-summary(lm(Measured~pred.mean,
                                                            cellulose_mass_pred_df[which(cellulose_mass_pred_df$dataset=="Dessain"),]))$r.squared
-summary_df$R2_LOPEX[summary_df$trait=="cellulose_mass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_LOPEX[summary_df$trait=="cellulose"]<-summary(lm(Measured~pred.mean,
                                                          cellulose_mass_pred_df[which(cellulose_mass_pred_df$dataset=="LOPEX"),]))$r.squared
-summary_df$R2_ANGERS[summary_df$trait=="cellulose_mass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_ANGERS[summary_df$trait=="cellulose"]<-summary(lm(Measured~pred.mean,
                                                           cellulose_mass_pred_df[which(cellulose_mass_pred_df$dataset=="ANGERS"),]))$r.squared
 
 lignin_mass_pred_df<-ind_val_list[["lignin_mass"]]
-summary_df$R2_Dessain[summary_df$trait=="lignin_mass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_Dessain[summary_df$trait=="lignin"]<-summary(lm(Measured~pred.mean,
                                                            lignin_mass_pred_df[which(lignin_mass_pred_df$dataset=="Dessain"),]))$r.squared
-summary_df$R2_LOPEX[summary_df$trait=="lignin_mass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_LOPEX[summary_df$trait=="lignin"]<-summary(lm(Measured~pred.mean,
                                                          lignin_mass_pred_df[which(lignin_mass_pred_df$dataset=="LOPEX"),]))$r.squared
-summary_df$R2_ANGERS[summary_df$trait=="lignin_mass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_ANGERS[summary_df$trait=="lignin"]<-summary(lm(Measured~pred.mean,
                                                           lignin_mass_pred_df[which(lignin_mass_pred_df$dataset=="ANGERS"),]))$r.squared
 
 Nmass_pred_df<-ind_val_list[["Nmass"]]
-summary_df$R2_Dessain[summary_df$trait=="Nmass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_Dessain[summary_df$trait=="N"]<-summary(lm(Measured~pred.mean,
                                                            Nmass_pred_df[which(Nmass_pred_df$dataset=="Dessain"),]))$r.squared
-summary_df$R2_LOPEX[summary_df$trait=="Nmass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_LOPEX[summary_df$trait=="N"]<-summary(lm(Measured~pred.mean,
                                                          Nmass_pred_df[which(Nmass_pred_df$dataset=="LOPEX"),]))$r.squared
-summary_df$R2_ANGERS[summary_df$trait=="Nmass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_ANGERS[summary_df$trait=="N"]<-summary(lm(Measured~pred.mean,
                                                           Nmass_pred_df[which(Nmass_pred_df$dataset=="ANGERS"),]))$r.squared
 
 Cmass_pred_df<-ind_val_list[["Cmass"]]
-summary_df$R2_Dessain[summary_df$trait=="Cmass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_Dessain[summary_df$trait=="C"]<-summary(lm(Measured~pred.mean,
                                                            Cmass_pred_df[which(Cmass_pred_df$dataset=="Dessain"),]))$r.squared
-summary_df$R2_LOPEX[summary_df$trait=="Cmass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_LOPEX[summary_df$trait=="C"]<-summary(lm(Measured~pred.mean,
                                                          Cmass_pred_df[which(Cmass_pred_df$dataset=="LOPEX"),]))$r.squared
-summary_df$R2_ANGERS[summary_df$trait=="Cmass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_ANGERS[summary_df$trait=="C"]<-summary(lm(Measured~pred.mean,
                                                           Cmass_pred_df[which(Cmass_pred_df$dataset=="ANGERS"),]))$r.squared
 
 chlA_mass_pred_df<-ind_val_list[["chlA_mass"]]
-summary_df$R2_Dessain[summary_df$trait=="chlA_mass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_Dessain[summary_df$trait=="Chl a"]<-summary(lm(Measured~pred.mean,
                                                            chlA_mass_pred_df[which(chlA_mass_pred_df$dataset=="Dessain"),]))$r.squared
-summary_df$R2_LOPEX[summary_df$trait=="chlA_mass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_LOPEX[summary_df$trait=="Chl a"]<-summary(lm(Measured~pred.mean,
                                                          chlA_mass_pred_df[which(chlA_mass_pred_df$dataset=="LOPEX"),]))$r.squared
-summary_df$R2_ANGERS[summary_df$trait=="chlA_mass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_ANGERS[summary_df$trait=="Chl a"]<-summary(lm(Measured~pred.mean,
                                                           chlA_mass_pred_df[which(chlA_mass_pred_df$dataset=="ANGERS"),]))$r.squared
 
 chlB_mass_pred_df<-ind_val_list[["chlB_mass"]]
-summary_df$R2_Dessain[summary_df$trait=="chlB_mass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_Dessain[summary_df$trait=="Chl b"]<-summary(lm(Measured~pred.mean,
                                                            chlB_mass_pred_df[which(chlB_mass_pred_df$dataset=="Dessain"),]))$r.squared
-summary_df$R2_LOPEX[summary_df$trait=="chlB_mass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_LOPEX[summary_df$trait=="Chl b"]<-summary(lm(Measured~pred.mean,
                                                          chlB_mass_pred_df[which(chlB_mass_pred_df$dataset=="LOPEX"),]))$r.squared
-summary_df$R2_ANGERS[summary_df$trait=="chlB_mass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_ANGERS[summary_df$trait=="Chl b"]<-summary(lm(Measured~pred.mean,
                                                           chlB_mass_pred_df[which(chlB_mass_pred_df$dataset=="ANGERS"),]))$r.squared
 
-
 car_mass_pred_df<-ind_val_list[["car_mass"]]
-summary_df$R2_Dessain[summary_df$trait=="car_mass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_Dessain[summary_df$trait=="carotenoids"]<-summary(lm(Measured~pred.mean,
                                                            car_mass_pred_df[which(car_mass_pred_df$dataset=="Dessain"),]))$r.squared
-summary_df$R2_LOPEX[summary_df$trait=="car_mass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_LOPEX[summary_df$trait=="carotenoids"]<-summary(lm(Measured~pred.mean,
                                                          car_mass_pred_df[which(car_mass_pred_df$dataset=="LOPEX"),]))$r.squared
-summary_df$R2_ANGERS[summary_df$trait=="car_mass"]<-summary(lm(Measured~pred.mean,
+summary_df$R2_ANGERS[summary_df$trait=="carotenoids"]<-summary(lm(Measured~pred.mean,
                                                           car_mass_pred_df[which(car_mass_pred_df$dataset=="ANGERS"),]))$r.squared
+
+
+R2_Asner<-data.frame(trait=c("LMA","LDMC","EWT","N","C","solubles",
+                             "hemicellulose","cellulose","lignin",
+                             "Chl a","Chl b","carotenoids"),
+                     R2=c(0.86,NA,0.88,0.77,0.71,0.63,0.60,0.77,
+                          0.62,0.8,0.79,0.76))
+summary_df$R2_Asner<-R2_Asner$R2[match(summary_df$trait,R2_asner$trait)]
 
 pdf("Images/R2_summary.pdf",height = 6,width=8,onefile=F)
 ggplot(data=summary_df,aes(x=trait,y=R2))+
   geom_point(color="blue",size=2)+
-  geom_point(data=summary_df,aes(x=trait,y=R2_Dessain),color="black",size=2)+
-  geom_point(data=summary_df,aes(x=trait,y=R2_LOPEX),color="black",size=2)+
-  geom_point(data=summary_df,aes(x=trait,y=R2_ANGERS),color="black",size=2)+
-  geom_point(data=summary_df,aes(x=trait,y=R2_val),color="red",size=2)+
+  geom_point(data=summary_df,aes(x=trait,y=R2_Dessain),color="red",size=2)+
+  geom_point(data=summary_df,aes(x=trait,y=R2_LOPEX),color="red",size=2)+
+  geom_point(data=summary_df,aes(x=trait,y=R2_ANGERS),color="red",size=2)+
+  geom_point(data=summary_df,aes(x=trait,y=R2_val),color="black",size=2)+
+#  geom_point(data=summary_df,aes(x=trait,y=R2_Asner),color="black",size=2,shape=1)+
   theme_bw()+
-  scale_x_discrete(labels=expression("LMA","LDMC","EWT","N"[mass],
-                            "C"[mass],"sol","hemi","cell",
+  scale_x_discrete(labels=expression("LMA","LDMC","EWT","N",
+                            "C","sol","hemi","cell",
                             "lign","Chl "~italic("a"),
                             "Chl "~italic("b"),"car"))+
   theme(text=element_text(size=20),
         axis.text.x = element_text(angle = 90,hjust=1,vjust=0))+
   coord_cartesian(ylim=c(0,1))+
-  labs(x="Trait",y=expression("R"^2))
+  labs(x="Trait",y=expression(italic("R"^2)))
 dev.off()
 
 RMSD_df<-data.frame(functional.group=LMA_sum_df$functional.group,

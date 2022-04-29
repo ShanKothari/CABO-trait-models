@@ -14,6 +14,8 @@ library(reshape2)
 library(patchwork)
 library(ggfortify)
 library(RDRToolbox)
+library(dimRed)
+library(rdist)
 
 ref.traits<-readRDS("ProcessedSpectra/all_ref_and_traits.rds")
 ref.traits<-ref.traits[which(meta(ref.traits)$project!="2019-Pardo-MSc-UdeM")]
@@ -51,15 +53,15 @@ traits.trans.samp<-meta(ref.traits.samp)[,c("logEWT","logLMA","Cmass","logN",
                                             "hemicellulose_mass","cellulose_mass",
                                             "lignin_mass","logchl","logcar")]
 
-traits.osnas.samp<-meta(ref.traits.samp)[,c("logEWT","logLMA","Cnorm","Nnorm",
-                                            "hemicellulose_norm","cellulose_norm",
-                                            "lignin_norm","chl_norm","car_norm")]
+traits.ni.samp<-meta(ref.traits.samp)[,c("logEWT","logLMA","Cnorm","Nnorm",
+                                         "hemicellulose_norm","cellulose_norm",
+                                         "lignin_norm","chl_norm","car_norm")]
 
 ## normalize all to mean 0, sd 1
 ref.traits.norm<-apply(as.matrix(ref.traits.samp),2,function(x) (x-mean(x))/sd(x))
 traits.norm<-apply(traits.samp,2,function(x) (x-mean(x,na.rm=T))/sd(x,na.rm = T))
 traits.trans.norm<-apply(traits.trans.samp,2,function(x) (x-mean(x,na.rm=T))/sd(x,na.rm = T))
-traits.osnas.norm<-apply(traits.osnas.samp,2,function(x) (x-mean(x,na.rm=T))/sd(x,na.rm = T))
+traits.ni.norm<-apply(traits.ni.samp,2,function(x) (x-mean(x,na.rm=T))/sd(x,na.rm = T))
 
 ## choose bands to downsample to
 select.bands<-c(seq(from=400,to=780,by=20),
@@ -116,120 +118,136 @@ ref.traits.dist<-dist(as.matrix(ref.traits.norm)[,select.bands-399],method = "ma
 
 ## isomap
 ref.isomap<-isomap(ref.traits.dist,ndim = 9,k=5)
-# ref.isomap.proc<-ref.isomap
-
 colnames(ref.isomap$points)<-paste("D",1:ncol(ref.isomap$points),sep="")
 ref.isomap.coords<-as.data.frame(ref.isomap$points)
-# ref.isomap.proc.coords<-data.frame(procrustes(X = traits.trans.norm, Y = ref.isomap.coords)$Yrot)
-# ref.isomap.proc$points<-ref.isomap.proc.coords
 
-ref.isomap.envfit.12<-envfit(ref.isomap,traits.trans.norm,choices = 1:2)
-scores.12.df<-as.data.frame(vegan::scores(ref.isomap.envfit.12, "vectors")) * ordiArrowMul(ref.isomap.envfit.12)
-ref.isomap.envfit.34<-envfit(ref.isomap,traits.trans.norm,choices = 3:4)
-scores.34.df<-as.data.frame(vegan::scores(ref.isomap.envfit.34, "vectors")) * ordiArrowMul(ref.isomap.envfit.34)
-rownames(scores.12.df)<-c("EWT","LMA","C","N","hemi","cell","lign","chl","car")
-rownames(scores.34.df)<-c("EWT","LMA","C","N","hemi","cell","lign","chl","car")
+## procrustes
+ref.isomap.proc<-ref.isomap
+ref.isomap.proc$points<-procrustes(Y = ref.isomap.coords,X = traits.ni.norm)$Yrot
+colnames(ref.isomap.proc$points)<-paste("D",1:ncol(ref.isomap.proc$points),sep="")
+ref.isomap.proc.coords<-as.data.frame(ref.isomap.proc$points)
 
-ref.isomap.coords$functional.group<-as.factor(meta(ref.traits.samp)$functional.group)
-ref.isomap.coords$LMA<-meta(ref.traits.samp)$LMA
-ref.isomap.coords$EWT<-meta(ref.traits.samp)$EWT
-ref.isomap.coords$Nmass<-meta(ref.traits.samp)$Nmass
-ref.isomap.coords$chl<-meta(ref.traits.samp)$chl_mass
-ref.isomap.coords$hemi<-meta(ref.traits.samp)$hemicellulose_mass
-ref.isomap.coords$cell<-meta(ref.traits.samp)$cellulose_mass
-ref.isomap.coords$lignin<-meta(ref.traits.samp)$lignin_mass
-ref.isomap.coords$car<-meta(ref.traits.samp)$car_mass
+colorBlind  <- c("#E69F00","#009E73","#56B4E9","#F0E442",
+                 "#0072B2","#CC79A7","#D55E00","#999999")
 
-ggplot(data=ref.isomap.coords,
-       aes(x=D1,y=D2,color=functional.group))+
-  geom_point(size=3)+
-  geom_segment(aes(x = 0, y = 0, xend = D1*125, yend = D2*125),
-               data = scores.12.df, size =1, alpha = 0.5, colour = "grey30") +
-  geom_text(data = scores.12.df, aes(x = D1*135, y = D2*135), 
-            label = row.names(scores.12.df), colour = "navy", fontface = "bold") +
-#  scale_color_viridis_c()+
-  theme_bw()
+# ## overlay traits onto plot -- no procrustes
+# ref.isomap.envfit.12<-envfit(ref.isomap,traits.ni.norm,choices = 1:2)
+# scores.12.df<-as.data.frame(vegan::scores(ref.isomap.envfit.12, "vectors"))
+# ref.isomap.envfit.34<-envfit(ref.isomap,traits.ni.norm,choices = 3:4)
+# scores.34.df<-as.data.frame(vegan::scores(ref.isomap.envfit.34, "vectors"))
+# rownames(scores.12.df)<-c("EWT","LMA","C","N","hemi","cell","lign","chl","car")
+# rownames(scores.34.df)<-c("EWT","LMA","C","N","hemi","cell","lign","chl","car")
 
-ggplot(data=ref.isomap.coords,
-       aes(x=D3,y=D4,color=functional.group))+
-  geom_point(size=3)+
-  geom_segment(aes(x = 0, y = 0, xend = D3*125, yend = D4*125),
-               data = scores.34.df, size =1, alpha = 0.5, colour = "grey30") +
-  geom_text(data = scores.34.df, aes(x = D3*135, y = D4*135), 
-            label = row.names(scores.34.df), colour = "navy", fontface = "bold") +
-  #  scale_color_viridis_c()+
-  theme_bw()
+# ref.isomap.coords$functional.group<-as.factor(meta(ref.traits.samp)$functional.group)
+#
+# isomap.12<-ggplot(data=ref.isomap.coords,
+#        aes(x=D1,y=D2,color=functional.group))+
+#   geom_point(size=3)+
+#   geom_segment(aes(x = 0, y = 0, xend = D1*150, yend = D2*150),
+#                data = scores.12.df, size =1, alpha = 0.5, colour = "grey30") +
+#   geom_text(data = scores.12.df, aes(x = D1*160, y = D2*160), 
+#             label = row.names(scores.12.df), colour = "black", fontface = "bold") +
+#   theme_bw()+coord_fixed()+
+#   theme(panel.grid.major = element_blank(),
+#         panel.grid.minor = element_blank(),
+#         text = element_text(size=15))+
+#   scale_color_manual(values=colorBlind)+
+#   guides(color=guide_legend("Functional group"))+
+#   labs(x="Axis 1",y="Axis 2")
+# 
+# isomap.34<-ggplot(data=ref.isomap.coords,
+#        aes(x=D3,y=D4,color=functional.group))+
+#   geom_point(size=3)+
+#   geom_segment(aes(x = 0, y = 0, xend = D3*100, yend = D4*100),
+#                data = scores.34.df, size =1, alpha = 0.5, colour = "grey30") +
+#   geom_text(data = scores.34.df, aes(x = D3*110, y = D4*110), 
+#             label = row.names(scores.34.df), colour = "black", fontface = "bold") +
+#   theme_bw()+coord_fixed()+
+#   theme(panel.grid.major = element_blank(),
+#         panel.grid.minor = element_blank(),
+#         text = element_text(size=15))+
+#   scale_color_manual(values=colorBlind)+
+#   guides(color=guide_legend("Functional group"))+
+#   labs(x="Axis 3",y="Axis 4")
 
 # isomap.cca<-CCorA(Y = ref.isomap.coords[,c("D1","D2","D3","D4","D5")],
 #                   X = data.frame(traits.trans.norm))
 # biplot(isomap.cca)
 
-# ref.isomap.proc.coords$functional.group<-as.factor(meta(ref.traits.samp)$functional.group)
-# ref.isomap.proc.coords$logLMA<-data.frame(traits.trans.norm)$logLMA
-# ref.isomap.proc.coords$logEWT<-data.frame(traits.trans.norm)$logEWT
-# ref.isomap.proc.coords$logN<-data.frame(traits.trans.norm)$logN
-# ref.isomap.proc.coords$Cmass<-data.frame(traits.trans.norm)$Cmass
-# ref.isomap.proc.coords$logchl<-data.frame(traits.trans.norm)$logchl
-# ref.isomap.proc.coords$hemi<-data.frame(traits.trans.norm)$hemicellulose_mass
-# ref.isomap.proc.coords$cell<-data.frame(traits.trans.norm)$cellulose_mass
-# ref.isomap.proc.coords$lignin<-data.frame(traits.trans.norm)$lignin_mass
-# ref.isomap.proc.coords$R800<-ref.traits.samp[,800]
-# 
-# ref.isomap.envfit.12<-envfit(ref.isomap.proc,traits.trans.norm,choices = 1:2)
-# scores.12.df<-as.data.frame(vegan::scores(ref.isomap.envfit.12, "vectors")) * ordiArrowMul(ref.isomap.envfit.12)
-# ref.isomap.envfit.34<-envfit(ref.isomap.proc,traits.trans.norm,choices = 3:4)
-# scores.34.df<-as.data.frame(vegan::scores(ref.isomap.envfit.34, "vectors")) * ordiArrowMul(ref.isomap.envfit.34)
-# rownames(scores.12.df)<-c("EWT","LMA","C","N","hemi","cell","lign","chl","car")
-# rownames(scores.34.df)<-c("EWT","LMA","C","N","hemi","cell","lign","chl","car")
-# 
-# ggplot(data=ref.isomap.proc.coords,
-#        aes(x=X1,y=X2,color=logEWT))+
-#   geom_point(size=3)+
-# #  scale_color_viridis_c()+
-#   theme_bw()+
-#   geom_segment(aes(x = 0, y = 0, xend = X1*2, yend = X2*2),
-#                data = scores.12.df, size =1, alpha = 0.5, colour = "grey30") +
-#   geom_text(data = scores.12.df, aes(x = X1*2.1, y = X2*2.1), 
-#             label = row.names(scores.12.df), colour = "navy", fontface = "bold")
-# 
-# ggplot(data=ref.isomap.proc.coords,
-#        aes(x=X3,y=X4,color=logLMA))+
-#   geom_point(size=3)+
-# #  scale_color_discrete()+
-#   theme_bw()+
-#   geom_segment(aes(x = 0, y = 0, xend = X3*1.5, yend = X4*1.5),
-#                data = scores.34.df, size =1, alpha = 0.5, colour = "grey30") +
-#   geom_text(data = scores.34.df, aes(x = X3*1.6, y = X4*1.6), 
-#             label = row.names(scores.34.df), colour = "navy", fontface = "bold")
-# 
-# isomap.proc.cca<-CCorA(Y = ref.isomap.proc[,c("X1","X2","X3","X4","X5")],
-#                   X = data.frame(traits.trans.norm))
-# biplot(isomap.cca)
+ref.isomap.proc.coords$functional.group<-as.factor(meta(ref.traits.samp)$functional.group)
+ref.isomap.proc.coords$logEWT<-log(meta(ref.traits.samp)$EWT)
+
+ref.isomap.envfit.12<-envfit(ref.isomap.proc,traits.ni.norm,choices = 1:2)
+scores.12.df<-as.data.frame(vegan::scores(ref.isomap.envfit.12, "vectors")) * ordiArrowMul(ref.isomap.envfit.12)
+ref.isomap.envfit.34<-envfit(ref.isomap.proc,traits.ni.norm,choices = 3:4)
+scores.34.df<-as.data.frame(vegan::scores(ref.isomap.envfit.34, "vectors")) * ordiArrowMul(ref.isomap.envfit.34)
+rownames(scores.12.df)<-c("EWT","LMA","C","N","hemi","cell","lign","chl","car")
+rownames(scores.34.df)<-c("EWT","LMA","C","N","hemi","cell","lign","chl","car")
+
+isomap.12<-ggplot(data=ref.isomap.proc.coords,
+                  aes(x=D1,y=D2,color=functional.group))+
+  geom_point(size=3)+
+  geom_segment(aes(x = 0, y = 0, xend = D1*2, yend = D2*2),
+               data = scores.12.df, size =1.5, alpha = 0.5, colour = "black") +
+  geom_text(data = scores.12.df, aes(x = D1*2.2, y = D2*2.2), size=5,
+            label = row.names(scores.12.df), colour = "black", fontface = "bold") +
+  theme_bw()+coord_fixed()+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        text = element_text(size=15))+
+  scale_color_manual(values=colorBlind)+
+  guides(color=guide_legend("Functional group"))+
+  labs(x="Axis 1",y="Axis 2")
+
+isomap.34<-ggplot(data=ref.isomap.proc.coords,
+                  aes(x=D3,y=D4,color=functional.group))+
+  geom_point(size=3)+
+  geom_segment(aes(x = 0, y = 0, xend = D3, yend = D4),
+               data = scores.34.df, size =1.5, alpha = 0.5, colour = "black") +
+  geom_text(data = scores.34.df, aes(x = D3*1.1, y = D4*1.1), size=5,
+            label = row.names(scores.34.df), colour = "black", fontface = "bold") +
+  theme_bw()+coord_fixed()+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        text = element_text(size=15))+
+  scale_color_manual(values=colorBlind)+
+  guides(color=guide_legend("Functional group"))+
+  labs(x="Axis 3",y="Axis 4")
+
+pdf("GrimeReview/isomap.pdf",width=6.5,height=11.5)
+isomap.12+isomap.34+
+  plot_layout(ncol=1,guides="collect") &
+  theme(legend.position = "bottom")
+dev.off()
 
 ## NMDS
-ref.nmds<-metaMDS(ref.traits.norm[,select.bands-399],distance="manhattan",k=10,
-                    autotransform = F)
-stressplot(ref.nmds)
+# ref.nmds<-metaMDS(ref.traits.norm[,select.bands-399],distance="manhattan",k=10,
+#                     autotransform = F)
+# stressplot(ref.nmds)
+
+## UMAP
+spec.trait.DR<-dimRedData(data=ref.traits.norm,meta=traits.trans.norm)
+ref.UMAP<-embed(spec.trait.DR,"UMAP",knn=5,method="naive",d="manhattan")
 
 #################################
 ## estimating intrinsic dimensionality
 
 ## Grassberger-Procaccia; unsure about correct choice of p or k1/k2
 corint(x=ref.traits.norm[,select.bands-399],p=20)
-corint(x=na.omit(traits.norm),p=20)
+corint(x=na.omit(traits.ni.norm),p=20)
 ## ML; not sure about correct choice of p or k1/k2
 lbmle(x = ref.traits.norm[,select.bands-399], k1=5, k2=10)
-lbmle(x = na.omit(traits.norm), k1=5, k2=10)
+lbmle(x = na.omit(traits.ni.norm), k1=5, k2=10)
 mada(x = ref.traits.norm[,select.bands-399], k = NULL, comb = "average", maxDim = 10)
-mada(x = na.omit(traits.norm), k = NULL, comb = "average", maxDim = 10)
+mada(x = na.omit(traits.ni.norm), k = NULL, comb = "average", maxDim = 10)
 side(x = ref.traits.norm[,select.bands-399], comb = "average", maxDim = 10)
-side(x = na.omit(traits.norm), comb = "average", maxDim = 10)
+side(x = na.omit(traits.ni.norm), comb = "average", maxDim = 10)
 nni(x = ref.traits.norm[,select.bands-399], k1 = 5, k2 = 30, eps = 0.01, p = NULL)
-nni(x = na.omit(traits.norm), k1 = 5, k2 = 30, eps = 0.01, p = NULL)
+nni(x = na.omit(traits.ni.norm), k1 = 5, k2 = 30, eps = 0.01, p = NULL)
 dancoDimEst(data = ref.traits.norm[,select.bands-399], k=5, D=10, ver = "DANCo")
-dancoDimEst(data = na.omit(traits.norm), k=5, D=10, ver = "DANCo")
+dancoDimEst(data = na.omit(traits.ni.norm), k=5, D=10, ver = "DANCo")
 dancoDimEst(data = ref.traits.norm[,select.bands-399], k=5, D=10, ver = "MIND_MLi")
-dancoDimEst(data = na.omit(traits.norm), k=5, D=10, ver = "MIND_MLi")
+dancoDimEst(data = na.omit(traits.ni.norm), k=5, D=10, ver = "MIND_MLi")
 
 ref.isomap<-isomap(dist(ref.traits.norm[,select.bands-399],method="manhattan"),ndim = 2,k = 5)
 trait.isomap<-isomap(dist(na.omit(traits.norm),method="manhattan"),ndim = 2,k = 5)
@@ -313,16 +331,14 @@ lle.pressed<-lle(as.matrix(pressed.spec),m=10,k=10,id = T)
 lle.ground<-lle(as.matrix(ground.spec),m=10,k=10,id = T)
 lle.traits<-lle(na.omit(traits.sub),m=10,k=10,id = T)
 
-isomap.fresh<-isomap(dist(as.matrix(fresh.spec),method = "euclidean"),
-                     ndim = 10,k=4)
-isomap.pressed<-isomap(dist(as.matrix(pressed.spec),method = "euclidean"),
-                     ndim = 10,k=4)
-isomap.ground<-isomap(dist(as.matrix(ground.spec),method = "euclidean"),
-                     ndim = 10,k=4)
-isomap.traits<-isomap(dist(na.omit(traits.sub),method = "euclidean"),
-                     ndim = 10,k=4)
-
-## try stressplot() with MDS in vegan
+isomap.fresh<-isomap(dist(as.matrix(fresh.spec),method = "manhattan"),
+                     ndim = 10,k=5)
+isomap.pressed<-isomap(dist(as.matrix(pressed.spec),method = "manhattan"),
+                     ndim = 10,k=5)
+isomap.ground<-isomap(dist(as.matrix(ground.spec),method = "manhattan"),
+                     ndim = 10,k=5)
+isomap.traits<-isomap(dist(na.omit(traits.sub),method = "manhattan"),
+                     ndim = 10,k=5)
 
 #########################################
 ## does nonlinear dimensionality reduction work
@@ -365,7 +381,7 @@ dancoDimEst(data = prospect.sim.norm[,select.bands-399], k=5, D=10, ver = "MIND_
 calc_k(prospect.sim.norm[,select.bands-399], m=10, kmin=1, kmax=20, plotres=TRUE, 
        parallel=FALSE, cpus=2, iLLE=FALSE) 
 prospect.lle<-lle(prospect.sim.norm[,select.bands-399],m=4,k=6,id = T)
-prospect.isomap<-isomap(dist(prospect.sim.norm,method="euclidean"),
+prospect.isomap<-isomap(dist(prospect.sim.norm,method="manhattan"),
                         ndim = 10,k=3)
 plot(prospect.isomap$points[,3]~prospect.params$Cab)
 plot(prospect.isomap$points[,1]~prospect.isomap$points[,2])
@@ -401,7 +417,7 @@ Cm_density<-ggplot(data=prospect.params,
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=15))+
-  labs(y="Density",x=expression("LMA (g cm"^-2*")"),tag="A")+
+  labs(y="Density",x=expression("LMA (g cm"^-2*")"),tag="(a)")+
   coord_cartesian(xlim=c(0,0.021))+
   scale_color_manual(values=colorBlind[c(1,2,4,5,6)])+
   guides(color=F)
@@ -428,7 +444,7 @@ prospect_fg_spec_plot<-ggplot(prospect.spec.long,
   stat_summary(fun=median,na.rm=T,geom="line",size=1)+
   theme_bw()+theme(text=element_text(size=15),
                    plot.margin=unit(c(0,0.2,0,0),"in"))+
-  labs(tag = "B",x="Wavelength (nm)",y="Reflectance")+
+  labs(tag = "(b)",x="Wavelength (nm)",y="Reflectance")+
   guides(color=guide_legend("Functional group",nrow = 2))+
   scale_y_continuous(expand = c(0, 0),limits=c(0,0.5))+
   scale_x_continuous(expand = c(0, 0),limits=c(390,2510))+
@@ -447,7 +463,7 @@ T1_Cm_plot<-ggplot(prospect.params,aes(y=T1,x=Cm,color=FG))+
   coord_cartesian(xlim=c(0,0.02),ylim=c(0,0.02))+
   theme(text = element_text(size=15),
         legend.position = c(0.8, 0.2))+
-  labs(tag="C",y="FT1",x=expression("LMA (g cm"^-2*")"))+
+  labs(tag="(c)",y="FT1",x=expression("LMA (g cm"^-2*")"))+
   scale_color_manual(values=colorBlind[c(1,2,4,5,6)])+
   guides(color=F)
 
@@ -458,7 +474,7 @@ T2_Cm_plot<-ggplot(prospect.params,aes(y=T2,x=Cm,color=FG))+
   coord_cartesian(xlim=c(0,0.02),ylim=c(0,0.02))+
   theme(text = element_text(size=15),
         legend.position = c(0.8, 0.2))+
-  labs(tag="D",y="FT2",x=expression("LMA (g cm"^-2*")"))+
+  labs(tag="(d)",y="FT2",x=expression("LMA (g cm"^-2*")"))+
   scale_color_manual(values=colorBlind[c(1,2,4,5,6)])+
   guides(color=F)
 
@@ -493,7 +509,7 @@ T1_plot<-ggplot(T1_pred,aes(y=measured,x=val_pred,color=FG))+
   coord_cartesian(xlim=c(0,0.02),ylim=c(0,0.02))+
   theme(text = element_text(size=15),
         legend.position = c(0.8, 0.2))+
-  labs(tag="E",y="Measured FT1",x="Predicted FT1")+
+  labs(tag="(e)",y="Measured FT1",x="Predicted FT1")+
   scale_color_manual(values=colorBlind[c(1,2,4,5,6)])+
   guides(color=F)
 
@@ -511,7 +527,7 @@ T2_plot<-ggplot(T2_pred,aes(y=measured,x=val_pred,color=FG))+
   coord_cartesian(xlim=c(0,0.02),ylim=c(0,0.02))+
   theme(text = element_text(size=15),
         legend.position = c(0.8, 0.2))+
-  labs(tag="F",y="Measured FT2",x="Predicted FT2")+
+  labs(tag="(f)",y="Measured FT2",x="Predicted FT2")+
   scale_color_manual(values=colorBlind[c(1,2,4,5,6)])+
   guides(color=F)
 
