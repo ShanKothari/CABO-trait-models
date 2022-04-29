@@ -227,7 +227,7 @@ LMA_named_pred_list<-mapply(`[<-`, LMA_pred_list, 'functional.group', value = na
 LMA_pred_df<-do.call(rbind,LMA_named_pred_list)
 LMA_lower<-min(c(LMA_pred_df$measured,LMA_pred_df$val_pred),na.rm=T)-0.01
 LMA_upper<-max(c(LMA_pred_df$measured,LMA_pred_df$val_pred),na.rm=T)+0.01
-LMA.ref.val.plot<-ggplot(LMA_pred_df,
+LMA_transfer_plot<-ggplot(LMA_pred_df,
                          aes(y=measured,x=val_pred,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
@@ -241,27 +241,134 @@ LMA.ref.val.plot<-ggplot(LMA_pred_df,
 
 LDMC_named_pred_list<-mapply(`[<-`, LDMC_pred_list, 'functional.group', value = names(LDMC_pred_list), SIMPLIFY = FALSE)
 LDMC_pred_df<-do.call(rbind,LDMC_named_pred_list)
+LDMC_lower<-min(c(LDMC_pred_df$measured,LDMC_pred_df$val_pred),na.rm=T)-0.01
+LDMC_upper<-max(c(LDMC_pred_df$measured,LDMC_pred_df$val_pred),na.rm=T)+0.01
+LDMC_transfer_plot<-ggplot(LDMC_pred_df,
+                          aes(y=measured,x=val_pred,color=functional.group))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(LDMC_lower,LDMC_upper),ylim=c(LDMC_lower,LDMC_upper))+
+  theme(text = element_text(size=25))+
+  labs(y=expression("Measured LDMC (mg g"^-1*")"),
+       x=expression("Predicted LDMC (mg g"^-1*")"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 EWT_named_pred_list<-mapply(`[<-`, EWT_pred_list, 'functional.group', value = names(EWT_pred_list), SIMPLIFY = FALSE)
 EWT_pred_df<-do.call(rbind,EWT_named_pred_list)
+EWT_lower<-min(c(EWT_pred_df$measured,EWT_pred_df$val_pred),na.rm=T)-0.01
+EWT_upper<-max(c(EWT_pred_df$measured,EWT_pred_df$val_pred),na.rm=T)+0.01
+EWT_transfer_plot<-ggplot(EWT_pred_df,
+                          aes(y=measured,x=val_pred,color=functional.group))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(EWT_lower,EWT_upper),ylim=c(EWT_lower,EWT_upper))+
+  theme(text = element_text(size=25))+
+  labs(y="Measured EWT (mm)",x="Predicted EWT (mm)")+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 Nmass_named_pred_list<-mapply(`[<-`, Nmass_pred_list, 'functional.group', value = names(Nmass_pred_list), SIMPLIFY = FALSE)
 Nmass_pred_df<-do.call(rbind,Nmass_named_pred_list)
+Nmass_lower<-min(c(Nmass_pred_df$measured,Nmass_pred_df$val_pred),na.rm=T)-0.01
+Nmass_upper<-max(c(Nmass_pred_df$measured,Nmass_pred_df$val_pred),na.rm=T)+0.01
+Nmass_transfer_plot<-ggplot(Nmass_pred_df,
+                          aes(y=measured,x=val_pred,color=functional.group))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(Nmass_lower,Nmass_upper),ylim=c(Nmass_lower,Nmass_upper))+
+  theme(text = element_text(size=25))+
+  labs(y=expression("Measured N (%)"),
+       x=expression("Predicted N (%)"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 Cmass_named_pred_list<-mapply(`[<-`, Cmass_pred_list, 'functional.group', value = names(Cmass_pred_list), SIMPLIFY = FALSE)
 Cmass_pred_df<-do.call(rbind,Cmass_named_pred_list)
+Cmass_lower<-min(c(Cmass_pred_df$measured,Cmass_pred_df$val_pred),na.rm=T)-0.01
+Cmass_upper<-max(c(Cmass_pred_df$measured,Cmass_pred_df$val_pred),na.rm=T)+0.01
+Cmass_transfer_plot<-ggplot(Cmass_pred_df,
+                            aes(y=measured,x=val_pred,color=functional.group))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(Cmass_lower,Cmass_upper),ylim=c(Cmass_lower,Cmass_upper))+
+  theme(text = element_text(size=25))+
+  labs(y=expression("Measured C (%)"),
+       x=expression("Predicted C (%)"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 solubles_mass_named_pred_list<-mapply(`[<-`, solubles_mass_pred_list, 'functional.group', value = names(solubles_mass_pred_list), SIMPLIFY = FALSE)
 solubles_mass_pred_df<-do.call(rbind,solubles_mass_named_pred_list)
+solubles_mass_lower<-min(c(solubles_mass_pred_df$measured,solubles_mass_pred_df$val_pred),na.rm=T)-0.01
+solubles_mass_upper<-max(c(solubles_mass_pred_df$measured,solubles_mass_pred_df$val_pred),na.rm=T)+0.01
+solubles_mass_transfer_plot<-ggplot(solubles_mass_pred_df,
+                            aes(y=measured,x=val_pred,color=functional.group))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(solubles_mass_lower,solubles_mass_upper),
+                  ylim=c(solubles_mass_lower,solubles_mass_upper))+
+  theme(text = element_text(size=25))+
+  labs(y=expression("Measured solubles (%)"),
+       x=expression("Predicted solubles (%)"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 hemicellulose_mass_named_pred_list<-mapply(`[<-`, hemicellulose_mass_pred_list, 'functional.group', value = names(hemicellulose_mass_pred_list), SIMPLIFY = FALSE)
 hemicellulose_mass_pred_df<-do.call(rbind,hemicellulose_mass_named_pred_list)
+hemicellulose_mass_lower<-min(c(hemicellulose_mass_pred_df$measured,hemicellulose_mass_pred_df$val_pred),na.rm=T)-0.01
+hemicellulose_mass_upper<-max(c(hemicellulose_mass_pred_df$measured,hemicellulose_mass_pred_df$val_pred),na.rm=T)+0.01
+hemicellulose_mass_transfer_plot<-ggplot(hemicellulose_mass_pred_df,
+                            aes(y=measured,x=val_pred,color=functional.group))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(hemicellulose_mass_lower,hemicellulose_mass_upper),
+                  ylim=c(hemicellulose_mass_lower,hemicellulose_mass_upper))+
+  theme(text = element_text(size=25))+
+  labs(y=expression("Measured hemicellulose (%)"),
+       x=expression("Predicted hemicellulose (%)"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 cellulose_mass_named_pred_list<-mapply(`[<-`, cellulose_mass_pred_list, 'functional.group', value = names(cellulose_mass_pred_list), SIMPLIFY = FALSE)
 cellulose_mass_pred_df<-do.call(rbind,cellulose_mass_named_pred_list)
+cellulose_mass_lower<-min(c(cellulose_mass_pred_df$measured,cellulose_mass_pred_df$val_pred),na.rm=T)-0.01
+cellulose_mass_upper<-max(c(cellulose_mass_pred_df$measured,cellulose_mass_pred_df$val_pred),na.rm=T)+0.01
+cellulose_mass_transfer_plot<-ggplot(cellulose_mass_pred_df,
+                            aes(y=measured,x=val_pred,color=functional.group))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(cellulose_mass_lower,cellulose_mass_upper),
+                  ylim=c(cellulose_mass_lower,cellulose_mass_upper))+
+  theme(text = element_text(size=25))+
+  labs(y=expression("Measured cellulose (%)"),
+       x=expression("Predicted cellulose (%)"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 lignin_mass_named_pred_list<-mapply(`[<-`, lignin_mass_pred_list, 'functional.group', value = names(lignin_mass_pred_list), SIMPLIFY = FALSE)
 lignin_mass_pred_df<-do.call(rbind,lignin_mass_named_pred_list)
+lignin_mass_lower<-min(c(lignin_mass_pred_df$measured,lignin_mass_pred_df$val_pred),na.rm=T)-0.01
+lignin_mass_upper<-max(c(lignin_mass_pred_df$measured,lignin_mass_pred_df$val_pred),na.rm=T)+0.01
+lignin_mass_transfer_plot<-ggplot(lignin_mass_pred_df,
+                            aes(y=measured,x=val_pred,color=functional.group))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(lignin_mass_lower,lignin_mass_upper),
+                  ylim=c(lignin_mass_lower,lignin_mass_upper))+
+  theme(text = element_text(size=25))+
+  labs(y=expression("Measured lignin (%)"),
+       x=expression("Predicted lignin (%)"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 chlA_mass_named_pred_list<-mapply(`[<-`, chlA_mass_pred_list, 'functional.group', value = names(chlA_mass_pred_list), SIMPLIFY = FALSE)
 chlA_mass_pred_df<-do.call(rbind,chlA_mass_named_pred_list)
