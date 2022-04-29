@@ -7,6 +7,8 @@ library(reshape2)
 library(statip)
 library(lme4)
 library(FNN)
+library(ggplot2)
+library(patchwork)
 source("Scripts/CABO-trait-models/00 useful_functions.R")
 
 spec.traits<-readRDS("ProcessedSpectra/all_ref_and_traits.rds")
@@ -223,6 +225,9 @@ for(i in common.fg){
   
 }
 
+###############################
+## measured vs predicted transfer plots
+
 LMA_named_pred_list<-mapply(`[<-`, LMA_pred_list, 'functional.group', value = names(LMA_pred_list), SIMPLIFY = FALSE)
 LMA_pred_df<-do.call(rbind,LMA_named_pred_list)
 LMA_lower<-min(c(LMA_pred_df$measured,LMA_pred_df$val_pred),na.rm=T)-0.01
@@ -233,7 +238,7 @@ LMA_transfer_plot<-ggplot(LMA_pred_df,
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(LMA_lower,LMA_upper),ylim=c(LMA_lower,LMA_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured LMA (kg m"^-2*")"),
        x=expression("Predicted LMA (kg m"^-2*")"))+
   guides(color=F)+
@@ -249,7 +254,7 @@ LDMC_transfer_plot<-ggplot(LDMC_pred_df,
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(LDMC_lower,LDMC_upper),ylim=c(LDMC_lower,LDMC_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured LDMC (mg g"^-1*")"),
        x=expression("Predicted LDMC (mg g"^-1*")"))+
   guides(color=F)+
@@ -265,7 +270,7 @@ EWT_transfer_plot<-ggplot(EWT_pred_df,
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(EWT_lower,EWT_upper),ylim=c(EWT_lower,EWT_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y="Measured EWT (mm)",x="Predicted EWT (mm)")+
   guides(color=F)+
   scale_color_manual(values=colorBlind)
@@ -280,7 +285,7 @@ Nmass_transfer_plot<-ggplot(Nmass_pred_df,
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Nmass_lower,Nmass_upper),ylim=c(Nmass_lower,Nmass_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured N (%)"),
        x=expression("Predicted N (%)"))+
   guides(color=F)+
@@ -296,7 +301,7 @@ Cmass_transfer_plot<-ggplot(Cmass_pred_df,
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Cmass_lower,Cmass_upper),ylim=c(Cmass_lower,Cmass_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured C (%)"),
        x=expression("Predicted C (%)"))+
   guides(color=F)+
@@ -313,7 +318,7 @@ solubles_mass_transfer_plot<-ggplot(solubles_mass_pred_df,
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(solubles_mass_lower,solubles_mass_upper),
                   ylim=c(solubles_mass_lower,solubles_mass_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured solubles (%)"),
        x=expression("Predicted solubles (%)"))+
   guides(color=F)+
@@ -330,7 +335,7 @@ hemicellulose_mass_transfer_plot<-ggplot(hemicellulose_mass_pred_df,
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(hemicellulose_mass_lower,hemicellulose_mass_upper),
                   ylim=c(hemicellulose_mass_lower,hemicellulose_mass_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured hemicellulose (%)"),
        x=expression("Predicted hemicellulose (%)"))+
   guides(color=F)+
@@ -347,7 +352,7 @@ cellulose_mass_transfer_plot<-ggplot(cellulose_mass_pred_df,
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(cellulose_mass_lower,cellulose_mass_upper),
                   ylim=c(cellulose_mass_lower,cellulose_mass_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured cellulose (%)"),
        x=expression("Predicted cellulose (%)"))+
   guides(color=F)+
@@ -364,7 +369,7 @@ lignin_mass_transfer_plot<-ggplot(lignin_mass_pred_df,
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(lignin_mass_lower,lignin_mass_upper),
                   ylim=c(lignin_mass_lower,lignin_mass_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured lignin (%)"),
        x=expression("Predicted lignin (%)"))+
   guides(color=F)+
@@ -372,12 +377,62 @@ lignin_mass_transfer_plot<-ggplot(lignin_mass_pred_df,
 
 chlA_mass_named_pred_list<-mapply(`[<-`, chlA_mass_pred_list, 'functional.group', value = names(chlA_mass_pred_list), SIMPLIFY = FALSE)
 chlA_mass_pred_df<-do.call(rbind,chlA_mass_named_pred_list)
+chlA_mass_lower<-min(c(chlA_mass_pred_df$measured,chlA_mass_pred_df$val_pred),na.rm=T)-0.01
+chlA_mass_upper<-max(c(chlA_mass_pred_df$measured,chlA_mass_pred_df$val_pred),na.rm=T)+0.01
+chlA_mass_transfer_plot<-ggplot(chlA_mass_pred_df,
+                            aes(y=measured,x=val_pred,color=functional.group))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(chlA_mass_lower,chlA_mass_upper),ylim=c(chlA_mass_lower,chlA_mass_upper))+
+  theme(text = element_text(size=20))+
+  labs(y=expression("Measured Chl"~italic("a")~"(mg g"^-1*")"),
+       x=expression("Predicted Chl"~italic("a")~"(mg g"^-1*")"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 chlB_mass_named_pred_list<-mapply(`[<-`, chlB_mass_pred_list, 'functional.group', value = names(chlB_mass_pred_list), SIMPLIFY = FALSE)
 chlB_mass_pred_df<-do.call(rbind,chlB_mass_named_pred_list)
+chlB_mass_lower<-min(c(chlB_mass_pred_df$measured,chlB_mass_pred_df$val_pred),na.rm=T)-0.01
+chlB_mass_upper<-max(c(chlB_mass_pred_df$measured,chlB_mass_pred_df$val_pred),na.rm=T)+0.01
+chlB_mass_transfer_plot<-ggplot(chlB_mass_pred_df,
+                                aes(y=measured,x=val_pred,color=functional.group))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(chlB_mass_lower,chlB_mass_upper),ylim=c(chlB_mass_lower,chlB_mass_upper))+
+  theme(text = element_text(size=20))+
+  labs(y=expression("Measured Chl"~italic("b")~"(mg g"^-1*")"),
+       x=expression("Predicted Chl"~italic("b")~"(mg g"^-1*")"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 car_mass_named_pred_list<-mapply(`[<-`, car_mass_pred_list, 'functional.group', value = names(car_mass_pred_list), SIMPLIFY = FALSE)
 car_mass_pred_df<-do.call(rbind,car_mass_named_pred_list)
+car_mass_lower<-min(c(car_mass_pred_df$measured,car_mass_pred_df$val_pred),na.rm=T)-0.01
+car_mass_upper<-max(c(car_mass_pred_df$measured,car_mass_pred_df$val_pred),na.rm=T)+0.01
+car_mass_transfer_plot<-ggplot(car_mass_pred_df,
+                                aes(y=measured,x=val_pred,color=functional.group))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(car_mass_lower,car_mass_upper),ylim=c(car_mass_lower,car_mass_upper))+
+  theme(text = element_text(size=20))+
+  labs(y=expression("Measured carotenoids (mg g"^-1*")"),
+       x=expression("Predicted carotenoids (mg g"^-1*")"),
+       color="Functional group")+
+  scale_color_manual(values=colorBlind)
+
+pdf("Images/model_transfer.pdf",width=16,height=19)
+(LMA_transfer_plot+LDMC_transfer_plot+EWT_transfer_plot)/
+  (Nmass_transfer_plot+Cmass_transfer_plot+solubles_mass_transfer_plot)/
+  (hemicellulose_mass_transfer_plot+cellulose_mass_transfer_plot+lignin_mass_transfer_plot)/
+  (chlA_mass_transfer_plot+chlB_mass_transfer_plot+car_mass_transfer_plot) &
+  plot_layout(guides="collect") & theme(legend.position = "bottom")
+dev.off()
+
+##################################
+## summary statistic plots
 
 LMA_sum_df<-data.frame(functional.group=names(LMA_pred_list),
                        RMSD=unlist(lapply(LMA_pred_list,function(x) RMSD(x$measured,x$val_pred))),
