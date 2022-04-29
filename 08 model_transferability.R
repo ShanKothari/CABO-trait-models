@@ -222,6 +222,8 @@ for(i in common.fg){
 
 LMA_named_pred_list<-mapply(`[<-`, LMA_pred_list, 'functional.group', value = names(LMA_pred_list), SIMPLIFY = FALSE)
 LMA_pred_df<-do.call(rbind,LMA_named_pred_list)
+LMA_lower<-min(c(LMA_pred_df$measured,LMA_pred_df$val_pred),na.rm=T)-0.01
+LMA_upper<-max(c(LMA_pred_df$measured,LMA_pred_df$val_pred),na.rm=T)+0.01
 LMA.ref.val.plot<-ggplot(LMA_pred_df,
                          aes(y=measured,x=val_pred,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
