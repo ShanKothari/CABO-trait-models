@@ -866,7 +866,7 @@ solubles_mass.val.plot<-ggplot(solubles_mass.jack.df,
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(solubles_lower,solubles_upper),
                   ylim=c(solubles_lower,solubles_upper))+
-  theme(text = element_text(size=25),
+  theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y="Measured solubles (%)",x="Predicted solubles (%)")+
   guides(color=F)+
@@ -896,7 +896,7 @@ hemicellulose_mass.val.plot<-ggplot(hemicellulose_mass.jack.df,aes(y=Measured,x=
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(hemicellulose_lower,hemicellulose_upper),
                   ylim=c(hemicellulose_lower,hemicellulose_upper))+
-  theme(text = element_text(size=25),
+  theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y="Measured hemicellulose (%)",
        x="Predicted hemicellulose (%)")+
@@ -927,7 +927,7 @@ cellulose_mass.val.plot<-ggplot(cellulose_mass.jack.df,aes(y=Measured,x=pred.mea
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(cellulose_lower,cellulose_upper),
                   ylim=c(cellulose_lower,cellulose_upper))+
-  theme(text = element_text(size=25),
+  theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y="Measured cellulose (%)",x="Predicted cellulose (%)")+
   guides(color=F)+
@@ -957,7 +957,7 @@ lignin_mass.val.plot<-ggplot(lignin_mass.jack.df,aes(y=Measured,x=pred.mean,colo
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(lignin_lower,lignin_upper),
                   ylim=c(lignin_lower,lignin_upper))+
-  theme(text = element_text(size=25),
+  theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y="Measured lignin (%)",x="Predicted lignin (%)")+
   guides(color=F)+
@@ -987,7 +987,7 @@ chlA_mass.val.plot<-ggplot(chlA_mass.jack.df,aes(y=Measured,x=pred.mean,color=fu
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(chlA_lower,chlA_upper),
                   ylim=c(chlA_lower,chlA_upper))+
-  theme(text = element_text(size=25),
+  theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured Chl"~italic("a")~"(mg g"^-1*")"),
        x=expression("Predicted Chl"~italic("a")~"(mg g"^-1*")"))+
@@ -1018,7 +1018,7 @@ chlB_mass.val.plot<-ggplot(chlB_mass.jack.df,aes(y=Measured,x=pred.mean,color=fu
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(chlB_lower,chlB_upper),
                   ylim=c(chlB_lower,chlB_upper))+
-  theme(text = element_text(size=25),
+  theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured Chl"~italic("b")~"(mg g"^-1*")"),
        x=expression("Predicted Chl"~italic("b")~"(mg g"^-1*")"))+
@@ -1049,7 +1049,7 @@ car_mass.val.plot<-ggplot(car_mass.jack.df,aes(y=Measured,x=pred.mean,color=func
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(car_lower,car_upper),
                   ylim=c(car_lower,car_upper))+
-  theme(text = element_text(size=25),
+  theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured carotenoids (mg g"^-1*")"),
        x=expression("Predicted carotenoids (mg g"^-1*")"),
@@ -1080,7 +1080,7 @@ Cmass.val.plot<-ggplot(Cmass.jack.df,aes(y=Measured,x=pred.mean,color=functional
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(C_lower,C_upper),
                   ylim=c(C_lower,C_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured C (%)"),
        x=expression("Predicted C (%)"))+
   guides(color=F)+
@@ -1110,7 +1110,7 @@ Nmass.val.plot<-ggplot(Nmass.jack.df,aes(y=Measured,x=pred.mean,color=functional
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(N_lower,N_upper),
                   ylim=c(N_lower,N_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured N (%)"),
        x=expression("Predicted N (%)"))+
   guides(color=F)+
@@ -1140,7 +1140,7 @@ EWT.val.plot<-ggplot(EWT.jack.df,aes(y=Measured,x=pred.mean,color=functional.gro
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(EWT_lower,EWT_upper),
                   ylim=c(EWT_lower,EWT_upper))+
-  theme(text = element_text(size=25),
+  theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y="Measured EWT (mm)",x="Predicted EWT (mm)")+
   guides(color=F)+
@@ -1170,7 +1170,7 @@ LMA.val.plot<-ggplot(LMA.jack.df,aes(y=Measured,x=pred.mean,color=functional.gro
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(LMA_lower,LMA_upper),
                   ylim=c(LMA_lower,LMA_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured LMA (kg m"^-2*")"),
        x=expression("Predicted LMA (kg m"^-2*")"))+
   guides(color=F)+
@@ -1200,7 +1200,7 @@ LDMC.val.plot<-ggplot(LDMC.jack.df,aes(y=Measured,x=pred.mean,color=functional.g
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(LDMC_lower,LDMC_upper),
                   ylim=c(LDMC_lower,LDMC_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured LDMC (mg g"^-1*")"),
        x=expression("Predicted LDMC (mg g"^-1*")"))+
   guides(color=F)+
@@ -1232,7 +1232,7 @@ Al_mass.val.plot<-ggplot(Al_mass.jack.df,aes(y=Measured,x=pred.mean,color=functi
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Al_lower,Al_upper),
                   ylim=c(Al_lower,Al_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured Al (mg g"^-1*")"),x=expression("Predicted Al (mg g"^-1*")"))+
   guides(color=F)+
   scale_color_manual(values=colorBlind)
@@ -1263,7 +1263,7 @@ Ca_mass.val.plot<-ggplot(Ca_mass.jack.df,aes(y=Measured,x=pred.mean,color=functi
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Ca_lower,Ca_upper),
                   ylim=c(Ca_lower,Ca_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured Ca (mg g"^-1*")"),
        x=expression("Predicted Ca (mg g"^-1*")"))+
   guides(color=F)+
@@ -1295,7 +1295,7 @@ Cu_mass.val.plot<-ggplot(Cu_mass.jack.df,aes(y=Measured,x=pred.mean,color=functi
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Cu_lower,Cu_upper),
                   ylim=c(Cu_lower,Cu_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured Cu (mg g"^-1*")"),
        x=expression("Predicted Cu (mg g"^-1*")"),
        color="Functional group")+
@@ -1328,7 +1328,7 @@ Fe_mass.val.plot<-ggplot(Fe_mass.jack.df,aes(y=Measured,x=pred.mean,color=functi
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Fe_lower,Fe_upper),
                   ylim=c(Fe_lower,Fe_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured Fe (mg g"^-1*")"),
        x=expression("Predicted Fe (mg g"^-1*")"))+
   guides(color=F)+
@@ -1360,7 +1360,7 @@ K_mass.val.plot<-ggplot(K_mass.jack.df,aes(y=Measured,x=pred.mean,color=function
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(K_lower,K_upper),
                   ylim=c(K_lower,K_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured K (mg g"^-1*")"),
        x=expression("Predicted K (mg g"^-1*")"))+
   guides(color=F)+
@@ -1392,7 +1392,7 @@ Mg_mass.val.plot<-ggplot(Mg_mass.jack.df,aes(y=Measured,x=pred.mean,color=functi
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Mg_lower,Mg_upper),
                   ylim=c(Mg_lower,Mg_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured Mg (mg g"^-1*")"),
        x=expression("Predicted Mg (mg g"^-1*")"))+
   guides(color=F)+
@@ -1424,7 +1424,7 @@ Mn_mass.val.plot<-ggplot(Mn_mass.jack.df,aes(y=Measured,x=pred.mean,color=functi
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Mn_lower,Mn_upper),
                   ylim=c(Mn_lower,Mn_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured Mn (mg g"^-1*")"),
        x=expression("Predicted Mn (mg g"^-1*")"))+
   guides(color=F)+
@@ -1456,7 +1456,7 @@ Na_mass.val.plot<-ggplot(Na_mass.jack.df,aes(y=Measured,x=pred.mean,color=functi
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Na_lower,Na_upper),
                   ylim=c(Na_lower,Na_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured Na (mg g"^-1*")"),
        x=expression("Predicted Na (mg g"^-1*")"))+
   guides(color=F)+
@@ -1488,7 +1488,7 @@ P_mass.val.plot<-ggplot(P_mass.jack.df,aes(y=Measured,x=pred.mean,color=function
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(P_lower,P_upper),
                   ylim=c(P_lower,P_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured P (mg g"^-1*")"),
        x=expression("Predicted P (mg g"^-1*")"))+
   guides(color=F)+
@@ -1520,7 +1520,7 @@ Zn_mass.val.plot<-ggplot(Zn_mass.jack.df,aes(y=Measured,x=pred.mean,color=functi
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Zn_lower,Zn_upper),
                   ylim=c(Zn_lower,Zn_upper))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured Zn (mg g"^-1*")"),
        x=expression("Predicted Zn (mg g"^-1*")"))+
   guides(color=F)+
@@ -1598,7 +1598,7 @@ all.jack.stats.list<-list(sol=solubles_mass.jack.stats,
                           Zn=Zn_mass.jack.stats)
 saveRDS(all.jack.stats.list,"SavedResults/all_jack_stats_list_ref.rds")
 
-pdf("Images/val_plots_ref1.pdf",width = 18,height = 22.5)
+pdf("Images/val_plots_ref1.pdf",width = 16,height = 19)
 (LMA.val.plot+LDMC.val.plot+EWT.val.plot)/
   (Nmass.val.plot+Cmass.val.plot+solubles_mass.val.plot)/
   (hemicellulose_mass.val.plot+cellulose_mass.val.plot+lignin_mass.val.plot)/
@@ -1606,12 +1606,12 @@ pdf("Images/val_plots_ref1.pdf",width = 18,height = 22.5)
   plot_layout(guides="collect") & theme(legend.position = "bottom")
 dev.off()
 
-pdf("Images/val_plots_ref2.pdf",width = 18,height = 22.5)
+pdf("Images/val_plots_ref2.pdf",width = 16,height = 19)
 (Al_mass.val.plot + Ca_mass.val.plot + Cu_mass.val.plot) / 
   (Fe_mass.val.plot + K_mass.val.plot + Mg_mass.val.plot) / 
   (Mn_mass.val.plot + Na_mass.val.plot + P_mass.val.plot) / 
   (Zn_mass.val.plot + guide_area() + guide_area()) &
-  plot_layout(guides="collect")
+  plot_layout(guides="collect") & theme(legend.position = "bottom")
 dev.off()
 
 ######################

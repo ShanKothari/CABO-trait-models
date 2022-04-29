@@ -766,7 +766,7 @@ solubles_area.val.plot<-ggplot(solubles_area.jack.df,
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(-3,25),ylim=c(-3,25))+
-  theme(text = element_text(size=25),
+  theme(text = element_text(size=20),
         legend.position = c(0, 0.25))+
   labs(y=expression("Measured solubles (mg cm"^-2*")"),
        x=expression("Measured solubles (mg cm"^-2*")"))+
@@ -794,7 +794,7 @@ hemicellulose_area.val.plot<-ggplot(hemicellulose_area.jack.df,
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(-1,5.5),ylim=c(-1,5.5))+
-  theme(text = element_text(size=25),
+  theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured hemicellulose (mg cm"^-2*")"),
        x=expression("Measured hemicellulose (mg cm"^-2*")"))+
@@ -822,7 +822,7 @@ cellulose_area.val.plot<-ggplot(cellulose_area.jack.df,
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(-1,7),ylim=c(-1,7))+
-  theme(text = element_text(size=25),
+  theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured cellulose (mg cm"^-2*")"),
        x=expression("Measured cellulose (mg cm"^-2*")"))+
@@ -850,7 +850,7 @@ lignin_area.val.plot<-ggplot(lignin_area.jack.df,
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(-0.5,4.5),ylim=c(-0.5,4.5))+
-  theme(text = element_text(size=25),
+  theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured lignin (mg cm"^-2*")"),
        x=expression("Measured lignin (mg cm"^-2*")"))+
@@ -878,7 +878,7 @@ chlA_area.val.plot<-ggplot(chlA_area.jack.df,
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,0.25),ylim=c(0,0.25))+
-  theme(text = element_text(size=25),
+  theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured Chl a (mg cm"^-2*")"),x=expression("Predicted Chl a (mg cm"^-2*")"))+
   guides(color=F)+
@@ -905,7 +905,7 @@ chlB_area.val.plot<-ggplot(chlB_area.jack.df,
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,0.075),ylim=c(0,0.075))+
-  theme(text = element_text(size=25),
+  theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured Chl b (mg cm"^-2*")"),x=expression("Predicted Chl b (mg cm"^-2*")"))+
   guides(color=F)+
@@ -932,7 +932,7 @@ car_area.val.plot<-ggplot(car_area.jack.df,
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,0.05),ylim=c(0,0.05))+
-  theme(text = element_text(size=25),
+  theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured carotenoids (mg cm"^-2*")"),
        x=expression("Predicted carotenoids (mg cm"^-2*")"))+
@@ -959,7 +959,7 @@ Carea.val.plot<-ggplot(Carea.jack.df,
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,18),ylim=c(0,18))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured C (mg cm"^-2*")"),
        x=expression("Predicted C (mg cm"^-2*")"))+
   guides(color=F)+
@@ -986,7 +986,7 @@ Narea.val.plot<-ggplot(Narea.jack.df,
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,0.35),ylim=c(0,0.35))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured N (mg cm"^-2*")"),
        x=expression("Predicted N (mg cm"^-2*")"))+
   guides(color=F)+
@@ -1013,7 +1013,7 @@ Al_area.val.plot<-ggplot(Al_area.jack.df,
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(-0.1,1.8),ylim=c(-0.1,1.8))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression(paste("Measured Al (",mu,"g cm"^-2*")")),
        x=expression(paste("Predicted Al (",mu,"g cm"^-2*")")))+
   guides(color=F)+
@@ -1040,7 +1040,7 @@ Ca_area.val.plot<-ggplot(Ca_area.jack.df,
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(-50,300),ylim=c(-50,300))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression(paste("Measured Ca (",mu,"g cm"^-2*")")),
        x=expression(paste("Predicted Ca (",mu,"g cm"^-2*")")))+
   guides(color=F)+
@@ -1067,7 +1067,7 @@ Cu_area.val.plot<-ggplot(Cu_area.jack.df,
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(-0.025,0.25),ylim=c(-0.025,0.25))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression(paste("Measured Cu (",mu,"g cm"^-2*")")),
        x=expression(paste("Predicted Cu (",mu,"g cm"^-2*")")))+
   guides(color=F)+
@@ -1094,7 +1094,7 @@ Fe_area.val.plot<-ggplot(Fe_area.jack.df,
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,2),ylim=c(0,2))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression(paste("Measured Fe (",mu,"g cm"^-2*")")),
        x=expression(paste("Predicted Fe (",mu,"g cm"^-2*")")))+
   guides(color=F)+
@@ -1121,7 +1121,7 @@ K_area.val.plot<-ggplot(K_area.jack.df,
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,150),ylim=c(0,150))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression(paste("Measured K (",mu,"g cm"^-2*")")),
        x=expression(paste("Predicted K (",mu,"g cm"^-2*")")))+
   guides(color=F)+
@@ -1148,7 +1148,7 @@ Mg_area.val.plot<-ggplot(Mg_area.jack.df,
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,60),ylim=c(0,60))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression(paste("Measured Mg (",mu,"g cm"^-2*")")),
        x=expression(paste("Predicted Mg (",mu,"g cm"^-2*")")))+
   guides(color=F)+
@@ -1175,7 +1175,7 @@ Mn_area.val.plot<-ggplot(Mn_area.jack.df,
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(-5,12),ylim=c(-5,12))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression(paste("Measured Mn (",mu,"g cm"^-2*")")),
        x=expression(paste("Predicted Mn (",mu,"g cm"^-2*")")))+
   guides(color=F)+
@@ -1202,7 +1202,7 @@ Na_area.val.plot<-ggplot(Na_area.jack.df,
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(-10,60),ylim=c(-10,60))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression(paste("Measured Na (",mu,"g cm"^-2*")")),
        x=expression(paste("Predicted Na (",mu,"g cm"^-2*")")))+
   guides(color=F)+
@@ -1229,7 +1229,7 @@ P_area.val.plot<-ggplot(P_area.jack.df,
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,45),ylim=c(0,45))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression(paste("Measured P (",mu,"g cm"^-2*")")),
        x=expression(paste("Predicted P (",mu,"g cm"^-2*")")))+
   guides(color=F)+
@@ -1256,7 +1256,7 @@ Zn_area.val.plot<-ggplot(Zn_area.jack.df,
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(-1,2.5),ylim=c(-1,2.5))+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   labs(y=expression(paste("Measured Zn (",mu,"g cm"^-2*")")),
        x=expression(paste("Predicted Zn (",mu,"g cm"^-2*")")))+
   scale_color_manual(values=colorBlind)
@@ -1324,17 +1324,17 @@ all.jack.stats.list<-list(sol=solubles_area.jack.stats,
                           Zn=Zn_area.jack.stats)
 saveRDS(all.jack.stats.list,"SavedResults/all_jack_stats_list_ref_area.rds")
 
-pdf("Images/val_plots_ref_area1.pdf",width = 18,height = 18)
+pdf("Images/val_plots_ref_area1.pdf",width = 16,height = 15)
 (Narea.val.plot+Carea.val.plot+solubles_area.val.plot)/
   (hemicellulose_area.val.plot+cellulose_area.val.plot+lignin_area.val.plot)/
   (chlA_area.val.plot+chlB_area.val.plot+car_area.val.plot) &
   plot_layout(guides="collect") & theme(legend.position = "bottom")
 dev.off()
 
-pdf("Images/val_plots_ref_area2.pdf",width = 18,height = 22.5)
+pdf("Images/val_plots_ref_area2.pdf",width = 16,height = 19)
 (Al_area.val.plot + Ca_area.val.plot + Cu_area.val.plot) / 
   (Fe_area.val.plot + K_area.val.plot + Mg_area.val.plot) / 
   (Mn_area.val.plot + Na_area.val.plot + P_area.val.plot) / 
   (Zn_area.val.plot + guide_area() + guide_area()) &
-  plot_layout(guides="collect")
+  plot_layout(guides="collect") & theme(legend.position = "bottom")
 dev.off()
