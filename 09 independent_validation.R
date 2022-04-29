@@ -823,7 +823,7 @@ solubles_ind_val<-ggplot(data=solubles_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y="Measured solubles (%)",x="Predicted solubles (%)")+
@@ -837,7 +837,7 @@ hemicellulose_ind_val<-ggplot(data=hemicellulose_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y="Measured hemicellulose (%)",x="Predicted hemicellulose (%)")+
@@ -851,7 +851,7 @@ cellulose_ind_val<-ggplot(data=cellulose_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y="Measured cellulose (%)",x="Predicted cellulose (%)")+
@@ -865,7 +865,7 @@ lignin_ind_val<-ggplot(data=lignin_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y="Measured lignin (%)",x="Predicted lignin (%)")+
@@ -879,7 +879,7 @@ Nmass_ind_val<-ggplot(data=Nmass_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y=expression("Measured N (%)"),
@@ -894,7 +894,7 @@ Cmass_ind_val<-ggplot(data=Cmass_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y=expression("Measured C (%)"),
@@ -909,7 +909,7 @@ LMA_ind_val<-ggplot(data=LMA_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y=expression("Measured LMA (kg m"^-2*")"),
@@ -924,7 +924,7 @@ LDMC_ind_val<-ggplot(data=LDMC_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y=expression("Measured LDMC (mg g"^-1*")"),
@@ -939,7 +939,7 @@ EWT_ind_val<-ggplot(data=EWT_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y="Measured EWT (mm)",x="Predicted EWT (mm)")+
@@ -953,7 +953,7 @@ chlA_ind_val<-ggplot(data=chlA_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y=expression("Measured Chl"~italic("a")~"(mg g"^-1*")"),
@@ -968,7 +968,7 @@ chlB_ind_val<-ggplot(data=chlB_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y=expression("Measured Chl"~italic("b")~"(mg g"^-1*")"),
@@ -983,7 +983,7 @@ car_ind_val<-ggplot(data=car_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y=expression("Measured carotenoids (mg g"^-1*")"),
@@ -998,7 +998,7 @@ Al_ind_val<-ggplot(data=Al_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y=expression("Measured Al (mg g"^-1*")"),
@@ -1013,7 +1013,7 @@ Ca_ind_val<-ggplot(data=Ca_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y=expression("Measured Ca (mg g"^-1*")"),
@@ -1028,7 +1028,7 @@ Cu_ind_val<-ggplot(data=Cu_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y=expression("Measured Cu (mg g"^-1*")"),
@@ -1043,7 +1043,7 @@ Fe_ind_val<-ggplot(data=Fe_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y=expression("Measured Fe (mg g"^-1*")"),
@@ -1058,7 +1058,7 @@ K_ind_val<-ggplot(data=K_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y=expression("Measured K (mg g"^-1*")"),
@@ -1073,7 +1073,7 @@ Mg_ind_val<-ggplot(data=Mg_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y=expression("Measured Mg (mg g"^-1*")"),
@@ -1088,7 +1088,7 @@ Mn_ind_val<-ggplot(data=Mn_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y=expression("Measured Mn (mg g"^-1*")"),
@@ -1103,7 +1103,7 @@ Na_ind_val<-ggplot(data=Na_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y=expression("Measured Na (mg g"^-1*")"),
@@ -1118,7 +1118,7 @@ P_ind_val<-ggplot(data=P_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y=expression("Measured P (mg g"^-1*")"),
@@ -1133,7 +1133,7 @@ Zn_ind_val<-ggplot(data=Zn_pred_df,
                  color="gray",alpha=0.7)+
   geom_point(size=2)+
   theme_bw()+
-  theme(text = element_text(size=25))+
+  theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   geom_smooth(method="lm",se=F)+
   labs(y=expression("Measured Zn (mg g"^-1*")"),
@@ -1166,7 +1166,7 @@ ind_val_list<-list(solubles_mass=solubles_pred_df,
                    Zn_mass=Zn_pred_df)
 saveRDS(ind_val_list,"SavedResults/ind_val_list.rds")
 
-pdf("Images/ind_val_plots1.pdf",width = 18,height = 22.5, onefile=F)
+pdf("Images/ind_val_plots1.pdf",width = 16,height = 19, onefile=F)
 ggarrange(plotlist=list(solubles_ind_val,hemicellulose_ind_val,
                         cellulose_ind_val,lignin_ind_val,
                         Nmass_ind_val,Cmass_ind_val,
@@ -1176,7 +1176,7 @@ ggarrange(plotlist=list(solubles_ind_val,hemicellulose_ind_val,
           nrow=4,ncol=3)
 dev.off()
 
-pdf("Images/ind_val_plots2.pdf",width = 18,height = 22.5, onefile=F)
+pdf("Images/ind_val_plots2.pdf",width = 16,height = 19, onefile=F)
 ggarrange(plotlist=list(Al_ind_val,Ca_ind_val,Cu_ind_val,
                         Fe_ind_val,K_ind_val,Mg_ind_val,
                         Mn_ind_val,Na_ind_val,P_ind_val,
