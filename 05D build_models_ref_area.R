@@ -3,7 +3,8 @@ setwd("C:/Users/kotha020/Dropbox/PostdocProjects/FreshLeafModels")
 library(spectrolab)
 library(caret)
 library(pls)
-library(lmodel2)
+library(RColorBrewer)
+library(patchwork)
 library(reshape2)
 source("Scripts/VIP.R")
 
@@ -14,9 +15,7 @@ ref.test<-readRDS("ProcessedSpectra/ref_test.rds")
 ## to dos
 
 ## try Type II regression?
-## eliminate outliers for Cu and Fe
 ## add together Chl a and b?
-## instead of 1.96 * SD, use 2.5 and 97.5 quantiles for error bars
 
 #########################################
 ## define functions
@@ -288,7 +287,7 @@ ggplot(Cu_area_pred,aes(y=measured,x=val_pred,color=Project))+
 
 Fe_area_CVmodel<-plsr(meta(ref.train)$Fe_area~as.matrix(ref.train),
                       ncomp=30,method = "oscorespls",validation="CV",segments=10)
-ncomp_Fe_area_CVmodel <- selectNcomp(Fe_area_CVmodel, method = "onesigma", plot = FALSE)
+ncomp_Fe_area_CVmodel <- max(c(selectNcomp(Fe_area_CVmodel, method = "onesigma", plot = FALSE),1))
 Fe_area_valid <- which(!is.na(meta(ref.train)$Fe_area))
 Fe_area_pred<-data.frame(ID=meta(ref.train)$sample_id[Fe_area_valid],
                          Species=meta(ref.train)$species[Fe_area_valid],
@@ -426,35 +425,107 @@ VIP1.df<-data.frame(Carea=VIP(Carea_CVmodel)[ncomp_Carea_CVmodel,],
                     Narea=VIP(Narea_CVmodel)[ncomp_Narea_CVmodel,],
                     wavelength=400:2400)
 
-VIP2.df<-data.frame(NDFarea=VIP(NDFarea_CVmodel)[ncomp_NDFarea_CVmodel,],
-                    ADFarea=VIP(ADFarea_CVmodel)[ncomp_ADFarea_CVmodel,],
-                    ADLarea=VIP(ADLarea_CVmodel)[ncomp_ADLarea_CVmodel,],
+VIP2.df<-data.frame(solubles_area=VIP(solubles_area_CVmodel)[ncomp_solubles_area_CVmodel,],
+                    hemicellulose_area=VIP(hemicellulose_area_CVmodel)[ncomp_hemicellulose_area_CVmodel,],
+                    cellulose_area=VIP(cellulose_area_CVmodel)[ncomp_cellulose_area_CVmodel,],
+                    lignin_area=VIP(lignin_area_CVmodel)[ncomp_lignin_area_CVmodel,],
                     wavelength=400:2400)
 
-VIPN.df<-data.frame(Narea=VIP(Narea_CVmodel)[ncomp_Narea_CVmodel,],
-                    Narea=VIP(Narea_CVmodel)[ncomp_Narea_CVmodel,],
-                    Nnorm=VIP(Nnorm_CVmodel)[ncomp_Nnorm_CVmodel,],
-                    LMA=VIP(LMA_CVmodel)[ncomp_LMA_CVmodel,],
+VIP3.df<-data.frame(chlA_area=VIP(chlA_area_CVmodel)[ncomp_chlA_area_CVmodel,],
+                    chlB_area=VIP(chlB_area_CVmodel)[ncomp_chlB_area_CVmodel,],
+                    car_area=VIP(car_area_CVmodel)[ncomp_car_area_CVmodel,],
+                    wavelength=400:2400)
+
+VIP4.df<-data.frame(Al_area=VIP(Al_area_CVmodel)[ncomp_Al_area_CVmodel,],
+                    Ca_area=VIP(Ca_area_CVmodel)[ncomp_Ca_area_CVmodel,],
+                    Cu_area=VIP(Cu_area_CVmodel)[ncomp_Cu_area_CVmodel,],
+                    Fe_area=VIP(Fe_area_CVmodel)[ncomp_Fe_area_CVmodel,],
+                    K_area=VIP(K_area_CVmodel)[ncomp_K_area_CVmodel,],
+                    wavelength=400:2400)
+
+VIP5.df<-data.frame(Mg_area=VIP(Mg_area_CVmodel)[ncomp_Mg_area_CVmodel,],
+                    Mn_area=VIP(Mn_area_CVmodel)[ncomp_Mn_area_CVmodel,],
+                    Na_area=VIP(Na_area_CVmodel)[ncomp_Na_area_CVmodel,],
+                    P_area=VIP(P_area_CVmodel)[ncomp_P_area_CVmodel,],
+                    Zn_area=VIP(Zn_area_CVmodel)[ncomp_Zn_area_CVmodel,],
                     wavelength=400:2400)
 
 VIP1.long<-melt(VIP1.df,id.vars = "wavelength")
 VIP2.long<-melt(VIP2.df,id.vars = "wavelength")
-VIPN.long<-melt(VIPN.df,id.vars = "wavelength")
+VIP3.long<-melt(VIP3.df,id.vars = "wavelength")
+VIP4.long<-melt(VIP4.df,id.vars = "wavelength")
+VIP5.long<-melt(VIP5.df,id.vars = "wavelength")
+
+focal_palette=palette(brewer.pal(8,name="Set2")[c(1,2,4,7,8)])
 
 VIP1.plot<-ggplot(VIP1.long,aes(x=wavelength,y=value,color=variable))+
-  geom_line()+theme_bw()+
-  theme(text=element_text(size=20))+
-  labs(y="PLSR VIP",x="Wavelength")
+  geom_line(size=1)+theme_bw()+
+  theme(text=element_text(size=20),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank())+
+  labs(y="VIP",x="Wavelength",color="Trait")+
+  coord_cartesian(ylim=c(0,4))+
+  scale_color_manual(labels=c("C","N","LMA","LDMC","EWT"),
+                     values=focal_palette)+
+  geom_abline(slope=0,intercept=0.8,linetype="dashed",size=1)
 
 VIP2.plot<-ggplot(VIP2.long,aes(x=wavelength,y=value,color=variable))+
-  geom_line()+theme_bw()+
-  theme(text=element_text(size=20))+
-  labs(y="PLSR VIP",x="Wavelength")
+  geom_line(size=1)+theme_bw()+
+  theme(text=element_text(size=20),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank())+
+  labs(y="VIP",x="Wavelength",color="Trait")+
+  coord_cartesian(ylim=c(0,4))+
+  scale_color_manual(labels=c("sol","hemi","cell","lign"),
+                     values=focal_palette)+
+  geom_abline(slope=0,intercept=0.8,linetype="dashed",size=1)
 
-VIPN.plot<-ggplot(VIPN.long,aes(x=wavelength,y=value,color=variable))+
-  geom_line()+theme_bw()+
-  theme(text=element_text(size=20))+
-  labs(y="PLSR VIP",x="Wavelength")
+VIP3.plot<-ggplot(VIP3.long,aes(x=wavelength,y=value,color=variable))+
+  geom_line(size=1)+theme_bw()+
+  theme(text=element_text(size=20),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank())+
+  labs(y="VIP",x="Wavelength",color="Trait")+
+  coord_cartesian(ylim=c(0,4))+
+  scale_color_manual(labels=c(expression("Chl"~italic("a")),
+                              expression("Chl"~italic("b")),
+                              expression("Car")),
+                     values=focal_palette)+
+  geom_abline(slope=0,intercept=0.8,linetype="dashed",size=1)
+
+VIP4.plot<-ggplot(VIP4.long,aes(x=wavelength,y=value,color=variable))+
+  geom_line(size=1)+theme_bw()+
+  theme(text=element_text(size=20),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank())+
+  labs(y="VIP",x="Wavelength",color="Trait")+
+  coord_cartesian(ylim=c(0,4))+
+  scale_color_manual(labels=c("Al","Ca","Cu","Fe","K"),
+                     values=focal_palette)+
+  geom_abline(slope=0,intercept=0.8,linetype="dashed",size=1)
+
+VIP5.plot<-ggplot(VIP5.long,aes(x=wavelength,y=value,color=variable))+
+  geom_line(size=1)+theme_bw()+
+  theme(text=element_text(size=20),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())+
+  labs(y="VIP",x="Wavelength",color="Trait")+
+  coord_cartesian(ylim=c(0,4))+
+  scale_color_manual(labels=c("Mg","Mn","Na","P","Zn"),
+                     values=focal_palette)+
+  geom_abline(slope=0,intercept=0.8,linetype="dashed",size=1)
+
+pdf("Images/VIP_ref_area.pdf",height=12,width=6,onefile = F)
+VIP1.plot / VIP2.plot / VIP3.plot / VIP4.plot / VIP5.plot
+dev.off()
 
 #######################################################
 ## jackknife analyses
@@ -705,19 +776,24 @@ for(i in 1:nreps){
   
 }
 
+colorBlind  <- c("#E69F00","#009E73","#56B4E9","#F0E442",
+                 "#0072B2","#CC79A7","#D55E00","#999999")
+
 solubles_area.jack.pred<-apply.coefs(solubles_area.jack.coefs,as.matrix(ref.test))
-solubles_area.jack.stat<-t(apply(solubles_area.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+solubles_area.jack.stat<-t(apply(solubles_area.jack.pred,1,
+                                 function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 solubles_area.jack.df<-data.frame(pred.mean=solubles_area.jack.stat[,1],
-                                  pred.low=solubles_area.jack.stat[,1]-1.96*solubles_area.jack.stat[,2],
-                                  pred.high=solubles_area.jack.stat[,1]+1.96*solubles_area.jack.stat[,2],
+                                  pred.low=solubles_area.jack.stat[,2],
+                                  pred.high=solubles_area.jack.stat[,3],
                                   Measured=meta(ref.test)$solubles_area,
                                   ncomp=ncomp_solubles_area_CVmodel,
                                   Species=meta(ref.test)$species,
                                   Project=meta(ref.test)$project,
+                                  functional.group=meta(ref.test)$functional.group,
                                   ID=meta(ref.test)$sample_id)
 
 solubles_area.val.plot<-ggplot(solubles_area.jack.df,
-                               aes(y=Measured*1000,x=pred.mean*1000,color=Project))+
+                               aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
@@ -728,21 +804,24 @@ solubles_area.val.plot<-ggplot(solubles_area.jack.df,
         legend.position = c(0, 0.25))+
   labs(y=expression("Measured solubles (mg cm"^-2*")"),
        x=expression("Measured solubles (mg cm"^-2*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 hemicellulose_area.jack.pred<-apply.coefs(hemicellulose_area.jack.coefs,as.matrix(ref.test))
-hemicellulose_area.jack.stat<-t(apply(hemicellulose_area.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+hemicellulose_area.jack.stat<-t(apply(hemicellulose_area.jack.pred,1,
+                                      function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 hemicellulose_area.jack.df<-data.frame(pred.mean=hemicellulose_area.jack.stat[,1],
-                                       pred.low=hemicellulose_area.jack.stat[,1]-1.96*hemicellulose_area.jack.stat[,2],
-                                       pred.high=hemicellulose_area.jack.stat[,1]+1.96*hemicellulose_area.jack.stat[,2],
+                                       pred.low=hemicellulose_area.jack.stat[,2],
+                                       pred.high=hemicellulose_area.jack.stat[,3],
                                        Measured=meta(ref.test)$hemicellulose_area,
                                        ncomp=ncomp_hemicellulose_area_CVmodel,
                                        Species=meta(ref.test)$species,
                                        Project=meta(ref.test)$project,
+                                       functional.group=meta(ref.test)$functional.group,
                                        ID=meta(ref.test)$sample_id)
 
 hemicellulose_area.val.plot<-ggplot(hemicellulose_area.jack.df,
-                                    aes(y=Measured*1000,x=pred.mean*1000,color=Project))+
+                                    aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
@@ -753,21 +832,24 @@ hemicellulose_area.val.plot<-ggplot(hemicellulose_area.jack.df,
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured hemicellulose (mg cm"^-2*")"),
        x=expression("Measured hemicellulose (mg cm"^-2*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 cellulose_area.jack.pred<-apply.coefs(cellulose_area.jack.coefs,as.matrix(ref.test))
-cellulose_area.jack.stat<-t(apply(cellulose_area.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+cellulose_area.jack.stat<-t(apply(cellulose_area.jack.pred,1,
+                                  function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 cellulose_area.jack.df<-data.frame(pred.mean=cellulose_area.jack.stat[,1],
-                                   pred.low=cellulose_area.jack.stat[,1]-1.96*cellulose_area.jack.stat[,2],
-                                   pred.high=cellulose_area.jack.stat[,1]+1.96*cellulose_area.jack.stat[,2],
+                                   pred.low=cellulose_area.jack.stat[,2],
+                                   pred.high=cellulose_area.jack.stat[,3],
                                    Measured=meta(ref.test)$cellulose_area,
                                    ncomp=ncomp_cellulose_area_CVmodel,
                                    Species=meta(ref.test)$species,
                                    Project=meta(ref.test)$project,
+                                   functional.group=meta(ref.test)$functional.group,
                                    ID=meta(ref.test)$sample_id)
 
 cellulose_area.val.plot<-ggplot(cellulose_area.jack.df,
-                                aes(y=Measured*1000,x=pred.mean*1000,color=Project))+
+                                aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
@@ -778,21 +860,24 @@ cellulose_area.val.plot<-ggplot(cellulose_area.jack.df,
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured cellulose (mg cm"^-2*")"),
        x=expression("Measured cellulose (mg cm"^-2*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 lignin_area.jack.pred<-apply.coefs(lignin_area.jack.coefs,as.matrix(ref.test))
-lignin_area.jack.stat<-t(apply(lignin_area.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+lignin_area.jack.stat<-t(apply(lignin_area.jack.pred,1,
+                               function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 lignin_area.jack.df<-data.frame(pred.mean=lignin_area.jack.stat[,1],
-                                pred.low=lignin_area.jack.stat[,1]-1.96*lignin_area.jack.stat[,2],
-                                pred.high=lignin_area.jack.stat[,1]+1.96*lignin_area.jack.stat[,2],
+                                pred.low=lignin_area.jack.stat[,2],
+                                pred.high=lignin_area.jack.stat[,3],
                                 Measured=meta(ref.test)$lignin_area,
                                 ncomp=ncomp_lignin_area_CVmodel,
                                 Species=meta(ref.test)$species,
                                 Project=meta(ref.test)$project,
+                                functional.group=meta(ref.test)$functional.group,
                                 ID=meta(ref.test)$sample_id)
 
 lignin_area.val.plot<-ggplot(lignin_area.jack.df,
-                             aes(y=Measured*1000,x=pred.mean*1000,color=Project))+
+                             aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
@@ -803,94 +888,106 @@ lignin_area.val.plot<-ggplot(lignin_area.jack.df,
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured lignin (mg cm"^-2*")"),
        x=expression("Measured lignin (mg cm"^-2*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 chlA_area.jack.pred<-apply.coefs(chlA_area.jack.coefs,as.matrix(ref.test))
-chlA_area.jack.stat<-t(apply(chlA_area.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+chlA_area.jack.stat<-t(apply(chlA_area.jack.pred,1,
+                             function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 chlA_area.jack.df<-data.frame(pred.mean=chlA_area.jack.stat[,1],
-                              pred.low=chlA_area.jack.stat[,1]-1.96*chlA_area.jack.stat[,2],
-                              pred.high=chlA_area.jack.stat[,1]+1.96*chlA_area.jack.stat[,2],
+                              pred.low=chlA_area.jack.stat[,2],
+                              pred.high=chlA_area.jack.stat[,3],
                               Measured=meta(ref.test)$chlA_area,
                               ncomp=ncomp_chlA_area_CVmodel,
                               Species=meta(ref.test)$species,
                               Project=meta(ref.test)$project,
+                              functional.group=meta(ref.test)$functional.group,
                               ID=meta(ref.test)$sample_id)
 
 chlA_area.val.plot<-ggplot(chlA_area.jack.df,
-                           aes(y=Measured*1000,x=pred.mean*1000,color=Project))+
+                           aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,2.5),ylim=c(0,2.5))+
+  coord_cartesian(xlim=c(0,0.25),ylim=c(0,0.25))+
   theme(text = element_text(size=25),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured Chl a (mg cm"^-2*")"),x=expression("Predicted Chl a (mg cm"^-2*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 chlB_area.jack.pred<-apply.coefs(chlB_area.jack.coefs,as.matrix(ref.test))
-chlB_area.jack.stat<-t(apply(chlB_area.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+chlB_area.jack.stat<-t(apply(chlB_area.jack.pred,1,
+                             function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 chlB_area.jack.df<-data.frame(pred.mean=chlB_area.jack.stat[,1],
-                              pred.low=chlB_area.jack.stat[,1]-1.96*chlB_area.jack.stat[,2],
-                              pred.high=chlB_area.jack.stat[,1]+1.96*chlB_area.jack.stat[,2],
+                              pred.low=chlB_area.jack.stat[,2],
+                              pred.high=chlB_area.jack.stat[,3],
                               Measured=meta(ref.test)$chlB_area,
                               ncomp=ncomp_chlB_area_CVmodel,
                               Species=meta(ref.test)$species,
                               Project=meta(ref.test)$project,
+                              functional.group=meta(ref.test)$functional.group,
                               ID=meta(ref.test)$sample_id)
 
 chlB_area.val.plot<-ggplot(chlB_area.jack.df,
-                           aes(y=Measured*1000,x=pred.mean*1000,color=Project))+
+                           aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,0.75),ylim=c(0,0.75))+
+  coord_cartesian(xlim=c(0,0.075),ylim=c(0,0.075))+
   theme(text = element_text(size=25),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured Chl b (mg cm"^-2*")"),x=expression("Predicted Chl b (mg cm"^-2*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 car_area.jack.pred<-apply.coefs(car_area.jack.coefs,as.matrix(ref.test))
-car_area.jack.stat<-t(apply(car_area.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+car_area.jack.stat<-t(apply(car_area.jack.pred,1,
+                            function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 car_area.jack.df<-data.frame(pred.mean=car_area.jack.stat[,1],
-                             pred.low=car_area.jack.stat[,1]-1.96*car_area.jack.stat[,2],
-                             pred.high=car_area.jack.stat[,1]+1.96*car_area.jack.stat[,2],
+                             pred.low=car_area.jack.stat[,2],
+                             pred.high=car_area.jack.stat[,3],
                              Measured=meta(ref.test)$car_area,
                              ncomp=ncomp_car_area_CVmodel,
                              Species=meta(ref.test)$species,
                              Project=meta(ref.test)$project,
+                             functional.group=meta(ref.test)$functional.group,
                              ID=meta(ref.test)$sample_id)
 
 car_area.val.plot<-ggplot(car_area.jack.df,
-                          aes(y=Measured*1000,x=pred.mean*1000,color=Project))+
+                          aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,0.5),ylim=c(0,0.5))+
+  coord_cartesian(xlim=c(0,0.05),ylim=c(0,0.05))+
   theme(text = element_text(size=25),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured carotenoids (mg cm"^-2*")"),
        x=expression("Predicted carotenoids (mg cm"^-2*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 Carea.jack.pred<-apply.coefs(Carea.jack.coefs,as.matrix(ref.test))
-Carea.jack.stat<-t(apply(Carea.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+Carea.jack.stat<-t(apply(Carea.jack.pred,1,
+                         function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 Carea.jack.df<-data.frame(pred.mean=Carea.jack.stat[,1],
-                          pred.low=Carea.jack.stat[,1]-1.96*Carea.jack.stat[,2],
-                          pred.high=Carea.jack.stat[,1]+1.96*Carea.jack.stat[,2],
+                          pred.low=Carea.jack.stat[,2],
+                          pred.high=Carea.jack.stat[,3],
                           Measured=meta(ref.test)$Carea,
                           ncomp=ncomp_Carea_CVmodel,
                           Species=meta(ref.test)$species,
                           Project=meta(ref.test)$project,
+                          functional.group=meta(ref.test)$functional.group,
                           ID=meta(ref.test)$sample_id)
 
 Carea.val.plot<-ggplot(Carea.jack.df,
-                       aes(y=Measured*1000,x=pred.mean*1000,color=Project))+
+                       aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
@@ -900,21 +997,24 @@ Carea.val.plot<-ggplot(Carea.jack.df,
   theme(text = element_text(size=25))+
   labs(y=expression("Measured C (mg cm"^-2*")"),
        x=expression("Predicted C (mg cm"^-2*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 Narea.jack.pred<-apply.coefs(Narea.jack.coefs,as.matrix(ref.test))
-Narea.jack.stat<-t(apply(Narea.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+Narea.jack.stat<-t(apply(Narea.jack.pred,1,
+                         function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 Narea.jack.df<-data.frame(pred.mean=Narea.jack.stat[,1],
-                          pred.low=Narea.jack.stat[,1]-1.96*Narea.jack.stat[,2],
-                          pred.high=Narea.jack.stat[,1]+1.96*Narea.jack.stat[,2],
+                          pred.low=Narea.jack.stat[,2],
+                          pred.high=Narea.jack.stat[,3],
                           Measured=meta(ref.test)$Narea,
                           ncomp=ncomp_Narea_CVmodel,
                           Species=meta(ref.test)$species,
                           Project=meta(ref.test)$project,
+                          functional.group=meta(ref.test)$functional.group,
                           ID=meta(ref.test)$sample_id)
 
 Narea.val.plot<-ggplot(Narea.jack.df,
-                       aes(y=Measured*1000,x=pred.mean*1000,color=Project))+
+                       aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
@@ -924,243 +1024,278 @@ Narea.val.plot<-ggplot(Narea.jack.df,
   theme(text = element_text(size=25))+
   labs(y=expression("Measured N (mg cm"^-2*")"),
        x=expression("Predicted N (mg cm"^-2*")"))+
-  guides(color=F)
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 Al_area.jack.pred<-apply.coefs(Al_area.jack.coefs,as.matrix(ref.test))
-Al_area.jack.stat<-t(apply(Al_area.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+Al_area.jack.stat<-t(apply(Al_area.jack.pred,1,
+                           function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 Al_area.jack.df<-data.frame(pred.mean=Al_area.jack.stat[,1],
-                            pred.low=Al_area.jack.stat[,1]-1.96*Al_area.jack.stat[,2],
-                            pred.high=Al_area.jack.stat[,1]+1.96*Al_area.jack.stat[,2],
+                            pred.low=Al_area.jack.stat[,2],
+                            pred.high=Al_area.jack.stat[,3],
                             Measured=meta(ref.test)$Al_area,
                             ncomp=ncomp_Al_area_CVmodel,
                             Species=meta(ref.test)$species,
                             Project=meta(ref.test)$project,
+                            functional.group=meta(ref.test)$functional.group,
                             ID=meta(ref.test)$sample_id)
 
 Al_area.val.plot<-ggplot(Al_area.jack.df,
-                         aes(y=Measured*1000,x=pred.mean*1000,color=Project))+
+                         aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-0.005,0.045),ylim=c(-0.005,0.045))+
+  coord_cartesian(xlim=c(-0.1,1.8),ylim=c(-0.1,1.8))+
   theme(text = element_text(size=25))+
-  labs(y=expression("Measured Al (mg cm"^-2*")"),x=expression("Predicted Al (mg cm"^-2*")"))+
-  guides(color=F)
+  labs(y=expression(paste("Measured Al (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted Al (",mu,"g cm"^-2*")")))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 Ca_area.jack.pred<-apply.coefs(Ca_area.jack.coefs,as.matrix(ref.test))
-Ca_area.jack.stat<-t(apply(Ca_area.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+Ca_area.jack.stat<-t(apply(Ca_area.jack.pred,1,
+                           function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 Ca_area.jack.df<-data.frame(pred.mean=Ca_area.jack.stat[,1],
-                            pred.low=Ca_area.jack.stat[,1]-1.96*Ca_area.jack.stat[,2],
-                            pred.high=Ca_area.jack.stat[,1]+1.96*Ca_area.jack.stat[,2],
+                            pred.low=Ca_area.jack.stat[,2],
+                            pred.high=Ca_area.jack.stat[,3],
                             Measured=meta(ref.test)$Ca_area,
                             ncomp=ncomp_Ca_area_CVmodel,
                             Species=meta(ref.test)$species,
                             Project=meta(ref.test)$project,
+                            functional.group=meta(ref.test)$functional.group,
                             ID=meta(ref.test)$sample_id)
 
 Ca_area.val.plot<-ggplot(Ca_area.jack.df,
-                         aes(y=Measured*1000,x=pred.mean*1000,color=Project))+
+                         aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-0.75,4),ylim=c(-0.75,4))+
+  coord_cartesian(xlim=c(-50,300),ylim=c(-50,300))+
   theme(text = element_text(size=25))+
-  labs(y=expression("Measured Ca (mg cm"^-2*")"),x=expression("Predicted Ca (mg cm"^-2*")"))+
-  guides(color=F)
+  labs(y=expression(paste("Measured Ca (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted Ca (",mu,"g cm"^-2*")")))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 Cu_area.jack.pred<-apply.coefs(Cu_area.jack.coefs,as.matrix(ref.test))
-Cu_area.jack.stat<-t(apply(Cu_area.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+Cu_area.jack.stat<-t(apply(Cu_area.jack.pred,1,
+                           function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 Cu_area.jack.df<-data.frame(pred.mean=Cu_area.jack.stat[,1],
-                            pred.low=Cu_area.jack.stat[,1]-1.96*Cu_area.jack.stat[,2],
-                            pred.high=Cu_area.jack.stat[,1]+1.96*Cu_area.jack.stat[,2],
+                            pred.low=Cu_area.jack.stat[,2],
+                            pred.high=Cu_area.jack.stat[,3],
                             Measured=meta(ref.test)$Cu_area,
                             ncomp=ncomp_Cu_area_CVmodel,
                             Species=meta(ref.test)$species,
                             Project=meta(ref.test)$project,
+                            functional.group=meta(ref.test)$functional.group,
                             ID=meta(ref.test)$sample_id)
 
 Cu_area.val.plot<-ggplot(Cu_area.jack.df,
-                         aes(y=Measured*1000,x=pred.mean*1000,color=Project))+
+                         aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,0.0055),ylim=c(0,0.0055))+
+  coord_cartesian(xlim=c(-0.025,0.25),ylim=c(-0.025,0.25))+
   theme(text = element_text(size=25))+
-  labs(y=expression("Measured Cu (mg cm"^-2*")"),
-       x=expression("Predicted Cu (mg cm"^-2*")"))+
-  guides(color=F)
+  labs(y=expression(paste("Measured Cu (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted Cu (",mu,"g cm"^-2*")")))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 Fe_area.jack.pred<-apply.coefs(Fe_area.jack.coefs,as.matrix(ref.test))
-Fe_area.jack.stat<-t(apply(Fe_area.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+Fe_area.jack.stat<-t(apply(Fe_area.jack.pred,1,
+                           function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 Fe_area.jack.df<-data.frame(pred.mean=Fe_area.jack.stat[,1],
-                            pred.low=Fe_area.jack.stat[,1]-1.96*Fe_area.jack.stat[,2],
-                            pred.high=Fe_area.jack.stat[,1]+1.96*Fe_area.jack.stat[,2],
+                            pred.low=Fe_area.jack.stat[,2],
+                            pred.high=Fe_area.jack.stat[,3],
                             Measured=meta(ref.test)$Fe_area,
                             ncomp=ncomp_Fe_area_CVmodel,
                             Species=meta(ref.test)$species,
                             Project=meta(ref.test)$project,
+                            functional.group=meta(ref.test)$functional.group,
                             ID=meta(ref.test)$sample_id)
 
 Fe_area.val.plot<-ggplot(Fe_area.jack.df,
-                         aes(y=Measured*1000,x=pred.mean*1000,color=Project))+
+                         aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,0.03),ylim=c(0,0.03))+
+  coord_cartesian(xlim=c(0,2),ylim=c(0,2))+
   theme(text = element_text(size=25))+
-  labs(y=expression("Measured Fe (mg cm"^-2*")"),x=expression("Predicted Fe (mg cm"^-2*")"))+
-  guides(color=F)
+  labs(y=expression(paste("Measured Fe (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted Fe (",mu,"g cm"^-2*")")))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 K_area.jack.pred<-apply.coefs(K_area.jack.coefs,as.matrix(ref.test))
-K_area.jack.stat<-t(apply(K_area.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+K_area.jack.stat<-t(apply(K_area.jack.pred,1,
+                          function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 K_area.jack.df<-data.frame(pred.mean=K_area.jack.stat[,1],
-                           pred.low=K_area.jack.stat[,1]-1.96*K_area.jack.stat[,2],
-                           pred.high=K_area.jack.stat[,1]+1.96*K_area.jack.stat[,2],
+                           pred.low=K_area.jack.stat[,2],
+                           pred.high=K_area.jack.stat[,3],
                            Measured=meta(ref.test)$K_area,
                            ncomp=ncomp_K_area_CVmodel,
                            Species=meta(ref.test)$species,
                            Project=meta(ref.test)$project,
+                           functional.group=meta(ref.test)$functional.group,
                            ID=meta(ref.test)$sample_id)
 
 K_area.val.plot<-ggplot(K_area.jack.df,
-                        aes(y=Measured*1000,x=pred.mean*1000,color=Project))+
+                        aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,1.75),ylim=c(0,1.75))+
+  coord_cartesian(xlim=c(0,150),ylim=c(0,150))+
   theme(text = element_text(size=25))+
-  labs(y=expression("Measured K (mg cm"^-2*")"),
-       x=expression("Predicted K (mg cm"^-2*")"))+
-  guides(color=F)
+  labs(y=expression(paste("Measured K (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted K (",mu,"g cm"^-2*")")))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 Mg_area.jack.pred<-apply.coefs(Mg_area.jack.coefs,as.matrix(ref.test))
-Mg_area.jack.stat<-t(apply(Mg_area.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+Mg_area.jack.stat<-t(apply(Mg_area.jack.pred,1,
+                           function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 Mg_area.jack.df<-data.frame(pred.mean=Mg_area.jack.stat[,1],
-                            pred.low=Mg_area.jack.stat[,1]-1.96*Mg_area.jack.stat[,2],
-                            pred.high=Mg_area.jack.stat[,1]+1.96*Mg_area.jack.stat[,2],
+                            pred.low=Mg_area.jack.stat[,2],
+                            pred.high=Mg_area.jack.stat[,3],
                             Measured=meta(ref.test)$Mg_area,
                             ncomp=ncomp_Mg_area_CVmodel,
                             Species=meta(ref.test)$species,
                             Project=meta(ref.test)$project,
+                            functional.group=meta(ref.test)$functional.group,
                             ID=meta(ref.test)$sample_id)
 
 Mg_area.val.plot<-ggplot(Mg_area.jack.df,
-                         aes(y=Measured*1000,x=pred.mean*1000,color=Project))+
+                         aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,1),ylim=c(0,1))+
+  coord_cartesian(xlim=c(0,60),ylim=c(0,60))+
   theme(text = element_text(size=25))+
-  labs(y=expression("Measured Mg (mg cm"^-2*")"),
-       x=expression("Predicted Mg (mg cm"^-2*")"))+
-  guides(color=F)
+  labs(y=expression(paste("Measured Mg (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted Mg (",mu,"g cm"^-2*")")))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 Mn_area.jack.pred<-apply.coefs(Mn_area.jack.coefs,as.matrix(ref.test))
-Mn_area.jack.stat<-t(apply(Mn_area.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+Mn_area.jack.stat<-t(apply(Mn_area.jack.pred,1,
+                           function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 Mn_area.jack.df<-data.frame(pred.mean=Mn_area.jack.stat[,1],
-                            pred.low=Mn_area.jack.stat[,1]-1.96*Mn_area.jack.stat[,2],
-                            pred.high=Mn_area.jack.stat[,1]+1.96*Mn_area.jack.stat[,2],
+                            pred.low=Mn_area.jack.stat[,2],
+                            pred.high=Mn_area.jack.stat[,3],
                             Measured=meta(ref.test)$Mn_area,
                             ncomp=ncomp_Mn_area_CVmodel,
                             Species=meta(ref.test)$species,
                             Project=meta(ref.test)$project,
+                            functional.group=meta(ref.test)$functional.group,
                             ID=meta(ref.test)$sample_id)
 
 Mn_area.val.plot<-ggplot(Mn_area.jack.df,
-                         aes(y=Measured*1000,x=pred.mean*1000,color=Project))+
+                         aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-0.02,0.18),ylim=c(-0.02,0.18))+
+  coord_cartesian(xlim=c(-5,12),ylim=c(-5,12))+
   theme(text = element_text(size=25))+
-  labs(y=expression("Measured Mn (mg cm"^-2*")"),
-       x=expression("Predicted Mn (mg cm"^-2*")"))+
-  guides(color=F)
+  labs(y=expression(paste("Measured Mn (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted Mn (",mu,"g cm"^-2*")")))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 Na_area.jack.pred<-apply.coefs(Na_area.jack.coefs,as.matrix(ref.test))
-Na_area.jack.stat<-t(apply(Na_area.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+Na_area.jack.stat<-t(apply(Na_area.jack.pred,1,
+                           function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 Na_area.jack.df<-data.frame(pred.mean=Na_area.jack.stat[,1],
-                            pred.low=Na_area.jack.stat[,1]-1.96*Na_area.jack.stat[,2],
-                            pred.high=Na_area.jack.stat[,1]+1.96*Na_area.jack.stat[,2],
+                            pred.low=Na_area.jack.stat[,2],
+                            pred.high=Na_area.jack.stat[,3],
                             Measured=meta(ref.test)$Na_area,
                             ncomp=ncomp_Na_area_CVmodel,
                             Species=meta(ref.test)$species,
                             Project=meta(ref.test)$project,
+                            functional.group=meta(ref.test)$functional.group,
                             ID=meta(ref.test)$sample_id)
 
 Na_area.val.plot<-ggplot(Na_area.jack.df,
-                         aes(y=Measured*1000,x=pred.mean*1000,color=Project))+
+                         aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-0.1,0.6),ylim=c(-0.1,0.6))+
+  coord_cartesian(xlim=c(-10,60),ylim=c(-10,60))+
   theme(text = element_text(size=25))+
-  labs(y=expression("Measured Na (mg cm"^-2*")"),
-       x=expression("Predicted Na (mg cm"^-2*")"))+
-  guides(color=F)
+  labs(y=expression(paste("Measured Na (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted Na (",mu,"g cm"^-2*")")))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 P_area.jack.pred<-apply.coefs(P_area.jack.coefs,as.matrix(ref.test))
-P_area.jack.stat<-t(apply(P_area.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+P_area.jack.stat<-t(apply(P_area.jack.pred,1,
+                          function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 P_area.jack.df<-data.frame(pred.mean=P_area.jack.stat[,1],
-                           pred.low=P_area.jack.stat[,1]-1.96*P_area.jack.stat[,2],
-                           pred.high=P_area.jack.stat[,1]+1.96*P_area.jack.stat[,2],
+                           pred.low=P_area.jack.stat[,2],
+                           pred.high=P_area.jack.stat[,3],
                            Measured=meta(ref.test)$P_area,
                            ncomp=ncomp_P_area_CVmodel,
                            Species=meta(ref.test)$species,
                            Project=meta(ref.test)$project,
+                           functional.group=meta(ref.test)$functional.group,
                            ID=meta(ref.test)$sample_id)
 
 P_area.val.plot<-ggplot(P_area.jack.df,
-                        aes(y=Measured*1000,x=pred.mean*1000,color=Project))+
+                        aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,0.45),ylim=c(0,0.45))+
+  coord_cartesian(xlim=c(0,45),ylim=c(0,45))+
   theme(text = element_text(size=25))+
-  labs(y=expression("Measured P (mg cm"^-2*")"),
-       x=expression("Predicted P (mg cm"^-2*")"))+
-  guides(color=F)
+  labs(y=expression(paste("Measured P (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted P (",mu,"g cm"^-2*")")))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 Zn_area.jack.pred<-apply.coefs(Zn_area.jack.coefs,as.matrix(ref.test))
-Zn_area.jack.stat<-t(apply(Zn_area.jack.pred,1,function(obs) c(mean(obs),sd(obs))))
+Zn_area.jack.stat<-t(apply(Zn_area.jack.pred,1,
+                           function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 Zn_area.jack.df<-data.frame(pred.mean=Zn_area.jack.stat[,1],
-                            pred.low=Zn_area.jack.stat[,1]-1.96*Zn_area.jack.stat[,2],
-                            pred.high=Zn_area.jack.stat[,1]+1.96*Zn_area.jack.stat[,2],
+                            pred.low=Zn_area.jack.stat[,2],
+                            pred.high=Zn_area.jack.stat[,3],
                             Measured=meta(ref.test)$Zn_area,
                             ncomp=ncomp_Zn_area_CVmodel,
                             Species=meta(ref.test)$species,
                             Project=meta(ref.test)$project,
+                            functional.group=meta(ref.test)$functional.group,
                             ID=meta(ref.test)$sample_id)
 
 Zn_area.val.plot<-ggplot(Zn_area.jack.df,
-                         aes(y=Measured*1000,x=pred.mean*1000,color=Project))+
+                         aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(-0.01,0.025),ylim=c(-0.01,0.025))+
+  coord_cartesian(xlim=c(-1,2.5),ylim=c(-1,2.5))+
   theme(text = element_text(size=25))+
-  labs(y=expression("Measured Zn (mg cm"^-2*")"),x=expression("Predicted Zn (mg cm"^-2*")"))+
-  guides(color=F)
+  labs(y=expression(paste("Measured Zn (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted Zn (",mu,"g cm"^-2*")")))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
 
 all.jack.coef.list<-list(solubles_area=solubles_area.jack.coefs,
                          hemicellulose_area=hemicellulose_area.jack.coefs,
@@ -1204,24 +1339,38 @@ all.jack.df.list<-list(solubles_area=solubles_area.jack.df,
                        Zn_area=Zn_area.jack.df)
 saveRDS(all.jack.df.list,"SavedResults/all_jack_df_list_ref_area.rds")
 
-pdf("Images/val_plots_ref_area.pdf",width = 10,height = 9)
-solubles_area.val.plot
-hemicellulose_area.val.plot
-cellulose_area.val.plot
-lignin_area.val.plot
-chlA_area.val.plot
-chlB_area.val.plot
-car_area.val.plot
-Narea.val.plot
-Carea.val.plot
-Al_area.val.plot
-Ca_area.val.plot
-Cu_area.val.plot
-Fe_area.val.plot
-K_area.val.plot
-Mg_area.val.plot
-Mn_area.val.plot
-Na_area.val.plot
-P_area.val.plot
-Zn_area.val.plot
+all.jack.stats.list<-list(sol=solubles_area.jack.stats,
+                          hemi=hemicellulose_area.jack.stats,
+                          cell=cellulose_area.jack.stats,
+                          lign=lignin_area.jack.stats,
+                          chlA=chlA_area.jack.stats,
+                          chlB=chlB_area.jack.stats,
+                          car=car_area.jack.stats,
+                          N=Narea.jack.stats,
+                          C=Carea.jack.stats,
+                          Al=Al_area.jack.stats,
+                          Ca=Ca_area.jack.stats,
+                          Cu=Cu_area.jack.stats,
+                          Fe=Fe_area.jack.stats,
+                          K=K_area.jack.stats,
+                          Mg=Mg_area.jack.stats,
+                          Mn=Mn_area.jack.stats,
+                          Na=Na_area.jack.stats,
+                          P=P_area.jack.stats,
+                          Zn=Zn_area.jack.stats)
+saveRDS(all.jack.stats.list,"SavedResults/all_jack_stats_list_ref_area.rds")
+
+pdf("Images/val_plots_ref_area1.pdf",width = 18,height = 18)
+(cellulose_area.val.plot + solubles_area.val.plot + Carea.val.plot) / 
+  (hemicellulose_area.val.plot + Narea.val.plot + chlB_area.val.plot) / 
+  (chlA_area.val.plot + lignin_area.val.plot + car_area.val.plot) &
+  plot_layout(guides="collect") & theme(legend.position = "bottom")
+dev.off()
+
+pdf("Images/val_plots_ref_area2.pdf",width = 18,height = 22.5)
+(Ca_area.val.plot + K_area.val.plot + Zn_area.val.plot) / 
+  (P_area.val.plot + Mg_area.val.plot + Na_area.val.plot) / 
+  (Fe_area.val.plot + Mn_area.val.plot + Al_area.val.plot) / 
+  (Cu_area.val.plot + guide_area() + guide_area()) &
+  plot_layout(guides="collect")
 dev.off()
