@@ -1,11 +1,11 @@
 setwd("C:/Users/kotha020/Dropbox/PostdocProjects/FreshLeafModels")
 
 library(spectrolab)
-library(caret)
 library(pls)
+library(reshape2)
+library(ggplot2)
 library(RColorBrewer)
 library(patchwork)
-library(reshape2)
 source("Scripts/VIP.R")
 source("Scripts/CABO-trait-models/00 useful_functions.R")
 
@@ -936,7 +936,6 @@ car_area.val.plot<-ggplot(car_area.jack.df,
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured carotenoids (mg cm"^-2*")"),
        x=expression("Predicted carotenoids (mg cm"^-2*")"))+
-  guides(color=F)+
   scale_color_manual(values=colorBlind)
 
 Carea.jack.pred<-apply.coefs(Carea.jack.coefs,as.matrix(ref.test))
@@ -1260,7 +1259,6 @@ Zn_area.val.plot<-ggplot(Zn_area.jack.df,
   theme(text = element_text(size=25))+
   labs(y=expression(paste("Measured Zn (",mu,"g cm"^-2*")")),
        x=expression(paste("Predicted Zn (",mu,"g cm"^-2*")")))+
-  guides(color=F)+
   scale_color_manual(values=colorBlind)
 
 all.jack.coef.list<-list(solubles_area=solubles_area.jack.coefs,
@@ -1327,16 +1325,16 @@ all.jack.stats.list<-list(sol=solubles_area.jack.stats,
 saveRDS(all.jack.stats.list,"SavedResults/all_jack_stats_list_ref_area.rds")
 
 pdf("Images/val_plots_ref_area1.pdf",width = 18,height = 18)
-(cellulose_area.val.plot + solubles_area.val.plot + Carea.val.plot) / 
-  (hemicellulose_area.val.plot + Narea.val.plot + chlB_area.val.plot) / 
-  (chlA_area.val.plot + lignin_area.val.plot + car_area.val.plot) &
+(Narea.val.plot+Carea.val.plot+solubles_area.val.plot)/
+  (hemicellulose_area.val.plot+cellulose_area.val.plot+lignin_area.val.plot)/
+  (chlA_area.val.plot+chlB_area.val.plot+car_area.val.plot) &
   plot_layout(guides="collect") & theme(legend.position = "bottom")
 dev.off()
 
 pdf("Images/val_plots_ref_area2.pdf",width = 18,height = 22.5)
-(Ca_area.val.plot + K_area.val.plot + Zn_area.val.plot) / 
-  (P_area.val.plot + Mg_area.val.plot + Na_area.val.plot) / 
-  (Fe_area.val.plot + Mn_area.val.plot + Al_area.val.plot) / 
-  (Cu_area.val.plot + guide_area() + guide_area()) &
+(Al_area.val.plot + Ca_area.val.plot + Cu_area.val.plot) / 
+  (Fe_area.val.plot + K_area.val.plot + Mg_area.val.plot) / 
+  (Mn_area.val.plot + Na_area.val.plot + P_area.val.plot) / 
+  (Zn_area.val.plot + guide_area() + guide_area()) &
   plot_layout(guides="collect")
 dev.off()

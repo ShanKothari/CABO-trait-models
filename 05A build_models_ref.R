@@ -1299,6 +1299,7 @@ Cu_mass.val.plot<-ggplot(Cu_mass.jack.df,aes(y=Measured,x=pred.mean,color=functi
   labs(y=expression("Measured Cu (mg g"^-1*")"),
        x=expression("Predicted Cu (mg g"^-1*")"),
        color="Functional group")+
+  guides(color=F)+
   scale_color_manual(values=colorBlind)
 
 Fe_mass.jack.pred<-apply.coefs(Fe_mass.jack.coefs,as.matrix(ref.test))
@@ -1598,18 +1599,18 @@ all.jack.stats.list<-list(sol=solubles_mass.jack.stats,
 saveRDS(all.jack.stats.list,"SavedResults/all_jack_stats_list_ref.rds")
 
 pdf("Images/val_plots_ref1.pdf",width = 18,height = 22.5)
-(EWT.val.plot + LDMC.val.plot + LMA.val.plot) / 
-  (cellulose_mass.val.plot + solubles_mass.val.plot + Cmass.val.plot) / 
-  (hemicellulose_mass.val.plot + Nmass.val.plot + chlB_mass.val.plot) / 
-  (chlA_mass.val.plot + lignin_mass.val.plot + car_mass.val.plot) &
+(LMA.val.plot+LDMC.val.plot+EWT.val.plot)/
+  (Nmass.val.plot+Cmass.val.plot+solubles_mass.val.plot)/
+  (hemicellulose_mass.val.plot+cellulose_mass.val.plot+lignin_mass.val.plot)/
+  (chlA_mass.val.plot+chlB_mass.val.plot+car_mass.val.plot) &
   plot_layout(guides="collect") & theme(legend.position = "bottom")
 dev.off()
 
 pdf("Images/val_plots_ref2.pdf",width = 18,height = 22.5)
-(Ca_mass.val.plot + K_mass.val.plot + Zn_mass.val.plot) / 
-  (P_mass.val.plot + Mg_mass.val.plot + Na_mass.val.plot) / 
-  (Fe_mass.val.plot + Mn_mass.val.plot + Al_mass.val.plot) / 
-  (Cu_mass.val.plot + guide_area() + guide_area()) &
+(Al_mass.val.plot + Ca_mass.val.plot + Cu_mass.val.plot) / 
+  (Fe_mass.val.plot + K_mass.val.plot + Mg_mass.val.plot) / 
+  (Mn_mass.val.plot + Na_mass.val.plot + P_mass.val.plot) / 
+  (Zn_mass.val.plot + guide_area() + guide_area()) &
   plot_layout(guides="collect")
 dev.off()
 
