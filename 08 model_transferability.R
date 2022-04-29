@@ -220,6 +220,53 @@ for(i in common.fg){
   
 }
 
+LMA_named_pred_list<-mapply(`[<-`, LMA_pred_list, 'functional.group', value = names(LMA_pred_list), SIMPLIFY = FALSE)
+LMA_pred_df<-do.call(rbind,LMA_named_pred_list)
+LMA.ref.val.plot<-ggplot(LMA_pred_df,
+                         aes(y=measured,x=val_pred,color=functional.group))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(LMA_lower,LMA_upper),ylim=c(LMA_lower,LMA_upper))+
+  theme(text = element_text(size=25))+
+  labs(y=expression("Measured LMA (kg m"^-2*")"),
+       x=expression("Predicted LMA (kg m"^-2*")"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+LDMC_named_pred_list<-mapply(`[<-`, LDMC_pred_list, 'functional.group', value = names(LDMC_pred_list), SIMPLIFY = FALSE)
+LDMC_pred_df<-do.call(rbind,LDMC_named_pred_list)
+
+EWT_named_pred_list<-mapply(`[<-`, EWT_pred_list, 'functional.group', value = names(EWT_pred_list), SIMPLIFY = FALSE)
+EWT_pred_df<-do.call(rbind,EWT_named_pred_list)
+
+Nmass_named_pred_list<-mapply(`[<-`, Nmass_pred_list, 'functional.group', value = names(Nmass_pred_list), SIMPLIFY = FALSE)
+Nmass_pred_df<-do.call(rbind,Nmass_named_pred_list)
+
+Cmass_named_pred_list<-mapply(`[<-`, Cmass_pred_list, 'functional.group', value = names(Cmass_pred_list), SIMPLIFY = FALSE)
+Cmass_pred_df<-do.call(rbind,Cmass_named_pred_list)
+
+solubles_mass_named_pred_list<-mapply(`[<-`, solubles_mass_pred_list, 'functional.group', value = names(solubles_mass_pred_list), SIMPLIFY = FALSE)
+solubles_mass_pred_df<-do.call(rbind,solubles_mass_named_pred_list)
+
+hemicellulose_mass_named_pred_list<-mapply(`[<-`, hemicellulose_mass_pred_list, 'functional.group', value = names(hemicellulose_mass_pred_list), SIMPLIFY = FALSE)
+hemicellulose_mass_pred_df<-do.call(rbind,hemicellulose_mass_named_pred_list)
+
+cellulose_mass_named_pred_list<-mapply(`[<-`, cellulose_mass_pred_list, 'functional.group', value = names(cellulose_mass_pred_list), SIMPLIFY = FALSE)
+cellulose_mass_pred_df<-do.call(rbind,cellulose_mass_named_pred_list)
+
+lignin_mass_named_pred_list<-mapply(`[<-`, lignin_mass_pred_list, 'functional.group', value = names(lignin_mass_pred_list), SIMPLIFY = FALSE)
+lignin_mass_pred_df<-do.call(rbind,lignin_mass_named_pred_list)
+
+chlA_mass_named_pred_list<-mapply(`[<-`, chlA_mass_pred_list, 'functional.group', value = names(chlA_mass_pred_list), SIMPLIFY = FALSE)
+chlA_mass_pred_df<-do.call(rbind,chlA_mass_named_pred_list)
+
+chlB_mass_named_pred_list<-mapply(`[<-`, chlB_mass_pred_list, 'functional.group', value = names(chlB_mass_pred_list), SIMPLIFY = FALSE)
+chlB_mass_pred_df<-do.call(rbind,chlB_mass_named_pred_list)
+
+car_mass_named_pred_list<-mapply(`[<-`, car_mass_pred_list, 'functional.group', value = names(car_mass_pred_list), SIMPLIFY = FALSE)
+car_mass_pred_df<-do.call(rbind,car_mass_named_pred_list)
+
 LMA_sum_df<-data.frame(functional.group=names(LMA_pred_list),
                        RMSD=unlist(lapply(LMA_pred_list,function(x) RMSD(x$measured,x$val_pred))),
                        perRMSD=unlist(lapply(LMA_pred_list,function(x) percentRMSD(x$measured,x$val_pred,0.025,0.975,na.rm=T))),
