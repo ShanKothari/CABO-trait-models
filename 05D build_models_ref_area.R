@@ -880,7 +880,8 @@ chlA_area.val.plot<-ggplot(chlA_area.jack.df,
   coord_cartesian(xlim=c(0,0.25),ylim=c(0,0.25))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
-  labs(y=expression("Measured Chl a (mg cm"^-2*")"),x=expression("Predicted Chl a (mg cm"^-2*")"))+
+  labs(y=expression("Measured Chl"~italic("a")~"(mg cm"^-2*")"),
+       x=expression("Predicted Chl"~italic("a")~"(mg cm"^-2*")"))+
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
@@ -907,7 +908,8 @@ chlB_area.val.plot<-ggplot(chlB_area.jack.df,
   coord_cartesian(xlim=c(0,0.075),ylim=c(0,0.075))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
-  labs(y=expression("Measured Chl b (mg cm"^-2*")"),x=expression("Predicted Chl b (mg cm"^-2*")"))+
+  labs(y=expression("Measured Chl"~italic("b")~"(mg cm"^-2*")"),
+       x=expression("Predicted Chl"~italic("b")~"(mg cm"^-2*")"))+
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
@@ -958,7 +960,7 @@ Carea.val.plot<-ggplot(Carea.jack.df,
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,18),ylim=c(0,18))+
+  coord_cartesian(xlim=c(0,19),ylim=c(0,19))+
   theme(text = element_text(size=20))+
   labs(y=expression("Measured C (mg cm"^-2*")"),
        x=expression("Predicted C (mg cm"^-2*")"))+
@@ -985,7 +987,7 @@ Narea.val.plot<-ggplot(Narea.jack.df,
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,0.35),ylim=c(0,0.35))+
+  coord_cartesian(xlim=c(0,0.42),ylim=c(0,0.42))+
   theme(text = element_text(size=20))+
   labs(y=expression("Measured N (mg cm"^-2*")"),
        x=expression("Predicted N (mg cm"^-2*")"))+
