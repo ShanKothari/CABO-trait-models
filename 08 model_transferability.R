@@ -15,7 +15,8 @@ spec.traits<-readRDS("ProcessedSpectra/all_ref_and_traits.rds")
 ## the Pardo dataset has no trait data (yet)
 spec.traits<-spec.traits[-which(meta(spec.traits)$project=="2019-Pardo-MSc-UdeM")]
 
-colorBlind  <- c("#E69F00","#009E73","#56B4E9","#F0E442",
+## third color (for ferns) removed
+colorBlind  <- c("#E69F00","#009E73","#F0E442",
                  "#0072B2","#CC79A7","#D55E00","#999999")
 
 ##########################################
