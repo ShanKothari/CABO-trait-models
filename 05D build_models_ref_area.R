@@ -937,7 +937,8 @@ car_area.val.plot<-ggplot(car_area.jack.df,
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured carotenoids (mg cm"^-2*")"),
-       x=expression("Predicted carotenoids (mg cm"^-2*")"))+
+       x=expression("Predicted carotenoids (mg cm"^-2*")"),
+       color="Functional group")+
   scale_color_manual(values=colorBlind)
 
 Carea.jack.pred<-apply.coefs(Carea.jack.coefs,as.matrix(ref.test))
@@ -1260,7 +1261,8 @@ Zn_area.val.plot<-ggplot(Zn_area.jack.df,
   coord_cartesian(xlim=c(-1,2.5),ylim=c(-1,2.5))+
   theme(text = element_text(size=20))+
   labs(y=expression(paste("Measured Zn (",mu,"g cm"^-2*")")),
-       x=expression(paste("Predicted Zn (",mu,"g cm"^-2*")")))+
+       x=expression(paste("Predicted Zn (",mu,"g cm"^-2*")")),
+       color="Functional group")+
   scale_color_manual(values=colorBlind)
 
 all.jack.coef.list<-list(solubles_area=solubles_area.jack.coefs,
@@ -1333,10 +1335,9 @@ pdf("Images/val_plots_ref_area1.pdf",width = 16,height = 15)
   plot_layout(guides="collect") & theme(legend.position = "bottom")
 dev.off()
 
-pdf("Images/val_plots_ref_area2.pdf",width = 16,height = 19)
-(Al_area.val.plot + Ca_area.val.plot + Cu_area.val.plot) / 
-  (Fe_area.val.plot + K_area.val.plot + Mg_area.val.plot) / 
-  (Mn_area.val.plot + Na_area.val.plot + P_area.val.plot) / 
-  (Zn_area.val.plot + guide_area() + guide_area()) &
-  plot_layout(guides="collect") & theme(legend.position = "bottom")
+pdf("Images/val_plots_ref_area2.pdf",width = 16,height = 19,onefile=F)
+ggarrange(Al_area.val.plot, Ca_area.val.plot, Cu_area.val.plot,
+          Fe_area.val.plot,K_area.val.plot,Mg_area.val.plot,
+          Mn_area.val.plot, Na_area.val.plot,P_area.val.plot,
+          Zn_area.val.plot,ncol=3, nrow=4, common.legend = TRUE, legend="bottom")
 dev.off()

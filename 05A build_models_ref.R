@@ -1606,12 +1606,11 @@ pdf("Images/val_plots_ref1.pdf",width = 16,height = 19)
   plot_layout(guides="collect") & theme(legend.position = "bottom")
 dev.off()
 
-pdf("Images/val_plots_ref2.pdf",width = 16,height = 19)
-(Al_mass.val.plot + Ca_mass.val.plot + Cu_mass.val.plot) / 
-  (Fe_mass.val.plot + K_mass.val.plot + Mg_mass.val.plot) / 
-  (Mn_mass.val.plot + Na_mass.val.plot + P_mass.val.plot) / 
-  (Zn_mass.val.plot + guide_area() + guide_area()) &
-  plot_layout(guides="collect") & theme(legend.position = "bottom")
+pdf("Images/val_plots_ref2.pdf",width = 16,height = 19,onefile=F)
+ggarrange(Al_mass.val.plot, Ca_mass.val.plot, Cu_mass.val.plot,
+          Fe_mass.val.plot,K_mass.val.plot,Mg_mass.val.plot,
+          Mn_mass.val.plot, Na_mass.val.plot,P_mass.val.plot,
+          Zn_mass.val.plot,ncol=3, nrow=4, common.legend = TRUE, legend="bottom")
 dev.off()
 
 ######################
