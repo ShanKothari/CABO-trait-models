@@ -10,24 +10,11 @@ library(GSAR)
 library(statip)
 library(lme4)
 library(FNN)
+source("Scripts/CABO-trait-models/00 useful_functions.R")
 
 spec.traits<-readRDS("ProcessedSpectra/all_ref_and_traits.rds")
 ## the Pardo dataset has no trait data (yet)
 spec.traits<-spec.traits[-which(meta(spec.traits)$project=="2019-Pardo-MSc-UdeM")]
-
-#########################################
-## define RMSD function
-
-RMSD<-function(measured,predicted){
-  not.na<-which(!is.na(measured) & !is.na(predicted))
-  return(sqrt(sum((measured-predicted)^2,na.rm=T)/(length(not.na)-1)))
-}
-
-percentRMSD<-function(measured,predicted,min,max,na.rm=T){
-  RMSD_data<-RMSD(measured,predicted)
-  range<-unname(quantile(measured,probs=max,na.rm=na.rm)-quantile(measured,probs=min,na.rm=na.rm))
-  return(RMSD_data/range)
-}
 
 #########################################
 ## processing spectral data
