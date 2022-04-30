@@ -6,6 +6,7 @@ library(reshape2)
 library(ggplot2)
 library(RColorBrewer)
 library(patchwork)
+library(ggpubr)
 source("Scripts/VIP.R")
 source("Scripts/CABO-trait-models/00 useful_functions.R")
 
@@ -1340,4 +1341,85 @@ ggarrange(Al_area.val.plot, Ca_area.val.plot, Cu_area.val.plot,
           Fe_area.val.plot,K_area.val.plot,Mg_area.val.plot,
           Mn_area.val.plot, Na_area.val.plot,P_area.val.plot,
           Zn_area.val.plot,ncol=3, nrow=4, common.legend = TRUE, legend="bottom")
+dev.off()
+
+
+######################
+## violin plots
+
+ref_val_summary<-data.frame(variable=names(all.jack.df.list),
+                            perRMSE=unlist(lapply(all.jack.df.list,
+                                                  function(x) percentRMSD(x$Measured,x$pred.mean,0.025,0.975))),
+                            R2=unlist(lapply(all.jack.df.list,
+                                             function(x) summary(lm(Measured~pred.mean,data=x))$r.squared)))
+
+R2.df<-data.frame(sol=unlist(lapply(solubles_area.jack.stats,function(x) x[["R2"]])),
+                  hemi=unlist(lapply(hemicellulose_area.jack.stats,function(x) x[["R2"]])),
+                  cell=unlist(lapply(cellulose_area.jack.stats,function(x) x[["R2"]])),
+                  lign=unlist(lapply(lignin_area.jack.stats,function(x) x[["R2"]])),
+                  C=unlist(lapply(Carea.jack.stats,function(x) x[["R2"]])),
+                  N=unlist(lapply(Narea.jack.stats,function(x) x[["R2"]])),
+                  chlA=unlist(lapply(chlA_area.jack.stats,function(x) x[["R2"]])),
+                  chlB=unlist(lapply(chlB_area.jack.stats,function(x) x[["R2"]])),
+                  car=unlist(lapply(car_area.jack.stats,function(x) x[["R2"]])),
+                  Al=unlist(lapply(Al_area.jack.stats,function(x) x[["R2"]])),
+                  Ca=unlist(lapply(Ca_area.jack.stats,function(x) x[["R2"]])),
+                  Cu=unlist(lapply(Cu_area.jack.stats,function(x) x[["R2"]])),
+                  Fe=unlist(lapply(Fe_area.jack.stats,function(x) x[["R2"]])),
+                  K=unlist(lapply(K_area.jack.stats,function(x) x[["R2"]])),
+                  Mg=unlist(lapply(Mg_area.jack.stats,function(x) x[["R2"]])),
+                  Mn=unlist(lapply(Mn_area.jack.stats,function(x) x[["R2"]])),
+                  Na=unlist(lapply(Na_area.jack.stats,function(x) x[["R2"]])),
+                  P=unlist(lapply(P_area.jack.stats,function(x) x[["R2"]])),
+                  Zn=unlist(lapply(Zn_area.jack.stats,function(x) x[["R2"]])))
+
+R2.long<-melt(R2.df)
+val_R2<-ggplot(R2.long,aes(y=value,x=variable))+
+  geom_violin()+
+  geom_point(data=ref_val_summary,
+             aes(x=variable,y=R2),color="red",size=2)+
+  theme_bw()+
+  theme(text = element_text(size=20),
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank())+
+  labs(y=expression(italic("R"^2)))+
+  ggtitle("Fresh-leaf spectra")+
+  scale_y_continuous(expand = c(0, 0),limits=c(0,1))
+
+perRMSE.df<-data.frame(sol=unlist(lapply(solubles_area.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       hemi=unlist(lapply(hemicellulose_area.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       cell=unlist(lapply(cellulose_area.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       lign=unlist(lapply(lignin_area.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       C=unlist(lapply(Carea.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       N=unlist(lapply(Narea.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       chlA=unlist(lapply(chlA_area.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       chlB=unlist(lapply(chlB_area.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       car=unlist(lapply(car_area.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Al=unlist(lapply(Al_area.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Ca=unlist(lapply(Ca_area.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Cu=unlist(lapply(Cu_area.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Fe=unlist(lapply(Fe_area.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       K=unlist(lapply(K_area.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Mg=unlist(lapply(Mg_area.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Mn=unlist(lapply(Mn_area.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Na=unlist(lapply(Na_area.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       P=unlist(lapply(P_area.jack.stats,function(x) 100*x[["perRMSE"]])),
+                       Zn=unlist(lapply(Zn_area.jack.stats,function(x) 100*x[["perRMSE"]])))
+
+perRMSE.long<-melt(perRMSE.df)
+val_perRMSE<-ggplot(perRMSE.long,aes(y=value,x=variable))+
+  geom_violin()+
+  geom_point(data=ref_val_summary,
+             aes(x=variable,y=perRMSE*100),color="red",size=2)+
+  theme_bw()+
+  theme(text = element_text(size=20),
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(angle = 90,hjust=1,vjust=0.5))+
+  labs(y="%RMSE")+
+  scale_y_continuous(expand = c(0, 0),
+                     limits = c(0,max(perRMSE.long$value)*1.1))
+
+pdf("Images/violin_plots_ref_area.pdf",width=8,height=6,onefile=F)
+egg::ggarrange(plots = list(val_R2,val_perRMSE),
+               nrow=2,ncol=1)
 dev.off()
