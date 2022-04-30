@@ -594,15 +594,6 @@ ggplot(data=summary_df,aes(x=hellinger,y=RMSD/tr95*100,
                                    "Chl "~italic("b"),"carotenoids"))
 dev.off()
 
-ggplot(Nmass_pred_list$conifer,aes(x=measured,y=val_pred))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,3),ylim=c(0,3))+
-  theme_bw()+
-  theme(text=element_text(size=20))+
-  labs(y=expression("Measured N"[mass]*" (%)"),
-       x=expression("Predicted N"[mass]*" (%)"))
-
 ## bringing in randomized validation data
 val_models<-readRDS("SavedResults/all_jack_df_list_ref.rds")
 summary_df$R2_val<-NA
@@ -726,7 +717,7 @@ R2_Asner<-data.frame(trait=c("LMA","LDMC","EWT","N","C","solubles",
                              "Chl a","Chl b","carotenoids"),
                      R2=c(0.86,NA,0.88,0.77,0.71,0.63,0.60,0.77,
                           0.62,0.8,0.79,0.76))
-summary_df$R2_Asner<-R2_Asner$R2[match(summary_df$trait,R2_asner$trait)]
+summary_df$R2_Asner<-R2_Asner$R2[match(summary_df$trait,R2_Asner$trait)]
 
 pdf("Images/R2_summary.pdf",height = 6,width=8,onefile=F)
 ggplot(data=summary_df,aes(x=trait,y=R2))+
@@ -746,19 +737,3 @@ ggplot(data=summary_df,aes(x=trait,y=R2))+
   coord_cartesian(ylim=c(0,1))+
   labs(x="Trait",y=expression(italic("R"^2)))
 dev.off()
-
-RMSD_df<-data.frame(functional.group=LMA_sum_df$functional.group,
-                    LMA=LMA_sum_df$RMSD,
-                    LDMC=LDMC_sum_df$RMSD,
-                    Nmass=Nmass_sum_df$RMSD,
-                    lignin_mass=lignin_mass_sum_df$RMSD,
-                    chlA_mass=chlA_mass_sum_df$RMSD,
-                    EWT=EWT_sum_df$RMSD)
-
-R2_df<-data.frame(functional.group=LMA_sum_df$functional.group,
-                    LMA=LMA_sum_df$R2,
-                    LDMC=LDMC_sum_df$R2,
-                    Nmass=Nmass_sum_df$R2,
-                    lignin_mass=lignin_mass_sum_df$R2,
-                    chlA_mass=chlA_mass_sum_df$R2,
-                    EWT=EWT_sum_df$R2)
