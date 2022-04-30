@@ -6,6 +6,7 @@ library(reshape2)
 library(ggplot2)
 library(RColorBrewer)
 library(patchwork)
+library(ggpubr)
 source("Scripts/VIP.R")
 source("Scripts/CABO-trait-models/00 useful_functions.R")
 
@@ -1297,8 +1298,7 @@ Cu_mass.val.plot<-ggplot(Cu_mass.jack.df,aes(y=Measured,x=pred.mean,color=functi
                   ylim=c(Cu_lower,Cu_upper))+
   theme(text = element_text(size=20))+
   labs(y=expression("Measured Cu (mg g"^-1*")"),
-       x=expression("Predicted Cu (mg g"^-1*")"),
-       color="Functional group")+
+       x=expression("Predicted Cu (mg g"^-1*")"))+
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
@@ -1522,8 +1522,8 @@ Zn_mass.val.plot<-ggplot(Zn_mass.jack.df,aes(y=Measured,x=pred.mean,color=functi
                   ylim=c(Zn_lower,Zn_upper))+
   theme(text = element_text(size=20))+
   labs(y=expression("Measured Zn (mg g"^-1*")"),
-       x=expression("Predicted Zn (mg g"^-1*")"))+
-  guides(color=F)+
+       x=expression("Predicted Zn (mg g"^-1*")"),
+       color="Functional group")+
   scale_color_manual(values=colorBlind)
 
 all.jack.coef.list<-list(sol=solubles_mass.jack.coefs,
