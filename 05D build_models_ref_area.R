@@ -1383,7 +1383,7 @@ val_R2<-ggplot(R2.long,aes(y=value,x=variable))+
         axis.title.x = element_blank(),
         axis.text.x = element_blank())+
   labs(y=expression(italic("R"^2)))+
-  ggtitle("Fresh-leaf spectra")+
+  ggtitle("Reflectance spectra")+
   scale_y_continuous(expand = c(0, 0),limits=c(0,1))
 
 perRMSE.df<-data.frame(sol=unlist(lapply(solubles_area.jack.stats,function(x) 100*x[["perRMSE"]])),
