@@ -872,17 +872,17 @@ chlA_area.jack.df<-data.frame(pred.mean=chlA_area.jack.stat[,1],
                               ID=meta(ref.test)$sample_id)
 
 chlA_area.val.plot<-ggplot(chlA_area.jack.df,
-                           aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
-  geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
+                           aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,0.25),ylim=c(0,0.25))+
+  coord_cartesian(xlim=c(0,250),ylim=c(0,250))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
-  labs(y=expression("Measured Chl"~italic("a")~"(mg cm"^-2*")"),
-       x=expression("Predicted Chl"~italic("a")~"(mg cm"^-2*")"))+
+  labs(y=expression(paste("Measured Chl"~italic("a")~"(",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted Chl"~italic("a")~"(",mu,"g cm"^-2*")")))+
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
@@ -900,17 +900,17 @@ chlB_area.jack.df<-data.frame(pred.mean=chlB_area.jack.stat[,1],
                               ID=meta(ref.test)$sample_id)
 
 chlB_area.val.plot<-ggplot(chlB_area.jack.df,
-                           aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
-  geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
+                           aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,0.075),ylim=c(0,0.075))+
+  coord_cartesian(xlim=c(0,75),ylim=c(0,75))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
-  labs(y=expression("Measured Chl"~italic("b")~"(mg cm"^-2*")"),
-       x=expression("Predicted Chl"~italic("b")~"(mg cm"^-2*")"))+
+  labs(y=expression(paste("Measured Chl"~italic("b")~"(",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted Chl"~italic("b")~"(",mu,"g cm"^-2*")")))+
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
@@ -928,17 +928,17 @@ car_area.jack.df<-data.frame(pred.mean=car_area.jack.stat[,1],
                              ID=meta(ref.test)$sample_id)
 
 car_area.val.plot<-ggplot(car_area.jack.df,
-                          aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
-  geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
+                          aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
                  color="gray",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,0.05),ylim=c(0,0.05))+
+  coord_cartesian(xlim=c(0,50),ylim=c(0,50))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
-  labs(y=expression("Measured carotenoids (mg cm"^-2*")"),
-       x=expression("Predicted carotenoids (mg cm"^-2*")"),
+  labs(y=expression(paste("Measured carotenoids (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted carotenoids (",mu,"g cm"^-2*")")),
        color="Functional group")+
   scale_color_manual(values=colorBlind)
 

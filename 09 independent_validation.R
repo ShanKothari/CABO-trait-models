@@ -5,6 +5,7 @@ library(spectrolab)
 library(asdreader)
 library(signal)
 library(ggpubr)
+library(prospectr)
 source("Scripts/CABO-trait-models/00 useful_functions.R")
 
 ##########################################################
@@ -118,7 +119,7 @@ ANGERS_traits<-ANGERS_traits[-which(paste("X0",ANGERS_traits$Sample_.,sep="") %i
 ANGERS_traits[which(ANGERS_traits== -999,arr.ind=T)]<-NA
 meta(ANGERS)$EWT<-ANGERS_traits$Equivalent.Water.Thickness..g.cm2.*10
 meta(ANGERS)$LMA<-ANGERS_traits$Leaf.mass.per.area..g.cm2.*10
-meta(ANGERS)$LDMC<-with(meta(ANGERS),LMA/(LMA+EWT))*1000
+# meta(ANGERS)$LDMC<-with(meta(ANGERS),LMA/(LMA+EWT))*1000
 meta(ANGERS)$chlA<-ANGERS_traits$Chlorophyll_a..µg.cm2./(100*meta(ANGERS)$LMA)
 meta(ANGERS)$chlB<-ANGERS_traits$Chlorophyll_b..µg.cm2./(100*meta(ANGERS)$LMA)
 meta(ANGERS)$car<-ANGERS_traits$Carotenoid..µg.cm2./(100*meta(ANGERS)$LMA)
@@ -496,9 +497,6 @@ LOPEX<-readRDS("IndependentValidationData/LOPEX/LOPEX_processed.rds")
 ANGERS<-readRDS("IndependentValidationData/ANGERS/ANGERS_processed.rds")
 Dessain.spec<-readRDS("IndependentValidationData/Dessain_processed.rds")
 
-## !!!!!!!!!
-## might want to add Hacker data
-
 LOPEX_ANGERS<-spectrolab::combine(LOPEX,ANGERS)
 all_val_ref<-spectrolab::combine(LOPEX_ANGERS,Dessain.spec)
 
@@ -631,7 +629,7 @@ EWT_lower<-min(EWT_all,na.rm=T)-0.03
 
 chlA_pred<-apply.coefs(all_jack_coefs_list_ref$chlA,val.spec = all_val_ref)
 chlA_stat<-t(apply(chlA_pred,1,
-                       function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+                   function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 chlA_pred_df<-data.frame(Measured=meta(all_val_ref)$chlA,
                              pred.mean=chlA_stat[,1],
                              pred.low=chlA_stat[,2],
@@ -810,6 +808,34 @@ Zn_all<-with(Zn_pred_df,c(pred.low[!is.na(Measured)],
                             Measured))
 Zn_upper<-max(Zn_all,na.rm=T)+0.05
 Zn_lower<-min(Zn_all,na.rm=T)-0.05
+
+all_pred_df<-list(LMA=LMA_pred_df,
+                  LDMC=LDMC_pred_df,
+                  EWT=EWT_pred_df,
+                  N=Nmass_pred_df,
+                  C=Cmass_pred_df,
+                  sol=solubles_pred_df,
+                  hemi=hemicellulose_pred_df,
+                  cell=cellulose_pred_df,
+                  lign=lignin_pred_df,
+                  chlA=chlA_pred_df,
+                  chlB=chlB_pred_df,
+                  car=car_pred_df,
+                  Al=Al_pred_df,
+                  Ca=Ca_pred_df,
+                  Cu=Cu_pred_df,
+                  Fe=Fe_pred_df,
+                  K=K_pred_df,
+                  Mg=Mg_pred_df,
+                  Mn=Mn_pred_df,
+                  Na=Na_pred_df,
+                  P=P_pred_df,
+                  Zn=Zn_pred_df)
+
+summ<-data.frame(#r2=round(unlist(lapply(all_pred_df,function(x) summary(lm(Measured~pred.mean,data=x[x$dataset=="LOPEX",]))$r.squared)),3),
+                 rmse=signif(unlist(lapply(all_pred_df,function(x) RMSD(x$Measured[x$dataset=="LOPEX"],x$pred.mean[x$dataset=="LOPEX"]))),3),
+                 perrmse=signif(unlist(lapply(all_pred_df,function(x) percentRMSD(x$Measured[x$dataset=="LOPEX"],x$pred.mean[x$dataset=="LOPEX"],0.025,0.975)))*100,3))
+write.csv(summ,"SavedResults/plsr_summ_ind.csv")
 
 ######################################
 ## plotting
@@ -1184,3 +1210,253 @@ ggarrange(plotlist=list(Al_ind_val,Ca_ind_val,Cu_ind_val,
           common.legend = T,legend = "bottom",
           nrow=4,ncol=3)
 dev.off()
+
+####################################
+## brightness normalization 
+
+all_jack_coefs_list_ref_bn<-readRDS("SavedResults/all_jack_coefs_list_ref_bn.rds")
+
+all_val_ref_bn<-t(apply(as.matrix(all_val_ref),1,function(x) x/sqrt(sum(x^2))))
+all_val_ref_bn<-spectra(all_val_ref_bn,bands=bands(all_val_ref),names=names(all_val_ref))
+meta(all_val_ref_bn)<-meta(all_val_ref)
+
+LMA_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                           measured=meta(all_val_ref_bn)$LMA,
+                           pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$LMA,as.matrix(all_val_ref_bn))))
+
+LDMC_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                           measured=meta(all_val_ref_bn)$LDMC,
+                           pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$LDMC,as.matrix(all_val_ref_bn))))
+
+EWT_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                           measured=meta(all_val_ref_bn)$EWT,
+                           pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$EWT,as.matrix(all_val_ref_bn))))
+
+Nmass_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                             measured=meta(all_val_ref_bn)$Nmass,
+                             pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$N,as.matrix(all_val_ref_bn))))
+
+Cmass_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                             measured=meta(all_val_ref_bn)$Cmass,
+                             pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$C,as.matrix(all_val_ref_bn))))
+
+solubles_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                                measured=meta(all_val_ref_bn)$solubles,
+                                pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$sol,as.matrix(all_val_ref_bn))))
+
+hemicellulose_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                                     measured=meta(all_val_ref_bn)$hemicellulose,
+                                     pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$hemi,as.matrix(all_val_ref_bn))))
+
+cellulose_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                                 measured=meta(all_val_ref_bn)$cellulose,
+                                 pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$cell,as.matrix(all_val_ref_bn))))
+
+lignin_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                              measured=meta(all_val_ref_bn)$lignin,
+                              pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$lign,as.matrix(all_val_ref_bn))))
+
+chlA_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                            measured=meta(all_val_ref_bn)$chlA,
+                            pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$chlA,as.matrix(all_val_ref_bn))))
+
+chlB_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                            measured=meta(all_val_ref_bn)$chlB,
+                            pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$chlB,as.matrix(all_val_ref_bn))))
+
+car_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                           measured=meta(all_val_ref_bn)$car,
+                           pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$car,as.matrix(all_val_ref_bn))))
+
+Al_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                          measured=meta(all_val_ref_bn)$Al,
+                          pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$Al,as.matrix(all_val_ref_bn))))
+
+Ca_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                          measured=meta(all_val_ref_bn)$Ca,
+                          pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$Ca,as.matrix(all_val_ref_bn))))
+
+Cu_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                          measured=meta(all_val_ref_bn)$Cu,
+                          pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$Cu,as.matrix(all_val_ref_bn))))
+
+Fe_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                          measured=meta(all_val_ref_bn)$Fe,
+                          pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$Fe,as.matrix(all_val_ref_bn))))
+
+K_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                         measured=meta(all_val_ref_bn)$K,
+                         pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$K,as.matrix(all_val_ref_bn))))
+
+Mg_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                          measured=meta(all_val_ref_bn)$Mg,
+                          pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$Mg,as.matrix(all_val_ref_bn))))
+
+Mn_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                          measured=meta(all_val_ref_bn)$Mn,
+                          pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$Mn,as.matrix(all_val_ref_bn))))
+
+Na_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                          measured=meta(all_val_ref_bn)$Na,
+                          pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$Na,as.matrix(all_val_ref_bn))))
+
+P_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                         measured=meta(all_val_ref_bn)$P,
+                         pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$P,as.matrix(all_val_ref_bn))))
+
+Zn_pred_df_bn<-data.frame(dataset=meta(all_val_ref_bn)$dataset,
+                          measured=meta(all_val_ref_bn)$Zn,
+                          pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_bn$Zn,as.matrix(all_val_ref_bn))))
+
+all_pred_df_bn<-list(LMA=LMA_pred_df_bn,
+                  LDMC=LDMC_pred_df_bn,
+                  EWT=EWT_pred_df_bn,
+                  N=Nmass_pred_df_bn,
+                  C=Cmass_pred_df_bn,
+                  sol=solubles_pred_df_bn,
+                  hemi=hemicellulose_pred_df_bn,
+                  cell=cellulose_pred_df_bn,
+                  lign=lignin_pred_df_bn,
+                  chlA=chlA_pred_df_bn,
+                  chlB=chlB_pred_df_bn,
+                  car=car_pred_df_bn,
+                  Al=Al_pred_df_bn,
+                  Ca=Ca_pred_df_bn,
+                  Cu=Cu_pred_df_bn,
+                  Fe=Fe_pred_df_bn,
+                  K=K_pred_df_bn,
+                  Mg=Mg_pred_df_bn,
+                  Mn=Mn_pred_df_bn,
+                  Na=Na_pred_df_bn,
+                  P=P_pred_df_bn,
+                  Zn=Zn_pred_df_bn)
+
+summ<-data.frame(r2=round(unlist(lapply(all_pred_df_bn,function(x) summary(lm(measured~pred.mean,data=x[x$dataset=="Dessain",]))$r.squared)),3),
+  rmse=signif(unlist(lapply(all_pred_df_bn,function(x) RMSD(x$measured[x$dataset=="Dessain"],x$pred.mean[x$dataset=="Dessain"]))),3),
+  perrmse=signif(unlist(lapply(all_pred_df_bn,function(x) percentRMSD(x$measured[x$dataset=="Dessain"],x$pred.mean[x$dataset=="Dessain"],0.025,0.975)))*100,3))
+write.csv(summ,"SavedResults/plsr_summ_ind.csv")
+
+############################################
+## continuum removal
+
+all_jack_coefs_list_ref_crs<-readRDS("SavedResults/all_jack_coefs_list_ref_crs.rds")
+
+all_val_ref_crs<-t(apply(as.matrix(all_val_ref),1,function(x) continuumRemoval(x,wav=400:2400,method="substraction")))
+all_val_ref_crs<-spectra(all_val_ref_crs,bands=bands(all_val_ref),names=names(all_val_ref))
+meta(all_val_ref_crs)<-meta(all_val_ref)
+
+LMA_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                           measured=meta(all_val_ref_crs)$LMA,
+                           pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$LMA,as.matrix(all_val_ref_crs))))
+
+LDMC_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                            measured=meta(all_val_ref_crs)$LDMC,
+                            pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$LDMC,as.matrix(all_val_ref_crs))))
+
+EWT_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                           measured=meta(all_val_ref_crs)$EWT,
+                           pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$EWT,as.matrix(all_val_ref_crs))))
+
+Nmass_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                             measured=meta(all_val_ref_crs)$Nmass,
+                             pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$N,as.matrix(all_val_ref_crs))))
+
+Cmass_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                             measured=meta(all_val_ref_crs)$Cmass,
+                             pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$C,as.matrix(all_val_ref_crs))))
+
+solubles_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                                measured=meta(all_val_ref_crs)$solubles,
+                                pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$sol,as.matrix(all_val_ref_crs))))
+
+hemicellulose_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                                     measured=meta(all_val_ref_crs)$hemicellulose,
+                                     pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$hemi,as.matrix(all_val_ref_crs))))
+
+cellulose_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                                 measured=meta(all_val_ref_crs)$cellulose,
+                                 pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$cell,as.matrix(all_val_ref_crs))))
+
+lignin_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                              measured=meta(all_val_ref_crs)$lignin,
+                              pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$lign,as.matrix(all_val_ref_crs))))
+
+chlA_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                            measured=meta(all_val_ref_crs)$chlA,
+                            pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$chlA,as.matrix(all_val_ref_crs))))
+
+chlB_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                            measured=meta(all_val_ref_crs)$chlB,
+                            pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$chlB,as.matrix(all_val_ref_crs))))
+
+car_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                           measured=meta(all_val_ref_crs)$car,
+                           pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$car,as.matrix(all_val_ref_crs))))
+
+Al_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                          measured=meta(all_val_ref_crs)$Al,
+                          pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$Al,as.matrix(all_val_ref_crs))))
+
+Ca_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                          measured=meta(all_val_ref_crs)$Ca,
+                          pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$Ca,as.matrix(all_val_ref_crs))))
+
+Cu_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                          measured=meta(all_val_ref_crs)$Cu,
+                          pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$Cu,as.matrix(all_val_ref_crs))))
+
+Fe_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                          measured=meta(all_val_ref_crs)$Fe,
+                          pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$Fe,as.matrix(all_val_ref_crs))))
+
+K_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                         measured=meta(all_val_ref_crs)$K,
+                         pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$K,as.matrix(all_val_ref_crs))))
+
+Mg_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                          measured=meta(all_val_ref_crs)$Mg,
+                          pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$Mg,as.matrix(all_val_ref_crs))))
+
+Mn_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                          measured=meta(all_val_ref_crs)$Mn,
+                          pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$Mn,as.matrix(all_val_ref_crs))))
+
+Na_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                          measured=meta(all_val_ref_crs)$Na,
+                          pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$Na,as.matrix(all_val_ref_crs))))
+
+P_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                         measured=meta(all_val_ref_crs)$P,
+                         pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$P,as.matrix(all_val_ref_crs))))
+
+Zn_pred_df_crs<-data.frame(dataset=meta(all_val_ref_crs)$dataset,
+                          measured=meta(all_val_ref_crs)$Zn,
+                          pred.mean=rowMeans(apply.coefs(all_jack_coefs_list_ref_crs$Zn,as.matrix(all_val_ref_crs))))
+
+all_pred_df_crs<-list(LMA=LMA_pred_df_crs,
+                     LDMC=LDMC_pred_df_crs,
+                     EWT=EWT_pred_df_crs,
+                     N=Nmass_pred_df_crs,
+                     C=Cmass_pred_df_crs,
+                     sol=solubles_pred_df_crs,
+                     hemi=hemicellulose_pred_df_crs,
+                     cell=cellulose_pred_df_crs,
+                     lign=lignin_pred_df_crs,
+                     chlA=chlA_pred_df_crs,
+                     chlB=chlB_pred_df_crs,
+                     car=car_pred_df_crs,
+                     Al=Al_pred_df_crs,
+                     Ca=Ca_pred_df_crs,
+                     Cu=Cu_pred_df_crs,
+                     Fe=Fe_pred_df_crs,
+                     K=K_pred_df_crs,
+                     Mg=Mg_pred_df_crs,
+                     Mn=Mn_pred_df_crs,
+                     Na=Na_pred_df_crs,
+                     P=P_pred_df_crs,
+                     Zn=Zn_pred_df_crs)
+
+summ<-data.frame(#r2=round(unlist(lapply(all_pred_df_crs,function(x) summary(lm(measured~pred.mean,data=x[x$dataset=="ANGERS",]))$r.squared)),3),
+                 rmse=signif(unlist(lapply(all_pred_df_crs,function(x) RMSD(x$measured[x$dataset=="ANGERS"],x$pred.mean[x$dataset=="ANGERS"]))),3),
+                 perrmse=signif(unlist(lapply(all_pred_df_crs,function(x) percentRMSD(x$measured[x$dataset=="ANGERS"],x$pred.mean[x$dataset=="ANGERS"],0.025,0.975)))*100,3))
+write.csv(summ,"SavedResults/plsr_summ_ind.csv")

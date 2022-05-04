@@ -3,6 +3,7 @@ setwd("C:/Users/kotha020/Dropbox/PostdocProjects/FreshLeafModels")
 library(ggplot2)
 library(RColorBrewer)
 library(patchwork)
+source("Scripts/CABO-trait-models/00 useful_functions.R")
 
 colorBlind  <- c("#E69F00","#009E73","#56B4E9","#F0E442",
                  "#0072B2","#CC79A7","#D55E00","#999999")
@@ -168,8 +169,8 @@ all.Zn<-c(all.jack.df.list.ref$Zn$Measured,
           all.jack.df.list.ref$Zn$pred.mean[!is.na(all.jack.df.list.ref$Zn$Measured)],
           all.jack.df.list.trans$Zn$pred.mean[!is.na(all.jack.df.list.ref$Zn$Measured)],
           all.jack.df.list.abs$Zn$pred.mean[!is.na(all.jack.df.list.ref$Zn$Measured)])
-Zn_upper<-max(all.Zn,na.rm=T)+0.1
-Zn_lower<-min(all.Zn,na.rm=T)-0.1
+Zn_upper<-max(all.Zn,na.rm=T)+0.05
+Zn_lower<-min(all.Zn,na.rm=T)-0.05
 
 ######################################################
 ## reflectance plots
@@ -1308,3 +1309,19 @@ pdf("Images/val_plots_comp7.pdf",width=16,height=17)
   (Zn_mass.ref.val.plot + Zn_mass.trans.val.plot + Zn_mass.abs.val.plot) &
   plot_layout(guides="collect") & theme(legend.position = "bottom")
 dev.off()
+
+#########################################
+## summary statistics
+
+all.jack.df.list.ref.area<-readRDS("SavedResults/all_jack_df_list_ref_area.rds")
+
+## validation R2, RMSE, and %RMSE
+summ<-data.frame(ncomp=unlist(lapply(all.jack.df.list.ref.area,function(x) x$ncomp[1])),
+                 r2=round(unlist(lapply(all.jack.df.list.ref.area,function(x) summary(lm(Measured~pred.mean,data=x))$r.squared)),3),
+                 rmse=signif(unlist(lapply(all.jack.df.list.ref.area,function(x) RMSD(x$Measured,x$pred.mean))),3),
+                 perrmse=signif(unlist(lapply(all.jack.df.list.ref.area,function(x) percentRMSD(x$Measured,x$pred.mean,0.025,0.975)))*100,3))
+write.csv(summ,"SavedResults/plsr_summ.csv")
+
+RMSD(all.jack.df.list.ref.area$N$Measured,all.jack.df.list.ref$N$pred.mean*all.jack.df.list.ref$LMA$pred.mean/1000)*1000
+percentRMSD(all.jack.df.list.ref.area$N$Measured*1000,all.jack.df.list.ref$N$pred.mean*all.jack.df.list.ref$LMA$pred.mean,0.025,0.975)*100
+summary(lm(all.jack.df.list.ref.area$N$Measured*1000~I(all.jack.df.list.ref$N$pred.mean*all.jack.df.list.ref$LMA$pred.mean)))

@@ -577,6 +577,10 @@ summary_df$tr95[summary_df$trait=="lignin"]<-quantile(meta(spec.traits)$lignin_m
 summary_df$tr95[summary_df$trait=="Chl a"]<-quantile(meta(spec.traits)$chlA_mass,probs=0.975,na.rm=T)-quantile(meta(spec.traits)$chlA_mass,probs=0.025,na.rm=T)
 summary_df$tr95[summary_df$trait=="Chl b"]<-quantile(meta(spec.traits)$chlB_mass,probs=0.975,na.rm=T)-quantile(meta(spec.traits)$chlB_mass,probs=0.025,na.rm=T)
 summary_df$tr95[summary_df$trait=="carotenoids"]<-quantile(meta(spec.traits)$car_mass,probs=0.975,na.rm=T)-quantile(meta(spec.traits)$car_mass,probs=0.025,na.rm=T)
+summary_df$perRMSDfull<-summary_df$RMSD/summary_df$tr95*100
+
+## output summary statistics for tables
+write.csv(summary_df[summary_df$functional.group=="shrub",],file = "SavedResults/plsr_summ_mt.csv")
 
 pdf("Images/HellingerPerRMSE.pdf",height=6,width=8,onefile=T)
 ggplot(data=summary_df,aes(x=hellinger,y=RMSD/tr95*100,
@@ -737,3 +741,5 @@ ggplot(data=summary_df,aes(x=trait,y=R2))+
   coord_cartesian(ylim=c(0,1))+
   labs(x="Trait",y=expression(italic("R"^2)))
 dev.off()
+
+write.csv(summary_df,"SavedResults/transfer_summary.csv")
