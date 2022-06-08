@@ -171,15 +171,15 @@ all.area.sub$SLA[all.area.sub$sample_id %in% c("13404937","44227362",
 ## EWT in units mm
 meta(all.ref)$SLA<-all.area.sub$SLA[match(meta(all.ref)$sample_id,all.area.sub$sample_id)]
 meta(all.ref)$LDMC<-all.area.sub$LDMC[match(meta(all.ref)$sample_id,all.area.sub$sample_id)]
-meta(all.ref)$EWT<-with(meta(all.ref),(1/(LDMC/1000)-1)*(1/SLA*0.1)*10)
+meta(all.ref)$EWT<-with(meta(all.ref),(1/(LDMC/1000)-1)*LMA)
 
 meta(all.trans)$SLA<-all.area.sub$SLA[match(meta(all.trans)$sample_id,all.area.sub$sample_id)]
 meta(all.trans)$LDMC<-all.area.sub$LDMC[match(meta(all.trans)$sample_id,all.area.sub$sample_id)]
-meta(all.trans)$EWT<-with(meta(all.trans),(1/(LDMC/1000)-1)*(1/SLA*0.1)*10)
+meta(all.trans)$EWT<-with(meta(all.trans),(1/(LDMC/1000)-1)*LMA)
 
 meta(all.abs)$SLA<-all.area.sub$SLA[match(meta(all.abs)$sample_id,all.area.sub$sample_id)]
 meta(all.abs)$LDMC<-all.area.sub$LDMC[match(meta(all.abs)$sample_id,all.area.sub$sample_id)]
-meta(all.abs)$EWT<-with(meta(all.abs),(1/(LDMC/1000)-1)*(1/SLA*0.1)*10)
+meta(all.abs)$EWT<-with(meta(all.abs),(1/(LDMC/1000)-1)*LMA)
 
 ##############################################
 ## read C/N

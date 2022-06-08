@@ -35,9 +35,10 @@ bad_spectra_LOPEX<-c("X0176","X0177","X0178","X0179","X0180",
                      "X0321","X0322","X0323","X0324","X0325")
 LOPEX.spec<-LOPEX.spec[-which(rownames(LOPEX.spec) %in% bad_spectra_LOPEX),]
 
-LOPEX.spec<-as.matrix(match_sensors(spectra(LOPEX.spec,
-                                            bands=400:2500,
-                                            names=rownames(LOPEX.spec)),
+LOPEX.spec<-spectra(LOPEX.spec,
+                    bands=400:2500,
+                    names=rownames(LOPEX.spec))
+LOPEX.spec<-as.matrix(match_sensors(LOPEX.spec,
                                     splice_at = 862,
                                     fixed_sensor = 2,
                                     interpolate_wvl = 5))
@@ -297,7 +298,7 @@ Dessain.area.sub<-data.frame(sample_id=Dessain.area$parentEventID,
 meta(Dessain.spec)$SLA<-Dessain.area.sub$SLA[match(meta(Dessain.spec)$sample_id,Dessain.area.sub$sample_id)]
 meta(Dessain.spec)$LMA<-1/meta(Dessain.spec)$SLA
 meta(Dessain.spec)$LDMC<-Dessain.area.sub$LDMC[match(meta(Dessain.spec)$sample_id,Dessain.area.sub$sample_id)]
-meta(Dessain.spec)$EWT<-with(meta(Dessain.spec),(1/(LDMC/1000)-1)*(1/SLA*0.1)*10)
+meta(Dessain.spec)$EWT<-with(meta(Dessain.spec),(1/(LDMC/1000)-1)*LMA)
 
 ## attach C and N
 Dessain.CN<-read.csv("TraitData/CNSamples/2017_Dessain_MSc_CN_data_total.csv")
@@ -840,7 +841,7 @@ write.csv(summ,"SavedResults/plsr_summ_ind.csv")
 ######################################
 ## plotting
 
-colorBlind  <- c("#E69F00","#009E73","#F0E442","#56B4E9",
+colorBlind  <- c("#E69F00","#009E73","#56B4E9","#F0E442",
                  "#0072B2","#CC79A7","#D55E00","#999999")
 
 solubles_ind_val<-ggplot(data=solubles_pred_df,
