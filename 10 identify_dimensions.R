@@ -463,7 +463,7 @@ T1_Cm_plot<-ggplot(prospect.params,aes(y=T1,x=Cm,color=FG))+
   coord_cartesian(xlim=c(0,0.02),ylim=c(0,0.02))+
   theme(text = element_text(size=15),
         legend.position = c(0.8, 0.2))+
-  labs(tag="(c)",y="FT1",x=expression("LMA (g cm"^-2*")"))+
+  labs(tag="(c)",y="Functional Trait 1",x=expression("LMA (g cm"^-2*")"))+
   scale_color_manual(values=colorBlind[c(1,2,4,5,6)])+
   guides(color=F)
 
@@ -474,7 +474,7 @@ T2_Cm_plot<-ggplot(prospect.params,aes(y=T2,x=Cm,color=FG))+
   coord_cartesian(xlim=c(0,0.02),ylim=c(0,0.02))+
   theme(text = element_text(size=15),
         legend.position = c(0.8, 0.2))+
-  labs(tag="(d)",y="FT2",x=expression("LMA (g cm"^-2*")"))+
+  labs(tag="(d)",y="Functional Trait 2",x=expression("LMA (g cm"^-2*")"))+
   scale_color_manual(values=colorBlind[c(1,2,4,5,6)])+
   guides(color=F)
 
@@ -509,7 +509,7 @@ T1_plot<-ggplot(T1_pred,aes(y=measured,x=val_pred,color=FG))+
   coord_cartesian(xlim=c(0,0.02),ylim=c(0,0.02))+
   theme(text = element_text(size=15),
         legend.position = c(0.8, 0.2))+
-  labs(tag="(e)",y="Measured FT1",x="Predicted FT1")+
+  labs(tag="(e)",y="Measured Functional Trait 1",x="Predicted Functional Trait 1")+
   scale_color_manual(values=colorBlind[c(1,2,4,5,6)])+
   guides(color=F)
 
@@ -527,7 +527,7 @@ T2_plot<-ggplot(T2_pred,aes(y=measured,x=val_pred,color=FG))+
   coord_cartesian(xlim=c(0,0.02),ylim=c(0,0.02))+
   theme(text = element_text(size=15),
         legend.position = c(0.8, 0.2))+
-  labs(tag="(f)",y="Measured FT2",x="Predicted FT2")+
+  labs(tag="(f)",y="Measured Functional Trait 2",x="Predicted Functional Trait 2")+
   scale_color_manual(values=colorBlind[c(1,2,4,5,6)])+
   guides(color=F)
 
