@@ -235,7 +235,7 @@ LMA_lower<-min(c(LMA_pred_df$measured,LMA_pred_df$val_pred),na.rm=T)-0.01
 LMA_upper<-max(c(LMA_pred_df$measured,LMA_pred_df$val_pred),na.rm=T)+0.01
 LMA_transfer_plot<-ggplot(LMA_pred_df,
                          aes(y=measured,x=val_pred,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(LMA_lower,LMA_upper),ylim=c(LMA_lower,LMA_upper))+
@@ -251,7 +251,7 @@ LDMC_lower<-min(c(LDMC_pred_df$measured,LDMC_pred_df$val_pred),na.rm=T)-0.01
 LDMC_upper<-max(c(LDMC_pred_df$measured,LDMC_pred_df$val_pred),na.rm=T)+0.01
 LDMC_transfer_plot<-ggplot(LDMC_pred_df,
                           aes(y=measured,x=val_pred,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(LDMC_lower,LDMC_upper),ylim=c(LDMC_lower,LDMC_upper))+
@@ -267,7 +267,7 @@ EWT_lower<-min(c(EWT_pred_df$measured,EWT_pred_df$val_pred),na.rm=T)-0.01
 EWT_upper<-max(c(EWT_pred_df$measured,EWT_pred_df$val_pred),na.rm=T)+0.01
 EWT_transfer_plot<-ggplot(EWT_pred_df,
                           aes(y=measured,x=val_pred,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(EWT_lower,EWT_upper),ylim=c(EWT_lower,EWT_upper))+
@@ -282,7 +282,7 @@ Nmass_lower<-min(c(Nmass_pred_df$measured,Nmass_pred_df$val_pred),na.rm=T)-0.01
 Nmass_upper<-max(c(Nmass_pred_df$measured,Nmass_pred_df$val_pred),na.rm=T)+0.01
 Nmass_transfer_plot<-ggplot(Nmass_pred_df,
                           aes(y=measured,x=val_pred,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Nmass_lower,Nmass_upper),ylim=c(Nmass_lower,Nmass_upper))+
@@ -298,7 +298,7 @@ Cmass_lower<-min(c(Cmass_pred_df$measured,Cmass_pred_df$val_pred),na.rm=T)-0.01
 Cmass_upper<-max(c(Cmass_pred_df$measured,Cmass_pred_df$val_pred),na.rm=T)+0.01
 Cmass_transfer_plot<-ggplot(Cmass_pred_df,
                             aes(y=measured,x=val_pred,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Cmass_lower,Cmass_upper),ylim=c(Cmass_lower,Cmass_upper))+
@@ -314,7 +314,7 @@ solubles_mass_lower<-min(c(solubles_mass_pred_df$measured,solubles_mass_pred_df$
 solubles_mass_upper<-max(c(solubles_mass_pred_df$measured,solubles_mass_pred_df$val_pred),na.rm=T)+0.01
 solubles_mass_transfer_plot<-ggplot(solubles_mass_pred_df,
                             aes(y=measured,x=val_pred,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(solubles_mass_lower,solubles_mass_upper),
@@ -331,7 +331,7 @@ hemicellulose_mass_lower<-min(c(hemicellulose_mass_pred_df$measured,hemicellulos
 hemicellulose_mass_upper<-max(c(hemicellulose_mass_pred_df$measured,hemicellulose_mass_pred_df$val_pred),na.rm=T)+0.01
 hemicellulose_mass_transfer_plot<-ggplot(hemicellulose_mass_pred_df,
                             aes(y=measured,x=val_pred,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(hemicellulose_mass_lower,hemicellulose_mass_upper),
@@ -348,7 +348,7 @@ cellulose_mass_lower<-min(c(cellulose_mass_pred_df$measured,cellulose_mass_pred_
 cellulose_mass_upper<-max(c(cellulose_mass_pred_df$measured,cellulose_mass_pred_df$val_pred),na.rm=T)+0.01
 cellulose_mass_transfer_plot<-ggplot(cellulose_mass_pred_df,
                             aes(y=measured,x=val_pred,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(cellulose_mass_lower,cellulose_mass_upper),
@@ -365,7 +365,7 @@ lignin_mass_lower<-min(c(lignin_mass_pred_df$measured,lignin_mass_pred_df$val_pr
 lignin_mass_upper<-max(c(lignin_mass_pred_df$measured,lignin_mass_pred_df$val_pred),na.rm=T)+0.01
 lignin_mass_transfer_plot<-ggplot(lignin_mass_pred_df,
                             aes(y=measured,x=val_pred,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(lignin_mass_lower,lignin_mass_upper),
@@ -382,7 +382,7 @@ chlA_mass_lower<-min(c(chlA_mass_pred_df$measured,chlA_mass_pred_df$val_pred),na
 chlA_mass_upper<-max(c(chlA_mass_pred_df$measured,chlA_mass_pred_df$val_pred),na.rm=T)+0.01
 chlA_mass_transfer_plot<-ggplot(chlA_mass_pred_df,
                             aes(y=measured,x=val_pred,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(chlA_mass_lower,chlA_mass_upper),ylim=c(chlA_mass_lower,chlA_mass_upper))+
@@ -398,7 +398,7 @@ chlB_mass_lower<-min(c(chlB_mass_pred_df$measured,chlB_mass_pred_df$val_pred),na
 chlB_mass_upper<-max(c(chlB_mass_pred_df$measured,chlB_mass_pred_df$val_pred),na.rm=T)+0.01
 chlB_mass_transfer_plot<-ggplot(chlB_mass_pred_df,
                                 aes(y=measured,x=val_pred,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(chlB_mass_lower,chlB_mass_upper),ylim=c(chlB_mass_lower,chlB_mass_upper))+
@@ -414,7 +414,7 @@ car_mass_lower<-min(c(car_mass_pred_df$measured,car_mass_pred_df$val_pred),na.rm
 car_mass_upper<-max(c(car_mass_pred_df$measured,car_mass_pred_df$val_pred),na.rm=T)+0.01
 car_mass_transfer_plot<-ggplot(car_mass_pred_df,
                                 aes(y=measured,x=val_pred,color=functional.group))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(car_mass_lower,car_mass_upper),ylim=c(car_mass_lower,car_mass_upper))+
@@ -431,6 +431,19 @@ pdf("Images/model_transfer.pdf",width=16,height=19)
   (chlA_mass_transfer_plot+chlB_mass_transfer_plot+car_mass_transfer_plot) &
   plot_layout(guides="collect") & theme(legend.position = "bottom")
 dev.off()
+
+model_transfer_list<-list(LMA=LMA_pred_df,
+                          LDMC=LDMC_pred_df,
+                          EWT=EWT_pred_df,
+                          N=Nmass_pred_df,
+                          C=Cmass_pred_df,
+                          sol=solubles_mass_pred_df,
+                          hemi=hemicellulose_mass_pred_df,
+                          cell=cellulose_mass_pred_df,
+                          lign=lignin_mass_pred_df,
+                          chlA=chlA_mass_pred_df,
+                          chlB=chlB_mass_pred_df,
+                          car=car_mass_pred_df)
 
 ##################################
 ## summary statistic plots
@@ -588,9 +601,9 @@ ggplot(data=summary_df,aes(x=hellinger,y=RMSD/tr95*100,
   geom_point(size=2,aes(shape=functional.group))+
   geom_smooth(method="lm",se=F)+theme_bw()+
   theme(text=element_text(size=20))+
-  labs(x="Hellinger distance",y=expression("%RMSE"[full]))+
+  labs(x="Hellinger distance",y=expression("%RMSE"[full]),tag="B")+
   guides(color=guide_legend("Trait"),
-         shape=guide_legend("Functional group"))+
+         shape="none")+
   scale_color_discrete(labels=expression("LMA","LDMC","EWT","N",
                                    "C","solubles","hemicellulose",
                                    "cellulose","lignin",
@@ -723,23 +736,31 @@ R2_Asner<-data.frame(trait=c("LMA","LDMC","EWT","N","C","solubles",
                           0.62,0.8,0.79,0.76))
 summary_df$R2_Asner<-R2_Asner$R2[match(summary_df$trait,R2_Asner$trait)]
 
+ind_val_long<-melt(summary_df[summary_df$functional.group=="broadleaf",
+                              c("trait","R2_Dessain","R2_LOPEX","R2_ANGERS")],
+                   id.vars="trait")
+ind_val_long$variable<-gsub(pattern="R2_",replacement="",x = ind_val_long$variable)
+
 pdf("Images/R2_summary.pdf",height = 6,width=8,onefile=F)
 ggplot(data=summary_df,aes(x=trait,y=R2))+
-  geom_point(color="blue",size=2)+
-  geom_point(data=summary_df,aes(x=trait,y=R2_Dessain),color="red",size=2)+
-  geom_point(data=summary_df,aes(x=trait,y=R2_LOPEX),color="red",size=2)+
-  geom_point(data=summary_df,aes(x=trait,y=R2_ANGERS),color="red",size=2)+
-  geom_point(data=summary_df,aes(x=trait,y=R2_val),color="black",size=2)+
-#  geom_point(data=summary_df,aes(x=trait,y=R2_Asner),color="black",size=2,shape=1)+
+  geom_point(color=colorBlind[7],aes(shape=functional.group),size=2)+
+  geom_point(data=ind_val_long,aes(x=trait,y=value,color=variable),size=2)+
+  # geom_point(data=summary_df,aes(x=trait,y=R2_Dessain),color="red",shape=1,size=2)+
+  # geom_point(data=summary_df,aes(x=trait,y=R2_LOPEX),color="red",shape=2,size=2)+
+  # geom_point(data=summary_df,aes(x=trait,y=R2_ANGERS),color="red",shape=3,size=2)+
+  geom_point(data=summary_df,aes(x=trait,y=R2_val),color="black",size=3)+
+  # geom_point(data=summary_df,aes(x=trait,y=R2_Asner),color="black",size=2,shape=1)+
   theme_bw()+
   scale_x_discrete(labels=expression("LMA","LDMC","EWT","N",
                             "C","sol","hemi","cell",
                             "lign","Chl "~italic("a"),
                             "Chl "~italic("b"),"car"))+
+  scale_color_manual(values=colorBlind[c(1,2,4)])+
   theme(text=element_text(size=20),
         axis.text.x = element_text(angle = 90,hjust=1,vjust=0))+
   coord_cartesian(ylim=c(0,1))+
-  labs(x="Trait",y=expression(italic("R"^2)))
+  labs(x="Trait",y=expression(italic("R"^2)),
+       shape="Functional group",color="Dataset",tag="A")
 dev.off()
 
 write.csv(summary_df,"SavedResults/transfer_summary.csv")

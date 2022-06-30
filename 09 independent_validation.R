@@ -847,8 +847,8 @@ colorBlind  <- c("#E69F00","#009E73","#56B4E9","#F0E442",
 solubles_ind_val<-ggplot(data=solubles_pred_df,
                          aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -861,8 +861,8 @@ solubles_ind_val<-ggplot(data=solubles_pred_df,
 hemicellulose_ind_val<-ggplot(data=hemicellulose_pred_df,
                               aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -875,8 +875,8 @@ hemicellulose_ind_val<-ggplot(data=hemicellulose_pred_df,
 cellulose_ind_val<-ggplot(data=cellulose_pred_df,
                           aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -889,8 +889,8 @@ cellulose_ind_val<-ggplot(data=cellulose_pred_df,
 lignin_ind_val<-ggplot(data=lignin_pred_df,
                        aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -903,8 +903,8 @@ lignin_ind_val<-ggplot(data=lignin_pred_df,
 Nmass_ind_val<-ggplot(data=Nmass_pred_df,
                       aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -918,8 +918,8 @@ Nmass_ind_val<-ggplot(data=Nmass_pred_df,
 Cmass_ind_val<-ggplot(data=Cmass_pred_df,
                       aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -933,8 +933,8 @@ Cmass_ind_val<-ggplot(data=Cmass_pred_df,
 LMA_ind_val<-ggplot(data=LMA_pred_df,
                     aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -948,8 +948,8 @@ LMA_ind_val<-ggplot(data=LMA_pred_df,
 LDMC_ind_val<-ggplot(data=LDMC_pred_df,
                      aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -963,8 +963,8 @@ LDMC_ind_val<-ggplot(data=LDMC_pred_df,
 EWT_ind_val<-ggplot(data=EWT_pred_df,
                     aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -977,8 +977,8 @@ EWT_ind_val<-ggplot(data=EWT_pred_df,
 chlA_ind_val<-ggplot(data=chlA_pred_df,
                      aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -992,8 +992,8 @@ chlA_ind_val<-ggplot(data=chlA_pred_df,
 chlB_ind_val<-ggplot(data=chlB_pred_df,
                      aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -1007,8 +1007,8 @@ chlB_ind_val<-ggplot(data=chlB_pred_df,
 car_ind_val<-ggplot(data=car_pred_df,
                     aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -1022,8 +1022,8 @@ car_ind_val<-ggplot(data=car_pred_df,
 Al_ind_val<-ggplot(data=Al_pred_df,
                    aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -1037,8 +1037,8 @@ Al_ind_val<-ggplot(data=Al_pred_df,
 Ca_ind_val<-ggplot(data=Ca_pred_df,
                    aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -1052,8 +1052,8 @@ Ca_ind_val<-ggplot(data=Ca_pred_df,
 Cu_ind_val<-ggplot(data=Cu_pred_df,
                    aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -1067,8 +1067,8 @@ Cu_ind_val<-ggplot(data=Cu_pred_df,
 Fe_ind_val<-ggplot(data=Fe_pred_df,
                    aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -1082,8 +1082,8 @@ Fe_ind_val<-ggplot(data=Fe_pred_df,
 K_ind_val<-ggplot(data=K_pred_df,
                   aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -1097,8 +1097,8 @@ K_ind_val<-ggplot(data=K_pred_df,
 Mg_ind_val<-ggplot(data=Mg_pred_df,
                    aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -1112,8 +1112,8 @@ Mg_ind_val<-ggplot(data=Mg_pred_df,
 Mn_ind_val<-ggplot(data=Mn_pred_df,
                    aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -1127,8 +1127,8 @@ Mn_ind_val<-ggplot(data=Mn_pred_df,
 Na_ind_val<-ggplot(data=Na_pred_df,
                    aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -1142,8 +1142,8 @@ Na_ind_val<-ggplot(data=Na_pred_df,
 P_ind_val<-ggplot(data=P_pred_df,
                   aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -1157,8 +1157,8 @@ P_ind_val<-ggplot(data=P_pred_df,
 Zn_ind_val<-ggplot(data=Zn_pred_df,
                    aes(x=pred.mean,y=Measured,color=dataset))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
   theme_bw()+
   theme(text = element_text(size=20))+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+

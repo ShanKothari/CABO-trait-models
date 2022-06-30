@@ -1313,13 +1313,13 @@ dev.off()
 #########################################
 ## summary statistics
 
-all.jack.df.list.ref<-readRDS("SavedResults/all_jack_df_list_ref.rds")
+all.jack.df.list.trans<-readRDS("SavedResults/all_jack_df_list_trans.rds")
 
 ## validation R2, RMSE, and %RMSE
-summ<-data.frame(ncomp=unlist(lapply(all.jack.df.list.ref,function(x) x$ncomp[1])),
-                 r2=round(unlist(lapply(all.jack.df.list.ref,function(x) summary(lm(Measured~pred.mean,data=x))$r.squared)),3),
-                 rmse=signif(unlist(lapply(all.jack.df.list.ref,function(x) RMSD(x$Measured,x$pred.mean))),3),
-                 perrmse=signif(unlist(lapply(all.jack.df.list.ref,function(x) percentRMSD(x$Measured,x$pred.mean,0.025,0.975)))*100,3))
+summ<-data.frame(ncomp=unlist(lapply(all.jack.df.list.trans,function(x) x$ncomp[1])),
+                 r2=round(unlist(lapply(all.jack.df.list.trans,function(x) summary(lm(Measured~pred.mean,data=x))$r.squared)),3),
+                 rmse=signif(unlist(lapply(all.jack.df.list.trans,function(x) RMSD(x$Measured,x$pred.mean))),3),
+                 perrmse=signif(unlist(lapply(all.jack.df.list.trans,function(x) percentRMSD(x$Measured,x$pred.mean,0.025,0.975)))*100,3))
 write.csv(summ,"SavedResults/plsr_summ.csv")
 
 RMSD(all.jack.df.list.ref.area$N$Measured,all.jack.df.list.ref$N$pred.mean*all.jack.df.list.ref$LMA$pred.mean/1000)*1000
