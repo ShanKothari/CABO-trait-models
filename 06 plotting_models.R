@@ -178,8 +178,8 @@ Zn_lower<-min(all.Zn,na.rm=T)-0.05
 solubles_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$sol,
                                    aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(solubles_lower,solubles_upper),ylim=c(solubles_lower,solubles_upper))+
@@ -193,8 +193,8 @@ solubles_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$sol,
 hemicellulose_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$hemi,
                                         aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(hemicellulose_lower,hemicellulose_upper),ylim=c(hemicellulose_lower,hemicellulose_upper))+
@@ -207,8 +207,8 @@ hemicellulose_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$hemi,
 cellulose_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$cell,
                                     aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(cellulose_lower,cellulose_upper),ylim=c(cellulose_lower,cellulose_upper))+
@@ -221,8 +221,8 @@ cellulose_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$cell,
 lignin_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$lign,
                                  aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(lignin_lower,lignin_upper),ylim=c(lignin_lower,lignin_upper))+
@@ -235,8 +235,8 @@ lignin_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$lign,
 chlA_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$chlA,
                                aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(chlA_lower,chlA_upper),ylim=c(chlA_lower,chlA_upper))+
@@ -251,8 +251,8 @@ chlA_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$chlA,
 chlB_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$chlB,
                                aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(chlB_lower,chlB_upper),ylim=c(chlB_lower,chlB_upper))+
@@ -266,8 +266,8 @@ chlB_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$chlB,
 car_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$car,
                               aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(car_lower,car_upper),ylim=c(car_lower,car_upper))+
@@ -282,8 +282,8 @@ car_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$car,
 Cmass.ref.val.plot<-ggplot(all.jack.df.list.ref$C,
                            aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(perC_lower,perC_upper),ylim=c(perC_lower,perC_upper))+
@@ -296,8 +296,8 @@ Cmass.ref.val.plot<-ggplot(all.jack.df.list.ref$C,
 Nmass.ref.val.plot<-ggplot(all.jack.df.list.ref$N,
                            aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(perN_lower,perN_upper),ylim=c(perN_lower,perN_upper))+
@@ -311,8 +311,8 @@ Nmass.ref.val.plot<-ggplot(all.jack.df.list.ref$N,
 EWT.ref.val.plot<-ggplot(all.jack.df.list.ref$EWT,
                          aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(EWT_lower,EWT_upper),ylim=c(EWT_lower,EWT_upper))+
@@ -325,8 +325,8 @@ EWT.ref.val.plot<-ggplot(all.jack.df.list.ref$EWT,
 LMA.ref.val.plot<-ggplot(all.jack.df.list.ref$LMA,
                          aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(LMA_lower,LMA_upper),ylim=c(LMA_lower,LMA_upper))+
@@ -340,8 +340,8 @@ LMA.ref.val.plot<-ggplot(all.jack.df.list.ref$LMA,
 LDMC.ref.val.plot<-ggplot(all.jack.df.list.ref$LDMC,
                           aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(LDMC_lower,LDMC_upper),ylim=c(LDMC_lower,LDMC_upper))+
@@ -354,8 +354,8 @@ LDMC.ref.val.plot<-ggplot(all.jack.df.list.ref$LDMC,
 Al_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$Al,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Al_lower,Al_upper),ylim=c(Al_lower,Al_upper))+
@@ -368,8 +368,8 @@ Al_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$Al,
 Ca_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$Ca,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Ca_lower,Ca_upper),ylim=c(Ca_lower,Ca_upper))+
@@ -382,8 +382,8 @@ Ca_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$Ca,
 Cu_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$Cu,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Cu_lower,Cu_upper),ylim=c(Cu_lower,Cu_upper))+
@@ -397,8 +397,8 @@ Cu_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$Cu,
 Fe_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$Fe,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Fe_lower,Fe_upper),ylim=c(Fe_lower,Fe_upper))+
@@ -412,8 +412,8 @@ Fe_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$Fe,
 K_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$K,
                             aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(K_lower,K_upper),ylim=c(K_lower,K_upper))+
@@ -426,8 +426,8 @@ K_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$K,
 Mg_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$Mg,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Mg_lower,Mg_upper),ylim=c(Mg_lower,Mg_upper))+
@@ -440,8 +440,8 @@ Mg_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$Mg,
 Mn_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$Mn,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Mn_lower,Mn_upper),ylim=c(Mn_lower,Mn_upper))+
@@ -455,8 +455,8 @@ Mn_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$Mn,
 Na_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$Na,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Na_lower,Na_upper),ylim=c(Na_lower,Na_upper))+
@@ -469,8 +469,8 @@ Na_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$Na,
 P_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$P,
                             aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(P_lower,P_upper),ylim=c(P_lower,P_upper))+
@@ -483,8 +483,8 @@ P_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$P,
 Zn_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$Zn,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Zn_lower,Zn_upper),ylim=c(Zn_lower,Zn_upper))+
@@ -500,8 +500,8 @@ Zn_mass.ref.val.plot<-ggplot(all.jack.df.list.ref$Zn,
 solubles_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$sol,
                                    aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(solubles_lower,solubles_upper),ylim=c(solubles_lower,solubles_upper))+
@@ -517,8 +517,8 @@ solubles_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$sol,
 hemicellulose_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$hemi,
                                         aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(hemicellulose_lower,hemicellulose_upper),ylim=c(hemicellulose_lower,hemicellulose_upper))+
@@ -533,8 +533,8 @@ hemicellulose_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$hemi,
 cellulose_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$cell,
                                     aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(cellulose_lower,cellulose_upper),ylim=c(cellulose_lower,cellulose_upper))+
@@ -549,8 +549,8 @@ cellulose_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$cell,
 lignin_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$lign,
                                  aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(lignin_lower,lignin_upper),ylim=c(lignin_lower,lignin_upper))+
@@ -565,8 +565,8 @@ lignin_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$lign,
 chlA_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$chlA,
                                aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(chlA_lower,chlA_upper),ylim=c(chlA_lower,chlA_upper))+
@@ -583,8 +583,8 @@ chlA_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$chlA,
 chlB_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$chlB,
                                aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(chlB_lower,chlB_upper),ylim=c(chlB_lower,chlB_upper))+
@@ -600,8 +600,8 @@ chlB_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$chlB,
 car_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$car,
                               aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(car_lower,car_upper),ylim=c(car_lower,car_upper))+
@@ -618,8 +618,8 @@ car_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$car,
 Cmass.trans.val.plot<-ggplot(all.jack.df.list.trans$C,
                            aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(perC_lower,perC_upper),ylim=c(perC_lower,perC_upper))+
@@ -634,8 +634,8 @@ Cmass.trans.val.plot<-ggplot(all.jack.df.list.trans$C,
 Nmass.trans.val.plot<-ggplot(all.jack.df.list.trans$N,
                            aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(perN_lower,perN_upper),ylim=c(perN_lower,perN_upper))+
@@ -651,8 +651,8 @@ Nmass.trans.val.plot<-ggplot(all.jack.df.list.trans$N,
 EWT.trans.val.plot<-ggplot(all.jack.df.list.trans$EWT,
                          aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(EWT_lower,EWT_upper),ylim=c(EWT_lower,EWT_upper))+
@@ -667,8 +667,8 @@ EWT.trans.val.plot<-ggplot(all.jack.df.list.trans$EWT,
 LMA.trans.val.plot<-ggplot(all.jack.df.list.trans$LMA,
                          aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(LMA_lower,LMA_upper),ylim=c(LMA_lower,LMA_upper))+
@@ -684,8 +684,8 @@ LMA.trans.val.plot<-ggplot(all.jack.df.list.trans$LMA,
 LDMC.trans.val.plot<-ggplot(all.jack.df.list.trans$LDMC,
                           aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(LDMC_lower,LDMC_upper),ylim=c(LDMC_lower,LDMC_upper))+
@@ -700,8 +700,8 @@ LDMC.trans.val.plot<-ggplot(all.jack.df.list.trans$LDMC,
 Al_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$Al,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Al_lower,Al_upper),ylim=c(Al_lower,Al_upper))+
@@ -716,8 +716,8 @@ Al_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$Al,
 Ca_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$Ca,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Ca_lower,Ca_upper),ylim=c(Ca_lower,Ca_upper))+
@@ -732,8 +732,8 @@ Ca_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$Ca,
 Cu_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$Cu,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Cu_lower,Cu_upper),ylim=c(Cu_lower,Cu_upper))+
@@ -749,8 +749,8 @@ Cu_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$Cu,
 Fe_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$Fe,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Fe_lower,Fe_upper),ylim=c(Fe_lower,Fe_upper))+
@@ -766,8 +766,8 @@ Fe_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$Fe,
 K_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$K,
                             aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(K_lower,K_upper),ylim=c(K_lower,K_upper))+
@@ -782,8 +782,8 @@ K_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$K,
 Mg_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$Mg,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Mg_lower,Mg_upper),ylim=c(Mg_lower,Mg_upper))+
@@ -798,8 +798,8 @@ Mg_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$Mg,
 Mn_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$Mn,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Mn_lower,Mn_upper),ylim=c(Mn_lower,Mn_upper))+
@@ -815,8 +815,8 @@ Mn_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$Mn,
 Na_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$Na,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Na_lower,Na_upper),ylim=c(Na_lower,Na_upper))+
@@ -831,8 +831,8 @@ Na_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$Na,
 P_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$P,
                             aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(P_lower,P_upper),ylim=c(P_lower,P_upper))+
@@ -847,8 +847,8 @@ P_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$P,
 Zn_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$Zn,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Zn_lower,Zn_upper),ylim=c(Zn_lower,Zn_upper))+
@@ -882,8 +882,8 @@ Zn_mass.trans.val.plot<-ggplot(all.jack.df.list.trans$Zn,
 solubles_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$sol,
                                    aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(solubles_lower,solubles_upper),ylim=c(solubles_lower,solubles_upper))+
@@ -899,8 +899,8 @@ solubles_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$sol,
 hemicellulose_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$hemi,
                                         aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(hemicellulose_lower,hemicellulose_upper),ylim=c(hemicellulose_lower,hemicellulose_upper))+
@@ -915,8 +915,8 @@ hemicellulose_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$hemi,
 cellulose_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$cell,
                                     aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(cellulose_lower,cellulose_upper),ylim=c(cellulose_lower,cellulose_upper))+
@@ -931,8 +931,8 @@ cellulose_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$cell,
 lignin_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$lign,
                                  aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(lignin_lower,lignin_upper),ylim=c(lignin_lower,lignin_upper))+
@@ -947,8 +947,8 @@ lignin_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$lign,
 chlA_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$chlA,
                                aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(chlA_lower,chlA_upper),ylim=c(chlA_lower,chlA_upper))+
@@ -965,8 +965,8 @@ chlA_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$chlA,
 chlB_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$chlB,
                                aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(chlB_lower,chlB_upper),ylim=c(chlB_lower,chlB_upper))+
@@ -982,8 +982,8 @@ chlB_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$chlB,
 car_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$car,
                               aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(car_lower,car_upper),ylim=c(car_lower,car_upper))+
@@ -999,8 +999,8 @@ car_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$car,
 Cmass.abs.val.plot<-ggplot(all.jack.df.list.abs$C,
                            aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(perC_lower,perC_upper),ylim=c(perC_lower,perC_upper))+
@@ -1015,8 +1015,8 @@ Cmass.abs.val.plot<-ggplot(all.jack.df.list.abs$C,
 Nmass.abs.val.plot<-ggplot(all.jack.df.list.abs$N,
                            aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(perN_lower,perN_upper),ylim=c(perN_lower,perN_upper))+
@@ -1032,8 +1032,8 @@ Nmass.abs.val.plot<-ggplot(all.jack.df.list.abs$N,
 EWT.abs.val.plot<-ggplot(all.jack.df.list.abs$EWT,
                          aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(EWT_lower,EWT_upper),ylim=c(EWT_lower,EWT_upper))+
@@ -1048,8 +1048,8 @@ EWT.abs.val.plot<-ggplot(all.jack.df.list.abs$EWT,
 LMA.abs.val.plot<-ggplot(all.jack.df.list.abs$LMA,
                          aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(LMA_lower,LMA_upper),ylim=c(LMA_lower,LMA_upper))+
@@ -1065,8 +1065,8 @@ LMA.abs.val.plot<-ggplot(all.jack.df.list.abs$LMA,
 LDMC.abs.val.plot<-ggplot(all.jack.df.list.abs$LDMC,
                           aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(LDMC_lower,LDMC_upper),ylim=c(LDMC_lower,LDMC_upper))+
@@ -1081,8 +1081,8 @@ LDMC.abs.val.plot<-ggplot(all.jack.df.list.abs$LDMC,
 Al_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$Al,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Al_lower,Al_upper),ylim=c(Al_lower,Al_upper))+
@@ -1098,8 +1098,8 @@ Al_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$Al,
 Ca_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$Ca,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Ca_lower,Ca_upper),ylim=c(Ca_lower,Ca_upper))+
@@ -1114,8 +1114,8 @@ Ca_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$Ca,
 Cu_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$Cu,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Cu_lower,Cu_upper),ylim=c(Cu_lower,Cu_upper))+
@@ -1130,8 +1130,8 @@ Cu_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$Cu,
 Fe_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$Fe,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Fe_lower,Fe_upper),ylim=c(Fe_lower,Fe_upper))+
@@ -1147,8 +1147,8 @@ Fe_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$Fe,
 K_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$K,
                             aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(K_lower,K_upper),ylim=c(K_lower,K_upper))+
@@ -1163,8 +1163,8 @@ K_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$K,
 Mg_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$Mg,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Mg_lower,Mg_upper),ylim=c(Mg_lower,Mg_upper))+
@@ -1179,8 +1179,8 @@ Mg_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$Mg,
 Mn_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$Mn,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Mn_lower,Mn_upper),ylim=c(Mn_lower,Mn_upper))+
@@ -1196,8 +1196,8 @@ Mn_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$Mn,
 Na_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$Na,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Na_lower,Na_upper),ylim=c(Na_lower,Na_upper))+
@@ -1212,8 +1212,8 @@ Na_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$Na,
 P_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$P,
                             aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(P_lower,P_upper),ylim=c(P_lower,P_upper))+
@@ -1228,8 +1228,8 @@ P_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$P,
 Zn_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$Zn,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
-                 color="gray",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(Zn_lower,Zn_upper),ylim=c(Zn_lower,Zn_upper))+
@@ -1313,13 +1313,13 @@ dev.off()
 #########################################
 ## summary statistics
 
-all.jack.df.list.ref.area<-readRDS("SavedResults/all_jack_df_list_ref_area.rds")
+all.jack.df.list.ref<-readRDS("SavedResults/all_jack_df_list_ref.rds")
 
 ## validation R2, RMSE, and %RMSE
-summ<-data.frame(ncomp=unlist(lapply(all.jack.df.list.ref.area,function(x) x$ncomp[1])),
-                 r2=round(unlist(lapply(all.jack.df.list.ref.area,function(x) summary(lm(Measured~pred.mean,data=x))$r.squared)),3),
-                 rmse=signif(unlist(lapply(all.jack.df.list.ref.area,function(x) RMSD(x$Measured,x$pred.mean))),3),
-                 perrmse=signif(unlist(lapply(all.jack.df.list.ref.area,function(x) percentRMSD(x$Measured,x$pred.mean,0.025,0.975)))*100,3))
+summ<-data.frame(ncomp=unlist(lapply(all.jack.df.list.ref,function(x) x$ncomp[1])),
+                 r2=round(unlist(lapply(all.jack.df.list.ref,function(x) summary(lm(Measured~pred.mean,data=x))$r.squared)),3),
+                 rmse=signif(unlist(lapply(all.jack.df.list.ref,function(x) RMSD(x$Measured,x$pred.mean))),3),
+                 perrmse=signif(unlist(lapply(all.jack.df.list.ref,function(x) percentRMSD(x$Measured,x$pred.mean,0.025,0.975)))*100,3))
 write.csv(summ,"SavedResults/plsr_summ.csv")
 
 RMSD(all.jack.df.list.ref.area$N$Measured,all.jack.df.list.ref$N$pred.mean*all.jack.df.list.ref$LMA$pred.mean/1000)*1000
