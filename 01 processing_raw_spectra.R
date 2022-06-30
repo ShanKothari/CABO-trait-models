@@ -27,7 +27,7 @@ sg_filter <- function(x, p, n) {
   return(x)  
 }
 
-## this function is for linear interpolation over the spectral overlap region
+## this function is for linear interpolation over the sensor overlap region
 interpolate <- function(x) {
   wvls <- x$wavelength
   DNs <- x$calculated_value
@@ -59,7 +59,7 @@ dup_ids_ref<-BeauchampRioux_ref$wvl_id[duplicated(BeauchampRioux_ref$wvl_id)]
 BeauchampRioux_ref_no_dups<-BeauchampRioux_ref[-which(BeauchampRioux_ref$wvl_id %in% dup_ids_ref),]
 inter_wvls <- ceiling(min(BeauchampRioux_ref_no_dups$wavelength)):floor(max(BeauchampRioux_ref_no_dups$wavelength))
 
-## apply linear interpolation step over spectral overlap
+## apply linear interpolation step over sensor overlap
 BeauchampRioux_ref_cleaned <-BeauchampRioux_ref_no_dups%>%
   group_by(sample_id,leaf_number) %>%
   do(interpolate(.))
