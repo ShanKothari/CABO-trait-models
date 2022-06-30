@@ -171,15 +171,12 @@ all.area.sub$SLA[all.area.sub$sample_id %in% c("13404937","44227362",
 ## EWT in units mm
 meta(all.ref)$SLA<-all.area.sub$SLA[match(meta(all.ref)$sample_id,all.area.sub$sample_id)]
 meta(all.ref)$LDMC<-all.area.sub$LDMC[match(meta(all.ref)$sample_id,all.area.sub$sample_id)]
-meta(all.ref)$EWT<-with(meta(all.ref),(1/(LDMC/1000)-1)*LMA)
 
 meta(all.trans)$SLA<-all.area.sub$SLA[match(meta(all.trans)$sample_id,all.area.sub$sample_id)]
 meta(all.trans)$LDMC<-all.area.sub$LDMC[match(meta(all.trans)$sample_id,all.area.sub$sample_id)]
-meta(all.trans)$EWT<-with(meta(all.trans),(1/(LDMC/1000)-1)*LMA)
 
 meta(all.abs)$SLA<-all.area.sub$SLA[match(meta(all.abs)$sample_id,all.area.sub$sample_id)]
 meta(all.abs)$LDMC<-all.area.sub$LDMC[match(meta(all.abs)$sample_id,all.area.sub$sample_id)]
-meta(all.abs)$EWT<-with(meta(all.abs),(1/(LDMC/1000)-1)*LMA)
 
 ##############################################
 ## read C/N
@@ -411,6 +408,11 @@ meta(all.ref)$LMA<-1/meta(all.ref)$SLA
 meta(all.trans)$LMA<-1/meta(all.trans)$SLA
 meta(all.abs)$LMA<-1/meta(all.abs)$SLA
 
+## EWT in mm
+meta(all.ref)$EWT<-with(meta(all.ref),(1/(LDMC/1000)-1)*LMA)
+meta(all.trans)$EWT<-with(meta(all.trans),(1/(LDMC/1000)-1)*LMA)
+meta(all.abs)$EWT<-with(meta(all.abs),(1/(LDMC/1000)-1)*LMA)
+
 ## area basis, in g/cm^2
 meta(all.ref)$Narea<-meta(all.ref)$Nmass*meta(all.ref)$LMA/1000
 Narea_norm<-lm(log(Narea)~log(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
@@ -610,7 +612,7 @@ abs_spec_plot<-ggplot()+
   scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
   labs(tag = "C")
 
-pdf("Images/all_spec.pdf",width=7,height=12)
+pdf("Images/all_spec.pdf",width=7,height=11)
 ref_spec_plot+trans_spec_plot+abs_spec_plot+plot_layout(ncol = 1)
 dev.off()
 
@@ -638,6 +640,17 @@ ref_fg_spec_plot<-ggplot(all.ref.long,aes(x=variable,y=value))+
   scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
   scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
   labs(tag = "A")+
+  scale_color_manual(values=colorBlind[c(1,2,4,5,6)])
+
+ref_fg_spec_plot_tagless<-ggplot(all.ref.long,aes(x=variable,y=value))+
+  stat_summary(fun=median,na.rm=T,geom="line",size=1,aes(color=functional.group))+
+  geom_line(data=CV_df,
+            aes(x=wavelength,y=ref_CV),size=1.5,linetype="longdash")+
+  theme_bw()+theme(text=element_text(size=15))+
+  labs(x="Wavelength (nm)",y="Reflectance (or CV)")+
+  guides(color=guide_legend("Functional group",nrow = 2))+
+  scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
+  scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
   scale_color_manual(values=colorBlind[c(1,2,4,5,6)])
 
 all.trans.df<-data.frame(sample_id=meta(all.trans)$sample_id,
@@ -684,6 +697,11 @@ ref_fg_spec_plot+trans_fg_spec_plot+
   theme(legend.position = "bottom")
 dev.off()
 
+pdf("Images/ref_spec_fg.pdf",width=7,height=5)
+ref_fg_spec_plot_tagless &
+  theme(legend.position = "bottom")
+dev.off()
+
 #####################
 ## PCA of traits
 
@@ -700,11 +718,13 @@ trait.pca.loadings$variables<-gsub("mass","",trait.pca.loadings$variables)
 trait.pca.perc<-trait.pca$sdev^2/sum(trait.pca$sdev^2)*100
 
 trait.pca.plot<-ggplot(trait.pca.val, aes(x = PC1, y = PC2, color = functional.group)) +
-  geom_point(size = 2) +
+  geom_point(size = 2,alpha=0.6) +
   geom_segment(data = trait.pca.loadings, aes(x = 0, y = 0, xend = PC1*10, yend = PC2*10),
                arrow = arrow(length = unit(1/2, "picas")),
                color = "black",size=1) +
-  annotate("text", x = trait.pca.loadings$PC1*12, y = trait.pca.loadings$PC2*12,
+  annotate("text",
+           x = trait.pca.loadings$PC1*12+c(0,0,0,0,0.3,0,0,0,0,-0.4,0.3,0),
+           y = trait.pca.loadings$PC2*12+c(0,0,0,0,-0.4,0,0,0,0,0.3,-0.1,0),
            label = trait.pca.loadings$variables)+
   theme_bw()+theme(text=element_text(size=15))+
   guides(color=guide_legend("Functional group"))+
@@ -725,11 +745,11 @@ traitnorm.pca.loadings$variables<-gsub("norm","",traitnorm.pca.loadings$variable
 traitnorm.pca.perc<-traitnorm.pca$sdev^2/sum(traitnorm.pca$sdev^2)*100
 
 traitnorm.pca.plot<-ggplot(traitnorm.pca.val, aes(x = -PC1*2, y = -PC2*2, color = functional.group)) +
-  geom_point(size = 2) +
+  geom_point(size = 2,alpha=0.6) +
   geom_segment(data = traitnorm.pca.loadings, aes(x = 0, y = 0, xend = -PC1*10, yend = -PC2*10),
                arrow = arrow(length = unit(1/2, "picas")),
                color = "black",size=1) +
-  annotate("text", x = -traitnorm.pca.loadings$PC1*12, y = -traitnorm.pca.loadings$PC2*12,
+  annotate("text", x = -traitnorm.pca.loadings$PC1*13, y = -traitnorm.pca.loadings$PC2*13,
            label = traitnorm.pca.loadings$variables)+
   theme_bw()+theme(text=element_text(size=15))+
   guides(color=guide_legend("Functional group"))+
