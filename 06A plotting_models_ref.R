@@ -3,6 +3,7 @@ setwd("C:/Users/kotha020/Dropbox/PostdocProjects/FreshLeafModels")
 library(ggplot2)
 library(RColorBrewer)
 library(patchwork)
+library(ggpubr)
 source("Scripts/CABO-trait-models/00 useful_functions.R")
 
 colorBlind  <- c("#E69F00","#009E73","#56B4E9","#F0E442",
