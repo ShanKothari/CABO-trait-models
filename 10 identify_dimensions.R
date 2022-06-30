@@ -189,8 +189,9 @@ isomap.12<-ggplot(data=ref.isomap.proc.coords,
   geom_point(size=3)+
   geom_segment(aes(x = 0, y = 0, xend = D1*2, yend = D2*2),
                data = scores.12.df, size =1.5, alpha = 0.5, colour = "black") +
-  geom_text(data = scores.12.df, aes(x = D1*2.2, y = D2*2.2), size=5,
-            label = row.names(scores.12.df), colour = "black", fontface = "bold") +
+  geom_text_repel(data = scores.12.df, aes(x = D1*2.4, y = D2*2.4), size=7,
+            label = row.names(scores.12.df), colour = "black", fontface = "bold",
+            max.overlaps = 15,force = 2,force_pull = 3) +
   theme_bw()+coord_fixed()+
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -204,8 +205,10 @@ isomap.34<-ggplot(data=ref.isomap.proc.coords,
   geom_point(size=3)+
   geom_segment(aes(x = 0, y = 0, xend = D3, yend = D4),
                data = scores.34.df, size =1.5, alpha = 0.5, colour = "black") +
-  geom_text(data = scores.34.df, aes(x = D3*1.1, y = D4*1.1), size=5,
-            label = row.names(scores.34.df), colour = "black", fontface = "bold") +
+  geom_text(data = scores.34.df, aes(x = D3*1.2, y = D4*1.2), size=7,
+            label = row.names(scores.34.df), colour = "black", fontface = "bold",
+            nudge_x = c(0,-0.1,-0.05,0,-0.15,0,0.05,0.05,-0.05),
+            nudge_y = c(0,0,0,-0.05,0,0,0,0,0)) +
   theme_bw()+coord_fixed()+
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -509,7 +512,7 @@ T1_plot<-ggplot(T1_pred,aes(y=measured,x=val_pred,color=FG))+
   coord_cartesian(xlim=c(0,0.02),ylim=c(0,0.02))+
   theme(text = element_text(size=15),
         legend.position = c(0.8, 0.2))+
-  labs(tag="(e)",y="Measured Functional Trait 1",x="Predicted Functional Trait 1")+
+  labs(tag="(e)",y="Functional Trait 1 (measured)",x="Functional Trait 1 (predicted)")+
   scale_color_manual(values=colorBlind[c(1,2,4,5,6)])+
   guides(color=F)
 
@@ -527,7 +530,7 @@ T2_plot<-ggplot(T2_pred,aes(y=measured,x=val_pred,color=FG))+
   coord_cartesian(xlim=c(0,0.02),ylim=c(0,0.02))+
   theme(text = element_text(size=15),
         legend.position = c(0.8, 0.2))+
-  labs(tag="(f)",y="Measured Functional Trait 2",x="Predicted Functional Trait 2")+
+  labs(tag="(f)",y="Functional Trait 2 (measured)",x="Functional Trait 2 (predicted)")+
   scale_color_manual(values=colorBlind[c(1,2,4,5,6)])+
   guides(color=F)
 
