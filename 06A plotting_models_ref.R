@@ -125,7 +125,7 @@ Zn_lower<-min(Zn_all,na.rm=T)-0.03
 ###########################################
 ## plotting mass-based models
 
-solubles_mass.val.plot<-ggplot(all.jack.df.list.ref$solubles_mass,
+solubles_mass.val.plot<-ggplot(all.jack.df.list.ref$sol,
                                aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
@@ -140,7 +140,7 @@ solubles_mass.val.plot<-ggplot(all.jack.df.list.ref$solubles_mass,
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
-hemicellulose_mass.val.plot<-ggplot(all.jack.df.list.ref$hemicellulose_mass,
+hemicellulose_mass.val.plot<-ggplot(all.jack.df.list.ref$hemi,
                                     aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
@@ -156,7 +156,7 @@ hemicellulose_mass.val.plot<-ggplot(all.jack.df.list.ref$hemicellulose_mass,
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
-cellulose_mass.val.plot<-ggplot(all.jack.df.list.ref$cellulose_mass,
+cellulose_mass.val.plot<-ggplot(all.jack.df.list.ref$cell,
                                 aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
@@ -171,7 +171,7 @@ cellulose_mass.val.plot<-ggplot(all.jack.df.list.ref$cellulose_mass,
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
-lignin_mass.val.plot<-ggplot(all.jack.df.list.ref$lignin_mass,
+lignin_mass.val.plot<-ggplot(all.jack.df.list.ref$lign,
                              aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
@@ -186,7 +186,7 @@ lignin_mass.val.plot<-ggplot(all.jack.df.list.ref$lignin_mass,
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
-chlA_mass.val.plot<-ggplot(all.jack.df.list.ref$chlA_mass,
+chlA_mass.val.plot<-ggplot(all.jack.df.list.ref$chlA,
                            aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
@@ -202,7 +202,7 @@ chlA_mass.val.plot<-ggplot(all.jack.df.list.ref$chlA_mass,
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
-chlB_mass.val.plot<-ggplot(all.jack.df.list.ref$chlB_mass,
+chlB_mass.val.plot<-ggplot(all.jack.df.list.ref$chlB,
                            aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
@@ -218,7 +218,7 @@ chlB_mass.val.plot<-ggplot(all.jack.df.list.ref$chlB_mass,
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
-car_mass.val.plot<-ggplot(all.jack.df.list.ref$car_mass,
+car_mass.val.plot<-ggplot(all.jack.df.list.ref$car,
                           aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
@@ -234,7 +234,7 @@ car_mass.val.plot<-ggplot(all.jack.df.list.ref$car_mass,
        color="Functional group")+
   scale_color_manual(values=colorBlind)
 
-Cmass.val.plot<-ggplot(all.jack.df.list.ref$Cmass,
+Cmass.val.plot<-ggplot(all.jack.df.list.ref$C,
                        aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
@@ -249,7 +249,7 @@ Cmass.val.plot<-ggplot(all.jack.df.list.ref$Cmass,
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
-Nmass.val.plot<-ggplot(all.jack.df.list.ref$Nmass,
+Nmass.val.plot<-ggplot(all.jack.df.list.ref$N,
                        aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
@@ -309,7 +309,7 @@ LDMC.val.plot<-ggplot(all.jack.df.list.ref$LDMC,
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
-Al_mass.val.plot<-ggplot(all.jack.df.list.ref$Al_mass,
+Al_mass.val.plot<-ggplot(all.jack.df.list.ref$Al,
                          aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
@@ -324,7 +324,7 @@ Al_mass.val.plot<-ggplot(all.jack.df.list.ref$Al_mass,
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
-Ca_mass.val.plot<-ggplot(all.jack.df.list.ref$Ca_mass,
+Ca_mass.val.plot<-ggplot(all.jack.df.list.ref$Ca,
                          aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
@@ -339,7 +339,7 @@ Ca_mass.val.plot<-ggplot(all.jack.df.list.ref$Ca_mass,
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
-Cu_mass.val.plot<-ggplot(all.jack.df.list.ref$Cu_mass,
+Cu_mass.val.plot<-ggplot(all.jack.df.list.ref$Cu,
                          aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
@@ -354,7 +354,7 @@ Cu_mass.val.plot<-ggplot(all.jack.df.list.ref$Cu_mass,
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
-Fe_mass.val.plot<-ggplot(all.jack.df.list.ref$Fe_mass,
+Fe_mass.val.plot<-ggplot(all.jack.df.list.ref$Fe,
                          aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
@@ -369,7 +369,7 @@ Fe_mass.val.plot<-ggplot(all.jack.df.list.ref$Fe_mass,
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
-K_mass.val.plot<-ggplot(all.jack.df.list.ref$K_mass,
+K_mass.val.plot<-ggplot(all.jack.df.list.ref$K,
                         aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
@@ -384,7 +384,7 @@ K_mass.val.plot<-ggplot(all.jack.df.list.ref$K_mass,
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
-Mg_mass.val.plot<-ggplot(all.jack.df.list.ref$Mg_mass,
+Mg_mass.val.plot<-ggplot(all.jack.df.list.ref$Mg,
                          aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
@@ -399,7 +399,7 @@ Mg_mass.val.plot<-ggplot(all.jack.df.list.ref$Mg_mass,
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
-Mn_mass.val.plot<-ggplot(all.jack.df.list.ref$Mn_mass,
+Mn_mass.val.plot<-ggplot(all.jack.df.list.ref$Mn,
                          aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
@@ -414,7 +414,7 @@ Mn_mass.val.plot<-ggplot(all.jack.df.list.ref$Mn_mass,
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
-Na_mass.val.plot<-ggplot(all.jack.df.list.ref$Na_mass,
+Na_mass.val.plot<-ggplot(all.jack.df.list.ref$Na,
                          aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
@@ -429,7 +429,7 @@ Na_mass.val.plot<-ggplot(all.jack.df.list.ref$Na_mass,
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
-P_mass.val.plot<-ggplot(all.jack.df.list.ref$P_mass,
+P_mass.val.plot<-ggplot(all.jack.df.list.ref$P,
                         aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
@@ -444,7 +444,7 @@ P_mass.val.plot<-ggplot(all.jack.df.list.ref$P_mass,
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
-Zn_mass.val.plot<-ggplot(all.jack.df.list.ref$Zn_mass,
+Zn_mass.val.plot<-ggplot(all.jack.df.list.ref$Zn,
                          aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
                  color="gray",alpha=0.7)+
@@ -476,3 +476,290 @@ dev.off()
 
 #################################################
 ## plotting area-based models
+
+solubles_area.val.plot<-ggplot(all.jack.df.list.ref.area$sol,
+                               aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(-3,25),ylim=c(-3,25))+
+  theme(text = element_text(size=20),
+        legend.position = c(0, 0.25))+
+  labs(y=expression("Measured solubles (mg cm"^-2*")"),
+       x=expression("Measured solubles (mg cm"^-2*")"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+hemicellulose_area.val.plot<-ggplot(all.jack.df.list.ref.area$hemi,
+                                    aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(-1,5.5),ylim=c(-1,5.5))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.25))+
+  labs(y=expression("Measured hemicellulose (mg cm"^-2*")"),
+       x=expression("Measured hemicellulose (mg cm"^-2*")"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+cellulose_area.val.plot<-ggplot(all.jack.df.list.ref.area$cell,
+                                aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(-1,7),ylim=c(-1,7))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.25))+
+  labs(y=expression("Measured cellulose (mg cm"^-2*")"),
+       x=expression("Measured cellulose (mg cm"^-2*")"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+lignin_area.val.plot<-ggplot(all.jack.df.list.ref.area$lign,
+                             aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(-0.5,4.5),ylim=c(-0.5,4.5))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.25))+
+  labs(y=expression("Measured lignin (mg cm"^-2*")"),
+       x=expression("Measured lignin (mg cm"^-2*")"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+chlA_area.val.plot<-ggplot(all.jack.df.list.ref.area$chlA,
+                           aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(0,250),ylim=c(0,250))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.25))+
+  labs(y=expression(paste("Measured Chl"~italic("a")~"(",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted Chl"~italic("a")~"(",mu,"g cm"^-2*")")))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+chlB_area.val.plot<-ggplot(all.jack.df.list.ref.area$chlB,
+                           aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(0,75),ylim=c(0,75))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.25))+
+  labs(y=expression(paste("Measured Chl"~italic("b")~"(",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted Chl"~italic("b")~"(",mu,"g cm"^-2*")")))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+car_area.val.plot<-ggplot(all.jack.df.list.ref.area$car,
+                          aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(0,50),ylim=c(0,50))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.25))+
+  labs(y=expression(paste("Measured carotenoids (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted carotenoids (",mu,"g cm"^-2*")")),
+       color="Functional group")+
+  scale_color_manual(values=colorBlind)
+
+Carea.val.plot<-ggplot(all.jack.df.list.ref.area$C,
+                       aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(0,19),ylim=c(0,19))+
+  theme(text = element_text(size=20))+
+  labs(y=expression("Measured C (mg cm"^-2*")"),
+       x=expression("Predicted C (mg cm"^-2*")"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+Narea.val.plot<-ggplot(all.jack.df.list.ref.area$N,
+                       aes(y=Measured*1000,x=pred.mean*1000,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*1000,xmin=pred.low*1000,xmax=pred.high*1000),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(0,0.42),ylim=c(0,0.42))+
+  theme(text = element_text(size=20))+
+  labs(y=expression("Measured N (mg cm"^-2*")"),
+       x=expression("Predicted N (mg cm"^-2*")"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+Al_area.val.plot<-ggplot(all.jack.df.list.ref.area$Al,
+                         aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(-0.1,1.8),ylim=c(-0.1,1.8))+
+  theme(text = element_text(size=20))+
+  labs(y=expression(paste("Measured Al (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted Al (",mu,"g cm"^-2*")")))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+Ca_area.val.plot<-ggplot(all.jack.df.list.ref.area$Ca,
+                         aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(-50,300),ylim=c(-50,300))+
+  theme(text = element_text(size=20))+
+  labs(y=expression(paste("Measured Ca (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted Ca (",mu,"g cm"^-2*")")))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+Cu_area.val.plot<-ggplot(all.jack.df.list.ref.area$Cu,
+                         aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(-0.025,0.25),ylim=c(-0.025,0.25))+
+  theme(text = element_text(size=20))+
+  labs(y=expression(paste("Measured Cu (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted Cu (",mu,"g cm"^-2*")")))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+Fe_area.val.plot<-ggplot(all.jack.df.list.ref.area$Fe,
+                         aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(0,2),ylim=c(0,2))+
+  theme(text = element_text(size=20))+
+  labs(y=expression(paste("Measured Fe (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted Fe (",mu,"g cm"^-2*")")))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+K_area.val.plot<-ggplot(all.jack.df.list.ref.area$K,
+                        aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(0,150),ylim=c(0,150))+
+  theme(text = element_text(size=20))+
+  labs(y=expression(paste("Measured K (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted K (",mu,"g cm"^-2*")")))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+Mg_area.val.plot<-ggplot(all.jack.df.list.ref.area$Mg,
+                         aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(0,60),ylim=c(0,60))+
+  theme(text = element_text(size=20))+
+  labs(y=expression(paste("Measured Mg (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted Mg (",mu,"g cm"^-2*")")))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+Mn_area.val.plot<-ggplot(all.jack.df.list.ref.area$Mn,
+                         aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(-5,12),ylim=c(-5,12))+
+  theme(text = element_text(size=20))+
+  labs(y=expression(paste("Measured Mn (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted Mn (",mu,"g cm"^-2*")")))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+Na_area.val.plot<-ggplot(all.jack.df.list.ref.area$Na,
+                         aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(-10,60),ylim=c(-10,60))+
+  theme(text = element_text(size=20))+
+  labs(y=expression(paste("Measured Na (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted Na (",mu,"g cm"^-2*")")))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+P_area.val.plot<-ggplot(all.jack.df.list.ref.area$P,
+                        aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(0,45),ylim=c(0,45))+
+  theme(text = element_text(size=20))+
+  labs(y=expression(paste("Measured P (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted P (",mu,"g cm"^-2*")")))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+Zn_area.val.plot<-ggplot(all.jack.df.list.ref.area$Zn,
+                         aes(y=Measured*10^6,x=pred.mean*10^6,color=functional.group))+
+  geom_errorbarh(aes(y=Measured*10^6,xmin=pred.low*10^6,xmax=pred.high*10^6),
+                 color="gray",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(-1,2.5),ylim=c(-1,2.5))+
+  theme(text = element_text(size=20))+
+  labs(y=expression(paste("Measured Zn (",mu,"g cm"^-2*")")),
+       x=expression(paste("Predicted Zn (",mu,"g cm"^-2*")")),
+       color="Functional group")+
+  scale_color_manual(values=colorBlind)
+
+pdf("Images/val_plots_ref_area1.pdf",width = 16,height = 15)
+(Narea.val.plot+Carea.val.plot+solubles_area.val.plot)/
+  (hemicellulose_area.val.plot+cellulose_area.val.plot+lignin_area.val.plot)/
+  (chlA_area.val.plot+chlB_area.val.plot+car_area.val.plot) &
+  plot_layout(guides="collect") & theme(legend.position = "bottom")
+dev.off()
+
+pdf("Images/val_plots_ref_area2.pdf",width = 16,height = 19,onefile=F)
+ggarrange(Al_area.val.plot, Ca_area.val.plot, Cu_area.val.plot,
+          Fe_area.val.plot,K_area.val.plot,Mg_area.val.plot,
+          Mn_area.val.plot, Na_area.val.plot,P_area.val.plot,
+          Zn_area.val.plot,ncol=3, nrow=4, common.legend = TRUE, legend="bottom")
+dev.off()
