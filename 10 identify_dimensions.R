@@ -16,6 +16,7 @@ library(ggfortify)
 library(RDRToolbox)
 library(dimRed)
 library(rdist)
+library(ggrepel)
 
 ref.traits<-readRDS("ProcessedSpectra/all_ref_and_traits.rds")
 ref.traits<-ref.traits[which(meta(ref.traits)$project!="2019-Pardo-MSc-UdeM")]
@@ -198,9 +199,9 @@ isomap.12<-ggplot(data=ref.isomap.proc.coords,
 isomap.34<-ggplot(data=ref.isomap.proc.coords,
                   aes(x=D3,y=D4,color=functional.group))+
   geom_point(size=3)+
-  geom_segment(aes(x = 0, y = 0, xend = D3, yend = D4),
+  geom_segment(aes(x = 0, y = 0, xend = D3*4, yend = D4*4),
                data = scores.34.df, size =1.5, alpha = 0.5, colour = "black") +
-  geom_text(data = scores.34.df, aes(x = D3*1.2, y = D4*1.2), size=7,
+  geom_text(data = scores.34.df, aes(x = D3*4.8, y = D4*4.8), size=7,
             label = row.names(scores.34.df), colour = "black", fontface = "bold",
             nudge_x = c(0,-0.1,-0.05,0,-0.15,0,0.05,0.05,-0.05),
             nudge_y = c(0,0,0,-0.05,0,0,0,0,0)) +
