@@ -49,10 +49,6 @@ traits.samp<-meta(ref.traits.samp)[,c("EWT","LMA","Cmass","Nmass",
                                       "hemicellulose_mass","cellulose_mass","lignin_mass",
                                       "chl_mass","car_mass")]
 
-traits.trans.samp<-meta(ref.traits.samp)[,c("logEWT","logLMA","Cmass","logN",
-                                            "hemicellulose_mass","cellulose_mass",
-                                            "lignin_mass","logchl","logcar")]
-
 traits.ni.samp<-meta(ref.traits.samp)[,c("logEWT","logLMA","Cnorm","Nnorm",
                                          "hemicellulose_norm","cellulose_norm",
                                          "lignin_norm","chl_norm","car_norm")]
@@ -60,7 +56,6 @@ traits.ni.samp<-meta(ref.traits.samp)[,c("logEWT","logLMA","Cnorm","Nnorm",
 ## normalize all to mean 0, sd 1
 ref.traits.norm<-apply(as.matrix(ref.traits.samp),2,function(x) (x-mean(x))/sd(x))
 traits.norm<-apply(traits.samp,2,function(x) (x-mean(x,na.rm=T))/sd(x,na.rm = T))
-traits.trans.norm<-apply(traits.trans.samp,2,function(x) (x-mean(x,na.rm=T))/sd(x,na.rm = T))
 traits.ni.norm<-apply(traits.ni.samp,2,function(x) (x-mean(x,na.rm=T))/sd(x,na.rm = T))
 
 ## choose bands to downsample to
@@ -84,7 +79,7 @@ meta(ref.traits.samp)$PC4<-ref.pca$x[,4]
 ## scree plot
 screeplot(ref.pca)
 screeplot(prcomp(~.,data=as.data.frame(ref.traits.ref[,select.bands-399]),scale.=T))
-screeplot(prcomp(~.,data=as.data.frame(traits.trans.norm),scale.=T))
+screeplot(prcomp(~.,data=as.data.frame(traits.ni.norm),scale.=T))
 
 ## reconstructing the spectrum
 # recon.unscaled<-ref.pca$x %*% t(ref.pca$rotation)
@@ -171,7 +166,7 @@ colorBlind  <- c("#E69F00","#009E73","#56B4E9","#F0E442",
 #   labs(x="Axis 3",y="Axis 4")
 
 # isomap.cca<-CCorA(Y = ref.isomap.coords[,c("D1","D2","D3","D4","D5")],
-#                   X = data.frame(traits.trans.norm))
+#                   X = data.frame(traits.ni.norm))
 # biplot(isomap.cca)
 
 ref.isomap.proc.coords$functional.group<-as.factor(meta(ref.traits.samp)$functional.group)
@@ -229,7 +224,7 @@ dev.off()
 # stressplot(ref.nmds)
 
 ## UMAP
-spec.trait.DR<-dimRedData(data=ref.traits.norm,meta=traits.trans.norm)
+spec.trait.DR<-dimRedData(data=ref.traits.norm,meta=traits.ni.norm)
 ref.UMAP<-embed(spec.trait.DR,"UMAP",knn=5,method="naive",d="manhattan")
 
 #################################
@@ -253,11 +248,11 @@ dancoDimEst(data = ref.traits.norm[,select.bands-399], k=5, D=10, ver = "MIND_ML
 dancoDimEst(data = na.omit(traits.ni.norm), k=5, D=10, ver = "MIND_MLi")
 
 ref.isomap<-isomap(dist(ref.traits.norm[,select.bands-399],method="manhattan"),ndim = 2,k = 5)
-trait.isomap<-isomap(dist(na.omit(traits.norm),method="manhattan"),ndim = 2,k = 5)
+trait.isomap<-isomap(dist(na.omit(traits.ni.norm),method="manhattan"),ndim = 2,k = 5)
 
 calc_k(ref.traits.norm[,select.bands-399], m=10, kmin=1, kmax=20, plotres=TRUE, 
        parallel=FALSE, cpus=2, iLLE=FALSE)
-calc_k(na.omit(traits.norm), m=10, kmin=1, kmax=20, plotres=TRUE, 
+calc_k(na.omit(traits.ni.norm), m=10, kmin=1, kmax=20, plotres=TRUE, 
        parallel=FALSE, cpus=2, iLLE=FALSE) 
 ref.lle<-lle(ref.traits.norm[,select.bands-399],m=10,k=8,id = T,iLLE=T)
 traits.lle<-lle(na.omit(traits.norm),m=10,k=8,id = T,iLLE=T)
