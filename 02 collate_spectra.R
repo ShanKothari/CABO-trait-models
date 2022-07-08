@@ -182,6 +182,7 @@ site.summary<-read.csv("SummaryData/sites.csv")
 Fulcrum.sub$latitude<-site.summary$latitude[match(Fulcrum.sub$site,site.summary$site_id)]
 Fulcrum.sub$longitude<-site.summary$longitude[match(Fulcrum.sub$site,site.summary$site_id)]
 
+Fulcrum.sub<-Fulcrum.sub[-which(Fulcrum.sub$species==""),]
 sp_split<-strsplit(as.character(Fulcrum.sub$species),split=" ")
 Fulcrum.sub$latin.genus<-unlist(lapply(sp_split,function(entry) entry[[1]]))
 Fulcrum.sub$latin.species<-unlist(lapply(sp_split,function(entry) entry[[2]]))
