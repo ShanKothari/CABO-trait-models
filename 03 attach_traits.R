@@ -141,27 +141,18 @@ CFractions$cellulose_perc[which(CFractions$species=="Alnus incana subsp. rugosa 
 CFractions$lignin_perc[which(CFractions$species=="Alnus incana subsp. rugosa (Du Roi) R.T. Clausen")]<-NA
 
 CFmatch.ref<-match(meta(all.ref)$sample_id,CFractions$bottle_id)
-meta(all.ref)$NDFmass<-CFractions$ndf_perc[CFmatch.ref]
-meta(all.ref)$ADFmass<-CFractions$adf_perc[CFmatch.ref]
-meta(all.ref)$ADLmass<-CFractions$adl_perc[CFmatch.ref]
 meta(all.ref)$solubles_mass<-CFractions$soluble_perc[CFmatch.ref]
 meta(all.ref)$hemicellulose_mass<-CFractions$hemicellulose_perc[CFmatch.ref]
 meta(all.ref)$cellulose_mass<-CFractions$cellulose_perc[CFmatch.ref]
 meta(all.ref)$lignin_mass<-CFractions$lignin_perc[CFmatch.ref]
 
 CFmatch.trans<-match(meta(all.trans)$sample_id,CFractions$bottle_id)
-meta(all.trans)$NDFmass<-CFractions$ndf_perc[CFmatch.trans]
-meta(all.trans)$ADFmass<-CFractions$adf_perc[CFmatch.trans]
-meta(all.trans)$ADLmass<-CFractions$adl_perc[CFmatch.trans]
 meta(all.trans)$solubles_mass<-CFractions$soluble_perc[CFmatch.trans]
 meta(all.trans)$hemicellulose_mass<-CFractions$hemicellulose_perc[CFmatch.trans]
 meta(all.trans)$cellulose_mass<-CFractions$cellulose_perc[CFmatch.trans]
 meta(all.trans)$lignin_mass<-CFractions$lignin_perc[CFmatch.trans]
 
 CFmatch.abs<-match(meta(all.abs)$sample_id,CFractions$bottle_id)
-meta(all.abs)$NDFmass<-CFractions$ndf_perc[CFmatch.abs]
-meta(all.abs)$ADFmass<-CFractions$adf_perc[CFmatch.abs]
-meta(all.abs)$ADLmass<-CFractions$adl_perc[CFmatch.abs]
 meta(all.abs)$solubles_mass<-CFractions$soluble_perc[CFmatch.abs]
 meta(all.abs)$hemicellulose_mass<-CFractions$hemicellulose_perc[CFmatch.abs]
 meta(all.abs)$cellulose_mass<-CFractions$cellulose_perc[CFmatch.abs]
@@ -284,6 +275,8 @@ ICP_all$Zn[ICP_all$Sample_id=="13384790"]<-NA
 ICP_all$Al[ICP_all$Al<0]<-0
 ICP_all$Na[ICP_all$Na<0]<-0
 
+## we don't attach boron to the metadata below
+## because it's unclear whether either estimate is really
 meta(all.ref)$Al_mass<-ICP_all$Al[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
 meta(all.ref)$Ca_mass<-ICP_all$Ca[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
 meta(all.ref)$Cu_mass<-ICP_all$Cu[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
