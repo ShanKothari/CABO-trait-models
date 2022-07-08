@@ -19,13 +19,21 @@ ref.traits<-ref.traits[which(meta(ref.traits)$project!="2019-Pardo-MSc-UdeM")]
 trans.traits<-trans.traits[which(meta(trans.traits)$project!="2019-Pardo-MSc-UdeM")]
 abs.traits<-abs.traits[which(meta(abs.traits)$project!="2019-Pardo-MSc-UdeM")]
 
+## save data for archiving
+write.csv(as.data.frame(ref.traits),"ProcessedSpectra/ref_spec.csv")
+write.csv(as.data.frame(trans.traits),"ProcessedSpectralData/trans_spec.csv")
+write.csv(as.data.frame(abs.traits),"ProcessedSpectralData/abs_spec.csv")
+
+###################################
+## divide up data
+
 ## check that IDs are the same and in the same order
 if(meta(ref.traits)$sample_id != meta(trans.traits)$sample_id ||
    meta(ref.traits)$sample_id != meta(abs.traits)$sample_id){
   stop("sample ids not the same")
 }
 
-## divide up data
+## create division
 train.sample <- createDataPartition(
   y = meta(ref.traits)$functional.group,
   p = .75,
