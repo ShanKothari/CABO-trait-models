@@ -17,84 +17,8 @@ if(meta(all.ref)$sample_id != meta(all.trans)$sample_id ||
   stop("sample ids not the same")
 }
 
-##############################################
-## plot quantiles
-
-# all.ref.quantiles<-quantile(all.ref,probs=c(0.025,0.25,0.5,0.75,0.975))
-# all.ref.CV<-apply(all.ref,2,function(x) sd(x,na.rm=T)/mean(x,na.rm=T))
-# 
-# all.ref.plot<-ggplot()+
-#   geom_line(aes(x=400:2400,y=as.matrix(all.quantiles)[3,]),size=1)+
-#   geom_line(aes(x=400:2400,y=as.matrix(all.quantiles)[2,]),size=1,linetype="dashed")+
-#   geom_line(aes(x=400:2400,y=as.matrix(all.quantiles)[4,]),size=1,linetype="dashed")+
-#   geom_line(aes(x=400:2400,y=as.matrix(all.quantiles)[1,]),size=1,linetype="dotted")+
-#   geom_line(aes(x=400:2400,y=as.matrix(all.quantiles)[5,]),size=1,linetype="dotted")+
-#   geom_line(aes(x=400:2400,y=all.CV),size=1,color="red")+
-#   theme_bw()+
-#   theme(text = element_text(size=20),
-#         panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank())+
-#   labs(x="Wavelength",y="Reflectance (or CV)")+lims(y=c(0,1))+
-#   ggtitle("All CABO spectra")
-
-##############################################
-## plot projects
-
-# meta(all.ref)$project<-factor(meta(all.ref)$project)
-# all.ref.df<-as.data.frame(all.ref)
-# all.ref.df$sample_name<-NULL
-# 
-# Girard.samples<-which(all.ref.df$project=="2018-Girard-MSc-UdeM")
-# all.ref.Girard<-all.ref.df[Girard.samples,]
-# Quercus.samples<-grep("Quercus",all.ref.df$species)
-# all.ref.Quercus<-all.ref.df[Quercus.samples,]
-# 
-# all.ref.sample<-all.ref.df[sample(1:nrow(all.ref.df),200),]
-# 
-# all.ref.Girard.long<-melt(data=all.ref.Girard,
-#                     id.vars=c("sample_id","species","project"),
-#                     variable.name="wavelength",
-#                     value.name="reflectance")
-# all.ref.Girard.long$wavelength<-as.numeric(as.character(all.ref.Girard.long$wavelength))
-# 
-# all.ref.Quercus.long<-melt(data=all.ref.Quercus,
-#                            id.vars=c("sample_id","species","project"),
-#                            variable.name="wavelength",
-#                            value.name="reflectance")
-# all.ref.Quercus.long$wavelength<-as.numeric(as.character(all.ref.Quercus.long$wavelength))
-# 
-# all.ref.long<-melt(data=all.ref.sample,
-#                            id.vars=c("sample_id","species","project"),
-#                            variable.name="wavelength",
-#                            value.name="reflectance")
-# all.ref.long$wavelength<-as.numeric(as.character(all.ref.long$wavelength))
-# 
-# Quercus_plot<-ggplot()+
-#   geom_line(data=all.ref.long,
-#             aes(x=wavelength,y=reflectance,group=sample_id),color="gray")+
-#   geom_line(data=all.ref.Quercus.long,
-#             aes(x=wavelength,y=reflectance,group=sample_id),color="orange",alpha=0.2)+
-#   theme_bw()+
-#   theme(text = element_text(size=20),
-#         panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank())+
-#   labs(x="Wavelength",y="Reflectance")+lims(y=c(0,1))+
-#   ggtitle("Quercus spectra")
-# 
-# Girard_plot<-ggplot()+
-#   geom_line(data=all.ref.long,
-#             aes(x=wavelength,y=reflectance,group=sample_id),color="gray")+
-#   geom_line(data=all.ref.Girard.long,
-#             aes(x=wavelength,y=reflectance,group=sample_id),color="blue",alpha=0.2)+
-#   theme_bw()+
-#   theme(text = element_text(size=20),
-#         panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank())+
-#   labs(x="Wavelength",y="Reflectance")+lims(y=c(0,1))+
-#   ggtitle("Girard spectra")
-
 #############################################
-## growth form
+## growth form and taxonomic information
 
 vascan<-read.csv("SummaryData/vascan.csv")
 
@@ -521,7 +445,7 @@ Zn_area_norm<-lm(log10(Zn_area)~log10(0.1*LMA),data=meta(all.ref),na.action=na.e
 meta(all.ref)$Zn_norm<-resid(Zn_area_norm)
 
 ################
-## eventually
+## save data
 
 saveRDS(all.ref,"ProcessedSpectra/all_ref_and_traits.rds")
 saveRDS(all.trans,"ProcessedSpectra/all_trans_and_traits.rds")
