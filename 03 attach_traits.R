@@ -370,7 +370,7 @@ saveRDS(all.trans,"ProcessedSpectra/all_trans_and_traits.rds")
 saveRDS(all.abs,"ProcessedSpectra/all_abs_and_traits.rds")
 
 ################
-## plotting
+## plotting quantiles of spectra
 
 all.ref<-all.ref[which(meta(all.ref)$project!="2019-Pardo-MSc-UdeM")]
 all.trans<-all.trans[which(meta(all.trans)$project!="2019-Pardo-MSc-UdeM")]

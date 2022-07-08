@@ -20,9 +20,9 @@ trans.traits<-trans.traits[which(meta(trans.traits)$project!="2019-Pardo-MSc-Ude
 abs.traits<-abs.traits[which(meta(abs.traits)$project!="2019-Pardo-MSc-UdeM")]
 
 ## save data for archiving
-write.csv(as.data.frame(ref.traits),"ProcessedSpectra/ref_spec.csv")
-write.csv(as.data.frame(trans.traits),"ProcessedSpectralData/trans_spec.csv")
-write.csv(as.data.frame(abs.traits),"ProcessedSpectralData/abs_spec.csv")
+write.csv(as.data.frame(ref.traits),"ProcessedSpectra/ref_spec.csv",row.names = F)
+write.csv(as.data.frame(trans.traits),"ProcessedSpectra/trans_spec.csv",row.names = F)
+write.csv(as.data.frame(abs.traits),"ProcessedSpectra/abs_spec.csv",row.names = F)
 
 ###################################
 ## divide up data
