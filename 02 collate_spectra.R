@@ -168,39 +168,48 @@ all.trans.spec<-Reduce(combine, list(BeauchampRioux.trans.spec, Blanchard.trans.
 ## attach summary data
 
 Fulcrum.summary<-read.csv("SummaryData/leaf_spectra.csv")
+Fulcrum.summary$measurement.date<-as.POSIXlt(Fulcrum.summary$date_measured,format="%Y-%m-%d")
 Fulcrum.sub<-data.frame(sample.id=Fulcrum.summary$sample_id,
                         species=Fulcrum.summary$scientific_name,
                         project=Fulcrum.summary$project,
-                        site=Fulcrum.summary$site_id)
-PhragmitesTemporal.summary<-read.csv("SummaryData/leaf_spectra_phragmites_temporal.csv")
-PhragmitesTemporal.sub<-data.frame(sample.id=PhragmitesTemporal.summary$sample_id,
-                        species=PhragmitesTemporal.summary$scientific_name,
-                        project=PhragmitesTemporal.summary$project,
-                        site=PhragmitesTemporal.summary$site_id)
+                        site=Fulcrum.summary$site_id,
+                        measurement.date=Fulcrum.summary$measurement.date)
+
 Warren.summary<-read.csv("SummaryData/WarrenSummary.csv")
-Warren.sub<-data.frame(sample.id=Warren.summary$Bulk.sample.ID,
-                       species=Warren.summary$Species,
-                       project="SWA-Warren",
-                       site=Warren.summary$Stage)
-allmeta.sub<-do.call(rbind,args=list(Fulcrum.sub,PhragmitesTemporal.sub,Warren.sub))
+Fulcrum.sub$stage<-Warren.summary$Stage[match(Fulcrum.summary$sample_id,Warren.summary$Bulk.sample.ID)]
 
-## missing full summary data for: Pardo
+site.summary<-read.csv("SummaryData/sites.csv")
+Fulcrum.sub$latitude<-site.summary$latitude[match(Fulcrum.sub$site,site.summary$site_id)]
+Fulcrum.sub$longitude<-site.summary$longitude[match(Fulcrum.sub$site,site.summary$site_id)]
 
-meta(all.ref.spec)$species<-allmeta.sub$species[match(meta(all.ref.spec)$sample_id,allmeta.sub$sample.id)]
-meta(all.ref.spec)$project<-allmeta.sub$project[match(meta(all.ref.spec)$sample_id,allmeta.sub$sample.id)]
-meta(all.ref.spec)$site<-allmeta.sub$site[match(meta(all.ref.spec)$sample_id,allmeta.sub$sample.id)]
-meta(all.trans.spec)$species<-allmeta.sub$species[match(meta(all.trans.spec)$sample_id,allmeta.sub$sample.id)]
-meta(all.trans.spec)$project<-allmeta.sub$project[match(meta(all.trans.spec)$sample_id,allmeta.sub$sample.id)]
-meta(all.trans.spec)$site<-allmeta.sub$site[match(meta(all.trans.spec)$sample_id,allmeta.sub$sample.id)]
+sp_split<-strsplit(as.character(Fulcrum.sub$species),split=" ")
+Fulcrum.sub$latin.genus<-unlist(lapply(sp_split,function(entry) entry[[1]]))
+Fulcrum.sub$latin.species<-unlist(lapply(sp_split,function(entry) entry[[2]]))
 
-## this is temporary
-meta(all.ref.spec)$project<-as.character(meta(all.ref.spec)$project)
-meta(all.ref.spec)$project[meta(all.ref.spec)$sample_id %in% meta(Pardo.ref.spec)$sample_id]<-"2019-Pardo-MSc-UdeM"
-meta(all.trans.spec)$project<-as.character(meta(all.trans.spec)$project)
-meta(all.trans.spec)$project[meta(all.trans.spec)$sample_id %in% meta(Pardo.trans.spec)$sample_id]<-"2019-Pardo-MSc-UdeM"
+## missing full summary data for: Pardo (but we'll drop those samples later)
 
-## remove data from Beauchamp Rioux dataset
-## of red or yellow leaves (or otherwise non-standard)
+meta(all.ref.spec)$species<-Fulcrum.sub$species[match(meta(all.ref.spec)$sample_id,Fulcrum.sub$sample.id)]
+meta(all.ref.spec)$latin.genus<-Fulcrum.sub$latin.genus[match(meta(all.ref.spec)$sample_id,Fulcrum.sub$sample.id)]
+meta(all.ref.spec)$latin.species<-Fulcrum.sub$latin.species[match(meta(all.ref.spec)$sample_id,Fulcrum.sub$sample.id)]
+meta(all.ref.spec)$measurement.date<-Fulcrum.sub$measurement.date[match(meta(all.ref.spec)$sample_id,Fulcrum.sub$sample.id)]
+meta(all.ref.spec)$project<-Fulcrum.sub$project[match(meta(all.ref.spec)$sample_id,Fulcrum.sub$sample.id)]
+meta(all.ref.spec)$site<-Fulcrum.sub$site[match(meta(all.ref.spec)$sample_id,Fulcrum.sub$sample.id)]
+meta(all.ref.spec)$stage<-Fulcrum.sub$stage[match(meta(all.ref.spec)$sample_id,Fulcrum.sub$sample.id)]
+meta(all.ref.spec)$latitude<-Fulcrum.sub$latitude[match(meta(all.ref.spec)$sample_id,Fulcrum.sub$sample.id)]
+meta(all.ref.spec)$longitude<-Fulcrum.sub$longitude[match(meta(all.ref.spec)$sample_id,Fulcrum.sub$sample.id)]
+
+meta(all.trans.spec)$species<-Fulcrum.sub$species[match(meta(all.trans.spec)$sample_id,Fulcrum.sub$sample.id)]
+meta(all.trans.spec)$latin.genus<-Fulcrum.sub$latin.genus[match(meta(all.trans.spec)$sample_id,Fulcrum.sub$sample.id)]
+meta(all.trans.spec)$latin.species<-Fulcrum.sub$latin.species[match(meta(all.trans.spec)$sample_id,Fulcrum.sub$sample.id)]
+meta(all.trans.spec)$measurement.date<-Fulcrum.sub$measurement.date[match(meta(all.trans.spec)$sample_id,Fulcrum.sub$sample.id)]
+meta(all.trans.spec)$project<-Fulcrum.sub$project[match(meta(all.trans.spec)$sample_id,Fulcrum.sub$sample.id)]
+meta(all.trans.spec)$site<-Fulcrum.sub$site[match(meta(all.trans.spec)$sample_id,Fulcrum.sub$sample.id)]
+meta(all.trans.spec)$stage<-Fulcrum.sub$stage[match(meta(all.trans.spec)$sample_id,Fulcrum.sub$sample.id)]
+meta(all.trans.spec)$latitude<-Fulcrum.sub$latitude[match(meta(all.trans.spec)$sample_id,Fulcrum.sub$sample.id)]
+meta(all.trans.spec)$longitude<-Fulcrum.sub$longitude[match(meta(all.trans.spec)$sample_id,Fulcrum.sub$sample.id)]
+
+## remove certain data from Beauchamp Rioux dataset
+## flagged for having red or yellow leaves (or being otherwise non-standard)
 all.ref.spec<-all.ref.spec[-which(meta(all.ref.spec)$sample_id %in% c("11851575","13221003","22405244",
                                                           "21854888","21854774","21854585",
                                                           "10449089","10450505","10452131",
