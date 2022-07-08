@@ -21,18 +21,88 @@ library(ggrepel)
 ref.traits<-readRDS("ProcessedSpectra/all_ref_and_traits.rds")
 ref.traits<-ref.traits[which(meta(ref.traits)$project!="2019-Pardo-MSc-UdeM")]
 
+## sum chlA and chlB to get total chl
 meta(ref.traits)$chl_mass<-meta(ref.traits)$chlA_mass+meta(ref.traits)$chlB_mass
-
 ## area basis, in g/cm^2
 meta(ref.traits)$chl_area<-meta(ref.traits)$chl_mass*meta(ref.traits)$LMA/10000
+
+###################################
+## calculate normalization-independent traits
+Narea_norm<-lm(log10(Narea)~log10(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Nnorm<-resid(Narea_norm)
+
+Carea_norm<-lm(log10(Carea)~log10(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Cnorm<-resid(Carea_norm)
+
+solubles_area_norm<-lm(log10(solubles_area)~log10(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$solubles_norm<-resid(solubles_area_norm)
+
+hemicellulose_area_norm<-lm(log10(hemicellulose_area)~log10(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$hemicellulose_norm<-resid(hemicellulose_area_norm)
+
+cellulose_area_norm<-lm(log10(cellulose_area)~log10(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$cellulose_norm<-resid(cellulose_area_norm)
+
+lignin_area_norm<-lm(log10(lignin_area)~log10(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$lignin_norm<-resid(lignin_area_norm)
+
+chlA_area_norm<-lm(log10(chlA_area)~log10(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$chlA_norm<-resid(chlA_area_norm)
+
+chlB_area_norm<-lm(log10(chlB_area)~log10(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$chlB_norm<-resid(chlB_area_norm)
+
 chl_area_norm<-lm(log(chl_area)~log(0.1*LMA),data=meta(ref.traits),na.action=na.exclude)
 meta(ref.traits)$chl_norm<-resid(chl_area_norm)
 
+car_area_norm<-lm(log10(car_area)~log10(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$car_norm<-resid(car_area_norm)
+
+meta(all.ref)$Al_area_omit<-meta(all.ref)$Al_area
+meta(all.ref)$Al_area_omit[which(meta(all.ref)$Al_area_omit==0)]<-NA
+Al_area_norm<-lm(log10(Al_area_omit)~log10(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Al_norm<-resid(Al_area_norm)
+meta(all.ref)$Al_area_omit<-NULL
+
+Ca_area_norm<-lm(log10(Ca_area)~log10(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Ca_norm<-resid(Ca_area_norm)
+
+meta(all.ref)$Cu_area_omit<-meta(all.ref)$Cu_area
+meta(all.ref)$Cu_area_omit[which(meta(all.ref)$Cu_area_omit==0)]<-NA
+Cu_area_norm<-lm(log10(Cu_area_omit)~log10(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Cu_norm<-resid(Cu_area_norm)
+meta(all.ref)$Cu_area_omit<-NULL
+
+Fe_area_norm<-lm(log10(Fe_area)~log10(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Fe_norm<-resid(Fe_area_norm)
+
+K_area_norm<-lm(log10(K_area)~log10(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$K_norm<-resid(K_area_norm)
+
+Mg_area_norm<-lm(log10(Mg_area)~log10(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Mg_norm<-resid(Mg_area_norm)
+
+meta(all.ref)$Mn_area_omit<-meta(all.ref)$Mn_area
+meta(all.ref)$Mn_area_omit[which(meta(all.ref)$Mn_area_omit==0)]<-NA
+Mn_area_norm<-lm(log10(Mn_area_omit)~log10(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Mn_norm<-resid(Mn_area_norm)
+meta(all.ref)$Mn_area_omit<-NULL
+
+meta(all.ref)$Na_area_omit<-meta(all.ref)$Na_area
+meta(all.ref)$Na_area_omit[which(meta(all.ref)$Na_area_omit==0)]<-NA
+Na_area_norm<-lm(log10(Na_area_omit)~log10(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Na_norm<-resid(Na_area_norm)
+meta(all.ref)$Na_area_omit<-NULL
+
+P_area_norm<-lm(log10(P_area)~log10(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$P_norm<-resid(P_area_norm)
+
+Zn_area_norm<-lm(log10(Zn_area)~log10(0.1*LMA),data=meta(all.ref),na.action=na.exclude)
+meta(all.ref)$Zn_norm<-resid(Zn_area_norm)
+
+## log-transform LMA and EWT to reduce skewness
 meta(ref.traits)$logLMA<-log(meta(ref.traits)$LMA)
 meta(ref.traits)$logEWT<-log(meta(ref.traits)$EWT)
-meta(ref.traits)$logchl<-log(meta(ref.traits)$chl_mass)
-meta(ref.traits)$logcar<-log(meta(ref.traits)$car_mass)
-meta(ref.traits)$logN<-log(meta(ref.traits)$Nmass)
 
 ## remove samples with NAs for key traits
 ## so that sampling picks out samples with all trait values present
