@@ -202,45 +202,12 @@ select.bands<-c(seq(from=400,to=780,by=20),
 #################################################
 ## factor analysis of spectra
 
+## PCA scree plots
 ref.traits.mat<-as.matrix(ref.traits.samp)
 colnames(ref.traits.mat)<-paste("X",colnames(ref.traits.mat),sep="")
-ref.pca<-prcomp(~.,data=as.data.frame(ref.traits.mat),scale.=T)
-meta(ref.traits.samp)$PC1<-ref.pca$x[,1]
-meta(ref.traits.samp)$PC2<-ref.pca$x[,2]
-meta(ref.traits.samp)$PC3<-ref.pca$x[,3]
-meta(ref.traits.samp)$PC4<-ref.pca$x[,4]
-
-## average spectrum
-# plot(400:2400,ref.pca$center,type="l")
-## scree plot
-screeplot(ref.pca)
+screeplot(prcomp(~.,data=as.data.frame(ref.traits.mat),scale.=T))
 screeplot(prcomp(~.,data=as.data.frame(ref.traits.mat[,select.bands-399]),scale.=T))
 screeplot(prcomp(~.,data=as.data.frame(traits.ni.norm),scale.=T))
-
-## reconstructing the spectrum
-# recon.unscaled<-ref.pca$x %*% t(ref.pca$rotation)
-# recon<-sapply(1:ncol(recon.unscaled),function(i) recon.unscaled[,i]*ref.pca$scale[i]+ref.pca$center[i])
-
-# ## here we rescale all PCA axes to a standard deviation of 1
-# ref.pca.scale<-ref.pca
-# ref.pca.scale$x<-sapply(1:ncol(ref.pca$x),function(i) ref.pca$x[,i]/ref.pca$sdev[i])
-# ref.pca.scale$rotation<-sapply(1:ncol(ref.pca$rotation),function(i) ref.pca$rotation[,i]*ref.pca$sdev[i])
-# 
-# ## matrix with the specified PC at -1, 0, or 1 and all other PCs at 0
-# PC<-1
-# trial.matrix<-matrix(data=0,nrow=3,ncol=ncol(ref.pca.scale$x))
-# trial.matrix[,PC]<-c(-1,0,1)
-# recon.trial.unscaled<-trial.matrix %*% t(ref.pca.scale$rotation)
-# recon.trial<-sapply(1:ncol(recon.trial.unscaled),function(i) recon.trial.unscaled[,i]*ref.pca.scale$scale[i]+ref.pca.scale$center[i])
-# 
-# plot(400:2400,recon.trial[1,],type="l",col="red",cex.lab=2,
-#      xlab="Wavelength",ylab="Reflectance",ylim=c(0,0.55))
-# points(400:2400,recon.trial[2,],type="l",col="black")
-# points(400:2400,recon.trial[3,],type="l",col="blue")
-# 
-# recon.trial.lib<-speclib(spectra=recon.trial,wavelength=400:2400)
-# ref.inv<-list()
-# for(i in 1:dim(recon.trial.lib)[1]){ref.inv[[i]]<-PROSPECTinvert(recon.trial.lib[i])}
 
 ################################
 ## nonlinear dimensionality reduction
@@ -353,11 +320,6 @@ isomap.12+isomap.34+
   plot_layout(ncol=1,guides="collect") &
   theme(legend.position = "bottom")
 dev.off()
-
-## NMDS
-# ref.nmds<-metaMDS(ref.traits.norm[,select.bands-399],distance="manhattan",k=10,
-#                     autotransform = F)
-# stressplot(ref.nmds)
 
 ## UMAP
 spec.trait.DR<-dimRedData(data=ref.traits.norm,meta=traits.ni.norm)
