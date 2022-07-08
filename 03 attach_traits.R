@@ -285,8 +285,6 @@ ICP_all$Al[ICP_all$Al<0]<-0
 ICP_all$Na[ICP_all$Na<0]<-0
 
 meta(all.ref)$Al_mass<-ICP_all$Al[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
-meta(all.ref)$B_mass<-ICP_all$B[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
-meta(all.ref)$B.1_mass<-ICP_all$B.1[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
 meta(all.ref)$Ca_mass<-ICP_all$Ca[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
 meta(all.ref)$Cu_mass<-ICP_all$Cu[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
 meta(all.ref)$Fe_mass<-ICP_all$Fe[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
@@ -298,8 +296,6 @@ meta(all.ref)$P_mass<-ICP_all$P[match(meta(all.ref)$sample_id,ICP_all$Sample_id)
 meta(all.ref)$Zn_mass<-ICP_all$Zn[match(meta(all.ref)$sample_id,ICP_all$Sample_id)]
 
 meta(all.trans)$Al_mass<-ICP_all$Al[match(meta(all.trans)$sample_id,ICP_all$Sample_id)]
-meta(all.trans)$B_mass<-ICP_all$B[match(meta(all.trans)$sample_id,ICP_all$Sample_id)]
-meta(all.trans)$B.1_mass<-ICP_all$B.1[match(meta(all.trans)$sample_id,ICP_all$Sample_id)]
 meta(all.trans)$Ca_mass<-ICP_all$Ca[match(meta(all.trans)$sample_id,ICP_all$Sample_id)]
 meta(all.trans)$Cu_mass<-ICP_all$Cu[match(meta(all.trans)$sample_id,ICP_all$Sample_id)]
 meta(all.trans)$Fe_mass<-ICP_all$Fe[match(meta(all.trans)$sample_id,ICP_all$Sample_id)]
@@ -311,8 +307,6 @@ meta(all.trans)$P_mass<-ICP_all$P[match(meta(all.trans)$sample_id,ICP_all$Sample
 meta(all.trans)$Zn_mass<-ICP_all$Zn[match(meta(all.trans)$sample_id,ICP_all$Sample_id)]
 
 meta(all.abs)$Al_mass<-ICP_all$Al[match(meta(all.abs)$sample_id,ICP_all$Sample_id)]
-meta(all.abs)$B_mass<-ICP_all$B[match(meta(all.abs)$sample_id,ICP_all$Sample_id)]
-meta(all.abs)$B.1_mass<-ICP_all$B.1[match(meta(all.abs)$sample_id,ICP_all$Sample_id)]
 meta(all.abs)$Ca_mass<-ICP_all$Ca[match(meta(all.abs)$sample_id,ICP_all$Sample_id)]
 meta(all.abs)$Cu_mass<-ICP_all$Cu[match(meta(all.abs)$sample_id,ICP_all$Sample_id)]
 meta(all.abs)$Fe_mass<-ICP_all$Fe[match(meta(all.abs)$sample_id,ICP_all$Sample_id)]
