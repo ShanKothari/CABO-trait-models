@@ -1,25 +1,25 @@
 setwd("C:/Users/kotha020/Dropbox/PostdocProjects/FreshLeafModels")
 
 library(spectrolab)
-library(dplyr)
 library(hsdar)
 library(truncnorm)
 library(vegan)
 library(intrinsicDimension)
 library(lle)
 library(ider)
-library(paran)
 library(pls)
 library(reshape2)
 library(patchwork)
-library(ggfortify)
-library(RDRToolbox)
 library(dimRed)
-library(rdist)
 library(ggrepel)
 
 ref.traits<-readRDS("ProcessedSpectra/all_ref_and_traits.rds")
+## remove the Pardo project, which has no trait data
 ref.traits<-ref.traits[which(meta(ref.traits)$project!="2019-Pardo-MSc-UdeM")]
+
+## color-blind friendly palette
+colorBlind  <- c("#E69F00","#009E73","#56B4E9","#F0E442",
+                 "#0072B2","#CC79A7","#D55E00","#999999")
 
 ## sum chlA and chlB to get total chl
 meta(ref.traits)$chl_mass<-meta(ref.traits)$chlA_mass+meta(ref.traits)$chlB_mass
@@ -28,6 +28,7 @@ meta(ref.traits)$chl_area<-meta(ref.traits)$chl_mass*meta(ref.traits)$LMA/10000
 
 ###################################
 ## calculate normalization-independent traits
+## sensu Osnas et al. 2013 Science and 2018 PNAS
 
 Narea_norm<-lm(log10(Narea)~log10(0.1*LMA),data=meta(ref.traits),na.action=na.exclude)
 meta(ref.traits)$Nnorm<-resid(Narea_norm)
@@ -132,6 +133,8 @@ trait.pca.plot<-ggplot(trait.pca.val, aes(x = PC1, y = PC2, color = functional.g
        y=paste("PC2 (",round(trait.pca.perc[2],1),"% variance)",sep=""))+
   scale_color_manual(values=colorBlind)
 
+## using normalization-independent traits
+## and leaving out some traits strongly correlated with others
 traitnorm.pca<-prcomp(~.,meta(ref.traits)[,c("LMA","LDMC","EWT","Cnorm","Nnorm",
                                           "hemicellulose_norm","cellulose_norm",
                                           "lignin_norm","chlA_norm")],
@@ -163,7 +166,7 @@ trait.pca.plot+traitnorm.pca.plot+plot_layout(ncol=1,guides="collect") &
 dev.off()
 
 #################################################
-## preparing data for dimensionality analyses
+## preparing data for dimensionality analyses in Grime Review
 
 ## log-transform LMA and EWT to reduce skewness
 meta(ref.traits)$logLMA<-log(meta(ref.traits)$LMA)
@@ -181,10 +184,13 @@ ref.traits<-ref.traits[-unique(na.traits$row),]
 ref.traits.samp<-subset_by(ref.traits,by=as.vector(meta(ref.traits)$species),
                            n_min = 1,n_max = 10)
 
+## subsetting traits of interest
 traits.samp<-meta(ref.traits.samp)[,c("EWT","LMA","Cmass","Nmass",
                                       "hemicellulose_mass","cellulose_mass","lignin_mass",
                                       "chl_mass","car_mass")]
 
+## and the normalization-independent version
+## also using the log-transformed EWT and LMA
 traits.ni.samp<-meta(ref.traits.samp)[,c("logEWT","logLMA","Cnorm","Nnorm",
                                          "hemicellulose_norm","cellulose_norm",
                                          "lignin_norm","chl_norm","car_norm")]
@@ -193,6 +199,9 @@ traits.ni.samp<-meta(ref.traits.samp)[,c("logEWT","logLMA","Cnorm","Nnorm",
 ref.traits.norm<-apply(as.matrix(ref.traits.samp),2,function(x) (x-mean(x))/sd(x))
 traits.norm<-apply(traits.samp,2,function(x) (x-mean(x,na.rm=T))/sd(x,na.rm = T))
 traits.ni.norm<-apply(traits.ni.samp,2,function(x) (x-mean(x,na.rm=T))/sd(x,na.rm = T))
+## note that normalization-independent traits should already have mean ~0
+## but not exactly because we did the renormalization prior to choosing
+## 10 samples from species
 
 ## choose bands to downsample to
 select.bands<-c(seq(from=400,to=780,by=20),
@@ -203,11 +212,12 @@ select.bands<-c(seq(from=400,to=780,by=20),
 ## factor analysis of spectra
 
 ## PCA scree plots
+## because the scaling is done by the PCA function
+## we can use the non-z-standardized data
 ref.traits.mat<-as.matrix(ref.traits.samp)
 colnames(ref.traits.mat)<-paste("X",colnames(ref.traits.mat),sep="")
-screeplot(prcomp(~.,data=as.data.frame(ref.traits.mat),scale.=T))
 screeplot(prcomp(~.,data=as.data.frame(ref.traits.mat[,select.bands-399]),scale.=T))
-screeplot(prcomp(~.,data=as.data.frame(traits.ni.norm),scale.=T))
+screeplot(prcomp(~.,data=as.data.frame(traits.ni.samp),scale.=T))
 
 ################################
 ## nonlinear dimensionality reduction
@@ -225,10 +235,7 @@ ref.isomap.proc$points<-procrustes(Y = ref.isomap.coords,X = traits.ni.norm)$Yro
 colnames(ref.isomap.proc$points)<-paste("D",1:ncol(ref.isomap.proc$points),sep="")
 ref.isomap.proc.coords<-as.data.frame(ref.isomap.proc$points)
 
-colorBlind  <- c("#E69F00","#009E73","#56B4E9","#F0E442",
-                 "#0072B2","#CC79A7","#D55E00","#999999")
-
-# ## overlay traits onto plot -- no procrustes
+## plotting without Procrustes analysis with traits overlain
 # ref.isomap.envfit.12<-envfit(ref.isomap,traits.ni.norm,choices = 1:2)
 # scores.12.df<-as.data.frame(vegan::scores(ref.isomap.envfit.12, "vectors"))
 # ref.isomap.envfit.34<-envfit(ref.isomap,traits.ni.norm,choices = 3:4)
@@ -267,14 +274,17 @@ colorBlind  <- c("#E69F00","#009E73","#56B4E9","#F0E442",
 #   scale_color_manual(values=colorBlind)+
 #   guides(color=guide_legend("Functional group"))+
 #   labs(x="Axis 3",y="Axis 4")
-
+#
+# # canonical correspondence analysis with traits
 # isomap.cca<-CCorA(Y = ref.isomap.coords[,c("D1","D2","D3","D4","D5")],
 #                   X = data.frame(traits.ni.norm))
 # biplot(isomap.cca)
 
+## plotting with Procrustes analysis
+# add functional group for visualization
 ref.isomap.proc.coords$functional.group<-as.factor(meta(ref.traits.samp)$functional.group)
-ref.isomap.proc.coords$logEWT<-log(meta(ref.traits.samp)$EWT)
 
+# extract scores matrices
 ref.isomap.envfit.12<-envfit(ref.isomap.proc,traits.ni.norm,choices = 1:2)
 scores.12.df<-as.data.frame(vegan::scores(ref.isomap.envfit.12, "vectors")) * ordiArrowMul(ref.isomap.envfit.12)
 ref.isomap.envfit.34<-envfit(ref.isomap.proc,traits.ni.norm,choices = 3:4)
@@ -321,28 +331,27 @@ isomap.12+isomap.34+
   theme(legend.position = "bottom")
 dev.off()
 
-## UMAP
-spec.trait.DR<-dimRedData(data=ref.traits.norm,meta=traits.ni.norm)
-ref.UMAP<-embed(spec.trait.DR,"UMAP",knn=5,method="naive",d="manhattan")
-
 #################################
 ## estimating intrinsic dimensionality
 
-## Grassberger-Procaccia; unsure about correct choice of p or k1/k2
+## Grassberger-Procaccia correlation integral (1983)
 corint(x=ref.traits.norm[,select.bands-399],p=20)
 corint(x=na.omit(traits.ni.norm),p=20)
-## ML; not sure about correct choice of p or k1/k2
+## Levina-Bickel maximum likelihood (2004)
 lbmle(x = ref.traits.norm[,select.bands-399], k1=5, k2=10)
 lbmle(x = na.omit(traits.ni.norm), k1=5, k2=10)
+## Manifold-adaptive from Farahmand et al. 2007
 mada(x = ref.traits.norm[,select.bands-399], k = NULL, comb = "average", maxDim = 10)
 mada(x = na.omit(traits.ni.norm), k = NULL, comb = "average", maxDim = 10)
+## Nearest-neighbor from Pettis et al. 1979
 nni(x = ref.traits.norm[,select.bands-399], k1 = 5, k2 = 30, eps = 0.01, p = NULL)
 nni(x = na.omit(traits.ni.norm), k1 = 5, k2 = 30, eps = 0.01, p = NULL)
+## minimum neighbor distance-maximum likelihood from Rozza et al.  (2012)
 dancoDimEst(data = ref.traits.norm[,select.bands-399], k=5, D=10, ver = "MIND_MLi")
 dancoDimEst(data = na.omit(traits.ni.norm), k=5, D=10, ver = "MIND_MLi")
 
-ref.isomap<-isomap(dist(ref.traits.norm[,select.bands-399],method="manhattan"),ndim = 2,k = 5)
-trait.isomap<-isomap(dist(na.omit(traits.ni.norm),method="manhattan"),ndim = 2,k = 5)
+ref.isomap<-isomap(dist(ref.traits.norm[,select.bands-399],method="manhattan"),ndim = 10,k = 5)
+trait.isomap<-isomap(dist(na.omit(traits.ni.norm),method="manhattan"),ndim = 10,k = 5)
 
 calc_k(ref.traits.norm[,select.bands-399], m=10, kmin=1, kmax=20, plotres=TRUE, 
        parallel=FALSE, cpus=2, iLLE=FALSE)
@@ -358,8 +367,6 @@ fresh.spec<-readRDS("../../TraitModels2018/HerbariumPaper/ProcessedSpectralData/
 pressed.spec<-readRDS("../../TraitModels2018/HerbariumPaper/ProcessedSpectralData/pressed_spec_all.rds")
 ground.spec<-readRDS("../../TraitModels2018/HerbariumPaper/ProcessedSpectralData/ground_spec_all.rds")
 
-meta(fresh.spec)$chl<-meta(fresh.spec)$chlA+meta(fresh.spec)$chlB
-
 ## sample no more than ten of the same species
 ## to avoid over-weighting common species in importance
 fresh.spec.samp<-subset_by(fresh.spec,by=as.vector(meta(fresh.spec)$Species),
@@ -369,18 +376,17 @@ pressed.spec.samp<-subset_by(pressed.spec,by=as.vector(meta(pressed.spec)$Specie
 ground.spec.samp<-subset_by(ground.spec,by=as.vector(meta(ground.spec)$Species),
                             n_min = 1,n_max = 10)
 
+## z-standardize spectral bands
 fresh.spec.norm<-apply(as.matrix(fresh.spec.samp),2,function(x) (x-mean(x))/sd(x))
 pressed.spec.norm<-apply(as.matrix(pressed.spec.samp),2,function(x) (x-mean(x))/sd(x))
 ground.spec.norm<-apply(as.matrix(ground.spec.samp),2,function(x) (x-mean(x))/sd(x))
 
-traits.sub<-apply(meta(fresh.spec.samp)[,c("LDMC","EWT","LMA","C","N",
-                                      "hemicellulose","cellulose","lignin",
-                                      "chl","car","Ca","K","P")],2,
-                  function(x) (x-mean(x,na.rm=T))/sd(x,na.rm=T))
-
 colnames(fresh.spec.norm)<-paste("X",colnames(fresh.spec.norm),sep="")
 colnames(pressed.spec.norm)<-paste("X",colnames(pressed.spec.norm),sep="")
 colnames(ground.spec.norm)<-paste("X",colnames(ground.spec.norm),sep="")
+
+## the dimensionality estimation methods are all mentioned above
+## with names/references
 
 screeplot(prcomp(~.,data=as.data.frame(fresh.spec.norm[,select.bands-399]),scale.=T))
 screeplot(prcomp(~.,data=as.data.frame(pressed.spec.norm[,select.bands-399]),scale.=T))
@@ -389,42 +395,32 @@ screeplot(prcomp(~.,data=as.data.frame(ground.spec.norm[,select.bands-399]),scal
 corint(x=fresh.spec.norm[,select.bands-399],p=20)
 corint(x=pressed.spec.norm[,select.bands-399],p=20)
 corint(x=ground.spec.norm[,select.bands-399],p=20)
-corint(x=na.omit(traits.sub),p=20)
 
-## with k1=k2=k, this yields the same result as
-## maxLikGlobalDimEst
 lbmle(x = fresh.spec.norm[,select.bands-399], k1=5, k2=10)
 lbmle(x = pressed.spec.norm[,select.bands-399], k1=5, k2=10)
 lbmle(x = ground.spec.norm[,select.bands-399], k1=5, k2=10)
-lbmle(x = na.omit(traits.sub), k1=5, k2=10)
 
 mada(x = fresh.spec.norm[,select.bands-399], k = NULL, comb = "average", maxDim = 10)
 mada(x = pressed.spec.norm[,select.bands-399], k = NULL, comb = "average", maxDim = 10)
 mada(x = ground.spec.norm[,select.bands-399], k = NULL, comb = "average", maxDim = 10)
-mada(x = na.omit(traits.sub), k = NULL, comb = "average", maxDim = 10)
 
 nni(x = fresh.spec.norm[,select.bands-399], k1 = 5, k2 = 30, eps = 0.01, p = NULL)
 nni(x = pressed.spec.norm[,select.bands-399], k1 = 5, k2 = 30, eps = 0.01, p = NULL)
 nni(x = ground.spec.norm[,select.bands-399], k1 = 5, k2 = 30, eps = 0.01, p = NULL)
-nni(x = na.omit(traits.sub), k1 = 5, k2 = 30, eps = 0.01, p = NULL)
 
 dancoDimEst(data = fresh.spec.norm[,select.bands-399], k=5, D=10, ver = "MIND_MLi")
 dancoDimEst(data = pressed.spec.norm[,select.bands-399], k=5, D=10, ver = "MIND_MLi")
 dancoDimEst(data = ground.spec.norm[,select.bands-399], k=5, D=10, ver = "MIND_MLi")
-dancoDimEst(data = na.omit(traits.sub), k=5, D=10, ver = "MIND_MLi")
 
 lle.fresh<-lle(as.matrix(fresh.spec),m=10,k=10,id = T)
 lle.pressed<-lle(as.matrix(pressed.spec),m=10,k=10,id = T)
 lle.ground<-lle(as.matrix(ground.spec),m=10,k=10,id = T)
-lle.traits<-lle(na.omit(traits.sub),m=10,k=10,id = T)
 
 isomap.fresh<-isomap(dist(as.matrix(fresh.spec),method = "manhattan"),
                      ndim = 10,k=5)
 isomap.pressed<-isomap(dist(as.matrix(pressed.spec),method = "manhattan"),
                      ndim = 10,k=5)
 isomap.ground<-isomap(dist(as.matrix(ground.spec),method = "manhattan"),
-                     ndim = 10,k=5)
-isomap.traits<-isomap(dist(na.omit(traits.sub),method = "manhattan"),
                      ndim = 10,k=5)
 
 #########################################
@@ -456,9 +452,7 @@ prospect.sim.norm<-apply(prospect.sim,2,function(x) (x-mean(x))/sd(x))
 colnames(prospect.sim.norm)<-paste("X",400:2500,sep="")
 screeplot(prcomp(~.,data=as.data.frame(prospect.sim.norm[,select.bands-399]),scale.=T))
 
-## Grassberger-Procaccia; unsure about correct choice of p or k1/k2
 corint(x=prospect.sim.norm[,select.bands-399],p=20)
-## ML; not sure about correct choice of p or k1/k2
 lbmle(x = prospect.sim.norm[,select.bands-399], k1=5, k2=10)
 mada(x = prospect.sim.norm[,select.bands-399], k = NULL, comb = "average", maxDim = 10)
 nni(x = prospect.sim.norm[,select.bands-399], k1 = 5, k2 = 30, eps = 0.01, p = NULL)
@@ -469,8 +463,6 @@ calc_k(prospect.sim.norm[,select.bands-399], m=10, kmin=1, kmax=20, plotres=TRUE
 prospect.lle<-lle(prospect.sim.norm[,select.bands-399],m=4,k=6,id = T)
 prospect.isomap<-isomap(dist(prospect.sim.norm,method="manhattan"),
                         ndim = 10,k=3)
-plot(prospect.isomap$points[,3]~prospect.params$Cab)
-plot(prospect.isomap$points[,1]~prospect.isomap$points[,2])
 
 ############################################
 ## trait covariance simulation
