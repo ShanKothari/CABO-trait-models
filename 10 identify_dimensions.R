@@ -466,6 +466,8 @@ prospect.isomap<-isomap(dist(prospect.sim.norm,method="manhattan"),
 
 ############################################
 ## trait covariance simulation
+## NOTE: this section is functionally independent of the section
+## immediately above and some of the variable names overlap
 
 ## pick the sizes of functional groups
 FG.sizes<-c(50,50,50,25,25)
