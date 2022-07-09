@@ -3,7 +3,8 @@ setwd("C:/Users/kotha020/Dropbox/PostdocProjects/FreshLeafModels/")
 library(spectrolab)
 
 ##################################
-## read in and process reflectance data
+## read in reflectance data
+## trim all to 400-2400 nm range
 
 BeauchampRioux.ref.df<-read.csv("ProcessedSpectra/BeauchampRioux_ref_processed.csv")
 colnames(BeauchampRioux.ref.df)<-gsub("X","",colnames(BeauchampRioux.ref.df))
@@ -60,6 +61,8 @@ Hacker2019.ref.spec<-as_spectra(Hacker2019.ref.df,name_idx=1)
 meta(Hacker2019.ref.spec)$sample_id<-gsub("spec_","",names(Hacker2019.ref.spec))
 Hacker2019.ref.spec<-Hacker2019.ref.spec[,400:2400]
 
+## the Pardo data are removed later on because there are no trait data
+## but we include them here
 Pardo.ref.df<-read.csv("ProcessedSpectra/Pardo_ref_processed.csv")
 colnames(Pardo.ref.df)<-gsub("X","",colnames(Pardo.ref.df))
 Pardo.ref.spec<-as_spectra(Pardo.ref.df,name_idx=1)
@@ -175,19 +178,22 @@ Fulcrum.sub<-data.frame(sample.id=Fulcrum.summary$sample_id,
                         site=Fulcrum.summary$site_id,
                         measurement.date=Fulcrum.summary$measurement.date)
 
+## to get chronosequence stages from the Warren project
 Warren.summary<-read.csv("SummaryData/WarrenSummary.csv")
 Fulcrum.sub$stage<-Warren.summary$Stage[match(Fulcrum.summary$sample_id,Warren.summary$Bulk.sample.ID)]
 
+## to get latitude and longitude
+## lat-long records for individual samples are unreliable
+## so we use site-level data
 site.summary<-read.csv("SummaryData/sites.csv")
 Fulcrum.sub$latitude<-site.summary$latitude[match(Fulcrum.sub$site,site.summary$site_id)]
 Fulcrum.sub$longitude<-site.summary$longitude[match(Fulcrum.sub$site,site.summary$site_id)]
 
+## split up genus and species into separate columns
 Fulcrum.sub<-Fulcrum.sub[-which(Fulcrum.sub$species==""),]
 sp_split<-strsplit(as.character(Fulcrum.sub$species),split=" ")
 Fulcrum.sub$latin.genus<-unlist(lapply(sp_split,function(entry) entry[[1]]))
 Fulcrum.sub$latin.species<-unlist(lapply(sp_split,function(entry) entry[[2]]))
-
-## missing full summary data for: Pardo (but we'll drop those samples later)
 
 meta(all.ref.spec)$species<-Fulcrum.sub$species[match(meta(all.ref.spec)$sample_id,Fulcrum.sub$sample.id)]
 meta(all.ref.spec)$latin.genus<-Fulcrum.sub$latin.genus[match(meta(all.ref.spec)$sample_id,Fulcrum.sub$sample.id)]
@@ -225,18 +231,19 @@ all.trans.spec<-all.trans.spec[-which(meta(all.trans.spec)$sample_id %in% c("118
                                                                       "10465061","10466192","10466735",
                                                                       "10468015"))]
 
-## remove a few missing spectra from Blanchard project?
-## not sure why they're missing though!
+## remove a few missing spectra from Blanchard project
 all.ref.spec<-all.ref.spec[-which(is.na(rowSums(as.matrix(all.ref.spec))))]
 all.trans.spec<-all.trans.spec[-which(is.na(rowSums(as.matrix(all.trans.spec))))]
 
-## check that spectra are in the same order
+## check that spectra are in the same order before we calculate absorptance
 sum(meta(all.ref.spec)$sample_id==meta(all.trans.spec)$sample_id)==nrow(all.ref.spec)
 
+## calculate absorptance as 1-R-T
 all.abs.mat<-1-as.matrix(all.ref.spec)-as.matrix(all.trans.spec)
 all.abs.spec<-spectra(all.abs.mat,bands=400:2400,names=names(all.ref.spec))
 meta(all.abs.spec)<-meta(all.ref.spec)
 
+## save data
 saveRDS(all.ref.spec,file = "ProcessedSpectra/all_ref.rds")
 saveRDS(all.trans.spec,file = "ProcessedSpectra/all_trans.rds")
 saveRDS(all.abs.spec,file = "ProcessedSpectra/all_abs.rds")

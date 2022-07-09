@@ -20,10 +20,13 @@ if(meta(all.ref)$sample_id != meta(all.trans)$sample_id ||
 #############################################
 ## growth form and taxonomic information
 
+## read data from VASCAN (Desmet & Brouillet 2013)
 vascan<-read.csv("SummaryData/vascan.csv")
 
-## attach to reflectance
+## attach to spectral metadata
 meta(all.ref)$growth.form<-vascan$growth_form[match(meta(all.ref)$species,vascan$scientific_name)]
+## manual disambiguation when VASCAN includes multiple growth forms
+## in most cases, based on specific individuals sampled by CABO
 meta(all.ref)$growth.form[meta(all.ref)$species=="Acer pensylvanicum Linnaeus"]<-"tree"
 meta(all.ref)$growth.form[meta(all.ref)$species=="Betula populifolia Marshall"]<-"tree"
 meta(all.ref)$growth.form[meta(all.ref)$species=="Sorbus decora (Sargent) C.K. Schneider"]<-"tree"
@@ -34,13 +37,12 @@ meta(all.ref)$growth.form[meta(all.ref)$species=="Rhamnus cathartica Linnaeus"]<
 meta(all.ref)$growth.form[meta(all.ref)$species=="Prunus nigra Aiton"]<-"tree"
 meta(all.ref)$growth.form[meta(all.ref)$species=="Salix Linnaeus"]<-"shrub"
 meta(all.ref)$growth.form[meta(all.ref)$species=="Agonis flexuosa (Willd.) Sweet"]<-"tree"
-## the next four, I'm not too sure about the tree/shrub assignment
-## making a best guess based on max height and project
 meta(all.ref)$growth.form[meta(all.ref)$species=="Prunus virginiana Linnaeus"]<-"shrub"
 meta(all.ref)$growth.form[meta(all.ref)$species=="Staphylea trifolia Linnaeus"]<-"shrub"
 meta(all.ref)$growth.form[meta(all.ref)$species=="Oemleria cerasiformis (Torrey & A. Gray ex Hooker & Arnott) J.W. Landon"]<-"shrub"
 meta(all.ref)$growth.form[meta(all.ref)$species=="Crataegus monogyna Jacquin"]<-"shrub"
 
+## add taxonomic information
 meta(all.ref)$order<-vascan$order[match(meta(all.ref)$species,vascan$scientific_name)]
 meta(all.ref)$family<-vascan$family[match(meta(all.ref)$species,vascan$scientific_name)]
 meta(all.ref)$genus<-vascan$genus[match(meta(all.ref)$species,vascan$scientific_name)]
@@ -50,6 +52,7 @@ meta(all.ref)$order[meta(all.ref)$species=="Agonis flexuosa (Willd.) Sweet"]<-"M
 meta(all.ref)$family[meta(all.ref)$species=="Agonis flexuosa (Willd.) Sweet"]<-"Myrtaceae"
 meta(all.ref)$genus[meta(all.ref)$species=="Agonis flexuosa (Willd.) Sweet"]<-"Agonis"
 
+## disambiguate functional groups by families
 meta(all.ref)$functional.group<-as.character(meta(all.ref)$growth.form)
 meta(all.ref)$functional.group[meta(all.ref)$family %in% c("Poaceae","Cyperaceae","Juncaceae","Typhaceae")]<-"graminoid"
 meta(all.ref)$functional.group[meta(all.ref)$family %in% c("Pinaceae","Cupressaceae")]<-"conifer"
@@ -75,8 +78,8 @@ meta(all.abs)$functional.group<-meta(all.ref)$functional.group
 all.area<-read.csv("TraitData/LeafAreaWaterSamples/leaf_area_and_water_samples.csv")
 
 all.area.sub<-data.frame(sample_id=all.area$sample_id,
-                             SLA=all.area$specific_leaf_area_m2_kg,
-                             LDMC=all.area$leaf_dry_matter_content_mg_g)
+                         SLA=all.area$specific_leaf_area_m2_kg,
+                         LDMC=all.area$leaf_dry_matter_content_mg_g)
 
 ## remove bad values, based on notes in Fulcrum data
 all.area.sub$LDMC[all.area.sub$sample_id %in% c("10290262","10966273","13404937",
@@ -87,7 +90,7 @@ all.area.sub$LDMC[all.area.sub$sample_id %in% c("10290262","10966273","13404937"
                                                   "44683516","45108236")]<-NA
 
 all.area.sub$SLA[all.area.sub$sample_id %in% c("13404937","44227362",
-                                                 "44683516","45108236","44142362")]<-NA
+                                               "44683516","45108236","44142362")]<-NA
 
 
 ## SLA in units m^2/kg

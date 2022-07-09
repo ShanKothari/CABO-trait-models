@@ -6,8 +6,8 @@ library(caret)
 #########################################
 ## this script is meant to ensure that the
 ## training and testing data for PLSR trait
-## modeling analyses using reflectance and
-## transmittance are the same
+## modeling analyses using reflectance,
+## transmittance, and absorptance are the same
 
 ## read spectra and traits
 ref.traits<-readRDS("ProcessedSpectra/all_ref_and_traits.rds")
@@ -20,9 +20,9 @@ trans.traits<-trans.traits[which(meta(trans.traits)$project!="2019-Pardo-MSc-Ude
 abs.traits<-abs.traits[which(meta(abs.traits)$project!="2019-Pardo-MSc-UdeM")]
 
 ## save data for archiving
-write.csv(as.data.frame(ref.traits),"ProcessedSpectra/ref_spec.csv",row.names = F)
-write.csv(as.data.frame(trans.traits),"ProcessedSpectra/trans_spec.csv",row.names = F)
-write.csv(as.data.frame(abs.traits),"ProcessedSpectra/abs_spec.csv",row.names = F)
+# write.csv(as.data.frame(ref.traits),"ProcessedSpectra/ref_spec.csv",row.names = F)
+# write.csv(as.data.frame(trans.traits),"ProcessedSpectra/trans_spec.csv",row.names = F)
+# write.csv(as.data.frame(abs.traits),"ProcessedSpectra/abs_spec.csv",row.names = F)
 
 ###################################
 ## divide up data
@@ -30,7 +30,7 @@ write.csv(as.data.frame(abs.traits),"ProcessedSpectra/abs_spec.csv",row.names = 
 ## check that IDs are the same and in the same order
 if(meta(ref.traits)$sample_id != meta(trans.traits)$sample_id ||
    meta(ref.traits)$sample_id != meta(abs.traits)$sample_id){
-  stop("sample ids not the same")
+  print("sample ids not the same")
 }
 
 ## create division
