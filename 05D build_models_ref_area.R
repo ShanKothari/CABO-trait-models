@@ -7,6 +7,9 @@ library(ggplot2)
 library(RColorBrewer)
 library(patchwork)
 library(ggpubr)
+
+## download VIP.R from Bjorn-Helge Mevik's website:
+## https://mevik.net/work/software/pls.html
 source("Scripts/VIP.R")
 source("Scripts/CABO-trait-models/00 useful_functions.R")
 

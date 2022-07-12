@@ -7,7 +7,6 @@ library(ggplot2)
 library(RColorBrewer)
 library(patchwork)
 library(prospectr)
-source("Scripts/VIP.R")
 source("Scripts/CABO-trait-models/00 useful_functions.R")
 
 ref.train<-readRDS("ProcessedSpectra/ref_train.rds")
