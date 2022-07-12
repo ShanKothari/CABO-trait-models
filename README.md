@@ -28,9 +28,9 @@ Manuscript (1) only involves scripts 1-3 and 10. Manuscript (2) involves all scr
 
 ## How to use
 
-This repository is *not* a software package or any sort of user-oriented product that people can use without further modification. It *is* meant to be a reasonably well-documented and faithful record of the analyses carried out in the two manuscripts listed above. Some analyses should be easily reproducible, with some modification, given the scripts and the archived data (see **Associated data** below). However, we do not (for example) include the TRY data.
+This repository is *not* a software package or any sort of user-oriented product that people can use without further modification. It *is* meant to be a reasonably well-documented and faithful record of the analyses carried out in the two manuscripts listed above. Some analyses should be easily reproducible, with some modification, given the scripts and the archived data (see **Associated data** below). However, we do not (for example) include the TRY data. Users will also have to (for example) change paths to the directories where they have saved the files locally.
 
-## Associated data
+## Associated data products
 
 There are a few associated data products (DOIs forthcoming):
 
@@ -38,3 +38,12 @@ There are a few associated data products (DOIs forthcoming):
 2. The complete Dessain project is not yet archived, but will be upon publication of manuscript (2).
 3. [LOPEX](https://ecosis.org/package/leaf-optical-properties-experiment-database--lopex93-) and [ANGERS](https://ecosis.org/package/angers-leaf-optical-properties-database--2003-), used in the external validation, are available at those respective links
 4. In script 10, I read in [fresh-](https://ecosis.org/package/fresh-leaf-cabo-spectra-from-herbarium-project), [pressed-](https://ecosis.org/package/pressed-leaf-cabo-spectra-from-herbarium-project), and [ground-](https://ecosis.org/package/pressed-leaf-cabo-spectra-from-herbarium-project)leaf spectra from another manuscript ([Kothari et al. 2022](https://www.biorxiv.org/content/10.1101/2021.04.21.440856), in press _Methods in Ecology and Evolution_) available at those respective links.
+
+In most of the scripts, I use the CRAN-hosted package `spectrolab v. 0.0.10` to handle the spectral data. In this package, the class `spectra` allows users to attach and retrieve metadata from spectral data using the function `meta()`. 
+
+```
+library(spectrolab)
+
+spec_data<-read.csv("mydata.csv")
+name_vars<-1 ## which columns contain sample names?
+```
