@@ -268,12 +268,14 @@ ICP_Warren<-data.frame(Sample_id=CFractions$bottle_id[match(ICP_Warren$leaf_chem
                        Zn=ICP_Warren$zn_mg_g)
 ICP_all<-rbind(ICP_boxes,ICP_Warren)
 
+## remove extreme outliers
 ICP_all$Al[ICP_all$Sample_id=="9157296"]<-NA
 ICP_all$Fe[ICP_all$Sample_id=="9157296"]<-NA
 ICP_all$Cu[ICP_all$Sample_id=="12176890"]<-NA
 ICP_all$Cu[ICP_all$Sample_id=="11914931"]<-NA
 ICP_all$Cu[ICP_all$Sample_id=="11995935"]<-NA
 ICP_all$Zn[ICP_all$Sample_id=="13384790"]<-NA
+## set samples with negative values (below detection limit) to 0
 ICP_all$Al[ICP_all$Al<0]<-0
 ICP_all$Na[ICP_all$Na<0]<-0
 
