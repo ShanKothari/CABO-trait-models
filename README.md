@@ -17,7 +17,7 @@ The stages are:
 2. Compiling spectral data from across projects.
 3. Attaching trait data to the spectral data.
 4. Dividing up training and testing data for PLSR analyses.
-5. Calibrating models using different kinds of data (reflectance A + D, transmittance B, absorptance C, continuum-removed reflectance E, brightness-normalized reflectance F) and traits (area-based \[D\] vs mass-based \[all others\] chemical traits) 
+5. Calibrating models using different kinds of data (reflectance A + D, transmittance B, absorptance C, continuum-removed reflectance E, brightness-normalized reflectance F) and traits (area-based \[D\] vs mass-based \[all others\] chemical traits). Here I mostly follow the approach laid out by Burnett et al. (2021) _Journal of Experimental Botany_.
 6. Plotting models with (A) just reflectance or (B) comparing reflectance, transmittance, and absorptance.
 7. Comparing trait distributions in the data to TRY data.
 8. Evaluating transferability of models across functional groups.
@@ -58,3 +58,7 @@ spec<-spectra(value = spec_df[,-c(name_vars,meta_vars)],
               names = spec_df[,name_var],
               meta = spec_df[,meta_vars])
 ```
+
+## Questions?
+
+Please feel free to reach me at _shan.kothari \[at\] umontreal \[dot\] ca_ with questions about the code or the data. I'm glad to help you adapt any of the approaches I use for your own purposes. If you draw heavily from my code, I would ask that (purely as a courtesy) you cite one of the two papers above⁠—whichever is more relevant.
