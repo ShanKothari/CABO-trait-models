@@ -17,7 +17,7 @@ The stages are:
 2. Compiling spectral data from across projects.
 3. Attaching trait data to the spectral data.
 4. Dividing up training and testing data for PLSR analyses.
-5. Calibrating models using different kinds of data (reflectance A + D, transmittance B, absorptance C, continuum-removed reflectance E, brightness-normalized reflectance F) and traits (area-based \[D\] vs mass-based \[all others\] chemical traits). Here I mostly follow the approach laid out by Burnett et al. (2021) _Journal of Experimental Botany_.
+5. Calibrating models using different kinds of data (\[A + D\] reflectance, \[B\] transmittance, \[C\] absorptance, \[E\] continuum-removed reflectance, \[F\] brightness-normalized reflectance) and traits (\[D\] area-based vs \[all others\] mass-based chemical traits). Here I mostly follow the approach laid out by Burnett et al. (2021) _Journal of Experimental Botany_.
 6. Plotting models with (A) just reflectance or (B) comparing reflectance, transmittance, and absorptance.
 7. Comparing trait distributions in the data to TRY data.
 8. Evaluating transferability of models across functional groups.
