@@ -24,7 +24,7 @@ The stages are:
 9. Externally validating the models built in step 5 across LOPEX, ANGERS, and Dessain data.
 10. Identifying the dimensionality and visualizing major dimensions of the spectral data, along with some miscellaneous analyses described in manuscript (1) above.
 
-Manuscript (1) only involves scripts 1-3 and 10. Manuscript (2) involves all scripts. The processed spectral and trait data products produced at the end of script 3, and read in at the beginning of script 4, are archived elsewhere (see **Associated data** below).
+Manuscript (1) only involves scripts 1-3 and 10. Manuscript (2) involves all scripts. The processed spectral and trait data products produced at the end of script 3, and read in at the beginning of script 4, are archived elsewhere (see **Associated data** below). If you are trying to reproduce analyses from manuscript (2), I recommend that you start by reading in the archived data at script 4 and proceed from there, clearing your environment in between scripts. If you are trying to reproduce analyses from manuscript (1), proceed right to script 10.
 
 ## How to use
 
