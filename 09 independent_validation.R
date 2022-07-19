@@ -385,6 +385,7 @@ meta(Dessain.spec)$dataset<-"Dessain"
 Dessain.spec<-Dessain.spec[,400:2400]
 
 saveRDS(Dessain.spec,"IndependentValidationData/Dessain_processed.rds")
+write.csv(as.data.frame(Dessain.spec),"IndependentValidationData/Dessain_spectra.csv",row.names = F)
 
 ##########################################################
 ## Hacker 2018 GOP
