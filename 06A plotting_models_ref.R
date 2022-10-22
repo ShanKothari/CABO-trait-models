@@ -78,8 +78,8 @@ Ca_lower<-min(Ca_all,na.rm=T)-1
 Cu_all<-with(all.jack.df.list.ref$Cu,c(pred.low[!is.na(Measured)],
                                pred.high[!is.na(Measured)],
                                Measured))
-Cu_upper<-max(Cu_all,na.rm=T)+0.002
-Cu_lower<-min(Cu_all,na.rm=T)-0.002
+Cu_upper<-max(Cu_all,na.rm=T)+0.003
+Cu_lower<-min(Cu_all,na.rm=T)-0.003
 
 Fe_all<-with(all.jack.df.list.ref$Fe,c(pred.low[!is.na(Measured)],
                                pred.high[!is.na(Measured)],
@@ -763,4 +763,158 @@ ggarrange(Al_area.val.plot, Ca_area.val.plot, Cu_area.val.plot,
           Fe_area.val.plot,K_area.val.plot,Mg_area.val.plot,
           Mn_area.val.plot, Na_area.val.plot,P_area.val.plot,
           Zn_area.val.plot,ncol=3, nrow=4, common.legend = TRUE, legend="bottom")
+dev.off()
+
+####################################
+## comparing trait transformations
+
+all.sqrt.jack.df.list.ref<-readRDS("SavedResults/all_jack_df_list_ref_sqrt.rds")
+all.log.jack.df.list.ref<-readRDS("SavedResults/all_jack_df_list_ref_log.rds")
+
+Nmass.sqrt.val.plot<-ggplot(all.sqrt.jack.df.list.ref$N,
+                       aes(y=Measured,x=pred.mean,color=functional.group))+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(N_lower,N_upper),
+                  ylim=c(N_lower,N_upper))+
+  theme(text = element_text(size=20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank())+
+  labs(y=expression("Measured N (%)"),
+       x=expression("Predicted N (%)"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+Nmass.log.val.plot<-ggplot(all.log.jack.df.list.ref$N,
+                            aes(y=Measured,x=pred.mean,color=functional.group))+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(N_lower,N_upper),
+                  ylim=c(N_lower,N_upper))+
+  theme(text = element_text(size=20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank())+
+  labs(y=expression("Measured N (%)"),
+       x=expression("Predicted N (%)"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+chlA_mass.sqrt.val.plot<-ggplot(all.sqrt.jack.df.list.ref$chlA,
+                           aes(y=Measured,x=pred.mean,color=functional.group))+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(chlA_lower,chlA_upper),
+                  ylim=c(chlA_lower,chlA_upper))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.25),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank())+
+  labs(y=expression("Measured Chl"~italic("a")~"(mg g"^-1*")"),
+       x=expression("Predicted Chl"~italic("a")~"(mg g"^-1*")"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+chlA_mass.log.val.plot<-ggplot(all.log.jack.df.list.ref$chlA,
+                           aes(y=Measured,x=pred.mean,color=functional.group))+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(chlA_lower,chlA_upper),
+                  ylim=c(chlA_lower,chlA_upper))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.25),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank())+
+  labs(y=expression("Measured Chl"~italic("a")~"(mg g"^-1*")"),
+       x=expression("Predicted Chl"~italic("a")~"(mg g"^-1*")"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+LMA.sqrt.val.plot<-ggplot(all.sqrt.jack.df.list.ref$LMA,
+                     aes(y=Measured,x=pred.mean,color=functional.group))+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(LMA_lower,LMA_upper),
+                  ylim=c(LMA_lower,LMA_upper))+
+  theme(text = element_text(size=20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank())+
+  labs(y=expression("Measured LMA (kg m"^-2*")"),
+       x=expression("Predicted LMA (kg m"^-2*")"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)+
+  ggtitle("Square root-transformed")
+
+LMA.log.val.plot<-ggplot(all.log.jack.df.list.ref$LMA,
+                     aes(y=Measured,x=pred.mean,color=functional.group))+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(LMA_lower,LMA_upper),
+                  ylim=c(LMA_lower,LMA_upper))+
+  theme(text = element_text(size=20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank())+
+  labs(y=expression("Measured LMA (kg m"^-2*")"),
+       x=expression("Predicted LMA (kg m"^-2*")"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)+
+  ggtitle("Log-transformed")
+
+K_mass.sqrt.val.plot<-ggplot(all.sqrt.jack.df.list.ref$K,
+                        aes(y=Measured,x=pred.mean,color=functional.group))+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(K_lower,K_upper),
+                  ylim=c(K_lower,K_upper))+
+  theme(text = element_text(size=20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank())+
+  labs(y=expression("Measured K (mg g"^-1*")"),
+       x=expression("Predicted K (mg g"^-1*")"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+K_mass.log.val.plot<-ggplot(all.log.jack.df.list.ref$K,
+                        aes(y=Measured,x=pred.mean,color=functional.group))+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(K_lower,K_upper),
+                  ylim=c(K_lower,K_upper))+
+  theme(text = element_text(size=20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank())+
+  labs(y=expression("Measured K (mg g"^-1*")"),
+       x=expression("Predicted K (mg g"^-1*")"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+pdf("Images/val_plots_comp_transform.pdf",width=16,height=21)
+((LMA.val.plot + ggtitle("Untransformed")) + LMA.sqrt.val.plot + LMA.log.val.plot) / 
+  (Nmass.val.plot + Nmass.sqrt.val.plot + Nmass.log.val.plot) / 
+  (chlA_mass.val.plot + chlA_mass.sqrt.val.plot + chlA_mass.log.val.plot) /
+  (K_mass.val.plot + K_mass.sqrt.val.plot + K_mass.log.val.plot) &
+  plot_layout(guides="collect") & theme(legend.position = "bottom")
 dev.off()
