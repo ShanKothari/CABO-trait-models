@@ -62,15 +62,15 @@ LOPEX<-spectra(LOPEX_sg,
 LOPEX_traits<-read.csv("IndependentValidationData/LOPEX/lopex1993metadata.csv")
 LOPEX_traits<-LOPEX_traits[-which(paste("X0",LOPEX_traits$Sample_.,sep="") %in% bad_spectra_LOPEX),]
 LOPEX_traits[which(LOPEX_traits== -999,arr.ind=T)]<-NA
-meta(LOPEX)$chlA<-LOPEX_traits$Chlorophyll_a..µg.cm2.
+meta(LOPEX)$chlA<-LOPEX_traits$Chlorophyll_a..?g.cm2.
 meta(LOPEX)$Nmass<-LOPEX_traits$Nitrogen....DW.
 meta(LOPEX)$Cmass<-LOPEX_traits$Carbon....DW.
 meta(LOPEX)$EWT<-LOPEX_traits$Equivalent.Water.Thickness..g.cm2.*10
 meta(LOPEX)$LMA<-LOPEX_traits$Leaf.mass.per.area..g.cm2.*10
 meta(LOPEX)$LDMC<-(LOPEX_traits$Dry.Weight..g./LOPEX_traits$Fresh.Weight..g.)*1000
-meta(LOPEX)$chlA<-LOPEX_traits$Chlorophyll_a..µg.cm2./(100*meta(LOPEX)$LMA)
-meta(LOPEX)$chlB<-LOPEX_traits$Chlorophyll_b..µg.cm2./(100*meta(LOPEX)$LMA)
-meta(LOPEX)$car<-LOPEX_traits$Carotenoid..µg.cm2./(100*meta(LOPEX)$LMA)
+meta(LOPEX)$chlA<-LOPEX_traits$Chlorophyll_a..?g.cm2./(100*meta(LOPEX)$LMA)
+meta(LOPEX)$chlB<-LOPEX_traits$Chlorophyll_b..?g.cm2./(100*meta(LOPEX)$LMA)
+meta(LOPEX)$car<-LOPEX_traits$Carotenoid..?g.cm2./(100*meta(LOPEX)$LMA)
 
 ## we average the two methods for estimating cellulose and lignin
 meta(LOPEX)$cellulose1<-LOPEX_traits$Cellulose_1....DW.
@@ -121,9 +121,9 @@ ANGERS_traits[which(ANGERS_traits== -999,arr.ind=T)]<-NA
 meta(ANGERS)$EWT<-ANGERS_traits$Equivalent.Water.Thickness..g.cm2.*10
 meta(ANGERS)$LMA<-ANGERS_traits$Leaf.mass.per.area..g.cm2.*10
 # meta(ANGERS)$LDMC<-with(meta(ANGERS),LMA/(LMA+EWT))*1000
-meta(ANGERS)$chlA<-ANGERS_traits$Chlorophyll_a..µg.cm2./(100*meta(ANGERS)$LMA)
-meta(ANGERS)$chlB<-ANGERS_traits$Chlorophyll_b..µg.cm2./(100*meta(ANGERS)$LMA)
-meta(ANGERS)$car<-ANGERS_traits$Carotenoid..µg.cm2./(100*meta(ANGERS)$LMA)
+meta(ANGERS)$chlA<-ANGERS_traits$Chlorophyll_a..?g.cm2./(100*meta(ANGERS)$LMA)
+meta(ANGERS)$chlB<-ANGERS_traits$Chlorophyll_b..?g.cm2./(100*meta(ANGERS)$LMA)
+meta(ANGERS)$car<-ANGERS_traits$Carotenoid..?g.cm2./(100*meta(ANGERS)$LMA)
 
 meta(ANGERS)$dataset<-"ANGERS"
 ANGERS<-ANGERS[,400:2400]
@@ -1476,3 +1476,40 @@ summ<-data.frame(#r2=round(unlist(lapply(all_pred_df_crs,function(x) summary(lm(
                  rmse=signif(unlist(lapply(all_pred_df_crs,function(x) RMSD(x$measured[x$dataset=="ANGERS"],x$pred.mean[x$dataset=="ANGERS"]))),3),
                  perrmse=signif(unlist(lapply(all_pred_df_crs,function(x) percentRMSD(x$measured[x$dataset=="ANGERS"],x$pred.mean[x$dataset=="ANGERS"],0.025,0.975)))*100,3))
 write.csv(summ,"SavedResults/plsr_summ_ind.csv")
+
+##########################################
+## validating the Serbin et al. models on our data
+
+ref.traits<-readRDS("ProcessedSpectra/all_ref_and_traits.rds")
+ref.traits<-ref.traits[which(meta(ref.traits)$project!="2019-Pardo-MSc-UdeM")]
+
+Serbin.coefs<-read.csv("SSerbin_etal_2019_NewPhytologist-1.2.1/SSerbin_multibiome_lma_plsr_model/sqrt_LMA_gDW_m2_Jackkife_PLSR_Coefficients.csv")
+Serbin.coefs$Iteration<-NULL
+
+Serbin.estimates<-(t(t(as.matrix(ref.traits[,500:2400]) %*% t(Serbin.coefs[,-1]))+Serbin.coefs[,1])^2)/1000
+meta(ref.traits)$Serbin.means<-rowMeans(Serbin.estimates)
+meta(ref.traits)$Serbin.025<-apply(Serbin.estimates,1,quantile,probs=0.025)
+meta(ref.traits)$Serbin.975<-apply(Serbin.estimates,1,quantile,probs=0.975)
+
+pdf("Images/serbin_val.pdf",height=8,width=8)  
+ggplot(meta(ref.traits),aes(y=LMA,x=Serbin.means,
+                            color=functional.group))+
+  geom_errorbarh(aes(y=LMA,xmin=Serbin.025,xmax=Serbin.975),
+                 color="gray")+
+  geom_point(size=2)+geom_smooth(method="lm",se=F,size=2)+
+  coord_cartesian(xlim=c(0,0.4),ylim=c(0,0.4))+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=3)+
+  theme(text = element_text(size=20),
+        legend.position="bottom")+
+  labs(y=expression("Measured LMA (kg m"^-2*")"),
+       x=expression("Predicted LMA (kg m"^-2*")"),
+       color="Functional group")+
+  scale_color_manual(values=colorBlind)
+dev.off()
+
+with(meta(ref.traits),RMSD(LMA,Serbin.means))
+with(meta(ref.traits),percentRMSD(LMA,Serbin.means,min = 0.025,max=0.975))
+
+with(meta(ref.traits)[meta(ref.traits)$functional.group!="conifer",],RMSD(LMA,Serbin.means))
+with(meta(ref.traits)[meta(ref.traits)$functional.group!="conifer",],percentRMSD(LMA,Serbin.means,min = 0.025,max=0.975))
