@@ -133,11 +133,15 @@ trait.pca.plot<-ggplot(trait.pca.val, aes(x = PC1, y = PC2, color = functional.g
        y=paste("PC2 (",round(trait.pca.perc[2],1),"% variance)",sep=""))+
   scale_color_manual(values=colorBlind)
 
+## log-transform LMA and EWT to reduce skewness
+meta(ref.traits)$logLMA<-log(meta(ref.traits)$LMA)
+meta(ref.traits)$logEWT<-log(meta(ref.traits)$EWT)
+
 ## using normalization-independent traits
 ## and leaving out some traits strongly correlated with others
-traitnorm.pca<-prcomp(~.,meta(ref.traits)[,c("LMA","LDMC","EWT","Cnorm","Nnorm",
-                                          "hemicellulose_norm","cellulose_norm",
-                                          "lignin_norm","chlA_norm")],
+traitnorm.pca<-prcomp(~.,meta(ref.traits)[,c("logLMA","LDMC","logEWT","Cnorm","Nnorm",
+                                             "hemicellulose_norm","cellulose_norm",
+                                             "lignin_norm","chlA_norm")],
                       scale.=T,na.action = na.exclude)
 
 traitnorm.pca.val <- data.frame(functional.group=meta(ref.traits)$functional.group,traitnorm.pca$x)
@@ -146,12 +150,14 @@ traitnorm.pca.loadings$variables<-gsub("_norm","",traitnorm.pca.loadings$variabl
 traitnorm.pca.loadings$variables<-gsub("norm","",traitnorm.pca.loadings$variables)
 traitnorm.pca.perc<-traitnorm.pca$sdev^2/sum(traitnorm.pca$sdev^2)*100
 
-traitnorm.pca.plot<-ggplot(traitnorm.pca.val, aes(x = -PC1*2, y = -PC2*2, color = functional.group)) +
+traitnorm.pca.plot<-ggplot(traitnorm.pca.val, aes(x = PC1*2, y = -PC2*2, color = functional.group)) +
   geom_point(size = 2,alpha=0.6) +
-  geom_segment(data = traitnorm.pca.loadings, aes(x = 0, y = 0, xend = -PC1*10, yend = -PC2*10),
+  geom_segment(data = traitnorm.pca.loadings, aes(x = 0, y = 0, xend = PC1*10, yend = -PC2*10),
                arrow = arrow(length = unit(1/2, "picas")),
                color = "black",size=1) +
-  annotate("text", x = -traitnorm.pca.loadings$PC1*13, y = -traitnorm.pca.loadings$PC2*13,
+  annotate("text",
+           x = traitnorm.pca.loadings$PC1*12+c(0,0,0,-0.1,0,-0.2,-0.2,0,-0.1),
+           y = -traitnorm.pca.loadings$PC2*12+c(-0.1,0,0,0.3,-0.2,-0.2,0.3,-0.2,0),
            label = traitnorm.pca.loadings$variables)+
   theme_bw()+theme(text=element_text(size=15))+
   guides(color=guide_legend("Functional group"))+
@@ -306,14 +312,14 @@ isomap.12<-ggplot(data=ref.isomap.proc.coords,
         text = element_text(size=15))+
   scale_color_manual(values=colorBlind)+
   guides(color=guide_legend("Functional group"))+
-  labs(x="Axis 1",y="Axis 2")
+  labs(x="Spectral Axis 1",y="Spectral Axis 2")
 
 isomap.34<-ggplot(data=ref.isomap.proc.coords,
                   aes(x=D3,y=D4,color=functional.group))+
   geom_point(size=3)+
-  geom_segment(aes(x = 0, y = 0, xend = D3*4, yend = D4*4),
+  geom_segment(aes(x = 0, y = 0, xend = D3, yend = D4),
                data = scores.34.df, size =1.5, alpha = 0.5, colour = "black") +
-  geom_text(data = scores.34.df, aes(x = D3*4.8, y = D4*4.8), size=7,
+  geom_text(data = scores.34.df, aes(x = D3*1.2, y = D4*1.2), size=7,
             label = row.names(scores.34.df), colour = "black", fontface = "bold",
             nudge_x = c(0,-0.1,-0.05,0,-0.15,0,0.05,0.05,-0.05),
             nudge_y = c(0,0,0,-0.05,0,0,0,0,0)) +
@@ -323,11 +329,11 @@ isomap.34<-ggplot(data=ref.isomap.proc.coords,
         text = element_text(size=15))+
   scale_color_manual(values=colorBlind)+
   guides(color=guide_legend("Functional group"))+
-  labs(x="Axis 3",y="Axis 4")
+  labs(x="Spectral Axis 3",y="Spectral Axis 4")
 
-pdf("GrimeReview/isomap.pdf",width=6.5,height=11.5)
+pdf("GrimeReview/isomap_horizontal.pdf",width=11.5,height=6.5)
 isomap.12+isomap.34+
-  plot_layout(ncol=1,guides="collect") &
+  plot_layout(ncol=2,guides="collect") &
   theme(legend.position = "bottom")
 dev.off()
 
