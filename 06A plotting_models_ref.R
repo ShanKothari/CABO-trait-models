@@ -805,6 +805,40 @@ Nmass.log.val.plot<-ggplot(all.log.jack.df.list.ref$N,
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
+Cmass.sqrt.val.plot<-ggplot(all.sqrt.jack.df.list.ref$C,
+                            aes(y=Measured,x=pred.mean,color=functional.group))+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(C_lower,C_upper),
+                  ylim=c(C_lower,C_upper))+
+  theme(text = element_text(size=20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank())+
+  labs(y=expression("Measured C (%)"),
+       x=expression("Predicted C (%)"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+Cmass.log.val.plot<-ggplot(all.log.jack.df.list.ref$C,
+                            aes(y=Measured,x=pred.mean,color=functional.group))+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(C_lower,C_upper),
+                  ylim=c(C_lower,C_upper))+
+  theme(text = element_text(size=20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank())+
+  labs(y=expression("Measured C (%)"),
+       x=expression("Predicted C (%)"))+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
 chlA_mass.sqrt.val.plot<-ggplot(all.sqrt.jack.df.list.ref$chlA,
                            aes(y=Measured,x=pred.mean,color=functional.group))+
   geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
@@ -913,7 +947,7 @@ K_mass.log.val.plot<-ggplot(all.log.jack.df.list.ref$K,
 
 pdf("Images/val_plots_comp_transform.pdf",width=16,height=21)
 ((LMA.val.plot + ggtitle("Untransformed")) + LMA.sqrt.val.plot + LMA.log.val.plot) / 
-  (Nmass.val.plot + Nmass.sqrt.val.plot + Nmass.log.val.plot) / 
+  (Cmass.val.plot + Cmass.sqrt.val.plot + Cmass.log.val.plot) / 
   (chlA_mass.val.plot + chlA_mass.sqrt.val.plot + chlA_mass.log.val.plot) /
   (K_mass.val.plot + K_mass.sqrt.val.plot + K_mass.log.val.plot) &
   plot_layout(guides="collect") & theme(legend.position = "bottom")
