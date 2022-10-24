@@ -48,6 +48,16 @@ Nmass_sqrt_pred<-data.frame(ID=meta(ref.train)$sample_id[Nmass_sqrt_valid],
                             measured=meta(ref.train)$Nmass[Nmass_sqrt_valid],
                             val_pred=Nmass_sqrt_CVmodel$validation$pred[,,ncomp_Nmass_sqrt_CVmodel]^2)
 
+Cmass_sqrt_CVmodel<-plsr(sqrt(meta(ref.train)$Cmass)~as.matrix(ref.train),
+                         ncomp=30,method = "oscorespls",validation="CV",segments=10)
+ncomp_Cmass_sqrt_CVmodel <- selectNcomp(Cmass_sqrt_CVmodel, method = "onesigma", plot = FALSE)
+Cmass_sqrt_valid <- which(!is.na(meta(ref.train)$Cmass))
+Cmass_sqrt_pred<-data.frame(ID=meta(ref.train)$sample_id[Cmass_sqrt_valid],
+                            Species=meta(ref.train)$species[Cmass_sqrt_valid],
+                            Project=meta(ref.train)$project[Cmass_sqrt_valid],
+                            measured=meta(ref.train)$Cmass[Cmass_sqrt_valid],
+                            val_pred=Cmass_sqrt_CVmodel$validation$pred[,,ncomp_Cmass_sqrt_CVmodel]^2)
+
 chlA_mass_sqrt_CVmodel<-plsr(sqrt(meta(ref.train)$chlA_mass)~as.matrix(ref.train),
                              ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_chlA_mass_sqrt_CVmodel <- selectNcomp(chlA_mass_sqrt_CVmodel, method = "onesigma", plot = FALSE)
@@ -90,6 +100,16 @@ Nmass_log_pred<-data.frame(ID=meta(ref.train)$sample_id[Nmass_log_valid],
                            measured=meta(ref.train)$Nmass[Nmass_log_valid],
                            val_pred=exp(Nmass_log_CVmodel$validation$pred[,,ncomp_Nmass_log_CVmodel]))
 
+Cmass_log_CVmodel<-plsr(log(meta(ref.train)$Cmass)~as.matrix(ref.train),
+                        ncomp=30,method = "oscorespls",validation="CV",segments=10)
+ncomp_Cmass_log_CVmodel <- selectNcomp(Cmass_log_CVmodel, method = "onesigma", plot = FALSE)
+Cmass_log_valid <- which(!is.na(meta(ref.train)$Cmass))
+Cmass_log_pred<-data.frame(ID=meta(ref.train)$sample_id[Cmass_log_valid],
+                           Species=meta(ref.train)$species[Cmass_log_valid],
+                           Project=meta(ref.train)$project[Cmass_log_valid],
+                           measured=meta(ref.train)$Cmass[Cmass_log_valid],
+                           val_pred=exp(Cmass_log_CVmodel$validation$pred[,,ncomp_Cmass_log_CVmodel]))
+
 chlA_mass_log_CVmodel<-plsr(log(meta(ref.train)$chlA_mass)~as.matrix(ref.train),
                             ncomp=30,method = "oscorespls",validation="CV",segments=10)
 ncomp_chlA_mass_log_CVmodel <- selectNcomp(chlA_mass_log_CVmodel, method = "onesigma", plot = FALSE)
@@ -115,21 +135,25 @@ K_mass_log_pred<-data.frame(ID=meta(ref.train)$sample_id[K_mass_log_valid],
 
 chlA_mass.sqrt.jack.coefs<-list()
 Nmass.sqrt.jack.coefs<-list()
+Cmass.sqrt.jack.coefs<-list()
 LMA.sqrt.jack.coefs<-list()
 K_mass.sqrt.jack.coefs<-list()
 
 chlA_mass.log.jack.coefs<-list()
 Nmass.log.jack.coefs<-list()
+Cmass.log.jack.coefs<-list()
 LMA.log.jack.coefs<-list()
 K_mass.log.jack.coefs<-list()
 
 chlA_mass.sqrt.jack.stats<-list()
 Nmass.sqrt.jack.stats<-list()
+Cmass.sqrt.jack.stats<-list()
 LMA.sqrt.jack.stats<-list()
 K_mass.sqrt.jack.stats<-list()
 
 chlA_mass.log.jack.stats<-list()
 Nmass.log.jack.stats<-list()
+Cmass.log.jack.stats<-list()
 LMA.log.jack.stats<-list()
 K_mass.log.jack.stats<-list()
 
@@ -149,6 +173,8 @@ for(i in 1:nreps){
                             ncomp=30,method = "oscorespls",validation="none")
   Nmass.sqrt.jack<-plsr(sqrt(meta(calib.jack)$Nmass)~as.matrix(calib.jack),
                         ncomp=30,method = "oscorespls",validation="none")
+  Cmass.sqrt.jack<-plsr(sqrt(meta(calib.jack)$Cmass)~as.matrix(calib.jack),
+                        ncomp=30,method = "oscorespls",validation="none")
   LMA.sqrt.jack<-plsr(sqrt(meta(calib.jack)$LMA)~as.matrix(calib.jack),
                       ncomp=30,method = "oscorespls",validation="none")
   K_mass.sqrt.jack<-plsr(sqrt(meta(calib.jack)$K_mass)~as.matrix(calib.jack),
@@ -157,6 +183,8 @@ for(i in 1:nreps){
   chlA_mass.log.jack<-plsr(log(meta(calib.jack)$chlA_mass)~as.matrix(calib.jack),
                            ncomp=30,method = "oscorespls",validation="none")
   Nmass.log.jack<-plsr(log(meta(calib.jack)$Nmass)~as.matrix(calib.jack),
+                       ncomp=30,method = "oscorespls",validation="none")
+  Cmass.log.jack<-plsr(log(meta(calib.jack)$Cmass)~as.matrix(calib.jack),
                        ncomp=30,method = "oscorespls",validation="none")
   LMA.log.jack<-plsr(log(meta(calib.jack)$LMA)~as.matrix(calib.jack),
                      ncomp=30,method = "oscorespls",validation="none")
@@ -176,6 +204,13 @@ for(i in 1:nreps){
                                 RMSE=RMSD(meta(val.jack)$Nmass,Nmass.sqrt.jack.val.pred),
                                 perRMSE=percentRMSD(meta(val.jack)$Nmass,Nmass.sqrt.jack.val.pred,0.025,0.975),
                                 bias=mean(Nmass.sqrt.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Nmass,na.rm=T))
+  
+  Cmass.sqrt.jack.val.pred<-as.vector(predict(Cmass.sqrt.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Cmass_sqrt_CVmodel)[,,1])^2
+  Cmass.sqrt.jack.val.fit<-lm(Cmass.sqrt.jack.val.pred~meta(val.jack)$Cmass)
+  Cmass.sqrt.jack.stats[[i]]<-c(R2=summary(Cmass.sqrt.jack.val.fit)$r.squared,
+                                RMSE=RMSD(meta(val.jack)$Cmass,Cmass.sqrt.jack.val.pred),
+                                perRMSE=percentRMSD(meta(val.jack)$Cmass,Cmass.sqrt.jack.val.pred,0.025,0.975),
+                                bias=mean(Cmass.sqrt.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Cmass,na.rm=T))
   
   LMA.sqrt.jack.val.pred<-as.vector(predict(LMA.sqrt.jack,newdata=as.matrix(val.jack),ncomp=ncomp_LMA_sqrt_CVmodel)[,,1])^2
   LMA.sqrt.jack.val.fit<-lm(LMA.sqrt.jack.val.pred~meta(val.jack)$LMA)
@@ -205,6 +240,13 @@ for(i in 1:nreps){
                                perRMSE=percentRMSD(meta(val.jack)$Nmass,Nmass.log.jack.val.pred,0.025,0.975),
                                bias=mean(Nmass.log.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Nmass,na.rm=T))
   
+  Cmass.log.jack.val.pred<-exp(as.vector(predict(Cmass.log.jack,newdata=as.matrix(val.jack),ncomp=ncomp_Cmass_log_CVmodel)[,,1]))
+  Cmass.log.jack.val.fit<-lm(Cmass.log.jack.val.pred~meta(val.jack)$Cmass)
+  Cmass.log.jack.stats[[i]]<-c(R2=summary(Cmass.log.jack.val.fit)$r.squared,
+                               RMSE=RMSD(meta(val.jack)$Cmass,Cmass.log.jack.val.pred),
+                               perRMSE=percentRMSD(meta(val.jack)$Cmass,Cmass.log.jack.val.pred,0.025,0.975),
+                               bias=mean(Cmass.log.jack.val.pred,na.rm=T)-mean(meta(val.jack)$Cmass,na.rm=T))
+  
   LMA.log.jack.val.pred<-exp(as.vector(predict(LMA.log.jack,newdata=as.matrix(val.jack),ncomp=ncomp_LMA_log_CVmodel)[,,1]))
   LMA.log.jack.val.fit<-lm(LMA.log.jack.val.pred~meta(val.jack)$LMA)
   LMA.log.jack.stats[[i]]<-c(R2=summary(LMA.log.jack.val.fit)$r.squared,
@@ -221,11 +263,13 @@ for(i in 1:nreps){
   
   chlA_mass.sqrt.jack.coefs[[i]]<-as.vector(coef(chlA_mass.sqrt.jack,ncomp=ncomp_chlA_mass_sqrt_CVmodel,intercept=TRUE))
   Nmass.sqrt.jack.coefs[[i]]<-as.vector(coef(Nmass.sqrt.jack,ncomp=ncomp_Nmass_sqrt_CVmodel,intercept=TRUE))
+  Cmass.sqrt.jack.coefs[[i]]<-as.vector(coef(Cmass.sqrt.jack,ncomp=ncomp_Cmass_sqrt_CVmodel,intercept=TRUE))
   LMA.sqrt.jack.coefs[[i]]<-as.vector(coef(LMA.sqrt.jack,ncomp=ncomp_LMA_sqrt_CVmodel,intercept=TRUE))
   K_mass.sqrt.jack.coefs[[i]]<-as.vector(coef(K_mass.sqrt.jack,ncomp=ncomp_K_mass_sqrt_CVmodel,intercept=TRUE))
   
   chlA_mass.log.jack.coefs[[i]]<-as.vector(coef(chlA_mass.log.jack,ncomp=ncomp_chlA_mass_log_CVmodel,intercept=TRUE))
   Nmass.log.jack.coefs[[i]]<-as.vector(coef(Nmass.log.jack,ncomp=ncomp_Nmass_log_CVmodel,intercept=TRUE))
+  Cmass.log.jack.coefs[[i]]<-as.vector(coef(Cmass.log.jack,ncomp=ncomp_Cmass_log_CVmodel,intercept=TRUE))
   LMA.log.jack.coefs[[i]]<-as.vector(coef(LMA.log.jack,ncomp=ncomp_LMA_log_CVmodel,intercept=TRUE))
   K_mass.log.jack.coefs[[i]]<-as.vector(coef(K_mass.log.jack,ncomp=ncomp_K_mass_log_CVmodel,intercept=TRUE))
   
@@ -252,6 +296,19 @@ Nmass.sqrt.jack.df<-data.frame(pred.mean=Nmass.sqrt.jack.stat[,1],
                                pred.high=Nmass.sqrt.jack.stat[,3],
                                Measured=meta(ref.test)$Nmass,
                                ncomp=ncomp_Nmass_sqrt_CVmodel,
+                               Species=meta(ref.test)$species,
+                               Project=meta(ref.test)$project,
+                               functional.group=meta(ref.test)$functional.group,
+                               ID=meta(ref.test)$sample_id)
+
+Cmass.sqrt.jack.pred<-apply.coefs(Cmass.sqrt.jack.coefs,as.matrix(ref.test))^2
+Cmass.sqrt.jack.stat<-t(apply(Cmass.sqrt.jack.pred,1,
+                              function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+Cmass.sqrt.jack.df<-data.frame(pred.mean=Cmass.sqrt.jack.stat[,1],
+                               pred.low=Cmass.sqrt.jack.stat[,2],
+                               pred.high=Cmass.sqrt.jack.stat[,3],
+                               Measured=meta(ref.test)$Cmass,
+                               ncomp=ncomp_Cmass_sqrt_CVmodel,
                                Species=meta(ref.test)$species,
                                Project=meta(ref.test)$project,
                                functional.group=meta(ref.test)$functional.group,
@@ -309,6 +366,19 @@ Nmass.log.jack.df<-data.frame(pred.mean=Nmass.log.jack.stat[,1],
                               functional.group=meta(ref.test)$functional.group,
                               ID=meta(ref.test)$sample_id)
 
+Cmass.log.jack.pred<-exp(apply.coefs(Cmass.log.jack.coefs,as.matrix(ref.test)))
+Cmass.log.jack.stat<-t(apply(Cmass.log.jack.pred,1,
+                             function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+Cmass.log.jack.df<-data.frame(pred.mean=Cmass.log.jack.stat[,1],
+                              pred.low=Cmass.log.jack.stat[,2],
+                              pred.high=Cmass.log.jack.stat[,3],
+                              Measured=meta(ref.test)$Cmass,
+                              ncomp=ncomp_Cmass_log_CVmodel,
+                              Species=meta(ref.test)$species,
+                              Project=meta(ref.test)$project,
+                              functional.group=meta(ref.test)$functional.group,
+                              ID=meta(ref.test)$sample_id)
+
 LMA.log.jack.pred<-exp(apply.coefs(LMA.log.jack.coefs,as.matrix(ref.test)))
 LMA.log.jack.stat<-t(apply(LMA.log.jack.pred,1,
                            function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
@@ -337,11 +407,13 @@ K_mass.log.jack.df<-data.frame(pred.mean=K_mass.log.jack.stat[,1],
 
 all.sqrt.jack.coef.list<-list(chlA=chlA_mass.sqrt.jack.coefs,
                               N=Nmass.sqrt.jack.coefs,
+                              C=Cmass.sqrt.jack.coefs,
                               LMA=LMA.sqrt.jack.coefs,
                               K=K_mass.sqrt.jack.coefs)
 
 all.log.jack.coef.list<-list(chlA=chlA_mass.log.jack.coefs,
                              N=Nmass.log.jack.coefs,
+                             C=Cmass.log.jack.coefs,
                              LMA=LMA.log.jack.coefs,
                              K=K_mass.log.jack.coefs)
 
@@ -350,11 +422,13 @@ saveRDS(all.log.jack.coef.list,"SavedResults/all_jack_coefs_list_ref_log.rds")
 
 all.sqrt.jack.df.list<-list(chlA=chlA_mass.sqrt.jack.df,
                             N=Nmass.sqrt.jack.df,
+                            C=Cmass.sqrt.jack.df,
                             LMA=LMA.sqrt.jack.df,
                             K=K_mass.sqrt.jack.df)
 
 all.log.jack.df.list<-list(chlA=chlA_mass.log.jack.df,
                            N=Nmass.log.jack.df,
+                           C=Cmass.log.jack.df,
                            LMA=LMA.log.jack.df,
                            K=K_mass.log.jack.df)
 
@@ -363,11 +437,13 @@ saveRDS(all.log.jack.df.list,"SavedResults/all_jack_df_list_ref_log.rds")
 
 all.sqrt.jack.stats.list<-list(chlA=chlA_mass.sqrt.jack.stats,
                                N=Nmass.sqrt.jack.stats,
+                               C=Cmass.sqrt.jack.stats,
                                LMA=LMA.sqrt.jack.stats,
                                K=K_mass.sqrt.jack.stats)
 
 all.log.jack.stats.list<-list(chlA=chlA_mass.log.jack.stats,
                               N=Nmass.log.jack.stats,
+                              C=Cmass.log.jack.stats,
                               LMA=LMA.log.jack.stats,
                               K=K_mass.log.jack.stats)
 
