@@ -3,7 +3,7 @@
 This repository is meant to support two separate manuscripts:
 
 1. [Plant spectra as integrative measures of plant phenotypes](https://ecoevorxiv.org/bfc5t/) by Kothari & Schweiger (2022), _EcoEvoRxiv_ DOI: 10.32942/osf.io/bfc5t (in press at _Journal of Ecology_). The relevant components of this manuscript are the analyses of the major dimensions of variation in leaf reflectance spectra (Section 4.2), as well as a toy example (Figure 3) of how trait covariance can aid leaf trait estimation using reflectance spectra.
-2. [Predicting leaf traits across functional groups using reflectance spectroscopy](https://www.biorxiv.org/content/10.1101/2022.07.01.498461v2) by Kothari et al. (2022), _bioRxiv_ DOI: 10.1101/2022.07.01.498461. In this manuscript, we build and validate partial least-squares regression (PLSR) models to estimate leaf traits across a wide variety of functional groups and ecosystems.
+2. [Predicting leaf traits across functional groups using reflectance spectroscopy](https://www.biorxiv.org/content/10.1101/2022.07.01.498461v2) by Kothari et al. (2022), _bioRxiv_ DOI: 10.1101/2022.07.01.498461 (in press at _New Phytologist_). In this manuscript, we build and validate partial least-squares regression (PLSR) models to estimate leaf traits across a wide variety of functional groups and ecosystems.
 
 The repository is maintained by Shan Kothari (shan.kothari \[at\] umontreal \[dot\] ca). The current version of the repository is being archived at Zenodo (DOI forthcoming) and is meant to represent the analyses carried out in the version of manuscript (1) that will appear in _Journal of Ecology_. The code base may change further before manuscript (2) is published in the journal.
 
@@ -17,8 +17,8 @@ The stages are:
 2. Compiling spectral data from across projects.
 3. Attaching trait data to the spectral data.
 4. Dividing up training and testing data for PLSR analyses.
-5. Calibrating models using different kinds of data (\[A + D\] reflectance, \[B\] transmittance, \[C\] absorptance, \[E\] brightness-normalized reflectance, and \[F\] continuum-removed reflectance) and traits (\[D\] area-based vs \[all others\] mass-based chemical traits). Here I mostly follow the approach laid out by Burnett et al. (2021) _Journal of Experimental Botany_.
-6. Plotting models with (A) just reflectance or (B) comparing reflectance, transmittance, and absorptance.
+5. Calibrating models using different kinds of data (\[A + D + G\] reflectance, \[B\] transmittance, \[C\] absorptance, \[E\] brightness-normalized reflectance, and \[F\] continuum-removed reflectance) and traits (\[D\] area-based vs \[all others\] mass-based chemical traits). I also tried various transformations of trait data (\[G\]) to see whether they improved model performance. Here I mostly follow the approach laid out by Burnett et al. (2021) _Journal of Experimental Botany_.
+6. Plotting model predictions with (A) just reflectance or (B) comparing reflectance, transmittance, and absorptance; and (C) plotting model coefficients.
 7. Comparing trait distributions in the data to TRY data.
 8. Evaluating transferability of models across functional groups.
 9. Externally validating the models built in step 5 across LOPEX, ANGERS, and Dessain data.
