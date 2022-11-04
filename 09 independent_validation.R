@@ -135,7 +135,7 @@ saveRDS(ANGERS,"IndependentValidationData/ANGERS/ANGERS_processed.rds")
 ## These were done with an ASD and integrating sphere
 ## (the other projects with an SVC and integrating sphere)
 ## the spectral overlap region is already spliced out
-## but I do need to do dark current correction, which isn't
+## but there is a manual dark current correction, which isn't
 ## true with the other projects
 
 zenith <- read.table('UnprocessedSpectra/DessainSpectra/c7101904_specchioformat.txt',
