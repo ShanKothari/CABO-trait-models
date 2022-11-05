@@ -257,6 +257,9 @@ colnames(Dessain.df)<-gsub(pattern = "value_sg.",
 Dessain.spec<-as_spectra(Dessain.df,name_idx=1)
 meta(Dessain.spec)$sample_id<-gsub("spec_","",names(Dessain.spec))
 
+sample_id_split<-strsplit(meta(Dessain.spec)$sample_id,split = "-")
+meta(Dessain.spec)$site<-unlist(lapply(sample_id_split,function(id) id[[4]]))
+
 Dessain.summary<-read.csv("SummaryData/DessainHerbarium.csv")
 Dessain.sub<-data.frame(sample.id=Dessain.summary$parentEventID,
                         species=Dessain.summary$scientificName,
@@ -264,20 +267,20 @@ Dessain.sub<-data.frame(sample.id=Dessain.summary$parentEventID,
 
 Dessain.sub<-Dessain.sub[-which(Dessain.sub$species==""),]
 sp_split<-strsplit(as.character(Dessain.sub$species),split=" ")
-Dessain.sub$LatinGenus<-unlist(lapply(sp_split,function(entry) entry[[1]]))
-Dessain.sub$LatinSpecies<-unlist(lapply(sp_split,function(entry) entry[[2]]))
+Dessain.sub$latin.genus<-unlist(lapply(sp_split,function(entry) entry[[1]]))
+Dessain.sub$latin.species<-unlist(lapply(sp_split,function(entry) entry[[2]]))
 
 meta(Dessain.spec)$species<-Dessain.sub$species[match(meta(Dessain.spec)$sample_id,Dessain.sub$sample.id)]
-meta(Dessain.spec)$LatinGenus<-Dessain.sub$LatinGenus[match(meta(Dessain.spec)$sample_id,Dessain.sub$sample.id)]
-meta(Dessain.spec)$LatinSpecies<-Dessain.sub$LatinSpecies[match(meta(Dessain.spec)$sample_id,Dessain.sub$sample.id)]
+meta(Dessain.spec)$latin.genus<-Dessain.sub$latin.genus[match(meta(Dessain.spec)$sample_id,Dessain.sub$sample.id)]
+meta(Dessain.spec)$latin.species<-Dessain.sub$latin.species[match(meta(Dessain.spec)$sample_id,Dessain.sub$sample.id)]
 meta(Dessain.spec)$project<-Dessain.sub$project[match(meta(Dessain.spec)$sample_id,Dessain.sub$sample.id)]
 
 Dessain.gps<-read.csv("SummaryData/Dessainleafspectra - gps.csv")
 Dessain.date<-sapply(Dessain.gps$parentEventID,function(id) substr(id,start=1,stop=10))
-Dessain.gps$MeasurementDate<-as.POSIXlt(Dessain.date,format="%Y-%m-%d")
+Dessain.gps$measurement.date<-as.POSIXlt(Dessain.date,format="%Y-%m-%d")
 meta(Dessain.spec)$latitude<-Dessain.gps$decimalLatitude[match(meta(Dessain.spec)$sample_id,Dessain.gps$parentEventID)]
 meta(Dessain.spec)$longitude<-Dessain.gps$decimalLongitude[match(meta(Dessain.spec)$sample_id,Dessain.gps$parentEventID)]
-meta(Dessain.spec)$date<-Dessain.gps$MeasurementDate[match(meta(Dessain.spec)$sample_id,Dessain.gps$parentEventID)]
+meta(Dessain.spec)$measurement.date<-Dessain.gps$measurement.date[match(meta(Dessain.spec)$sample_id,Dessain.gps$parentEventID)]
 
 vascan<-read.csv("SummaryData/vascan.csv")
 meta(Dessain.spec)$growth.form<-vascan$growth_form[match(meta(Dessain.spec)$species,vascan$scientific_name)]
