@@ -35,9 +35,9 @@ This repository is *not* a software package or any sort of user-oriented product
 There are a few associated data products:
 
 1. The main CABO dataset, including traits and spectra, are found [here](https://ecosis.org/package/cabo-2018-2019-leaf-level-spectra) at EcoSIS. Reflectance, transmittance, and absorptance spectra are available.
-2. [Dessain](https://ecosis.org/package/ddca5025-2d9a-4769-b7b8-40153d64559d) data are available at that link.
-3. [LOPEX](https://ecosis.org/package/leaf-optical-properties-experiment-database--lopex93-) and [ANGERS](https://ecosis.org/package/angers-leaf-optical-properties-database--2003-) data used in the external validation are available at those respective links
-4. In script 10, I read in [fresh-](https://ecosis.org/package/fresh-leaf-cabo-spectra-from-herbarium-project), [pressed-](https://ecosis.org/package/pressed-leaf-cabo-spectra-from-herbarium-project), and [ground-](https://ecosis.org/package/pressed-leaf-cabo-spectra-from-herbarium-project)leaf spectra from another manuscript ([Kothari et al. 2022](https://www.biorxiv.org/content/10.1101/2021.04.21.440856), in press _Methods in Ecology and Evolution_) available at those respective links.
+2. Our own [Dessain](https://ecosis.org/package/ddca5025-2d9a-4769-b7b8-40153d64559d) data used in the external validation are available at that EcoSIS link.
+3. [LOPEX](https://ecosis.org/package/leaf-optical-properties-experiment-database--lopex93-) and [ANGERS](https://ecosis.org/package/angers-leaf-optical-properties-database--2003-) data used in the external validation are available at those respective links.
+4. In script 10, I read in [fresh-](https://ecosis.org/package/fresh-leaf-cabo-spectra-from-herbarium-project), [pressed-](https://ecosis.org/package/pressed-leaf-cabo-spectra-from-herbarium-project), and [ground-](https://ecosis.org/package/pressed-leaf-cabo-spectra-from-herbarium-project)leaf spectra from another manuscript ([Kothari et al. 2022]([https://www.biorxiv.org/content/10.1101/2021.04.21.440856](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13958)) _Methods in Ecology and Evolution_) available at those respective links.
 
 Even more raw data can be queried from the [CABO Data Portal](https://data.caboscience.org/leaf/).
 
