@@ -2,10 +2,10 @@
 
 This repository is meant to support two separate manuscripts:
 
-1. [Plant spectra as integrative measures of plant phenotypes](https://ecoevorxiv.org/bfc5t/) by Kothari & Schweiger (2022), _EcoEvoRxiv_ DOI: 10.32942/osf.io/bfc5t (in press at _Journal of Ecology_). The relevant components of this manuscript are the analyses of the major dimensions of variation in leaf reflectance spectra (Section 4.2), as well as a toy example (Figure 3) of how trait covariance can aid leaf trait estimation using reflectance spectra.
+1. [Plant spectra as integrative measures of plant phenotypes](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/1365-2745.13972) by Kothari & Schweiger (2022), _Journal of Ecology_ DOI: 10.1111/1365-2745.13972. The relevant components of this manuscript are the analyses of the major dimensions of variation in leaf reflectance spectra (Section 4.2), as well as a toy example (Figure 3) of how trait covariance can aid leaf trait estimation using reflectance spectra.
 2. [Predicting leaf traits across functional groups using reflectance spectroscopy](https://www.biorxiv.org/content/10.1101/2022.07.01.498461v2) by Kothari et al. (2022), _bioRxiv_ DOI: 10.1101/2022.07.01.498461 (in press at _New Phytologist_). In this manuscript, we build and validate partial least-squares regression (PLSR) models to estimate leaf traits across a wide variety of functional groups and ecosystems.
 
-The repository is maintained by Shan Kothari (shan.kothari \[at\] umontreal \[dot\] ca). The current version of the repository is being archived at Zenodo (DOI forthcoming) and is meant to represent the analyses carried out in the version of manuscript (1) that will appear in _Journal of Ecology_. The code base may change further before manuscript (2) is published in the journal.
+The repository is maintained by Shan Kothari (shan.kothari \[at\] umontreal \[dot\] ca). A previous version of the repository is archived at Zenodo (DOI: 10.5281/zenodo.6820487) and represents the analyses carried out in the final version of paper (1). This version represents the analyses in manuscript (2) and will shortly be archived as a new release of the same repository at Zenodo (DOI forthcoming).
 
 ## Components
 
@@ -28,15 +28,15 @@ Manuscript (1) only involves scripts 1-3 and 10. Manuscript (2) involves all scr
 
 ## How to use
 
-This repository is *not* a software package or any sort of user-oriented product that people can use without further modification. It *is* meant to be a reasonably well-documented and faithful record of the analyses carried out in the two manuscripts listed above. Some analyses should be easily reproducible, with some modification, given the scripts and the archived data (see **Associated data** below). However, we do not (for example) include the TRY data. Users will also have to (for example) change paths to the directories where they have saved the files locally.
+This repository is *not* a software package or any sort of user-oriented product that people can use without further modification. It *is* meant to be a reasonably well-documented and faithful record of the analyses carried out in the two manuscripts listed above. Some analyses should be easily reproducible, with some modification, given the scripts and the archived data (see **Associated data** below). However, we do not (for example) include the TRY data, the LOPEX and ANGERS data, and the model coefficients for the Serbin et al. (2019) paper that both of our papers cite. These can all be downloaded from original sources cited in those papers. Users will also have to (for example) change paths to the directories where they have saved the files locally.
 
 ## Associated data products
 
-There are a few associated data products (DOIs forthcoming):
+There are a few associated data products:
 
 1. The main CABO dataset, including traits and spectra, are found [here](https://ecosis.org/package/cabo-2018-2019-leaf-level-spectra) at EcoSIS. Reflectance, transmittance, and absorptance spectra are available.
-2. The complete Dessain project is not yet archived, but will be upon publication of manuscript (2).
-3. [LOPEX](https://ecosis.org/package/leaf-optical-properties-experiment-database--lopex93-) and [ANGERS](https://ecosis.org/package/angers-leaf-optical-properties-database--2003-), used in the external validation, are available at those respective links
+2. [Dessain](https://ecosis.org/package/ddca5025-2d9a-4769-b7b8-40153d64559d) data are available at that link.
+3. [LOPEX](https://ecosis.org/package/leaf-optical-properties-experiment-database--lopex93-) and [ANGERS](https://ecosis.org/package/angers-leaf-optical-properties-database--2003-) data used in the external validation are available at those respective links
 4. In script 10, I read in [fresh-](https://ecosis.org/package/fresh-leaf-cabo-spectra-from-herbarium-project), [pressed-](https://ecosis.org/package/pressed-leaf-cabo-spectra-from-herbarium-project), and [ground-](https://ecosis.org/package/pressed-leaf-cabo-spectra-from-herbarium-project)leaf spectra from another manuscript ([Kothari et al. 2022](https://www.biorxiv.org/content/10.1101/2021.04.21.440856), in press _Methods in Ecology and Evolution_) available at those respective links.
 
 Even more raw data can be queried from the [CABO Data Portal](https://data.caboscience.org/leaf/).
