@@ -37,7 +37,7 @@ library(ggpubr)
 # Tannins: 148
 
 # ## leaf structure -- includes LDMC and SLA (TRY request 14553)
-# TRY_struc<-read.table("C:/Users/kotha020/Downloads/TRYStructure/14553.txt",
+# TRY_struc<-read.table("TraitData/TRY/TRYStructure/14553.txt",
 #                       sep = "\t",fill=T,header=T,quote="")
 # 
 # TRY_struc_sub<-TRY_struc[which(TRY_struc$TraitID %in% c(3115,47)),]
@@ -51,11 +51,11 @@ library(ggpubr)
 # TRY_LDMC<-TRY_struc_sub[which(TRY_struc_sub$TraitID==47),]
 # TRY_SLA<-TRY_struc_sub[which(TRY_struc_sub$TraitID==3115),]
 # 
-# write.csv(TRY_LDMC,"C:/Users/kotha020/Downloads/TRY_LDMC.csv")
-# write.csv(TRY_SLA,"C:/Users/kotha020/Downloads/TRY_SLA.csv")
+# write.csv(TRY_LDMC,"TraitData/TRY/TRY_LDMC.csv")
+# write.csv(TRY_SLA,"TraitData/TRY/TRY_SLA.csv")
 # 
 # ## leaf macronutrients -- includes C, N, and P (TRY request 14554)
-# TRY_CNP<-read.table("C:/Users/kotha020/Downloads/TRYNutrients/14554.txt",
+# TRY_CNP<-read.table("TraitData/TRY/TRYNutrients/14554.txt",
 #                       sep = "\t",fill=T,header=T,quote = "")
 # 
 # TRY_CNP_sub<-TRY_CNP[which(TRY_CNP$TraitID %in% 13:15),]
@@ -70,12 +70,12 @@ library(ggpubr)
 # TRY_N<-TRY_CNP_sub[which(TRY_CNP_sub$TraitID==14),]
 # TRY_P<-TRY_CNP_sub[which(TRY_CNP_sub$TraitID==15),]
 # 
-# write.csv(TRY_C,"C:/Users/kotha020/Downloads/TRY_C.csv")
-# write.csv(TRY_N,"C:/Users/kotha020/Downloads/TRY_N.csv")
-# write.csv(TRY_P,"C:/Users/kotha020/Downloads/TRY_P.csv")
+# write.csv(TRY_C,"TraitData/TRY/TRY_C.csv")
+# write.csv(TRY_N,"TraitData/TRY/TRY_N.csv")
+# write.csv(TRY_P,"TraitData/TRY/TRY_P.csv")
 # 
 # ## leaf carbon fractions (TRY request 14555)
-# TRY_CFrac<-read.table("C:/Users/kotha020/Downloads/TRYCFrac/14555.txt",
+# TRY_CFrac<-read.table("TraitData/TRY/TRYCFrac/14555.txt",
 #                     sep = "\t",fill=T,header=T,quote = "")
 # 
 # TRY_CFrac_sub<-TRY_CFrac[which(TRY_CFrac$TraitID %in% c(85,87,92,94)),]
@@ -91,13 +91,13 @@ library(ggpubr)
 # TRY_cellulose<-TRY_CFrac_sub[which(TRY_CFrac_sub$TraitID==92),]
 # TRY_hemicellulose<-TRY_CFrac_sub[which(TRY_CFrac_sub$TraitID==94),]
 # 
-# write.csv(TRY_solubles,"C:/Users/kotha020/Downloads/TRY_solubles.csv")
-# write.csv(TRY_lignin,"C:/Users/kotha020/Downloads/TRY_lignin.csv")
-# write.csv(TRY_cellulose,"C:/Users/kotha020/Downloads/TRY_cellulose.csv")
-# write.csv(TRY_hemicellulose,"C:/Users/kotha020/Downloads/TRY_hemicellulose.csv")
+# write.csv(TRY_solubles,"TraitData/TRY/TRY_solubles.csv")
+# write.csv(TRY_lignin,"TraitData/TRY/TRY_lignin.csv")
+# write.csv(TRY_cellulose,"TraitData/TRY/TRY_cellulose.csv")
+# write.csv(TRY_hemicellulose,"TraitData/TRY/TRY_hemicellulose.csv")
 # 
 ## leaf pigments (TRY request 14556)
-# TRY_pigments<-read.table("C:/Users/kotha020/Downloads/TRYPigments/14556.txt",
+# TRY_pigments<-read.table("TraitData/TRY/TRYPigments/14556.txt",
 #                       sep = "\t",fill=T,header=T,quote = "")
 # 
 # TRY_pigments_sub<-TRY_pigments[which(TRY_pigments$TraitID %in% c(164,809,3474,3475)),]
@@ -137,13 +137,13 @@ library(ggpubr)
 # TRY_Car<-TRY_Car[,c("DatasetID","SpeciesName","AccSpeciesID","ObservationID",
 #                     "ObsDataID","TraitID","TraitName","StdValue","UnitName","ErrorRisk")]
 # 
-# write.csv(TRY_Chl,"C:/Users/kotha020/Downloads/TRY_Chl.csv")
-# write.csv(TRY_ChlA,"C:/Users/kotha020/Downloads/TRY_ChlA.csv")
-# write.csv(TRY_ChlB,"C:/Users/kotha020/Downloads/TRY_ChlB.csv")
-# write.csv(TRY_Car,"C:/Users/kotha020/Downloads/TRY_Car.csv")
+# write.csv(TRY_Chl,"TraitData/TRY/TRY_Chl.csv")
+# write.csv(TRY_ChlA,"TraitData/TRY/TRY_ChlA.csv")
+# write.csv(TRY_ChlB,"TraitData/TRY/TRY_ChlB.csv")
+# write.csv(TRY_Car,"TraitData/TRY/TRY_Car.csv")
 # 
 # ## leaf micronutrients (TRY request 14557)
-# TRY_Micro<-read.table("C:/Users/kotha020/Downloads/TRYMicro/14557.txt",
+# TRY_Micro<-read.table("TraitData/TRY/TRYMicro/14557.txt",
 #                       sep = "\t",fill=T,header=T,quote = "")
 # 
 # TRY_Micro_sub<-TRY_Micro[which(TRY_Micro$TraitID %in% c(249,250,252,255,256,44,
@@ -166,16 +166,16 @@ library(ggpubr)
 # TRY_Na<-TRY_Micro_sub[which(TRY_Micro_sub$TraitID==260),]
 # TRY_Zn<-TRY_Micro_sub[which(TRY_Micro_sub$TraitID==268),]
 # 
-# write.csv(TRY_Al,"C:/Users/kotha020/Downloads/TRY_Al.csv")
-# write.csv(TRY_B,"C:/Users/kotha020/Downloads/TRY_B.csv")
-# write.csv(TRY_Ca,"C:/Users/kotha020/Downloads/TRY_Ca.csv")
-# write.csv(TRY_Cu,"C:/Users/kotha020/Downloads/TRY_Cu.csv")
-# write.csv(TRY_Fe,"C:/Users/kotha020/Downloads/TRY_Fe.csv")
-# write.csv(TRY_K,"C:/Users/kotha020/Downloads/TRY_K.csv")
-# write.csv(TRY_Mn,"C:/Users/kotha020/Downloads/TRY_Mn.csv")
-# write.csv(TRY_Mg,"C:/Users/kotha020/Downloads/TRY_Mg.csv")
-# write.csv(TRY_Na,"C:/Users/kotha020/Downloads/TRY_Na.csv")
-# write.csv(TRY_Zn,"C:/Users/kotha020/Downloads/TRY_Zn.csv")
+# write.csv(TRY_Al,"TraitData/TRY/TRY_Al.csv")
+# write.csv(TRY_B,"TraitData/TRY/TRY_B.csv")
+# write.csv(TRY_Ca,"TraitData/TRY/TRY_Ca.csv")
+# write.csv(TRY_Cu,"TraitData/TRY/TRY_Cu.csv")
+# write.csv(TRY_Fe,"TraitData/TRY/TRY_Fe.csv")
+# write.csv(TRY_K,"TraitData/TRY/TRY_K.csv")
+# write.csv(TRY_Mn,"TraitData/TRY/TRY_Mn.csv")
+# write.csv(TRY_Mg,"TraitData/TRY/TRY_Mg.csv")
+# write.csv(TRY_Na,"TraitData/TRY/TRY_Na.csv")
+# write.csv(TRY_Zn,"TraitData/TRY/TRY_Zn.csv")
 
 #####################################
 ## read CABO trait data
@@ -186,28 +186,28 @@ ref.traits<-ref.traits[-which(meta(ref.traits)$project=="2019-Pardo-MSc-UdeM")]
 
 trait.df<-meta(ref.traits)
 
-TRY_SLA<-read.csv("C:/Users/kotha020/Downloads/TRY_SLA.csv")
-TRY_LDMC<-read.csv("C:/Users/kotha020/Downloads/TRY_LDMC.csv")
-TRY_N<-read.csv("C:/Users/kotha020/Downloads/TRY_N.csv")
-TRY_C<-read.csv("C:/Users/kotha020/Downloads/TRY_C.csv")
-TRY_solubles<-read.csv("C:/Users/kotha020/Downloads/TRY_solubles.csv")
-TRY_hemicellulose<-read.csv("C:/Users/kotha020/Downloads/TRY_hemicellulose.csv")
-TRY_cellulose<-read.csv("C:/Users/kotha020/Downloads/TRY_cellulose.csv")
-TRY_lignin<-read.csv("C:/Users/kotha020/Downloads/TRY_lignin.csv")
-TRY_Chl<-read.csv("C:/Users/kotha020/Downloads/TRY_Chl.csv")
-TRY_ChlA<-read.csv("C:/Users/kotha020/Downloads/TRY_ChlA.csv")
-TRY_ChlB<-read.csv("C:/Users/kotha020/Downloads/TRY_ChlB.csv")
-TRY_Car<-read.csv("C:/Users/kotha020/Downloads/TRY_Car.csv")
-TRY_Al<-read.csv("C:/Users/kotha020/Downloads/TRY_Al.csv")
-TRY_Ca<-read.csv("C:/Users/kotha020/Downloads/TRY_Ca.csv")
-TRY_Cu<-read.csv("C:/Users/kotha020/Downloads/TRY_Cu.csv")
-TRY_Fe<-read.csv("C:/Users/kotha020/Downloads/TRY_Fe.csv")
-TRY_K<-read.csv("C:/Users/kotha020/Downloads/TRY_K.csv")
-TRY_Mg<-read.csv("C:/Users/kotha020/Downloads/TRY_Mg.csv")
-TRY_Mn<-read.csv("C:/Users/kotha020/Downloads/TRY_Mn.csv")
-TRY_Na<-read.csv("C:/Users/kotha020/Downloads/TRY_Na.csv")
-TRY_P<-read.csv("C:/Users/kotha020/Downloads/TRY_P.csv")
-TRY_Zn<-read.csv("C:/Users/kotha020/Downloads/TRY_Zn.csv")
+TRY_SLA<-read.csv("TraitData/TRY/TRY_SLA.csv")
+TRY_LDMC<-read.csv("TraitData/TRY/TRY_LDMC.csv")
+TRY_N<-read.csv("TraitData/TRY/TRY_N.csv")
+TRY_C<-read.csv("TraitData/TRY/TRY_C.csv")
+TRY_solubles<-read.csv("TraitData/TRY/TRY_solubles.csv")
+TRY_hemicellulose<-read.csv("TraitData/TRY/TRY_hemicellulose.csv")
+TRY_cellulose<-read.csv("TraitData/TRY/TRY_cellulose.csv")
+TRY_lignin<-read.csv("TraitData/TRY/TRY_lignin.csv")
+TRY_Chl<-read.csv("TraitData/TRY/TRY_Chl.csv")
+TRY_ChlA<-read.csv("TraitData/TRY/TRY_ChlA.csv")
+TRY_ChlB<-read.csv("TraitData/TRY/TRY_ChlB.csv")
+TRY_Car<-read.csv("TraitData/TRY/TRY_Car.csv")
+TRY_Al<-read.csv("TraitData/TRY/TRY_Al.csv")
+TRY_Ca<-read.csv("TraitData/TRY/TRY_Ca.csv")
+TRY_Cu<-read.csv("TraitData/TRY/TRY_Cu.csv")
+TRY_Fe<-read.csv("TraitData/TRY/TRY_Fe.csv")
+TRY_K<-read.csv("TraitData/TRY/TRY_K.csv")
+TRY_Mg<-read.csv("TraitData/TRY/TRY_Mg.csv")
+TRY_Mn<-read.csv("TraitData/TRY/TRY_Mn.csv")
+TRY_Na<-read.csv("TraitData/TRY/TRY_Na.csv")
+TRY_P<-read.csv("TraitData/TRY/TRY_P.csv")
+TRY_Zn<-read.csv("TraitData/TRY/TRY_Zn.csv")
 
 TRY_SLA$LMA<-1/TRY_SLA$StdValue
 
@@ -337,7 +337,8 @@ solubles_mass_density<-ggplot(data=all.solubles_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.25,0.92))+
+        legend.position = c(0.25,0.92),
+        legend.background = element_rect(fill="transparent"))+
   labs(y="Density",x=expression("Solubles (%)"))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$solubles_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_solubles$StdValue)),")",sep="")))
