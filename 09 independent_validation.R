@@ -282,6 +282,9 @@ meta(Dessain.spec)$latitude<-Dessain.gps$decimalLatitude[match(meta(Dessain.spec
 meta(Dessain.spec)$longitude<-Dessain.gps$decimalLongitude[match(meta(Dessain.spec)$sample_id,Dessain.gps$parentEventID)]
 meta(Dessain.spec)$measurement.date<-Dessain.gps$measurement.date[match(meta(Dessain.spec)$sample_id,Dessain.gps$parentEventID)]
 
+## missing minus sign?
+meta(Dessain.spec)$longitude[meta(Dessain.spec$sample_id=="2017-07-26-sblac-P004")]<- -74.0065328
+
 vascan<-read.csv("SummaryData/vascan.csv")
 meta(Dessain.spec)$growth.form<-vascan$growth_form[match(meta(Dessain.spec)$species,vascan$scientific_name)]
 meta(Dessain.spec)$growth.form[meta(Dessain.spec)$species=="Acer pensylvanicum Linnaeus"]<-"tree"
