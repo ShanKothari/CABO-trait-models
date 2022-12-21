@@ -270,6 +270,13 @@ sp_split<-strsplit(as.character(Dessain.sub$species),split=" ")
 Dessain.sub$latin.genus<-unlist(lapply(sp_split,function(entry) entry[[1]]))
 Dessain.sub$latin.species<-unlist(lapply(sp_split,function(entry) entry[[2]]))
 
+## add DOI for overlaps from
+## Fresh-leaf CABO spectra from herbarium project
+herb.spec<-readRDS("../../TraitModels2018/HerbariumPaper/ProcessedSpectralData/fresh_spec_all.rds")
+overlap<-which(meta(Dessain.spec)$sample_id %in% meta(herb.spec)$ID)
+meta(Dessain.spec)$DOI<-NA
+meta(Dessain.spec)$DOI[overlap]<-"10.21232/deP7jVyq"
+
 meta(Dessain.spec)$species<-Dessain.sub$species[match(meta(Dessain.spec)$sample_id,Dessain.sub$sample.id)]
 meta(Dessain.spec)$latin.genus<-Dessain.sub$latin.genus[match(meta(Dessain.spec)$sample_id,Dessain.sub$sample.id)]
 meta(Dessain.spec)$latin.species<-Dessain.sub$latin.species[match(meta(Dessain.spec)$sample_id,Dessain.sub$sample.id)]
@@ -283,7 +290,7 @@ meta(Dessain.spec)$longitude<-Dessain.gps$decimalLongitude[match(meta(Dessain.sp
 meta(Dessain.spec)$measurement.date<-Dessain.gps$measurement.date[match(meta(Dessain.spec)$sample_id,Dessain.gps$parentEventID)]
 
 ## missing minus sign?
-meta(Dessain.spec)$longitude[meta(Dessain.spec$sample_id=="2017-07-26-sblac-P004")]<- -74.0065328
+meta(Dessain.spec)$longitude[meta(Dessain.spec)$sample_id=="2017-07-26-sblac-P004"]<- -74.0065328
 
 vascan<-read.csv("SummaryData/vascan.csv")
 meta(Dessain.spec)$growth.form<-vascan$growth_form[match(meta(Dessain.spec)$species,vascan$scientific_name)]
