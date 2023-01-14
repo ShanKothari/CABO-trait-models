@@ -232,7 +232,7 @@ all.LMA<-rbind(LMA_sub,TRY_SLA_sub)
 
 LMA_density<-ggplot(data=all.LMA,
                     aes(x=LMA,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -248,7 +248,7 @@ EWT_sub<-trait.df[,c("sample_id","EWT","cat")]
 
 EWT_density<-ggplot(data=EWT_sub,
                      aes(x=EWT,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -268,7 +268,7 @@ all.LDMC<-rbind(LDMC_sub,TRY_LDMC_sub)
 
 LDMC_density<-ggplot(data=all.LDMC,
                      aes(x=LDMC,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -289,7 +289,7 @@ all.Nmass<-rbind(Nmass_sub,TRY_N_sub)
 
 Nmass_density<-ggplot(data=all.Nmass,
                      aes(x=Nmass,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -310,7 +310,7 @@ all.Cmass<-rbind(Cmass_sub,TRY_C_sub)
 
 Cmass_density<-ggplot(data=all.Cmass,
                       aes(x=Cmass,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -331,7 +331,7 @@ all.solubles_mass<-rbind(solubles_mass_sub,TRY_solubles_sub)
 
 solubles_mass_density<-ggplot(data=all.solubles_mass,
                                    aes(x=solubles_mass,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -353,7 +353,7 @@ all.hemicellulose_mass<-rbind(hemicellulose_mass_sub,TRY_hemicellulose_sub)
 
 hemicellulose_mass_density<-ggplot(data=all.hemicellulose_mass,
                       aes(x=hemicellulose_mass,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -374,7 +374,7 @@ all.cellulose_mass<-rbind(cellulose_mass_sub,TRY_cellulose_sub)
 
 cellulose_mass_density<-ggplot(data=all.cellulose_mass,
                                aes(x=cellulose_mass,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -395,7 +395,7 @@ all.lignin_mass<-rbind(lignin_mass_sub,TRY_lignin_sub)
 
 lignin_mass_density<-ggplot(data=all.lignin_mass,
                             aes(x=lignin_mass,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -417,7 +417,7 @@ all.chl_mass<-rbind(chl_mass_sub,TRY_Chl_sub)
 
 chl_mass_density<-ggplot(data=all.chl_mass,
                           aes(x=chl_mass,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -438,7 +438,7 @@ all.chlA_mass<-rbind(chlA_mass_sub,TRY_ChlA_sub)
 
 chlA_mass_density<-ggplot(data=all.chlA_mass,
                           aes(x=chlA_mass,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -459,7 +459,7 @@ all.chlB_mass<-rbind(chlB_mass_sub,TRY_ChlB_sub)
 
 chlB_mass_density<-ggplot(data=all.chlB_mass,
                           aes(x=chlB_mass,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -480,7 +480,7 @@ all.car_mass<-rbind(car_mass_sub,TRY_Car_sub)
 
 car_mass_density<-ggplot(data=all.car_mass,
                           aes(x=car_mass,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -501,7 +501,7 @@ all.Al_mass<-rbind(Al_mass_sub,TRY_Al_sub)
 
 Al_mass_density<-ggplot(data=all.Al_mass,
                          aes(x=Al_mass,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -523,7 +523,7 @@ all.Ca_mass<-rbind(Ca_mass_sub,TRY_Ca_sub)
 
 Ca_mass_density<-ggplot(data=all.Ca_mass,
                          aes(x=Ca_mass,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -544,7 +544,7 @@ all.Cu_mass<-rbind(Cu_mass_sub,TRY_Cu_sub)
 
 Cu_mass_density<-ggplot(data=all.Cu_mass,
                          aes(x=Cu_mass,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -565,7 +565,7 @@ all.Fe_mass<-rbind(Fe_mass_sub,TRY_Fe_sub)
 
 Fe_mass_density<-ggplot(data=all.Fe_mass,
                          aes(x=Fe_mass,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -586,7 +586,7 @@ all.K_mass<-rbind(K_mass_sub,TRY_K_sub)
 
 K_mass_density<-ggplot(data=all.K_mass,
                          aes(x=K_mass,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -607,7 +607,7 @@ all.Mg_mass<-rbind(Mg_mass_sub,TRY_Mg_sub)
 
 Mg_mass_density<-ggplot(data=all.Mg_mass,
                          aes(x=Mg_mass,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -628,7 +628,7 @@ all.Mn_mass<-rbind(Mn_mass_sub,TRY_Mn_sub)
 
 Mn_mass_density<-ggplot(data=all.Mn_mass,
                          aes(x=Mn_mass,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -649,7 +649,7 @@ all.Na_mass<-rbind(Na_mass_sub,TRY_Na_sub)
 
 Na_mass_density<-ggplot(data=all.Na_mass,
                          aes(x=Na_mass,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -671,7 +671,7 @@ all.P_mass<-rbind(P_mass_sub,TRY_P_sub)
 
 P_mass_density<-ggplot(data=all.P_mass,
                          aes(x=P_mass,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -692,7 +692,7 @@ all.Zn_mass<-rbind(Zn_mass_sub,TRY_Zn_sub)
 
 Zn_mass_density<-ggplot(data=all.Zn_mass,
                          aes(x=Zn_mass,color=cat))+
-  geom_density(size=1.5)+
+  geom_density(size=1.5,bounds=c(0,Inf))+
   theme_bw()+
   theme(legend.title = element_blank(),
         panel.grid.major = element_blank(),
