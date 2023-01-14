@@ -238,7 +238,9 @@ LMA_density<-ggplot(data=all.LMA,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.7))+
+        legend.position = c(0.7,0.7),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression("LMA (kg m"^-2*")"))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$LMA)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_SLA$LMA)),")",sep="")))
@@ -254,7 +256,10 @@ EWT_density<-ggplot(data=EWT_sub,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.7))+
+        legend.position = c(0.7,0.7),
+        axis.title.y=element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x="EWT (mm)")+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$EWT)),")",sep="")))
 
@@ -274,7 +279,10 @@ LDMC_density<-ggplot(data=all.LDMC,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.75,0.7))+
+        legend.position = c(0.75,0.7),
+        axis.title.y=element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression("LDMC (mg g"^-1*")"))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$LDMC)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_LDMC$StdValue)),")",sep="")))
@@ -295,7 +303,9 @@ Nmass_density<-ggplot(data=all.Nmass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.7))+
+        legend.position = c(0.7,0.7),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression("N (%)"))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$Nmass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_N$StdValue)),")",sep="")))
@@ -316,7 +326,10 @@ Cmass_density<-ggplot(data=all.Cmass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.25,0.7))+
+        legend.position = c(0.25,0.7),
+        axis.title.y=element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression("C (%)"))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$Cmass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_C$StdValue)),")",sep="")))
@@ -338,7 +351,10 @@ solubles_mass_density<-ggplot(data=all.solubles_mass,
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
         legend.position = c(0.25,0.92),
-        legend.background = element_rect(fill="transparent"))+
+        legend.background = element_rect(fill="transparent"),
+        axis.title.y=element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression("Solubles (%)"))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$solubles_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_solubles$StdValue)),")",sep="")))
@@ -359,7 +375,9 @@ hemicellulose_mass_density<-ggplot(data=all.hemicellulose_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.8))+
+        legend.position = c(0.7,0.8),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression("Hemicellulose (%)"))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$hemicellulose_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_hemicellulose$StdValue)),")",sep="")))
@@ -380,7 +398,10 @@ cellulose_mass_density<-ggplot(data=all.cellulose_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.8))+
+        legend.position = c(0.7,0.8),
+        axis.title.y=element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression("Cellulose (%)"))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$cellulose_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_cellulose$StdValue)),")",sep="")))
@@ -401,7 +422,10 @@ lignin_mass_density<-ggplot(data=all.lignin_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.8))+
+        legend.position = c(0.7,0.8),
+        axis.title.y=element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression("Lignin (%)"))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$lignin_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_lignin$StdValue)),")",sep="")))
@@ -423,7 +447,9 @@ chl_mass_density<-ggplot(data=all.chl_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.7))+
+        legend.position = c(0.7,0.7),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression("Total Chl (mg g"^-1*")"))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$chlA_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_Chl$StdValue)),")",sep="")))
@@ -444,7 +470,9 @@ chlA_mass_density<-ggplot(data=all.chlA_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.7))+
+        legend.position = c(0.7,0.7),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression(paste("Chl ",italic("a")," (mg g"^-1*")")))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$chlA_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_ChlA$StdValue)),")",sep="")))
@@ -465,7 +493,9 @@ chlB_mass_density<-ggplot(data=all.chlB_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.7))+
+        legend.position = c(0.7,0.7),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression(paste("Chl ",italic("b")," (mg g"^-1*")")))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$chlB_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_ChlB$StdValue)),")",sep="")))
@@ -486,7 +516,10 @@ car_mass_density<-ggplot(data=all.car_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.7))+
+        legend.position = c(0.7,0.7),
+        axis.title.y=element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression("Carotenoids (mg g"^-1*")"))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$car_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_Car$StdValue)),")",sep="")))
@@ -507,7 +540,10 @@ Al_mass_density<-ggplot(data=all.Al_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.7))+
+        legend.position = c(0.7,0.7),
+        axis.title.y=element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression(paste("Al (mg g"^-1*")")))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$Al_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_Al$StdValue)),")",sep="")))+
@@ -529,7 +565,9 @@ Ca_mass_density<-ggplot(data=all.Ca_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.7))+
+        legend.position = c(0.7,0.7),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression(paste("Ca (mg g"^-1*")")))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$Ca_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_Ca$StdValue)),")",sep="")))
@@ -550,7 +588,10 @@ Cu_mass_density<-ggplot(data=all.Cu_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.7))+
+        legend.position = c(0.7,0.7),
+        axis.title.y=element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression(paste("Cu (mg g"^-1*")")))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$Cu_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_Cu$StdValue)),")",sep="")))
@@ -571,7 +612,10 @@ Fe_mass_density<-ggplot(data=all.Fe_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.7))+
+        legend.position = c(0.7,0.7),
+        axis.title.y=element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression(paste("Fe (mg g"^-1*")")))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$Fe_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_Fe$StdValue)),")",sep="")))
@@ -592,7 +636,9 @@ K_mass_density<-ggplot(data=all.K_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.7))+
+        legend.position = c(0.7,0.7),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression(paste("K (mg g"^-1*")")))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$K_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_K$StdValue)),")",sep="")))
@@ -613,7 +659,10 @@ Mg_mass_density<-ggplot(data=all.Mg_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.7))+
+        legend.position = c(0.7,0.7),
+        axis.title.y=element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression(paste("Mg (mg g"^-1*")")))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$Mg_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_Mg$StdValue)),")",sep="")))
@@ -634,7 +683,10 @@ Mn_mass_density<-ggplot(data=all.Mn_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.7))+
+        legend.position = c(0.7,0.7),
+        axis.title.y=element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression(paste("Mn (mg g"^-1*")")))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$Mn_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_Mn$StdValue)),")",sep="")))
@@ -655,7 +707,9 @@ Na_mass_density<-ggplot(data=all.Na_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.7))+
+        legend.position = c(0.7,0.7),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression(paste("Na (mg g"^-1*")")))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$Na_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_Na$StdValue)),")",sep="")))+
@@ -677,7 +731,10 @@ P_mass_density<-ggplot(data=all.P_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.7))+
+        legend.position = c(0.7,0.7),
+        axis.title.y=element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression(paste("P (mg g"^-1*")")))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$P_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_P$StdValue)),")",sep="")))
@@ -698,12 +755,15 @@ Zn_mass_density<-ggplot(data=all.Zn_mass,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=30),
-        legend.position = c(0.7,0.7))+
+        legend.position = c(0.7,0.7),
+        axis.title.y=element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
   labs(y="Density",x=expression(paste("Zn (mg g"^-1*")")))+
   scale_color_discrete(labels=c(paste("CABO (n=",sum(!is.na(trait.df$Zn_mass)),")",sep=""),
                                 paste("TRY (n=",sum(!is.na(TRY_Zn$StdValue)),")",sep="")))
 
-pdf("Images/density_plot.pdf",width=24,height=30)
+pdf("Images/density_plot.pdf",width=21,height=30)
 ggarrange(plotlist = list(LMA_density,EWT_density,LDMC_density,
                           Nmass_density,Cmass_density,solubles_mass_density,
                           hemicellulose_mass_density,cellulose_mass_density,lignin_mass_density,
