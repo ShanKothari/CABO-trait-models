@@ -1526,3 +1526,25 @@ with(meta(ref.traits),percentRMSD(LMA,Serbin.means,min = 0.025,max=0.975))
 
 with(meta(ref.traits)[meta(ref.traits)$functional.group!="conifer",],RMSD(LMA,Serbin.means))
 with(meta(ref.traits)[meta(ref.traits)$functional.group!="conifer",],percentRMSD(LMA,Serbin.means,min = 0.025,max=0.975))
+
+######################3
+## testing Serbin on LOPEX, ANGERS, and Dessain
+Serbin.val<-(t(t(as.matrix(all_val_ref[,500:2400]) %*% t(Serbin.coefs[,-1]))+Serbin.coefs[,1])^2)/1000
+meta(all_val_ref)$Serbin.means<-rowMeans(Serbin.val)
+meta(all_val_ref)$Serbin.025<-apply(Serbin.val,1,quantile,probs=0.025)
+meta(all_val_ref)$Serbin.975<-apply(Serbin.val,1,quantile,probs=0.975)
+
+ggplot(meta(all_val_ref),aes(y=LMA,x=Serbin.means,
+                            color=dataset))+
+  geom_errorbarh(aes(y=LMA,xmin=Serbin.025,xmax=Serbin.975),
+                 color="gray")+
+  geom_point(size=2)+geom_smooth(method="lm",se=F,size=2)+
+  coord_cartesian(xlim=c(0,0.4),ylim=c(0,0.4))+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=3)+
+  theme(text = element_text(size=20),
+        legend.position="bottom")+
+  labs(y=expression("Measured LMA (kg m"^-2*")"),
+       x=expression("Predicted LMA (kg m"^-2*")"),
+       color="Functional group")+
+  scale_color_manual(values=colorBlind)
