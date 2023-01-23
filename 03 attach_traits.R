@@ -181,7 +181,7 @@ Crofts.pigments<-read.csv("TraitData/Pigments/2019_Crofts_pigments_valeurs_brute
 Crofts.pigments<-Crofts.pigments[,c("sample_id","chlA_mg_g","chlB_mg_g","carotenoides._mg_g","Notes")]
 Crofts.pigments<-Crofts.pigments[-which(Crofts.pigments$sample_id==""),]
 
-Girard.pigments<-read.csv("TraitData/Pigments/Alizée_pigments_valeurs_brutes.csv")
+Girard.pigments<-read.csv("TraitData/Pigments/AlizÃ©e_pigments_valeurs_brutes.csv")
 Girard.pigments<-Girard.pigments[,c("sample_id","chlA_mg_g","chlB_mg_g","carotenoides_mg_g","Notes")]
 colnames(Girard.pigments)[colnames(Girard.pigments)=="carotenoides_mg_g"]<-"carotenoides._mg_g"
 Girard.pigments<-Girard.pigments[-which(Girard.pigments$sample_id==""),]
