@@ -193,13 +193,21 @@ Fulcrum.sub$species<-plants$scientific_name[match(Fulcrum.sub$plant.id,plants$pl
 ## fix three samples with incorrect plant lat/long coordinates
 ## by assigning site coordinates
 site.summary<-read.csv("SummaryData/sites.csv")
-sample.location.ind<-match(c(11824578,13920107,13988512),Fulcrum.sub$sample.id)
-site.samples<-Fulcrum.sub$site[sample.location.ind]
-Fulcrum.sub$latitude[sample.location.ind]<-site.summary$latitude[match(site.samples,site.summary$site_id)]
-Fulcrum.sub$longitude[sample.location.ind]<-site.summary$longitude[match(site.samples,site.summary$site_id)]
+wrong.location<-match(c(11824578,13920107,13988512),Fulcrum.sub$sample.id)
+wrong.location.sites<-Fulcrum.sub$site[wrong.location]
+Fulcrum.sub$latitude[wrong.location]<-site.summary$latitude[match(wrong.location.sites,site.summary$site_id)]
+Fulcrum.sub$longitude[wrong.location]<-site.summary$longitude[match(wrong.location.sites,site.summary$site_id)]
+
+## add species ID and latitude if possible from
+## leaf spectra app when missing from plants app
+missing.species<-which(is.na(Fulcrum.sub$species))
+missing.species.id<-Fulcrum.sub$sample.id[missing.species]
+missing.species.site<-Fulcrum.sub$site[missing.species]
+Fulcrum.sub$species[missing.species]<-Fulcrum.summary$scientific_name[match(missing.species.id,Fulcrum.summary$sample_id)]
+Fulcrum.sub$latitude[missing.species]<-site.summary$latitude[match(missing.species.site,site.summary$site_id)]
+Fulcrum.sub$longitude[missing.species]<-site.summary$longitude[match(missing.species.site,site.summary$site_id)]
 
 ## split up genus and species into separate columns
-Fulcrum.sub<-Fulcrum.sub[-which(is.na(Fulcrum.sub$species)),]
 sp_split<-strsplit(as.character(Fulcrum.sub$species),split=" ")
 Fulcrum.sub$latin.genus<-unlist(lapply(sp_split,function(entry) entry[[1]]))
 Fulcrum.sub$latin.species<-unlist(lapply(sp_split,function(entry) entry[[2]]))
@@ -226,19 +234,14 @@ meta(all.trans.spec)$longitude<-Fulcrum.sub$longitude[match(meta(all.trans.spec)
 
 ## remove certain data from Beauchamp Rioux dataset
 ## flagged for having red or yellow leaves (or being otherwise non-standard)
-all.ref.spec<-all.ref.spec[-which(meta(all.ref.spec)$sample_id %in% c("11851575","13221003","22405244",
-                                                          "21854888","21854774","21854585",
-                                                          "10449089","10450505","10452131",
-                                                          "10453164","10454172","10461643",
-                                                          "10465061","10466192","10466735",
-                                                          "10468015"))]
 
-all.trans.spec<-all.trans.spec[-which(meta(all.trans.spec)$sample_id %in% c("11851575","13221003","22405244",
-                                                                      "21854888","21854774","21854585",
-                                                                      "10449089","10450505","10452131",
-                                                                      "10453164","10454172","10461643",
-                                                                      "10465061","10466192","10466735",
-                                                                      "10468015"))]
+remove.ids<-c("11851575","13221003","22405244","21854888",
+              "21854774","21854585","10449089","10450505",
+              "10452131","10453164","10454172","10461643",
+              "10465061","10466192","10466735","10468015")
+
+all.ref.spec<-all.ref.spec[-which(meta(all.ref.spec)$sample_id %in% remove.ids)]
+all.trans.spec<-all.trans.spec[-which(meta(all.trans.spec)$sample_id %in% remove.ids)]
 
 ## remove a few missing spectra from Blanchard project
 all.ref.spec<-all.ref.spec[-which(is.na(rowSums(as.matrix(all.ref.spec))))]
