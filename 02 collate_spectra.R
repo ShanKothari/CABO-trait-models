@@ -173,24 +173,33 @@ all.trans.spec<-Reduce(combine, list(BeauchampRioux.trans.spec, Blanchard.trans.
 Fulcrum.summary<-read.csv("SummaryData/leaf_spectra.csv")
 Fulcrum.summary$measurement.date<-as.POSIXlt(Fulcrum.summary$date_measured,format="%Y-%m-%d")
 Fulcrum.sub<-data.frame(sample.id=Fulcrum.summary$sample_id,
-                        species=Fulcrum.summary$scientific_name,
                         project=Fulcrum.summary$project,
                         site=Fulcrum.summary$site_id,
                         measurement.date=Fulcrum.summary$measurement.date)
 
 ## to get chronosequence stages from the Warren project
 Warren.summary<-read.csv("SummaryData/WarrenSummary.csv")
-Fulcrum.sub$stage<-Warren.summary$Stage[match(Fulcrum.summary$sample_id,Warren.summary$Bulk.sample.ID)]
+Fulcrum.sub$stage<-Warren.summary$Stage[match(Fulcrum.sub$sample.id,Warren.summary$Bulk.sample.ID)]
 
 ## to get latitude and longitude
-## lat-long records for individual samples are unreliable
-## so we use site-level data
+## we link to the bulk sample and plant records
+bulk_samples<-read.csv("SummaryData/bulk_leaf_samples.csv")
+plants<-read.csv("SummaryData/plants.csv")
+Fulcrum.sub$plant.id<-bulk_samples$plant_id[match(Fulcrum.sub$sample.id,bulk_samples$sample_id)]
+Fulcrum.sub$latitude<-plants$latitude[match(Fulcrum.sub$plant.id,plants$plant_id)]
+Fulcrum.sub$longitude<-plants$longitude[match(Fulcrum.sub$plant.id,plants$plant_id)]
+Fulcrum.sub$species<-plants$scientific_name[match(Fulcrum.sub$plant.id,plants$plant_id)]
+
+## fix three samples with incorrect plant lat/long coordinates
+## by assigning site coordinates
 site.summary<-read.csv("SummaryData/sites.csv")
-Fulcrum.sub$latitude<-site.summary$latitude[match(Fulcrum.sub$site,site.summary$site_id)]
-Fulcrum.sub$longitude<-site.summary$longitude[match(Fulcrum.sub$site,site.summary$site_id)]
+sample.location.ind<-match(c(11824578,13920107,13988512),Fulcrum.sub$sample.id)
+site.samples<-Fulcrum.sub$site[sample.location.ind]
+Fulcrum.sub$latitude[sample.location.ind]<-site.summary$latitude[match(site.samples,site.summary$site_id)]
+Fulcrum.sub$longitude[sample.location.ind]<-site.summary$longitude[match(site.samples,site.summary$site_id)]
 
 ## split up genus and species into separate columns
-Fulcrum.sub<-Fulcrum.sub[-which(Fulcrum.sub$species==""),]
+Fulcrum.sub<-Fulcrum.sub[-which(is.na(Fulcrum.sub$species)),]
 sp_split<-strsplit(as.character(Fulcrum.sub$species),split=" ")
 Fulcrum.sub$latin.genus<-unlist(lapply(sp_split,function(entry) entry[[1]]))
 Fulcrum.sub$latin.species<-unlist(lapply(sp_split,function(entry) entry[[2]]))
