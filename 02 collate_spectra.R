@@ -190,8 +190,8 @@ Fulcrum.sub$latitude<-plants$latitude[match(Fulcrum.sub$plant.id,plants$plant_id
 Fulcrum.sub$longitude<-plants$longitude[match(Fulcrum.sub$plant.id,plants$plant_id)]
 Fulcrum.sub$species<-plants$scientific_name[match(Fulcrum.sub$plant.id,plants$plant_id)]
 
-## fix three samples with incorrect plant lat/long coordinates
-## by assigning site coordinates
+## fix three samples with clearly incorrect plant
+## lat/long coordinates by assigning site coordinates
 site.summary<-read.csv("SummaryData/sites.csv")
 wrong.location<-match(c(11824578,13920107,13988512),Fulcrum.sub$sample.id)
 wrong.location.sites<-Fulcrum.sub$site[wrong.location]
