@@ -15,12 +15,6 @@ source("Scripts/CABO-trait-models/00 useful_functions.R")
 ref.train<-readRDS("ProcessedSpectra/ref_train.rds")
 ref.test<-readRDS("ProcessedSpectra/ref_test.rds")
 
-##########################################
-## to dos
-
-## try Type II regression?
-## add together Chl a and b?
-
 ###########################################
 ## start building first-pass models using
 ## K-fold cross validation to get the
