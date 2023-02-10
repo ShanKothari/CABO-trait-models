@@ -174,7 +174,6 @@ Fulcrum.summary<-read.csv("SummaryData/leaf_spectra.csv")
 Fulcrum.summary$measurement.date<-as.POSIXlt(Fulcrum.summary$date_measured,format="%Y-%m-%d")
 Fulcrum.sub<-data.frame(sample.id=Fulcrum.summary$sample_id,
                         project=Fulcrum.summary$project,
-                        site=Fulcrum.summary$site_id,
                         measurement.date=Fulcrum.summary$measurement.date)
 
 ## to get chronosequence stages from the Warren project
@@ -186,11 +185,15 @@ Fulcrum.sub$stage<-Warren.summary$Stage[match(Fulcrum.sub$sample.id,Warren.summa
 bulk_samples<-read.csv("SummaryData/bulk_leaf_samples.csv")
 plants<-read.csv("SummaryData/plants.csv")
 Fulcrum.sub$plant.id<-bulk_samples$plant_id[match(Fulcrum.sub$sample.id,bulk_samples$sample_id)]
+Fulcrum.sub$site<-plants$site_id[match(Fulcrum.sub$plant.id,plants$plant_id)]
+## fill in site manually for one sample that's missing from the Plants app
+Fulcrum.sub$site[which(Fulcrum.sub$plant.id=="38713158")]<-"CGOP_1"
+
 Fulcrum.sub$latitude<-plants$latitude[match(Fulcrum.sub$plant.id,plants$plant_id)]
 Fulcrum.sub$longitude<-plants$longitude[match(Fulcrum.sub$plant.id,plants$plant_id)]
 Fulcrum.sub$species<-plants$scientific_name[match(Fulcrum.sub$plant.id,plants$plant_id)]
 
-## fix three samples with clearly incorrect plant
+## fix three samples with missing or clearly incorrect plant
 ## lat/long coordinates by assigning site coordinates
 site.summary<-read.csv("SummaryData/sites.csv")
 wrong.location<-match(c(11824578,13920107,13988512),Fulcrum.sub$sample.id)
@@ -216,6 +219,7 @@ meta(all.ref.spec)$species<-Fulcrum.sub$species[match(meta(all.ref.spec)$sample_
 meta(all.ref.spec)$latin.genus<-Fulcrum.sub$latin.genus[match(meta(all.ref.spec)$sample_id,Fulcrum.sub$sample.id)]
 meta(all.ref.spec)$latin.species<-Fulcrum.sub$latin.species[match(meta(all.ref.spec)$sample_id,Fulcrum.sub$sample.id)]
 meta(all.ref.spec)$measurement.date<-Fulcrum.sub$measurement.date[match(meta(all.ref.spec)$sample_id,Fulcrum.sub$sample.id)]
+meta(all.ref.spec)$plant.id<-Fulcrum.sub$plant.id[match(meta(all.ref.spec)$sample_id,Fulcrum.sub$sample.id)]
 meta(all.ref.spec)$project<-Fulcrum.sub$project[match(meta(all.ref.spec)$sample_id,Fulcrum.sub$sample.id)]
 meta(all.ref.spec)$site<-Fulcrum.sub$site[match(meta(all.ref.spec)$sample_id,Fulcrum.sub$sample.id)]
 meta(all.ref.spec)$stage<-Fulcrum.sub$stage[match(meta(all.ref.spec)$sample_id,Fulcrum.sub$sample.id)]
@@ -226,6 +230,7 @@ meta(all.trans.spec)$species<-Fulcrum.sub$species[match(meta(all.trans.spec)$sam
 meta(all.trans.spec)$latin.genus<-Fulcrum.sub$latin.genus[match(meta(all.trans.spec)$sample_id,Fulcrum.sub$sample.id)]
 meta(all.trans.spec)$latin.species<-Fulcrum.sub$latin.species[match(meta(all.trans.spec)$sample_id,Fulcrum.sub$sample.id)]
 meta(all.trans.spec)$measurement.date<-Fulcrum.sub$measurement.date[match(meta(all.trans.spec)$sample_id,Fulcrum.sub$sample.id)]
+meta(all.trans.spec)$plant.id<-Fulcrum.sub$plant.id[match(meta(all.trans.spec)$sample_id,Fulcrum.sub$sample.id)]
 meta(all.trans.spec)$project<-Fulcrum.sub$project[match(meta(all.trans.spec)$sample_id,Fulcrum.sub$sample.id)]
 meta(all.trans.spec)$site<-Fulcrum.sub$site[match(meta(all.trans.spec)$sample_id,Fulcrum.sub$sample.id)]
 meta(all.trans.spec)$stage<-Fulcrum.sub$stage[match(meta(all.trans.spec)$sample_id,Fulcrum.sub$sample.id)]
