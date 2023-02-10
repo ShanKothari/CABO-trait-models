@@ -186,9 +186,14 @@ bulk_samples<-read.csv("SummaryData/bulk_leaf_samples.csv")
 plants<-read.csv("SummaryData/plants.csv")
 Fulcrum.sub$plant.id<-bulk_samples$plant_id[match(Fulcrum.sub$sample.id,bulk_samples$sample_id)]
 Fulcrum.sub$site<-plants$site_id[match(Fulcrum.sub$plant.id,plants$plant_id)]
-## fill in site manually for one sample that's missing from the Plants app
-Fulcrum.sub$site[which(Fulcrum.sub$plant.id=="38713158")]<-"CGOP_1"
 
+## when site is missing from the Plants app
+## fill it in from leaf spectra app
+missing.site<-which(is.na(Fulcrum.sub$site) | Fulcrum.sub$site=="")
+missing.site.ids<-Fulcrum.sub$sample.id[missing.site]
+Fulcrum.sub$site[missing.site]<-Fulcrum.summary$site_id[match(missing.site.ids,Fulcrum.summary$sample_id)]
+
+## add latitude and longitude from Plants app
 Fulcrum.sub$latitude<-plants$latitude[match(Fulcrum.sub$plant.id,plants$plant_id)]
 Fulcrum.sub$longitude<-plants$longitude[match(Fulcrum.sub$plant.id,plants$plant_id)]
 Fulcrum.sub$species<-plants$scientific_name[match(Fulcrum.sub$plant.id,plants$plant_id)]
