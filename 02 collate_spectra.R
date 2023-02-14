@@ -193,27 +193,30 @@ missing.site<-which(is.na(Fulcrum.sub$site) | Fulcrum.sub$site=="")
 missing.site.ids<-Fulcrum.sub$sample.id[missing.site]
 Fulcrum.sub$site[missing.site]<-Fulcrum.summary$site_id[match(missing.site.ids,Fulcrum.summary$sample_id)]
 
+## add species
+## when species ID is missing from the Plants app
+## fill it in from the leaf spectra app
+Fulcrum.sub$species<-plants$scientific_name[match(Fulcrum.sub$plant.id,plants$plant_id)]
+missing.species<-which(is.na(Fulcrum.sub$species))
+missing.species.id<-Fulcrum.sub$sample.id[missing.species]
+Fulcrum.sub$species[missing.species]<-Fulcrum.summary$scientific_name[match(missing.species.id,Fulcrum.summary$sample_id)]
+
 ## add latitude and longitude from Plants app
 Fulcrum.sub$latitude<-plants$latitude[match(Fulcrum.sub$plant.id,plants$plant_id)]
 Fulcrum.sub$longitude<-plants$longitude[match(Fulcrum.sub$plant.id,plants$plant_id)]
-Fulcrum.sub$species<-plants$scientific_name[match(Fulcrum.sub$plant.id,plants$plant_id)]
 
-## fix three samples with missing or clearly incorrect plant
-## lat/long coordinates by assigning site coordinates
+## or from Sites app when missing from Plants app
 site.summary<-read.csv("SummaryData/sites.csv")
+missing.species.site<-Fulcrum.sub$site[missing.species]
+Fulcrum.sub$latitude[missing.species]<-site.summary$latitude[match(missing.species.site,site.summary$site_id)]
+Fulcrum.sub$longitude[missing.species]<-site.summary$longitude[match(missing.species.site,site.summary$site_id)]
+
+## fix three samples with clearly incorrect plant
+## lat/long coordinates by assigning site coordinates
 wrong.location<-match(c(11824578,13920107,13988512),Fulcrum.sub$sample.id)
 wrong.location.sites<-Fulcrum.sub$site[wrong.location]
 Fulcrum.sub$latitude[wrong.location]<-site.summary$latitude[match(wrong.location.sites,site.summary$site_id)]
 Fulcrum.sub$longitude[wrong.location]<-site.summary$longitude[match(wrong.location.sites,site.summary$site_id)]
-
-## add species ID and latitude if possible from
-## leaf spectra app when missing from plants app
-missing.species<-which(is.na(Fulcrum.sub$species))
-missing.species.id<-Fulcrum.sub$sample.id[missing.species]
-missing.species.site<-Fulcrum.sub$site[missing.species]
-Fulcrum.sub$species[missing.species]<-Fulcrum.summary$scientific_name[match(missing.species.id,Fulcrum.summary$sample_id)]
-Fulcrum.sub$latitude[missing.species]<-site.summary$latitude[match(missing.species.site,site.summary$site_id)]
-Fulcrum.sub$longitude[missing.species]<-site.summary$longitude[match(missing.species.site,site.summary$site_id)]
 
 ## split up genus and species into separate columns
 sp_split<-strsplit(as.character(Fulcrum.sub$species),split=" ")
