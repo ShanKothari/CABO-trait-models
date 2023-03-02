@@ -375,10 +375,8 @@ all.trans<-all.trans[which(meta(all.trans)$project!="2019-Pardo-MSc-UdeM")]
 all.abs<-all.abs[which(meta(all.abs)$project!="2019-Pardo-MSc-UdeM")]
 
 ref_quantiles<-quantile(all.ref,probs=c(0.025,0.25,0.5,0.75,0.975))
-trans_quantiles<-quantile(all.trans[meta(all.trans)$project!="2019-Pardo-MSc-UdeM"],
-                          probs=c(0.025,0.25,0.5,0.75,0.975))
-abs_quantiles<-quantile(all.abs[meta(all.abs)$project!="2019-Pardo-MSc-UdeM"],
-                        probs=c(0.025,0.25,0.5,0.75,0.975))
+trans_quantiles<-quantile(all.trans,probs=c(0.025,0.25,0.5,0.75,0.975))
+abs_quantiles<-quantile(all.abs,probs=c(0.025,0.25,0.5,0.75,0.975))
 
 ref_CV<-apply(all.ref,2,function(x) sd(x)/mean(x))
 trans_CV<-apply(all.trans,2,function(x) sd(x)/mean(x))
