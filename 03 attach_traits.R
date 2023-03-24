@@ -79,30 +79,39 @@ all.area<-read.csv("TraitData/LeafAreaWaterSamples/leaf_area_and_water_samples.c
 
 all.area.sub<-data.frame(sample_id=all.area$sample_id,
                          SLA=all.area$specific_leaf_area_m2_kg,
-                         LDMC=all.area$leaf_dry_matter_content_mg_g)
+                         LDMC=all.area$leaf_dry_matter_content_mg_g,
+                         LDMC_actual=all.area$actual_leaf_dry_matter_content_perc*10)
 
 ## remove bad values, based on notes in Fulcrum data
-all.area.sub$LDMC[all.area.sub$sample_id %in% c("10290262","10966273","13404937",
-                                                  "38530951","41809826","42944395",
-                                                  "43711631","43713406","43717241",
-                                                  "43718957","43718799","43712000","43721033",
-                                                  "44060633","44142362","44148646",
-                                                  "44683516","45108236")]<-NA
+bad.LDMC<-c("10290262","10966273","13404937","38530951","41809826","42944395",
+            "43711631","43713406","43717241","43718957","43718799","43712000",
+            "43721033","44060633","44142362","44148646","44683516","45108236")
+bad.SLA<-c("13404937","44227362","44683516","45108236","44142362")
 
-all.area.sub$SLA[all.area.sub$sample_id %in% c("13404937","44227362",
-                                               "44683516","45108236","44142362")]<-NA
+all.area.sub$LDMC[all.area.sub$sample_id %in% bad.LDMC]<-NA
+all.area.sub$LDMC_actual[all.area.sub$sample_id %in% bad.LDMC]<-NA
 
+all.area.sub$SLA[all.area.sub$sample_id %in% bad.SLA]<-NA
+
+## LMA in kg/m^2
+all.area.sub$LMA<-1/all.area.sub$SLA
+
+## EWT in mm
+all.area.sub$EWT<-with(all.area.sub,(1/(LDMC_actual/1000)-1)*LMA)
 
 ## SLA in units m^2/kg
 ## LDMC in units mg/g
-meta(all.ref)$SLA<-all.area.sub$SLA[match(meta(all.ref)$sample_id,all.area.sub$sample_id)]
+meta(all.ref)$LMA<-all.area.sub$LMA[match(meta(all.ref)$sample_id,all.area.sub$sample_id)]
 meta(all.ref)$LDMC<-all.area.sub$LDMC[match(meta(all.ref)$sample_id,all.area.sub$sample_id)]
+meta(all.ref)$EWT<-all.area.sub$EWT[match(meta(all.ref)$sample_id,all.area.sub$sample_id)]
 
-meta(all.trans)$SLA<-all.area.sub$SLA[match(meta(all.trans)$sample_id,all.area.sub$sample_id)]
+meta(all.trans)$LMA<-all.area.sub$LMA[match(meta(all.trans)$sample_id,all.area.sub$sample_id)]
 meta(all.trans)$LDMC<-all.area.sub$LDMC[match(meta(all.trans)$sample_id,all.area.sub$sample_id)]
+meta(all.trans)$EWT<-all.area.sub$EWT[match(meta(all.trans)$sample_id,all.area.sub$sample_id)]
 
-meta(all.abs)$SLA<-all.area.sub$SLA[match(meta(all.abs)$sample_id,all.area.sub$sample_id)]
+meta(all.abs)$LMA<-all.area.sub$LMA[match(meta(all.abs)$sample_id,all.area.sub$sample_id)]
 meta(all.abs)$LDMC<-all.area.sub$LDMC[match(meta(all.abs)$sample_id,all.area.sub$sample_id)]
+meta(all.abs)$EWT<-all.area.sub$EWT[match(meta(all.abs)$sample_id,all.area.sub$sample_id)]
 
 ##############################################
 ## read C/N
@@ -324,16 +333,6 @@ meta(all.abs)$Zn_mass<-ICP_all$Zn[match(meta(all.abs)$sample_id,ICP_all$Sample_i
 #############################################
 ## area-normalized chemical traits and
 ## normalization-independent chemical traits sensu Osnas
-
-## LMA in kg/m^2
-meta(all.ref)$LMA<-1/meta(all.ref)$SLA
-meta(all.trans)$LMA<-1/meta(all.trans)$SLA
-meta(all.abs)$LMA<-1/meta(all.abs)$SLA
-
-## EWT in mm
-meta(all.ref)$EWT<-with(meta(all.ref),(1/(LDMC/1000)-1)*LMA)
-meta(all.trans)$EWT<-with(meta(all.trans),(1/(LDMC/1000)-1)*LMA)
-meta(all.abs)$EWT<-with(meta(all.abs),(1/(LDMC/1000)-1)*LMA)
 
 ## area basis, in g/cm^2
 meta(all.ref)$Narea<-meta(all.ref)$Nmass*meta(all.ref)$LMA/1000
