@@ -31,9 +31,9 @@ meta(ref.test)$EWT_actual<-meta(all.ref)$EWT[match(meta(ref.test)$sample_id,
 ## compare old and corrected EWT values
 all.ref.old<-combine(ref.train,ref.test)
 summary(lm(EWT_actual~EWT,data=meta(all.ref.old)))
-with(meta(ref.train),quantile(EWT_actual/EWT,
-                              probs=c(0.025,0.25,0.5,0.75,0.975),
-                              na.rm=T))
+with(meta(all.ref.old),quantile(EWT_actual/EWT,
+                                probs=c(0.025,0.25,0.5,0.75,0.975),
+                                na.rm=T))
 
 ###############################################
 ## rerun model development and internal validation
@@ -274,9 +274,19 @@ rm(list=ls())
 ###############################################
 ## plotting internal validation output
 
+colorBlind  <- c("#E69F00","#009E73","#56B4E9","#F0E442",
+                 "#0072B2","#CC79A7","#D55E00","#999999")
+
 EWT_actual.jack.df.ref<-readRDS("SavedResults/EWT_corrected_jack_df_ref.rds")
 EWT_actual.jack.df.trans<-readRDS("SavedResults/EWT_corrected_jack_df_trans.rds")
 EWT_actual.jack.df.abs<-readRDS("SavedResults/EWT_corrected_jack_df_abs.rds")
+
+all.EWT<-c(EWT_actual.jack.df.ref$Measured,
+           EWT_actual.jack.df.ref$pred.mean,
+           EWT_actual.jack.df.trans$pred.mean,
+           EWT_actual.jack.df.abs$pred.mean)
+EWT_upper<-max(all.EWT,na.rm=T)+0.02
+EWT_lower<-min(all.EWT,na.rm=T)-0.02
 
 EWT_actual.ref.val.plot<-ggplot(EWT_actual.jack.df.ref,
                          aes(y=Measured,x=pred.mean,color=functional.group))+
@@ -285,8 +295,8 @@ EWT_actual.ref.val.plot<-ggplot(EWT_actual.jack.df.ref,
   geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(EWT_actual_lower,EWT_actual_upper),
-                  ylim=c(EWT_actual_lower,EWT_actual_upper))+
+  coord_cartesian(xlim=c(EWT_lower,EWT_upper),
+                  ylim=c(EWT_lower,EWT_upper))+
   theme(text = element_text(size=25),
         legend.position = c(0.8, 0.25))+
   labs(y="Measured EWT (mm)",x="Predicted EWT (mm)")+
@@ -300,8 +310,8 @@ EWT_actual.trans.val.plot<-ggplot(EWT_actual.jack.df.trans,
   geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(EWT_actual_lower,EWT_actual_upper),
-                  ylim=c(EWT_actual_lower,EWT_actual_upper))+
+  coord_cartesian(xlim=c(EWT_lower,EWT_upper),
+                  ylim=c(EWT_lower,EWT_upper))+
   theme(text = element_text(size=25),
         legend.position = c(0.8, 0.25),
         axis.title.y = element_blank(),
@@ -317,8 +327,8 @@ EWT_actual.abs.val.plot<-ggplot(EWT_actual.jack.df.abs,
   geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(EWT_actual_lower,EWT_actual_upper),
-                  ylim=c(EWT_actual_lower,EWT_actual_upper))+
+  coord_cartesian(xlim=c(EWT_lower,EWT_upper),
+                  ylim=c(EWT_lower,EWT_upper))+
   theme(text = element_text(size=25),
         legend.position = c(0.8, 0.25),
         axis.title.y = element_blank(),
@@ -326,6 +336,11 @@ EWT_actual.abs.val.plot<-ggplot(EWT_actual.jack.df.abs,
   labs(y="Measured EWT (mm)",x="Predicted EWT (mm)",
        color="Functional group")+
   scale_color_manual(values=colorBlind)
+
+pdf("Images/EWT_corrected_val_plot.pdf",width=16,height=6)
+  (EWT_actual.ref.val.plot + EWT_actual.trans.val.plot + EWT_actual.abs.val.plot) &
+  plot_layout(guides="collect") & theme(legend.position = "bottom")
+dev.off()
 
 ###############################################
 ## external validation
