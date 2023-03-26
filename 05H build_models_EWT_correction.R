@@ -272,4 +272,60 @@ saveRDS(EWT_actual.jack.stats,"SavedResults/EWT_corrected_jack_stats_abs.rds")
 rm(list=ls())
 
 ###############################################
+## plotting internal validation output
+
+EWT_actual.jack.df.ref<-readRDS("SavedResults/EWT_corrected_jack_df_ref.rds")
+EWT_actual.jack.df.trans<-readRDS("SavedResults/EWT_corrected_jack_df_trans.rds")
+EWT_actual.jack.df.abs<-readRDS("SavedResults/EWT_corrected_jack_df_abs.rds")
+
+EWT_actual.ref.val.plot<-ggplot(EWT_actual.jack.df.ref,
+                         aes(y=Measured,x=pred.mean,color=functional.group))+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(EWT_actual_lower,EWT_actual_upper),
+                  ylim=c(EWT_actual_lower,EWT_actual_upper))+
+  theme(text = element_text(size=25),
+        legend.position = c(0.8, 0.25))+
+  labs(y="Measured EWT (mm)",x="Predicted EWT (mm)")+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+EWT_actual.trans.val.plot<-ggplot(EWT_actual.jack.df.trans,
+                           aes(y=Measured,x=pred.mean,color=functional.group))+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(EWT_actual_lower,EWT_actual_upper),
+                  ylim=c(EWT_actual_lower,EWT_actual_upper))+
+  theme(text = element_text(size=25),
+        legend.position = c(0.8, 0.25),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank())+
+  labs(y="Measured EWT (mm)",x="Predicted EWT (mm)")+
+  guides(color=F)+
+  scale_color_manual(values=colorBlind)
+
+EWT_actual.abs.val.plot<-ggplot(EWT_actual.jack.df.abs,
+                         aes(y=Measured,x=pred.mean,color=functional.group))+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(EWT_actual_lower,EWT_actual_upper),
+                  ylim=c(EWT_actual_lower,EWT_actual_upper))+
+  theme(text = element_text(size=25),
+        legend.position = c(0.8, 0.25),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank())+
+  labs(y="Measured EWT (mm)",x="Predicted EWT (mm)",
+       color="Functional group")+
+  scale_color_manual(values=colorBlind)
+
+###############################################
 ## external validation
