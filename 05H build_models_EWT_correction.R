@@ -344,3 +344,42 @@ dev.off()
 
 ###############################################
 ## external validation
+
+source("Scripts/CABO-trait-models/00 useful_functions.R")
+EWT_actual.jack.coefs.ref<-readRDS("SavedResults/EWT_corrected_jack_coefs_ref.rds")
+
+## read in processed data
+LOPEX<-readRDS("IndependentValidationData/LOPEX/LOPEX_processed.rds")
+ANGERS<-readRDS("IndependentValidationData/ANGERS/ANGERS_processed.rds")
+Dessain.spec<-readRDS("IndependentValidationData/Dessain_processed.rds")
+
+LOPEX_ANGERS<-spectrolab::combine(LOPEX,ANGERS)
+all_val_ref<-spectrolab::combine(LOPEX_ANGERS,Dessain.spec)
+
+EWT_pred<-apply.coefs(EWT_actual.jack.coefs.ref,val.spec = all_val_ref)
+EWT_stat<-t(apply(EWT_pred,1,
+                  function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+EWT_pred_df<-data.frame(Measured=meta(all_val_ref)$EWT,
+                        pred.mean=EWT_stat[,1],
+                        pred.low=EWT_stat[,2],
+                        pred.high=EWT_stat[,3],
+                        dataset=meta(all_val_ref)$dataset)
+EWT_all<-with(EWT_pred_df,c(pred.low[!is.na(Measured)],
+                            pred.high[!is.na(Measured)],
+                            Measured))
+EWT_upper<-max(EWT_all,na.rm=T)+0.03
+EWT_lower<-min(EWT_all,na.rm=T)-0.03
+
+EWT_ind_val<-ggplot(data=EWT_pred_df,
+                    aes(x=pred.mean,y=Measured,color=dataset))+
+  geom_errorbarh(aes(y=Measured,xmin=pred.low,xmax=pred.high),
+                 color="gray")+
+  geom_point(size=2,alpha=0.7)+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_smooth(method="lm",se=F)+
+  labs(y="Measured EWT (mm)",x="Predicted EWT (mm)")+
+  coord_cartesian(xlim=c(EWT_lower,EWT_upper),
+                  ylim=c(EWT_lower,EWT_upper))+
+  scale_color_manual(values=colorBlind)
