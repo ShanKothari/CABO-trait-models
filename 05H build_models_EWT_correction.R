@@ -7,8 +7,6 @@ library(ggplot2)
 library(RColorBrewer)
 library(ggpubr)
 
-source("Scripts/CABO-trait-models/00 useful_functions.R")
-
 ####################################
 ## the purpose of this script is to add on the corrected values of EWT
 ## without creating a new training/testing data split
@@ -18,6 +16,7 @@ source("Scripts/CABO-trait-models/00 useful_functions.R")
 ## we'll use those values to create a new column in the
 ## training and testing splits
 
+source("Scripts/CABO-trait-models/00 useful_functions.R")
 all.ref<-readRDS("ProcessedSpectra/all_ref_and_traits.rds")
 
 ref.train<-readRDS("ProcessedSpectra/ref_train.rds")
@@ -116,6 +115,7 @@ rm(list=ls())
 ## rerun model development and internal validation
 ## transmittance
 
+source("Scripts/CABO-trait-models/00 useful_functions.R")
 all.trans<-readRDS("ProcessedSpectra/all_trans_and_traits.rds")
 trans.train<-readRDS("ProcessedSpectra/trans_train.rds")
 trans.test<-readRDS("ProcessedSpectra/trans_test.rds")
@@ -125,10 +125,77 @@ meta(trans.train)$EWT_actual<-meta(all.trans)$EWT[match(meta(trans.train)$sample
 meta(trans.test)$EWT_actual<-meta(all.trans)$EWT[match(meta(trans.test)$sample_id,
                                                        meta(all.trans)$sample_id)]
 
+EWT_actual_CVmodel<-plsr(meta(trans.train)$EWT_actual~as.matrix(trans.train),
+                         ncomp=30,method = "oscorespls",validation="CV",segments=10)
+ncomp_EWT_actual_CVmodel <- selectNcomp(EWT_actual_CVmodel, method = "onesigma", plot = FALSE)
+EWT_actual_valid <- which(!is.na(meta(trans.train)$EWT_actual))
+EWT_actual_pred<-data.frame(ID=meta(trans.train)$sample_id[EWT_actual_valid],
+                            Species=meta(trans.train)$species[EWT_actual_valid],
+                            Project=meta(trans.train)$project[EWT_actual_valid],
+                            measured=meta(trans.train)$EWT_actual[EWT_actual_valid],
+                            val_pred=EWT_actual_CVmodel$validation$pred[,,ncomp_EWT_actual_CVmodel])
+ggplot(EWT_actual_pred,aes(y=measured,x=val_pred,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  ##  coord_cartesian(xlim=c(38,55),ylim=c(38,55))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.2))+
+  labs(y="Measured",x="Predicted")+
+  ggtitle("Predicting %EWT from fresh-leaf spectra")
+
+EWT_actual.jack.coefs<-list()
+EWT_actual.jack.stats<-list()
+nreps<-100
+
+for(i in 1:nreps){
+  print(i)
+  
+  n.cal.spec<-nrow(trans.train)
+  train.jack<-sample(1:n.cal.spec,floor(0.7*n.cal.spec))
+  test.jack<-setdiff(1:n.cal.spec,train.jack)
+  
+  calib.jack<-trans.train[train.jack]
+  val.jack<-trans.train[test.jack]
+  
+  EWT_actual.jack<-plsr(meta(calib.jack)$EWT_actual~as.matrix(calib.jack),
+                        ncomp=30,method = "oscorespls",validation="none")
+  
+  EWT_actual.jack.val.pred<-as.vector(predict(EWT_actual.jack,newdata=as.matrix(val.jack),ncomp=ncomp_EWT_actual_CVmodel)[,,1])
+  EWT_actual.jack.val.fit<-lm(EWT_actual.jack.val.pred~meta(val.jack)$EWT_actual)
+  EWT_actual.jack.stats[[i]]<-c(R2=summary(EWT_actual.jack.val.fit)$r.squared,
+                                RMSE=RMSD(meta(val.jack)$EWT_actual,EWT_actual.jack.val.pred),
+                                perRMSE=percentRMSD(meta(val.jack)$EWT_actual,EWT_actual.jack.val.pred,0.025,0.975),
+                                bias=mean(EWT_actual.jack.val.pred,na.rm=T)-mean(meta(val.jack)$EWT_actual,na.rm=T))
+  
+  EWT_actual.jack.coefs[[i]]<-as.vector(coef(EWT_actual.jack,ncomp=ncomp_EWT_actual_CVmodel,intercept=TRUE))
+  
+}
+
+EWT_actual.jack.pred<-apply.coefs(EWT_actual.jack.coefs,as.matrix(trans.test))
+EWT_actual.jack.stat<-t(apply(EWT_actual.jack.pred,1,
+                              function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+EWT_actual.jack.df<-data.frame(pred.mean=EWT_actual.jack.stat[,1],
+                               pred.low=EWT_actual.jack.stat[,2],
+                               pred.high=EWT_actual.jack.stat[,3],
+                               Measured=meta(trans.test)$EWT_actual,
+                               ncomp=ncomp_EWT_actual_CVmodel,
+                               Species=meta(trans.test)$species,
+                               Project=meta(trans.test)$project,
+                               functional.group=meta(trans.test)$functional.group,
+                               ID=meta(trans.test)$sample_id)
+
+saveRDS(EWT_actual.jack.coefs,"SavedResults/EWT_corrected_jack_coefs_trans.rds")
+saveRDS(EWT_actual.jack.df,"SavedResults/EWT_corrected_jack_df_trans.rds")
+saveRDS(EWT_actual.jack.stats,"SavedResults/EWT_corrected_jack_stats_trans.rds")
+
+rm(list=ls())
+
 ###############################################
 ## rerun model development and internal validation
 ## absorptance
 
+source("Scripts/CABO-trait-models/00 useful_functions.R")
 all.abs<-readRDS("ProcessedSpectra/all_abs_and_traits.rds")
 abs.train<-readRDS("ProcessedSpectra/abs_train.rds")
 abs.test<-readRDS("ProcessedSpectra/abs_test.rds")
@@ -138,6 +205,71 @@ meta(abs.train)$EWT_actual<-meta(all.abs)$EWT[match(meta(abs.train)$sample_id,
 meta(abs.test)$EWT_actual<-meta(all.abs)$EWT[match(meta(abs.test)$sample_id,
                                                        meta(all.abs)$sample_id)]
 
+EWT_actual_CVmodel<-plsr(meta(abs.train)$EWT_actual~as.matrix(abs.train),
+                         ncomp=30,method = "oscorespls",validation="CV",segments=10)
+ncomp_EWT_actual_CVmodel <- selectNcomp(EWT_actual_CVmodel, method = "onesigma", plot = FALSE)
+EWT_actual_valid <- which(!is.na(meta(abs.train)$EWT_actual))
+EWT_actual_pred<-data.frame(ID=meta(abs.train)$sample_id[EWT_actual_valid],
+                            Species=meta(abs.train)$species[EWT_actual_valid],
+                            Project=meta(abs.train)$project[EWT_actual_valid],
+                            measured=meta(abs.train)$EWT_actual[EWT_actual_valid],
+                            val_pred=EWT_actual_CVmodel$validation$pred[,,ncomp_EWT_actual_CVmodel])
+ggplot(EWT_actual_pred,aes(y=measured,x=val_pred,color=Project))+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  ##  coord_cartesian(xlim=c(38,55),ylim=c(38,55))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.2))+
+  labs(y="Measured",x="Predicted")+
+  ggtitle("Predicting %EWT from fresh-leaf spectra")
+
+EWT_actual.jack.coefs<-list()
+EWT_actual.jack.stats<-list()
+nreps<-100
+
+for(i in 1:nreps){
+  print(i)
+  
+  n.cal.spec<-nrow(abs.train)
+  train.jack<-sample(1:n.cal.spec,floor(0.7*n.cal.spec))
+  test.jack<-setdiff(1:n.cal.spec,train.jack)
+  
+  calib.jack<-abs.train[train.jack]
+  val.jack<-abs.train[test.jack]
+  
+  EWT_actual.jack<-plsr(meta(calib.jack)$EWT_actual~as.matrix(calib.jack),
+                        ncomp=30,method = "oscorespls",validation="none")
+  
+  EWT_actual.jack.val.pred<-as.vector(predict(EWT_actual.jack,newdata=as.matrix(val.jack),ncomp=ncomp_EWT_actual_CVmodel)[,,1])
+  EWT_actual.jack.val.fit<-lm(EWT_actual.jack.val.pred~meta(val.jack)$EWT_actual)
+  EWT_actual.jack.stats[[i]]<-c(R2=summary(EWT_actual.jack.val.fit)$r.squared,
+                                RMSE=RMSD(meta(val.jack)$EWT_actual,EWT_actual.jack.val.pred),
+                                perRMSE=percentRMSD(meta(val.jack)$EWT_actual,EWT_actual.jack.val.pred,0.025,0.975),
+                                bias=mean(EWT_actual.jack.val.pred,na.rm=T)-mean(meta(val.jack)$EWT_actual,na.rm=T))
+  
+  EWT_actual.jack.coefs[[i]]<-as.vector(coef(EWT_actual.jack,ncomp=ncomp_EWT_actual_CVmodel,intercept=TRUE))
+  
+}
+
+EWT_actual.jack.pred<-apply.coefs(EWT_actual.jack.coefs,as.matrix(abs.test))
+EWT_actual.jack.stat<-t(apply(EWT_actual.jack.pred,1,
+                              function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+EWT_actual.jack.df<-data.frame(pred.mean=EWT_actual.jack.stat[,1],
+                               pred.low=EWT_actual.jack.stat[,2],
+                               pred.high=EWT_actual.jack.stat[,3],
+                               Measured=meta(abs.test)$EWT_actual,
+                               ncomp=ncomp_EWT_actual_CVmodel,
+                               Species=meta(abs.test)$species,
+                               Project=meta(abs.test)$project,
+                               functional.group=meta(abs.test)$functional.group,
+                               ID=meta(abs.test)$sample_id)
+
+saveRDS(EWT_actual.jack.coefs,"SavedResults/EWT_corrected_jack_coefs_abs.rds")
+saveRDS(EWT_actual.jack.df,"SavedResults/EWT_corrected_jack_df_abs.rds")
+saveRDS(EWT_actual.jack.stats,"SavedResults/EWT_corrected_jack_stats_abs.rds")
+
+rm(list=ls())
 
 ###############################################
 ## external validation
