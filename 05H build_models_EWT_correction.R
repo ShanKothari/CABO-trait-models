@@ -301,7 +301,8 @@ EWT_actual.ref.val.plot<-ggplot(EWT_actual.jack.df.ref,
         legend.position = c(0.8, 0.25))+
   labs(y="Measured EWT (mm)",x="Predicted EWT (mm)")+
   guides(color=F)+
-  scale_color_manual(values=colorBlind)
+  scale_color_manual(values=colorBlind)+
+  ggtitle("Reflectance")
 
 EWT_actual.trans.val.plot<-ggplot(EWT_actual.jack.df.trans,
                            aes(y=Measured,x=pred.mean,color=functional.group))+
@@ -318,7 +319,8 @@ EWT_actual.trans.val.plot<-ggplot(EWT_actual.jack.df.trans,
         axis.text.y = element_blank())+
   labs(y="Measured EWT (mm)",x="Predicted EWT (mm)")+
   guides(color=F)+
-  scale_color_manual(values=colorBlind)
+  scale_color_manual(values=colorBlind)+
+  ggtitle("Transmittance")
 
 EWT_actual.abs.val.plot<-ggplot(EWT_actual.jack.df.abs,
                          aes(y=Measured,x=pred.mean,color=functional.group))+
@@ -335,9 +337,10 @@ EWT_actual.abs.val.plot<-ggplot(EWT_actual.jack.df.abs,
         axis.text.y = element_blank())+
   labs(y="Measured EWT (mm)",x="Predicted EWT (mm)",
        color="Functional group")+
-  scale_color_manual(values=colorBlind)
+  scale_color_manual(values=colorBlind)+
+  ggtitle("Absorptance")
 
-pdf("Images/EWT_corrected_val_plot.pdf",width=16,height=6)
+pdf("Images/EWT_corrected_val_plot.pdf",width=16,height=7)
   (EWT_actual.ref.val.plot + EWT_actual.trans.val.plot + EWT_actual.abs.val.plot) &
   plot_layout(guides="collect") & theme(legend.position = "bottom")
 dev.off()
