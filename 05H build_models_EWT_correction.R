@@ -385,4 +385,8 @@ EWT_ind_val<-ggplot(data=EWT_pred_df,
   labs(y="Measured EWT (mm)",x="Predicted EWT (mm)")+
   coord_cartesian(xlim=c(EWT_lower,EWT_upper),
                   ylim=c(EWT_lower,EWT_upper))+
-  scale_color_manual(values=colorBlind)
+  scale_color_manual(values=colorBlind)+
+  guides(color="Dataset")
+
+summary(lm(Measured~pred.mean,data=EWT_pred_df[EWT_pred_df$dataset=="Dessain",]))
+with(EWT_pred_df[EWT_pred_df$dataset=="Dessain",],RMSD(measured = Measured,predicted = pred.mean))
