@@ -345,6 +345,12 @@ pdf("Images/EWT_corrected_val_plot.pdf",width=16,height=7)
   plot_layout(guides="collect") & theme(legend.position = "bottom")
 dev.off()
 
+summary(lm(Measured~pred.mean,data=EWT_actual.jack.df.abs))
+with(EWT_actual.jack.df.abs,
+     RMSD(measured = Measured,predicted = pred.mean))
+with(EWT_actual.jack.df.abs,
+     percentRMSD(measured = Measured,predicted = pred.mean,min=0.025,max=0.975))
+
 ###############################################
 ## external validation
 
@@ -386,7 +392,14 @@ EWT_ind_val<-ggplot(data=EWT_pred_df,
   coord_cartesian(xlim=c(EWT_lower,EWT_upper),
                   ylim=c(EWT_lower,EWT_upper))+
   scale_color_manual(values=colorBlind)+
-  guides(color="Dataset")
+  guides(color=guide_legend(title="Dataset"))
 
-summary(lm(Measured~pred.mean,data=EWT_pred_df[EWT_pred_df$dataset=="Dessain",]))
-with(EWT_pred_df[EWT_pred_df$dataset=="Dessain",],RMSD(measured = Measured,predicted = pred.mean))
+pdf("Images/EWT_corrected_ind_val_plot.pdf",height=6,width=6)
+EWT_ind_val & theme(legend.position = "bottom")
+dev.off()
+
+summary(lm(Measured~pred.mean,data=EWT_pred_df[EWT_pred_df$dataset=="ANGERS",]))
+with(EWT_pred_df[EWT_pred_df$dataset=="ANGERS",],
+     RMSD(measured = Measured,predicted = pred.mean))
+with(EWT_pred_df[EWT_pred_df$dataset=="ANGERS",],
+     percentRMSD(measured = Measured,predicted = pred.mean,min=0.025,max=0.975))
