@@ -78,7 +78,7 @@ meta(all.abs)$functional.group<-meta(all.ref)$functional.group
 all.area<-read.csv("TraitData/LeafAreaWaterSamples/leaf_area_and_water_samples.csv")
 
 all.area.sub<-data.frame(sample_id=all.area$sample_id,
-                         SLA=all.area$specific_leaf_area_m2_kg,
+                         LMA=all.area$leaf_mass_per_area_g_m2/1000,
                          LDMC=all.area$leaf_dry_matter_content_mg_g,
                          EWT=all.area$equivalent_water_thickness_cm*10)
 
@@ -86,17 +86,15 @@ all.area.sub<-data.frame(sample_id=all.area$sample_id,
 bad.LDMC<-c("10290262","10966273","13404937","38530951","41809826","42944395",
             "43711631","43713406","43717241","43718957","43718799","43712000",
             "43721033","44060633","44142362","44148646","44683516","45108236")
-bad.SLA<-c("13404937","44227362","44683516","45108236","44142362")
+bad.LMA<-c("13404937","44227362","44683516","45108236","44142362")
 
 all.area.sub$LDMC[all.area.sub$sample_id %in% bad.LDMC]<-NA
-all.area.sub$SLA[all.area.sub$sample_id %in% bad.SLA]<-NA
-all.area.sub$EWT[all.area.sub$sample_id %in% c(bad.SLA,bad.LDMC)]<-NA
+all.area.sub$LMA[all.area.sub$sample_id %in% bad.LMA]<-NA
+all.area.sub$EWT[all.area.sub$sample_id %in% c(bad.LMA,bad.LDMC)]<-NA
 
 ## LMA in kg/m^2
-all.area.sub$LMA<-1/all.area.sub$SLA
-
-## SLA in units m^2/kg
 ## LDMC in units mg/g
+## EWT in mm
 meta(all.ref)$LMA<-all.area.sub$LMA[match(meta(all.ref)$sample_id,all.area.sub$sample_id)]
 meta(all.ref)$LDMC<-all.area.sub$LDMC[match(meta(all.ref)$sample_id,all.area.sub$sample_id)]
 meta(all.ref)$EWT<-all.area.sub$EWT[match(meta(all.ref)$sample_id,all.area.sub$sample_id)]
