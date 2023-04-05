@@ -80,7 +80,7 @@ all.area<-read.csv("TraitData/LeafAreaWaterSamples/leaf_area_and_water_samples.c
 all.area.sub<-data.frame(sample_id=all.area$sample_id,
                          SLA=all.area$specific_leaf_area_m2_kg,
                          LDMC=all.area$leaf_dry_matter_content_mg_g,
-                         LDMC_actual=all.area$actual_leaf_dry_matter_content_perc*10)
+                         EWT=all.area$equivalent_water_thickness_cm*10)
 
 ## remove bad values, based on notes in Fulcrum data
 bad.LDMC<-c("10290262","10966273","13404937","38530951","41809826","42944395",
@@ -89,15 +89,11 @@ bad.LDMC<-c("10290262","10966273","13404937","38530951","41809826","42944395",
 bad.SLA<-c("13404937","44227362","44683516","45108236","44142362")
 
 all.area.sub$LDMC[all.area.sub$sample_id %in% bad.LDMC]<-NA
-all.area.sub$LDMC_actual[all.area.sub$sample_id %in% bad.LDMC]<-NA
-
 all.area.sub$SLA[all.area.sub$sample_id %in% bad.SLA]<-NA
+all.area.sub$EWT[all.area.sub$sample_id %in% c(bad.SLA,bad.LDMC)]<-NA
 
 ## LMA in kg/m^2
 all.area.sub$LMA<-1/all.area.sub$SLA
-
-## EWT in mm
-all.area.sub$EWT<-with(all.area.sub,(1/(LDMC_actual/1000)-1)*LMA)
 
 ## SLA in units m^2/kg
 ## LDMC in units mg/g
