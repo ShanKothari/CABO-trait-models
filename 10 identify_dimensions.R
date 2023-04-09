@@ -248,7 +248,7 @@ ref.isomap.proc.coords<-as.data.frame(ref.isomap.proc$points)
 # scores.34.df<-as.data.frame(vegan::scores(ref.isomap.envfit.34, "vectors"))
 # rownames(scores.12.df)<-c("EWT","LMA","C","N","hemi","cell","lign","chl","car")
 # rownames(scores.34.df)<-c("EWT","LMA","C","N","hemi","cell","lign","chl","car")
-
+#
 # ref.isomap.coords$functional.group<-as.factor(meta(ref.traits.samp)$functional.group)
 #
 # isomap.12<-ggplot(data=ref.isomap.coords,
@@ -256,7 +256,7 @@ ref.isomap.proc.coords<-as.data.frame(ref.isomap.proc$points)
 #   geom_point(size=3)+
 #   geom_segment(aes(x = 0, y = 0, xend = D1*150, yend = D2*150),
 #                data = scores.12.df, size =1, alpha = 0.5, colour = "grey30") +
-#   geom_text(data = scores.12.df, aes(x = D1*160, y = D2*160), 
+#   geom_text(data = scores.12.df, aes(x = D1*160, y = D2*160),
 #             label = row.names(scores.12.df), colour = "black", fontface = "bold") +
 #   theme_bw()+coord_fixed()+
 #   theme(panel.grid.major = element_blank(),
@@ -265,13 +265,13 @@ ref.isomap.proc.coords<-as.data.frame(ref.isomap.proc$points)
 #   scale_color_manual(values=colorBlind)+
 #   guides(color=guide_legend("Functional group"))+
 #   labs(x="Axis 1",y="Axis 2")
-# 
+#
 # isomap.34<-ggplot(data=ref.isomap.coords,
 #        aes(x=D3,y=D4,color=functional.group))+
 #   geom_point(size=3)+
 #   geom_segment(aes(x = 0, y = 0, xend = D3*100, yend = D4*100),
 #                data = scores.34.df, size =1, alpha = 0.5, colour = "grey30") +
-#   geom_text(data = scores.34.df, aes(x = D3*110, y = D4*110), 
+#   geom_text(data = scores.34.df, aes(x = D3*110, y = D4*110),
 #             label = row.names(scores.34.df), colour = "black", fontface = "bold") +
 #   theme_bw()+coord_fixed()+
 #   theme(panel.grid.major = element_blank(),

@@ -272,6 +272,34 @@ saveRDS(EWT_actual.jack.stats,"SavedResults/EWT_corrected_jack_stats_abs.rds")
 rm(list=ls())
 
 ###############################################
+## save coefficients
+
+EWT_actual.jack.coefs.ref<-readRDS("SavedResults/EWT_corrected_jack_coefs_ref.rds")
+EWT_actual.jack.coefs.trans<-readRDS("SavedResults/EWT_corrected_jack_coefs_trans.rds")
+EWT_actual.jack.coefs.abs<-readRDS("SavedResults/EWT_corrected_jack_coefs_abs.rds")
+
+## save coefficients
+write.coefs<-function(obj,path,filename){
+  coef_mat<-matrix(unlist(obj),nrow=length(obj),byrow=T)
+  colnames(coef_mat)<-c("intercept",400:2400)
+  write.csv(coef_mat,
+            paste(path,filename,".csv",sep=""),
+            row.names=F)
+}
+
+write.coefs(obj=EWT_actual.jack.coefs.ref,
+            path="ModelCoefficients/EWTCorrectedModels/",
+            filename="EWTFresh_ref")
+
+write.coefs(obj=EWT_actual.jack.coefs.trans,
+            path="ModelCoefficients/EWTCorrectedModels/",
+            filename="EWTFresh_trans")
+
+write.coefs(obj=EWT_actual.jack.coefs.abs,
+            path="ModelCoefficients/EWTCorrectedModels/",
+            filename="EWTFresh_abs")
+
+###############################################
 ## plotting internal validation output
 
 colorBlind  <- c("#E69F00","#009E73","#56B4E9","#F0E442",
@@ -403,3 +431,36 @@ with(EWT_pred_df[EWT_pred_df$dataset=="ANGERS",],
      RMSD(measured = Measured,predicted = pred.mean))
 with(EWT_pred_df[EWT_pred_df$dataset=="ANGERS",],
      percentRMSD(measured = Measured,predicted = pred.mean,min=0.025,max=0.975))
+
+##########################################
+## plot comparisons between fresh and rehydrated EWT
+
+library(reshape2)
+
+all.ref<-readRDS("ProcessedSpectra/all_ref_and_traits.rds")
+meta(all.ref)$EWT_rehydrated<-with(meta(all.ref),(1/(LDMC/1000)-1)*LMA)
+EWT_df<-meta(all.ref)[,c("sample_id","EWT","EWT_rehydrated")]
+EWT_df_long<-melt(EWT_df, id.vars="sample_id")
+levels(EWT_df_long$variable)<-c("Fresh EWT","Rehydrated EWT")
+
+EWT_corr_density<-ggplot(data=EWT_df_long,
+                         aes(x=value,color=variable))+
+  geom_density(size=1.5,bounds=c(0,Inf))+
+  theme_bw()+
+  theme(legend.title = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        text = element_text(size=30),
+        legend.position = c(0.7,0.7),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
+  labs(y="Density",x="EWT (mm)")
+
+EWT_corr_plot<-ggplot(data=meta(all.ref),
+                      aes(x=EWT_rehydrated,y=EWT))+
+  geom_point(size=2)+
+  geom_abline(intercept=0,slope=1,size=2,linetype="dashed")+
+  theme_bw()+
+  theme(text = element_text(size=20))+
+  coord_cartesian(xlim=c(0,0.7),ylim=c(0,0.7))+
+  labs(y="Rehydrated EWT (mm)",x="Fresh EWT (mm)")
