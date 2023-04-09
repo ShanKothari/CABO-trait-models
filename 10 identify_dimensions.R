@@ -248,9 +248,9 @@ ref.isomap.proc.coords<-as.data.frame(ref.isomap.proc$points)
 # scores.34.df<-as.data.frame(vegan::scores(ref.isomap.envfit.34, "vectors"))
 # rownames(scores.12.df)<-c("EWT","LMA","C","N","hemi","cell","lign","chl","car")
 # rownames(scores.34.df)<-c("EWT","LMA","C","N","hemi","cell","lign","chl","car")
-#
+# 
 # ref.isomap.coords$functional.group<-as.factor(meta(ref.traits.samp)$functional.group)
-#
+# 
 # isomap.12<-ggplot(data=ref.isomap.coords,
 #        aes(x=D1,y=D2,color=functional.group))+
 #   geom_point(size=3)+
@@ -258,33 +258,39 @@ ref.isomap.proc.coords<-as.data.frame(ref.isomap.proc$points)
 #                data = scores.12.df, size =1, alpha = 0.5, colour = "grey30") +
 #   geom_text(data = scores.12.df, aes(x = D1*160, y = D2*160),
 #             label = row.names(scores.12.df), colour = "black", fontface = "bold") +
-#   theme_bw()+coord_fixed()+
+#   theme_bw()+
 #   theme(panel.grid.major = element_blank(),
 #         panel.grid.minor = element_blank(),
 #         text = element_text(size=15))+
 #   scale_color_manual(values=colorBlind)+
 #   guides(color=guide_legend("Functional group"))+
 #   labs(x="Axis 1",y="Axis 2")
-#
+# 
 # isomap.34<-ggplot(data=ref.isomap.coords,
 #        aes(x=D3,y=D4,color=functional.group))+
 #   geom_point(size=3)+
 #   geom_segment(aes(x = 0, y = 0, xend = D3*100, yend = D4*100),
 #                data = scores.34.df, size =1, alpha = 0.5, colour = "grey30") +
 #   geom_text(data = scores.34.df, aes(x = D3*110, y = D4*110),
-#             label = row.names(scores.34.df), colour = "black", fontface = "bold") +
-#   theme_bw()+coord_fixed()+
+#             label = row.names(scores.34.df), colour = "black", fontface = "bold",
+#             size=5) +
+#   theme_bw()+
 #   theme(panel.grid.major = element_blank(),
 #         panel.grid.minor = element_blank(),
 #         text = element_text(size=15))+
 #   scale_color_manual(values=colorBlind)+
 #   guides(color=guide_legend("Functional group"))+
 #   labs(x="Axis 3",y="Axis 4")
-#
+# 
 # # canonical correspondence analysis with traits
 # isomap.cca<-CCorA(Y = ref.isomap.coords[,c("D1","D2","D3","D4","D5")],
 #                   X = data.frame(traits.ni.norm))
 # biplot(isomap.cca)
+# 
+# pdf("GrimeReview/isomap_no_procrustes_horizontal2.pdf",width=7,height=7)
+# isomap.34+
+#   theme(legend.position = "bottom")
+# dev.off()
 
 ## plotting with Procrustes analysis
 # add functional group for visualization
