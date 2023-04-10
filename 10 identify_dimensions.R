@@ -264,23 +264,23 @@ ref.isomap.proc.coords<-as.data.frame(ref.isomap.proc$points)
 #         text = element_text(size=15))+
 #   scale_color_manual(values=colorBlind)+
 #   guides(color=guide_legend("Functional group"))+
-#   labs(x="Axis 1",y="Axis 2")
+#   labs(x="Spectral axis 1",y="Spectral axis 2")
 # 
 # isomap.34<-ggplot(data=ref.isomap.coords,
 #        aes(x=D3,y=D4,color=functional.group))+
 #   geom_point(size=3)+
-#   geom_segment(aes(x = 0, y = 0, xend = D3*100, yend = D4*100),
+#   geom_segment(aes(x = 0, y = 0, xend = D3*110, yend = D4*110),
 #                data = scores.34.df, size =1, alpha = 0.5, colour = "grey30") +
-#   geom_text(data = scores.34.df, aes(x = D3*110, y = D4*110),
+#   geom_text(data = scores.34.df, aes(x = D3*120, y = D4*120),
 #             label = row.names(scores.34.df), colour = "black", fontface = "bold",
-#             size=5) +
+#             size=7) +
 #   theme_bw()+
 #   theme(panel.grid.major = element_blank(),
 #         panel.grid.minor = element_blank(),
-#         text = element_text(size=15))+
+#         text = element_text(size=20))+
 #   scale_color_manual(values=colorBlind)+
 #   guides(color=guide_legend("Functional group"))+
-#   labs(x="Axis 3",y="Axis 4")
+#   labs(x="Spectral axis 3",y="Spectral axis 4")
 # 
 # # canonical correspondence analysis with traits
 # isomap.cca<-CCorA(Y = ref.isomap.coords[,c("D1","D2","D3","D4","D5")],
