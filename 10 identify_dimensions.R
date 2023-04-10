@@ -257,11 +257,12 @@ ref.isomap.proc.coords<-as.data.frame(ref.isomap.proc$points)
 #   geom_segment(aes(x = 0, y = 0, xend = D1*150, yend = D2*150),
 #                data = scores.12.df, size =1, alpha = 0.5, colour = "grey30") +
 #   geom_text(data = scores.12.df, aes(x = D1*160, y = D2*160),
-#             label = row.names(scores.12.df), colour = "black", fontface = "bold") +
+#             label = row.names(scores.12.df), colour = "black", fontface = "bold",
+#             size=7) +
 #   theme_bw()+
 #   theme(panel.grid.major = element_blank(),
 #         panel.grid.minor = element_blank(),
-#         text = element_text(size=15))+
+#         text = element_text(size=20))+
 #   scale_color_manual(values=colorBlind)+
 #   guides(color=guide_legend("Functional group"))+
 #   labs(x="Spectral axis 1",y="Spectral axis 2")
