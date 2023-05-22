@@ -8,7 +8,7 @@ library(RColorBrewer)
 library(ggpubr)
 
 ####################################
-## the purpose of this script is to add on the corrected values of EWT
+## the purpose of this section is to add on the corrected values of EWT
 ## without creating a new training/testing data split
 ## script 03 has been modified so that the trait data
 ## incorporates the corrected values of EWT in the file
