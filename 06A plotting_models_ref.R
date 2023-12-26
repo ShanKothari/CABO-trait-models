@@ -1,4 +1,4 @@
-setwd("C:/Users/kotha020/Dropbox/PostdocProjects/FreshLeafModels")
+# setwd("C:/Users/kotha020/Dropbox/PostdocProjects/FreshLeafModels")
 
 library(ggplot2)
 library(RColorBrewer)
@@ -460,20 +460,20 @@ Zn_mass.val.plot<-ggplot(all.jack.df.list.ref$Zn,
        color="Functional group")+
   scale_color_manual(values=colorBlind)
 
-pdf("Images/val_plots_ref1.pdf",width = 16,height = 19)
-(LMA.val.plot+LDMC.val.plot+EWT.val.plot)/
-  (Nmass.val.plot+Cmass.val.plot+solubles_mass.val.plot)/
-  (hemicellulose_mass.val.plot+cellulose_mass.val.plot+lignin_mass.val.plot)/
-  (chlA_mass.val.plot+chlB_mass.val.plot+car_mass.val.plot) &
-  plot_layout(guides="collect") & theme(legend.position = "bottom")
-dev.off()
+# pdf("Images/val_plots_ref1.pdf",width = 16,height = 19)
+# (LMA.val.plot+LDMC.val.plot+EWT.val.plot)/
+#   (Nmass.val.plot+Cmass.val.plot+solubles_mass.val.plot)/
+#   (hemicellulose_mass.val.plot+cellulose_mass.val.plot+lignin_mass.val.plot)/
+#   (chlA_mass.val.plot+chlB_mass.val.plot+car_mass.val.plot) &
+#   plot_layout(guides="collect") & theme(legend.position = "bottom")
+# dev.off()
 
-pdf("Images/val_plots_ref2.pdf",width = 16,height = 19,onefile=F)
-ggarrange(Al_mass.val.plot, Ca_mass.val.plot, Cu_mass.val.plot,
-          Fe_mass.val.plot,K_mass.val.plot,Mg_mass.val.plot,
-          Mn_mass.val.plot, Na_mass.val.plot,P_mass.val.plot,
-          Zn_mass.val.plot,ncol=3, nrow=4, common.legend = TRUE, legend="bottom")
-dev.off()
+# pdf("Images/val_plots_ref2.pdf",width = 16,height = 19,onefile=F)
+# ggarrange(Al_mass.val.plot, Ca_mass.val.plot, Cu_mass.val.plot,
+#           Fe_mass.val.plot,K_mass.val.plot,Mg_mass.val.plot,
+#           Mn_mass.val.plot, Na_mass.val.plot,P_mass.val.plot,
+#           Zn_mass.val.plot,ncol=3, nrow=4, common.legend = TRUE, legend="bottom")
+# dev.off()
 
 #################################################
 ## plotting area-based models
@@ -751,19 +751,19 @@ Zn_area.val.plot<-ggplot(all.jack.df.list.ref.area$Zn,
        color="Functional group")+
   scale_color_manual(values=colorBlind)
 
-pdf("Images/val_plots_ref_area1.pdf",width = 16,height = 15)
-(Narea.val.plot+Carea.val.plot+solubles_area.val.plot)/
-  (hemicellulose_area.val.plot+cellulose_area.val.plot+lignin_area.val.plot)/
-  (chlA_area.val.plot+chlB_area.val.plot+car_area.val.plot) &
-  plot_layout(guides="collect") & theme(legend.position = "bottom")
-dev.off()
+# pdf("Images/val_plots_ref_area1.pdf",width = 16,height = 15)
+# (Narea.val.plot+Carea.val.plot+solubles_area.val.plot)/
+#   (hemicellulose_area.val.plot+cellulose_area.val.plot+lignin_area.val.plot)/
+#   (chlA_area.val.plot+chlB_area.val.plot+car_area.val.plot) &
+#   plot_layout(guides="collect") & theme(legend.position = "bottom")
+# dev.off()
 
-pdf("Images/val_plots_ref_area2.pdf",width = 16,height = 19,onefile=F)
-ggarrange(Al_area.val.plot, Ca_area.val.plot, Cu_area.val.plot,
-          Fe_area.val.plot,K_area.val.plot,Mg_area.val.plot,
-          Mn_area.val.plot, Na_area.val.plot,P_area.val.plot,
-          Zn_area.val.plot,ncol=3, nrow=4, common.legend = TRUE, legend="bottom")
-dev.off()
+# pdf("Images/val_plots_ref_area2.pdf",width = 16,height = 19,onefile=F)
+# ggarrange(Al_area.val.plot, Ca_area.val.plot, Cu_area.val.plot,
+#           Fe_area.val.plot,K_area.val.plot,Mg_area.val.plot,
+#           Mn_area.val.plot, Na_area.val.plot,P_area.val.plot,
+#           Zn_area.val.plot,ncol=3, nrow=4, common.legend = TRUE, legend="bottom")
+# dev.off()
 
 ####################################
 ## comparing trait transformations
@@ -945,10 +945,10 @@ K_mass.log.val.plot<-ggplot(all.log.jack.df.list.ref$K,
   guides(color=F)+
   scale_color_manual(values=colorBlind)
 
-pdf("Images/val_plots_comp_transform.pdf",width=16,height=21)
-((LMA.val.plot + ggtitle("Untransformed")) + LMA.sqrt.val.plot + LMA.log.val.plot) / 
-  (Cmass.val.plot + Cmass.sqrt.val.plot + Cmass.log.val.plot) / 
-  (chlA_mass.val.plot + chlA_mass.sqrt.val.plot + chlA_mass.log.val.plot) /
-  (K_mass.val.plot + K_mass.sqrt.val.plot + K_mass.log.val.plot) &
-  plot_layout(guides="collect") & theme(legend.position = "bottom")
-dev.off()
+# pdf("Images/val_plots_comp_transform.pdf",width=16,height=21)
+# ((LMA.val.plot + ggtitle("Untransformed")) + LMA.sqrt.val.plot + LMA.log.val.plot) / 
+#   (Cmass.val.plot + Cmass.sqrt.val.plot + Cmass.log.val.plot) / 
+#   (chlA_mass.val.plot + chlA_mass.sqrt.val.plot + chlA_mass.log.val.plot) /
+#   (K_mass.val.plot + K_mass.sqrt.val.plot + K_mass.log.val.plot) &
+#   plot_layout(guides="collect") & theme(legend.position = "bottom")
+# dev.off()

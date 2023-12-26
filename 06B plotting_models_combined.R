@@ -1,4 +1,4 @@
-setwd("C:/Users/kotha020/Dropbox/PostdocProjects/FreshLeafModels")
+# setwd("C:/Users/kotha020/Dropbox/PostdocProjects/FreshLeafModels")
 
 library(ggplot2)
 library(RColorBrewer)
@@ -1260,55 +1260,55 @@ Zn_mass.abs.val.plot<-ggplot(all.jack.df.list.abs$Zn,
 ###########################################
 ## combined plots
 
-pdf("Images/val_plots_comp1.pdf",width=16,height=17)
-(LMA.ref.val.plot + LMA.trans.val.plot + LMA.abs.val.plot) / 
-  (LDMC.ref.val.plot + LDMC.trans.val.plot + LDMC.abs.val.plot) / 
-  (EWT.ref.val.plot + EWT.trans.val.plot + EWT.abs.val.plot) &
-  plot_layout(guides="collect") & theme(legend.position = "bottom")
-dev.off()
+# pdf("Images/val_plots_comp1.pdf",width=16,height=17)
+# (LMA.ref.val.plot + LMA.trans.val.plot + LMA.abs.val.plot) / 
+#   (LDMC.ref.val.plot + LDMC.trans.val.plot + LDMC.abs.val.plot) / 
+#   (EWT.ref.val.plot + EWT.trans.val.plot + EWT.abs.val.plot) &
+#   plot_layout(guides="collect") & theme(legend.position = "bottom")
+# dev.off()
 
-pdf("Images/val_plots_comp2.pdf",width=16,height=17)
-(Nmass.ref.val.plot + Nmass.trans.val.plot + Nmass.abs.val.plot) / 
-  (Cmass.ref.val.plot + Cmass.trans.val.plot + Cmass.abs.val.plot) / 
-  (P_mass.ref.val.plot + P_mass.trans.val.plot + P_mass.abs.val.plot) &
-  plot_layout(guides="collect") & theme(legend.position = "bottom")
-dev.off()
+# pdf("Images/val_plots_comp2.pdf",width=16,height=17)
+# (Nmass.ref.val.plot + Nmass.trans.val.plot + Nmass.abs.val.plot) / 
+#   (Cmass.ref.val.plot + Cmass.trans.val.plot + Cmass.abs.val.plot) / 
+#   (P_mass.ref.val.plot + P_mass.trans.val.plot + P_mass.abs.val.plot) &
+#   plot_layout(guides="collect") & theme(legend.position = "bottom")
+# dev.off()
 
-pdf("Images/val_plots_comp3.pdf",width=16,height=21)
-(solubles_mass.ref.val.plot + solubles_mass.trans.val.plot + solubles_mass.abs.val.plot) / 
-  (hemicellulose_mass.ref.val.plot + hemicellulose_mass.trans.val.plot + hemicellulose_mass.abs.val.plot) / 
-  (cellulose_mass.ref.val.plot + cellulose_mass.trans.val.plot + cellulose_mass.abs.val.plot) / 
-  (lignin_mass.ref.val.plot + lignin_mass.trans.val.plot + lignin_mass.abs.val.plot) &
-  plot_layout(guides="collect") & theme(legend.position = "bottom")
-dev.off()
+# pdf("Images/val_plots_comp3.pdf",width=16,height=21)
+# (solubles_mass.ref.val.plot + solubles_mass.trans.val.plot + solubles_mass.abs.val.plot) / 
+#   (hemicellulose_mass.ref.val.plot + hemicellulose_mass.trans.val.plot + hemicellulose_mass.abs.val.plot) / 
+#   (cellulose_mass.ref.val.plot + cellulose_mass.trans.val.plot + cellulose_mass.abs.val.plot) / 
+#   (lignin_mass.ref.val.plot + lignin_mass.trans.val.plot + lignin_mass.abs.val.plot) &
+#   plot_layout(guides="collect") & theme(legend.position = "bottom")
+# dev.off()
 
-pdf("Images/val_plots_comp4.pdf",width=16,height=17)
-(chlA_mass.ref.val.plot + chlA_mass.trans.val.plot + chlA_mass.abs.val.plot) / 
-  (chlB_mass.ref.val.plot + chlB_mass.trans.val.plot + chlB_mass.abs.val.plot) / 
-  (car_mass.ref.val.plot + car_mass.trans.val.plot + car_mass.abs.val.plot) &
-  plot_layout(guides="collect") & theme(legend.position = "bottom")
-dev.off()
+# pdf("Images/val_plots_comp4.pdf",width=16,height=17)
+# (chlA_mass.ref.val.plot + chlA_mass.trans.val.plot + chlA_mass.abs.val.plot) / 
+#   (chlB_mass.ref.val.plot + chlB_mass.trans.val.plot + chlB_mass.abs.val.plot) / 
+#   (car_mass.ref.val.plot + car_mass.trans.val.plot + car_mass.abs.val.plot) &
+#   plot_layout(guides="collect") & theme(legend.position = "bottom")
+# dev.off()
 
-pdf("Images/val_plots_comp5.pdf",width=16,height=17)
-(Al_mass.ref.val.plot + Al_mass.trans.val.plot + Al_mass.abs.val.plot) / 
-  (Ca_mass.ref.val.plot + Ca_mass.trans.val.plot + Ca_mass.abs.val.plot) / 
-  (Cu_mass.ref.val.plot + Cu_mass.trans.val.plot + Cu_mass.abs.val.plot) &
-  plot_layout(guides="collect") & theme(legend.position = "bottom")
-dev.off()
+# pdf("Images/val_plots_comp5.pdf",width=16,height=17)
+# (Al_mass.ref.val.plot + Al_mass.trans.val.plot + Al_mass.abs.val.plot) / 
+#   (Ca_mass.ref.val.plot + Ca_mass.trans.val.plot + Ca_mass.abs.val.plot) / 
+#   (Cu_mass.ref.val.plot + Cu_mass.trans.val.plot + Cu_mass.abs.val.plot) &
+#   plot_layout(guides="collect") & theme(legend.position = "bottom")
+# dev.off()
 
-pdf("Images/val_plots_comp6.pdf",width=16,height=17)
-(Fe_mass.ref.val.plot + Fe_mass.trans.val.plot + Fe_mass.abs.val.plot) / 
-  (K_mass.ref.val.plot + K_mass.trans.val.plot + K_mass.abs.val.plot) / 
-  (Mg_mass.ref.val.plot + Mg_mass.trans.val.plot + Mg_mass.abs.val.plot) &
-  plot_layout(guides="collect") & theme(legend.position = "bottom")
-dev.off()
+# pdf("Images/val_plots_comp6.pdf",width=16,height=17)
+# (Fe_mass.ref.val.plot + Fe_mass.trans.val.plot + Fe_mass.abs.val.plot) / 
+#   (K_mass.ref.val.plot + K_mass.trans.val.plot + K_mass.abs.val.plot) / 
+#   (Mg_mass.ref.val.plot + Mg_mass.trans.val.plot + Mg_mass.abs.val.plot) &
+#   plot_layout(guides="collect") & theme(legend.position = "bottom")
+# dev.off()
 
-pdf("Images/val_plots_comp7.pdf",width=16,height=17)
-(Mn_mass.ref.val.plot + Mn_mass.trans.val.plot + Mn_mass.abs.val.plot) / 
-  (Na_mass.ref.val.plot + Na_mass.trans.val.plot + Na_mass.abs.val.plot) / 
-  (Zn_mass.ref.val.plot + Zn_mass.trans.val.plot + Zn_mass.abs.val.plot) &
-  plot_layout(guides="collect") & theme(legend.position = "bottom")
-dev.off()
+# pdf("Images/val_plots_comp7.pdf",width=16,height=17)
+# (Mn_mass.ref.val.plot + Mn_mass.trans.val.plot + Mn_mass.abs.val.plot) / 
+#   (Na_mass.ref.val.plot + Na_mass.trans.val.plot + Na_mass.abs.val.plot) / 
+#   (Zn_mass.ref.val.plot + Zn_mass.trans.val.plot + Zn_mass.abs.val.plot) &
+#   plot_layout(guides="collect") & theme(legend.position = "bottom")
+# dev.off()
 
 #########################################
 ## summary statistics
@@ -1320,8 +1320,8 @@ summ<-data.frame(ncomp=unlist(lapply(all.jack.df.list.trans,function(x) x$ncomp[
                  r2=round(unlist(lapply(all.jack.df.list.trans,function(x) summary(lm(Measured~pred.mean,data=x))$r.squared)),3),
                  rmse=signif(unlist(lapply(all.jack.df.list.trans,function(x) RMSD(x$Measured,x$pred.mean))),3),
                  perrmse=signif(unlist(lapply(all.jack.df.list.trans,function(x) percentRMSD(x$Measured,x$pred.mean,0.025,0.975)))*100,3))
-write.csv(summ,"SavedResults/plsr_summ.csv")
+# write.csv(summ,"SavedResults/plsr_summ.csv")
 
-RMSD(all.jack.df.list.ref.area$N$Measured,all.jack.df.list.ref$N$pred.mean*all.jack.df.list.ref$LMA$pred.mean/1000)*1000
-percentRMSD(all.jack.df.list.ref.area$N$Measured*1000,all.jack.df.list.ref$N$pred.mean*all.jack.df.list.ref$LMA$pred.mean,0.025,0.975)*100
-summary(lm(all.jack.df.list.ref.area$N$Measured*1000~I(all.jack.df.list.ref$N$pred.mean*all.jack.df.list.ref$LMA$pred.mean)))
+# RMSD(all.jack.df.list.ref.area$N$Measured,all.jack.df.list.ref$N$pred.mean*all.jack.df.list.ref$LMA$pred.mean/1000)*1000
+# percentRMSD(all.jack.df.list.ref.area$N$Measured*1000,all.jack.df.list.ref$N$pred.mean*all.jack.df.list.ref$LMA$pred.mean,0.025,0.975)*100
+# summary(lm(all.jack.df.list.ref.area$N$Measured*1000~I(all.jack.df.list.ref$N$pred.mean*all.jack.df.list.ref$LMA$pred.mean)))
