@@ -21,7 +21,7 @@ library(asdreader)
 ##########################################################
 ## defining important functions for later
 
-## this just applies a Savitzy-Golay filter with given p and n
+## this just applies a Savitzky-Golay filter with given p and n
 sg_filter <- function(x, p, n) {
   x$value_sg <- sgolayfilt(x$value, p, n)
   return(x)  
