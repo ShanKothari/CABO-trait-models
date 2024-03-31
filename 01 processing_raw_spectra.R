@@ -14,8 +14,8 @@ library(asdreader)
 ## I choose to keep it that way so that I can easily go back
 ## and redo a single project without fussing around too much
 
-## I delete the raw data from my computer by they can always
-## be found at:
+## I deleted the raw data from my computer but
+## they can always be found at:
 ## http://data.caboscience.org/field-data/projects/
 
 ##########################################################
